@@ -7,6 +7,8 @@ public class GameManager extends Thread {
 
 	private boolean running = false;
 	
+	static final long FPS = 5;
+	
 	public GameManager(GameView view) {
 		this.view = view;
 	}
@@ -17,7 +19,11 @@ public class GameManager extends Thread {
 	
 	@Override
 	public void run() {
+		long ticksPS = 1000 / FPS;
+        long startTime;
+        long sleepTime;
 		while(running) {
+			startTime = System.currentTimeMillis();
 			Canvas c = null;
 			try {
 				c = view.getHolder().lockCanvas();
@@ -31,6 +37,14 @@ public class GameManager extends Thread {
 					view.getHolder().unlockCanvasAndPost(c);
 				}
 			}
+			
+			sleepTime = ticksPS-(System.currentTimeMillis() - startTime);
+            try {
+                   if (sleepTime > 10)
+                          sleep(sleepTime);
+                   else
+                          sleep(10);
+            } catch (Exception e) {}
 		}
 	}
 }

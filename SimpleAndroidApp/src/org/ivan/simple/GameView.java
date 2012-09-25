@@ -13,17 +13,26 @@ import android.view.SurfaceView;
 public class GameView extends SurfaceView {
 	private Bitmap hero;
 	
-	private static final int JUMP_SPEED = -20;
+	private static int JUMP_SPEED;
 	private int speed = 0;
+	private int xSpeed = 0;
 	
-	private static final int TOP_BOUND = 10;
-	private static final int BOTTOM_BOUND = 500;
-	private int heroX = 10;
+	private static int GRID_STEP;
+	
+	private static int TOP_BOUND;
+	private static int BOTTOM_BOUND;
+	private static int LEFT_BOUND;
+	private static int RIGHT_BOUND;
+	private int heroX = LEFT_BOUND;
 	private int heroY = BOTTOM_BOUND;
+	
+	private MoveEvent moveEvent;
 	
 	private GameManager gameLoopThread;
 	
 	private SurfaceHolder holder;
+	
+	private Bitmap background; 
 	
 	public GameView(Context context) {
 		super(context);
@@ -70,14 +79,36 @@ public class GameView extends SurfaceView {
 			}
 		});
 		hero = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+		TOP_BOUND = hero.getHeight();
+		BOTTOM_BOUND = 670;
+		LEFT_BOUND = hero.getWidth();
+		RIGHT_BOUND = 500;
+		JUMP_SPEED = hero.getWidth();
+		GRID_STEP = hero.getWidth();
+		
+		heroX = LEFT_BOUND;
+		heroY = BOTTOM_BOUND;
+		
+		background = BitmapFactory.decodeResource(getResources(), R.drawable.level);
 	}
 	
 	@Override
 	protected void onDraw(Canvas canvas) {
+		xSpeed = 0;
 		// fly up
 		if(speed < 0) {
-			if(heroY + JUMP_SPEED < TOP_BOUND) {
-				speed = -JUMP_SPEED;
+			if(moveEvent != null && moveEvent.type == MoveType.LEFT) {
+				speed = JUMP_SPEED;
+				if(heroX - JUMP_SPEED >= LEFT_BOUND) {
+					xSpeed = - JUMP_SPEED;
+				}
+			} else if(moveEvent != null && moveEvent.type == MoveType.RIGHT) {
+				speed = JUMP_SPEED;
+				if(heroX + JUMP_SPEED <= RIGHT_BOUND) {
+					xSpeed = JUMP_SPEED;
+				}
+			} else if(heroY - JUMP_SPEED < TOP_BOUND) {
+				speed = JUMP_SPEED;
 			}
 		// fly down
 		} else if(speed > 0) {
@@ -85,22 +116,57 @@ public class GameView extends SurfaceView {
 				speed = 0;
 			}
 		}
-		heroY += speed;
-		canvas.drawColor(Color.WHITE);
-		canvas.drawBitmap(hero, heroX, heroY, null);
+		moveEvent = null;
+		if(xSpeed == 0) {
+			heroY += speed;
+		}
+		heroX += xSpeed;
+		canvas.drawColor(Color.BLACK);
+		canvas.drawBitmap(background, 0, 0, null);
+		canvas.drawBitmap(hero, heroX - hero.getWidth() / 2, heroY - hero.getHeight() / 2, null);		
 	}
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if(event.getAction() == MotionEvent.ACTION_DOWN) {
-			if(speed == 0) {
-				speed = JUMP_SPEED;
-			} else if(speed < 0 ) {
-				speed = -JUMP_SPEED;
+			MoveType moveType = getMoveType(event);
+			switch(moveType) {
+				case UP:
+					if(speed == 0) {
+						speed = -JUMP_SPEED;
+					}
+					break;
+				case DOWN:
+					if(speed < 0) {
+						speed = JUMP_SPEED;
+					}
+					break;
+				case LEFT:
+					moveEvent = new MoveEvent(MoveType.LEFT, 1);
+					break;
+				case RIGHT:
+					moveEvent = new MoveEvent(MoveType.RIGHT, 1);
+					break;
 			}
 			return true;
     	}
 		return super.onTouchEvent(event);
+	}
+	
+	public MoveType getMoveType(MotionEvent event) {
+		if((event.getX() - heroX) > (GRID_STEP / 2)) {
+			return MoveType.RIGHT;
+		}
+		if((heroX - event.getX()) > (GRID_STEP / 2)) {
+			return MoveType.LEFT;
+		}
+		if((event.getY() - heroY) > (GRID_STEP / 2)) {
+			return MoveType.DOWN;
+		}
+		if((heroY - event.getY()) > (GRID_STEP / 2)) {
+			return MoveType.UP;
+		}
+		return MoveType.IDLE;
 	}
 
 }
