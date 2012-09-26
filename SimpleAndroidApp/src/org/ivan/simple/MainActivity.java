@@ -3,6 +3,8 @@ package org.ivan.simple;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -12,12 +14,15 @@ public class MainActivity extends Activity {
 	
 	public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 
+	public static Bitmap simplePlatform;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // hide screen title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+        simplePlatform = BitmapFactory.decodeResource(getResources(), R.drawable.simple_platform);
     }
 
     @Override

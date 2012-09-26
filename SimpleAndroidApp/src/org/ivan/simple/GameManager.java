@@ -7,7 +7,7 @@ public class GameManager extends Thread {
 
 	private boolean running = false;
 	
-	static final long FPS = 10;
+	static final long FPS = 20;
 	
 	public GameManager(GameView view) {
 		this.view = view;

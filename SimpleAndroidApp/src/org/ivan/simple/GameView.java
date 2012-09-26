@@ -1,5 +1,7 @@
 package org.ivan.simple;
 
+import org.ivan.simple.level.LevelView;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,7 +13,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 public class GameView extends SurfaceView {
-	private static int GRID_STEP;
+	
+	public static int GRID_STEP;
 	
 	private Bitmap background;
 	
@@ -38,6 +41,8 @@ public class GameView extends SurfaceView {
 	private GameManager gameLoopThread;
 	
 	private SurfaceHolder holder;
+	
+	private LevelView level;
 	
 	public GameView(Context context) {
 		super(context);
@@ -111,6 +116,9 @@ public class GameView extends SurfaceView {
 		
 		BACKGROUND_LEFT = 0;
 		BACKGROUND_TOP = 0;
+		level = new LevelView(
+				(BOTTOM_BOUND - TOP_BOUND) / GRID_STEP + 1,
+				(RIGHT_BOUND - LEFT_BOUND) / GRID_STEP + 1);
 	}
 	
 	@Override
@@ -145,8 +153,9 @@ public class GameView extends SurfaceView {
 			heroY += ySpeed;
 		}
 		heroX += xSpeed;
-		canvas.drawColor(Color.BLACK);
-		canvas.drawBitmap(background, BACKGROUND_LEFT, BACKGROUND_TOP, null);
+		canvas.drawColor(Color.WHITE);
+		//canvas.drawBitmap(background, BACKGROUND_LEFT, BACKGROUND_TOP, null);
+		level.onDraw(canvas);
 		canvas.drawBitmap(hero, heroX - hero.getWidth() / 2, heroY - hero.getHeight() / 2, null);		
 	}
 	
