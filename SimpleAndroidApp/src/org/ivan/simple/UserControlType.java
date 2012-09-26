@@ -1,6 +1,6 @@
 package org.ivan.simple;
 
-public enum MoveType {
+public enum UserControlType {
 	UP,
 	DOWN,
 	LEFT,
