@@ -27,8 +27,8 @@ public class LevelView {
 	public void onDraw(Canvas canvas) {
 		for(int i = 0; i < rows; i++) {
 			for(int j = 0; j < cols; j++) {
-				if(levelGrid[i][j].getFloor().getBitmap() != null) {
-					canvas.drawBitmap(levelGrid[i][j].getFloor().getBitmap(), getXByIndex(j), getYByIndex(i), null);
+				if(levelGrid[i][j].getFloor().getSprite() != null) {
+					levelGrid[i][j].getFloor().getSprite().onDraw(canvas, getXByIndex(j), getYByIndex(i));
 				}
 			}
 		}

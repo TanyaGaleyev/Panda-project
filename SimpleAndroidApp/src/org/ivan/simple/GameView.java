@@ -1,5 +1,6 @@
 package org.ivan.simple;
 
+import org.ivan.simple.hero.Sprite;
 import org.ivan.simple.level.LevelView;
 
 import android.content.Context;
@@ -21,7 +22,7 @@ public class GameView extends SurfaceView {
 	private static int BACKGROUND_LEFT;
 	private static int BACKGROUND_TOP;
 	
-	private Bitmap hero;
+	private Sprite hero;
 	
 	private static int JUMP_SPEED;
 	private static int ANIMATION_JUMP_SPEED;
@@ -93,7 +94,9 @@ public class GameView extends SurfaceView {
 	}
 	
 	private void initImages() {
-		hero = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+		hero = new Sprite(
+				BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher),
+				1, 8);
 		Bitmap backgroundImage = BitmapFactory.decodeResource(getResources(), R.drawable.level);
 		int bLeft = 0;
 		int bWidth = (backgroundImage.getWidth() > getWidth()) ? getWidth() : backgroundImage.getWidth();
@@ -156,7 +159,7 @@ public class GameView extends SurfaceView {
 		canvas.drawColor(Color.WHITE);
 		//canvas.drawBitmap(background, BACKGROUND_LEFT, BACKGROUND_TOP, null);
 		level.onDraw(canvas);
-		canvas.drawBitmap(hero, heroX - hero.getWidth() / 2, heroY - hero.getHeight() / 2, null);		
+		hero.onDraw(canvas, heroX - hero.getWidth() / 2, heroY - hero.getHeight() / 2);
 	}
 	
 	@Override
