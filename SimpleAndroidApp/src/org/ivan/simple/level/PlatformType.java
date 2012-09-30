@@ -1,15 +1,17 @@
 package org.ivan.simple.level;
 
+import org.ivan.simple.ImageProvider;
 import org.ivan.simple.MainActivity;
 import org.ivan.simple.hero.Sprite;
 
 import android.graphics.Bitmap;
+import org.ivan.simple.R;
 
 public enum PlatformType {
 	SIMPLE {
 		private Sprite sprite;
 		{
-			sprite = new Sprite(MainActivity.simplePlatform, 1, 4);
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.simple_platform), 1, 4);
 		}
 		@Override
 		public Sprite getSprite() {

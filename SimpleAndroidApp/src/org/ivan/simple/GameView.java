@@ -73,6 +73,7 @@ public class GameView extends SurfaceView {
                          gameLoopThread.join();
                          retry = false;
                    } catch (InterruptedException e) {
+                	   
                    }
                 }
                 
@@ -94,9 +95,8 @@ public class GameView extends SurfaceView {
 	}
 	
 	private void initImages() {
-		hero = new Sprite(
-				BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher),
-				1, 8);
+		//sprite = new Sprite(ImageProvider.getBitmap(R.drawable.simple_platform), 1, 4);
+		hero = new Sprite(ImageProvider.getBitmap(R.drawable.ic_launcher),	1, 17);
 		Bitmap backgroundImage = BitmapFactory.decodeResource(getResources(), R.drawable.level);
 		int bLeft = 0;
 		int bWidth = (backgroundImage.getWidth() > getWidth()) ? getWidth() : backgroundImage.getWidth();
@@ -120,8 +120,8 @@ public class GameView extends SurfaceView {
 		BACKGROUND_LEFT = 0;
 		BACKGROUND_TOP = 0;
 		level = new LevelView(
-				(BOTTOM_BOUND - TOP_BOUND) / GRID_STEP + 1,
-				(RIGHT_BOUND - LEFT_BOUND) / GRID_STEP + 1);
+			1,
+				6);
 	}
 	
 	@Override

@@ -13,8 +13,6 @@ import android.widget.EditText;
 public class MainActivity extends Activity {
 	
 	public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
-
-	public static Bitmap simplePlatform;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -22,7 +20,7 @@ public class MainActivity extends Activity {
         // hide screen title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        simplePlatform = BitmapFactory.decodeResource(getResources(), R.drawable.simple_platform);
+        ImageProvider.resources = getResources();
     }
 
     @Override
