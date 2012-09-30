@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -16,11 +17,6 @@ import android.view.SurfaceView;
 public class GameView extends SurfaceView {
 	
 	public static int GRID_STEP;
-	
-	private Bitmap background;
-	
-	private static int BACKGROUND_LEFT;
-	private static int BACKGROUND_TOP;
 	
 	private Sprite hero;
 	
@@ -95,21 +91,16 @@ public class GameView extends SurfaceView {
 	}
 	
 	private void initImages() {
-		//sprite = new Sprite(ImageProvider.getBitmap(R.drawable.simple_platform), 1, 4);
-		hero = new Sprite(ImageProvider.getBitmap(R.drawable.ic_launcher),	1, 17);
-		Bitmap backgroundImage = BitmapFactory.decodeResource(getResources(), R.drawable.level);
-		int bLeft = 0;
-		int bWidth = (backgroundImage.getWidth() > getWidth()) ? getWidth() : backgroundImage.getWidth();
-		int bTop = (backgroundImage.getHeight() > getHeight()) ? backgroundImage.getHeight() - getHeight() : 0;
-		int bHeight = (backgroundImage.getHeight() > getHeight()) ? getHeight() : backgroundImage.getHeight();
-		background = Bitmap.createBitmap(backgroundImage, bLeft, bTop, bWidth, bHeight);
+//		hero = new Sprite(ImageProvider.getBitmap(R.drawable.ic_launcher),	1, 8);
+		hero = new Sprite(ImageProvider.getBitmap(R.drawable.ic_launcher3),	1, 17);
+		hero.setAnimating(true);
 		
-		GRID_STEP = hero.getWidth();
-		TOP_BOUND = hero.getHeight();
-		BOTTOM_BOUND = background.getHeight() - hero.getHeight();
+		GRID_STEP = hero.getWidth() % 4 == 0 ? hero.getWidth() : (hero.getWidth() / 4  + 1) * 4;
+		TOP_BOUND = GRID_STEP;
+		BOTTOM_BOUND = getHeight() - hero.getHeight();
 		BOTTOM_BOUND -= BOTTOM_BOUND % GRID_STEP;
-		LEFT_BOUND = hero.getWidth();
-		RIGHT_BOUND = background.getWidth() - hero.getWidth();
+		LEFT_BOUND = GRID_STEP;
+		RIGHT_BOUND = getWidth() - hero.getWidth();
 		RIGHT_BOUND -= RIGHT_BOUND % GRID_STEP;
 		JUMP_SPEED = GRID_STEP;
 		ANIMATION_JUMP_SPEED = JUMP_SPEED / 4;
@@ -117,11 +108,7 @@ public class GameView extends SurfaceView {
 		heroX = LEFT_BOUND;
 		heroY = BOTTOM_BOUND;
 		
-		BACKGROUND_LEFT = 0;
-		BACKGROUND_TOP = 0;
-		level = new LevelView(
-			1,
-				6);
+		level = new LevelView(5, 10);
 	}
 	
 	@Override
@@ -160,6 +147,18 @@ public class GameView extends SurfaceView {
 		//canvas.drawBitmap(background, BACKGROUND_LEFT, BACKGROUND_TOP, null);
 		level.onDraw(canvas);
 		hero.onDraw(canvas, heroX - hero.getWidth() / 2, heroY - hero.getHeight() / 2);
+		drawGrid(canvas);
+	}
+	
+	public void drawGrid(Canvas canvas) {
+		Paint paint = new Paint();
+		paint.setColor(Color.BLUE);
+		for(int x = LEFT_BOUND - GRID_STEP / 2; x <= RIGHT_BOUND + GRID_STEP / 2; x += GRID_STEP) {
+			canvas.drawLine(x, TOP_BOUND - GRID_STEP / 2, x, BOTTOM_BOUND + GRID_STEP / 2, paint);
+		}
+		for(int y = TOP_BOUND - GRID_STEP / 2; y <= BOTTOM_BOUND + GRID_STEP / 2; y += GRID_STEP) {
+			canvas.drawLine(LEFT_BOUND - GRID_STEP / 2, y, RIGHT_BOUND + GRID_STEP / 2, y, paint);
+		}
 	}
 	
 	@Override

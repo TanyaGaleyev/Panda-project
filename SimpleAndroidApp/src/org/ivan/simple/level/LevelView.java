@@ -15,7 +15,7 @@ public class LevelView {
 		levelGrid = new LevelCell[rows][cols];
 		for(int i = 0; i < rows; i++) {
 			for(int j = 0; j < cols; j++) {
-				if((i + 1) == rows) {
+				if((i + 2) > rows) {
 					levelGrid[i][j] = LevelCell.createSimple();
 				} else {
 					levelGrid[i][j] = LevelCell.createNone();

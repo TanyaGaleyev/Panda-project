@@ -17,6 +17,8 @@ public class Sprite {
 	
 	private final int singleHeight;
 	
+	private boolean animating = false;
+	
 	public Sprite(Bitmap bmp, int rows, int cols) {
 		this.bmp = bmp;
 		BMP_ROWS = rows;
@@ -31,7 +33,9 @@ public class Sprite {
         Rect src = new Rect(srcX, srcY, srcX + singleWidth, srcY + singleHeight);
         Rect dst = new Rect(x, y, x + singleWidth, y + singleHeight);
         canvas.drawBitmap(bmp, src, dst, null);
-        currentFrame = (currentFrame + 1) % BMP_COLS;
+        if(animating) {
+        	currentFrame = (currentFrame + 1) % BMP_COLS;
+        }
 	}
 	
 	public int getWidth() {
@@ -40,5 +44,9 @@ public class Sprite {
 	
 	public int getHeight() {
 		return singleHeight;
+	}
+	
+	public void setAnimating(boolean animating) {
+		this.animating = animating;
 	}
 }
