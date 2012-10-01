@@ -6,7 +6,7 @@
     
     <org.ivan.simple.GameView
         android:id="@+id/game"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_width="792px"
+        android:layout_height="432px" />
 
 </LinearLayout>
