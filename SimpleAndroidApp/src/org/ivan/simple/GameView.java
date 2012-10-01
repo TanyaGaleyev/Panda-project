@@ -108,7 +108,7 @@ public class GameView extends SurfaceView {
 		heroX = LEFT_BOUND;
 		heroY = BOTTOM_BOUND;
 		
-		level = new LevelView(5, 10);
+		level = new LevelView(1);
 	}
 	
 	@Override
