@@ -19,6 +19,18 @@ public enum PlatformType {
 			return sprite;
 		}
 	},
+	//v=vertical =)
+	SIMPLE_V {
+		private Sprite sprite;
+		{
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.simple_platform_v), 1, 1);
+		}
+		@Override
+		public Sprite getSprite() {
+			// TODO Auto-generated method stub
+			return sprite;
+		}
+	},
 	NONE {
 		@Override
 		public Sprite getSprite() {

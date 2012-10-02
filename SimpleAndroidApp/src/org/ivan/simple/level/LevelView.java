@@ -26,13 +26,22 @@ public class LevelView {
 	}
 	
 	private int getYByIndex(int i) {
-		return (GameView.GRID_STEP * (i + 1) + GameView.GRID_STEP / 2)-15;
+		return (GameView.GRID_STEP * (i + 1) + GameView.GRID_STEP / 2);
 	}
 	
 	private void drawCell(Canvas canvas, int i, int j) {
 		LevelCell cell = model.getCell(i, j);
 		if(cell.getFloor().getSprite() != null) {
-			cell.getFloor().getSprite().onDraw(canvas, getXByIndex(j), getYByIndex(i));
+			cell.getFloor().getSprite().onDraw(canvas, getXByIndex(j), getYByIndex(i)-15);
+		}
+		if(cell.getLeft().getSprite() != null) {
+			cell.getLeft().getSprite().onDraw(canvas, getXByIndex(j)-15, getYByIndex(i)-72);
+		}
+		if(cell.getRoof().getSprite() != null) {
+			cell.getRoof().getSprite().onDraw(canvas, getXByIndex(j), getYByIndex(i)-15-72);
+		}	
+		if(cell.getRight().getSprite() != null) {
+			cell.getRight().getSprite().onDraw(canvas, getXByIndex(j)+72-15, getYByIndex(i)-72);
 		}
 	}
 

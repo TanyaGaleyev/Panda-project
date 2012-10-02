@@ -12,26 +12,46 @@ public class LevelModel {
 		levelGrid = new LevelCell[row][col];
 		for(int i=0;i<row;i++){
 			for(int j=0;j<col;j++){
+				levelGrid[i][j] =new LevelCell();
 				for(int k=0;k<4;k++){	
 				if(k==0){
-					
+					if(mylevel[i][j][k]==0){
+						
+						levelGrid[i][j].createNone();
+					}
+            	   if(mylevel[i][j][k]==1){
+            		levelGrid[i][j].createSimple_V(0);
+						
+					}		
 					
 					
 				}
 				if(k==1){
-					
+					if(mylevel[i][j][k]==0){
+						levelGrid[i][j].createNone();
+					}
+            	   if(mylevel[i][j][k]==1){
+            		levelGrid[i][j] .createSimple(1);
+						
+					}		
 					
 				}
 				if(k==2){
-					
+					if(mylevel[i][j][k]==0){
+						levelGrid[i][j] .createNone();
+					}
+            	   if(mylevel[i][j][k]==1){
+            		levelGrid[i][j].createSimple_V(1);
+						
+					}			
 					
 				}
 				if(k==3){
 					if(mylevel[i][j][k]==0){
-						levelGrid[i][j] = LevelCell.createNone();
+						levelGrid[i][j].createNone();
 					}
-            	if(mylevel[i][j][k]==1){
-            		levelGrid[i][j] = LevelCell.createSimple();
+            	   if(mylevel[i][j][k]==1){
+            		levelGrid[i][j] .createSimple(0);
 						
 					}	
 					
