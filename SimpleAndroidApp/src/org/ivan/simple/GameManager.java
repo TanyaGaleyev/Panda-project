@@ -28,7 +28,9 @@ public class GameManager extends Thread {
 			try {
 				c = view.getHolder().lockCanvas();
 				synchronized (view.getHolder()) {
-					updateGame();
+					if(view.readyForUpdate()) {
+						view.level.model.updateGame();
+					}
 					view.onDraw(c);
 				}
 			} catch(Exception ex) {
@@ -50,6 +52,4 @@ public class GameManager extends Thread {
 		}
 	}
 	
-	private void updateGame() {
-	}
 }
