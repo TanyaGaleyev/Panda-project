@@ -33,7 +33,10 @@ public class GameView extends SurfaceView {
 	private int heroX;
 	private int heroY;
 	
-	private MoveEvent moveEvent;
+	//private MoveEvent moveEvent;
+	private UserControlType controlType = UserControlType.IDLE;
+	private MotionType motionType = MotionType.STAY;
+	private MotionType nextMotionType;
 	
 	private GameManager gameLoopThread;
 	
@@ -115,39 +118,143 @@ public class GameView extends SurfaceView {
 	protected void onDraw(Canvas canvas) {
 		// change behavior only if hero is on grid point
 		if(heroX % GRID_STEP == 0  && heroY % GRID_STEP == 0) {
-			xSpeed = 0;
-			// fly up
-			if(ySpeed < 0) {
-				if(moveEvent != null && moveEvent.type == UserControlType.LEFT) {
-					ySpeed = ANIMATION_JUMP_SPEED;
-					if(heroX - JUMP_SPEED >= LEFT_BOUND) {
-						xSpeed = -ANIMATION_JUMP_SPEED;
+			switch (motionType) {
+			case STAY:
+				switch (controlType) {
+				case UP:
+					if(motionAvaible(MotionType.JUMP)) {
+						motionType = MotionType.JUMP;
+					} else {
+						motionType = MotionType.STAY;
 					}
-				} else if(moveEvent != null && moveEvent.type == UserControlType.RIGHT) {
-					ySpeed = ANIMATION_JUMP_SPEED;
-					if(heroX + JUMP_SPEED <= RIGHT_BOUND) {
-						xSpeed = ANIMATION_JUMP_SPEED;
+					break;
+				case LEFT:
+					if(motionAvaible(MotionType.STEP_LEFT)) {
+						motionType = MotionType.STEP_LEFT;
+					} else {
+						motionType = MotionType.STAY;
 					}
-				} else if(heroY - JUMP_SPEED < TOP_BOUND) {
-					ySpeed = ANIMATION_JUMP_SPEED;
+					break;
+				case RIGHT:
+					if(motionAvaible(MotionType.STEP_RIGHT)) {
+						motionType = MotionType.STEP_RIGHT;
+					} else {
+						motionType = MotionType.STAY;
+					}
+					break;
+				default:
+					motionType = MotionType.STAY;
+					break;
 				}
-			// fly down
-			} else if(ySpeed > 0) {
-				if(heroY + JUMP_SPEED > BOTTOM_BOUND) {
-					ySpeed = 0;
+				break;
+			case JUMP:
+				switch (controlType) {
+				case DOWN:
+					motionType = MotionType.FALL;
+					break;
+				default:
+					if(motionAvaible(MotionType.JUMP)) {
+						motionType = MotionType.JUMP;
+					} else {
+						motionType = MotionType.FALL;
+					}
+					break;
 				}
+				break;
+			case FALL:
+				switch (controlType) {
+				default:
+					if(motionAvaible(MotionType.FALL)) {
+						motionType = MotionType.FALL;
+					} else {
+						motionType = MotionType.STAY;
+					}
+					break;
+				}
+				break;
+			case STEP_RIGHT:
+			case STEP_LEFT:
+				motionType = MotionType.STAY;
+				break;
+			default:
+				break;
 			}
-			moveEvent = null;
+			controlType = UserControlType.IDLE;
+			
+			switch (motionType) {
+			case JUMP:
+				xSpeed = 0;
+				ySpeed = -ANIMATION_JUMP_SPEED;
+				break;
+			case FALL:
+				xSpeed = 0;
+				ySpeed = ANIMATION_JUMP_SPEED;
+				break;
+			case STEP_LEFT:
+				xSpeed = -ANIMATION_JUMP_SPEED;
+				ySpeed = 0;
+				break;
+			case STEP_RIGHT:
+				xSpeed = ANIMATION_JUMP_SPEED;
+				ySpeed = 0;
+				break;
+			default:
+				xSpeed = 0;
+				ySpeed = 0;
+				break;
+			}
+//			xSpeed = 0;
+//			// fly up
+//			if(ySpeed < 0) {
+//				if(moveEvent != null && moveEvent.type == UserControlType.LEFT) {
+//					ySpeed = ANIMATION_JUMP_SPEED;
+//					if(heroX - JUMP_SPEED >= LEFT_BOUND) {
+//						xSpeed = -ANIMATION_JUMP_SPEED;
+//					}
+//				} else if(moveEvent != null && moveEvent.type == UserControlType.RIGHT) {
+//					ySpeed = ANIMATION_JUMP_SPEED;
+//					if(heroX + JUMP_SPEED <= RIGHT_BOUND) {
+//						xSpeed = ANIMATION_JUMP_SPEED;
+//					}
+//				} else if(heroY - JUMP_SPEED < TOP_BOUND) {
+//					ySpeed = ANIMATION_JUMP_SPEED;
+//				}
+//			// fly down
+//			} else if(ySpeed > 0) {
+//				if(heroY + JUMP_SPEED > BOTTOM_BOUND) {
+//					ySpeed = 0;
+//				}
+//			}
+//			moveEvent = null;
 		}
-		if(xSpeed == 0) {
-			heroY += ySpeed;
-		}
+		heroY += ySpeed;
 		heroX += xSpeed;
 		canvas.drawColor(Color.WHITE);
 		//canvas.drawBitmap(background, BACKGROUND_LEFT, BACKGROUND_TOP, null);
 		level.onDraw(canvas);
 		hero.onDraw(canvas, heroX - hero.getWidth() / 2, heroY - hero.getHeight() / 2);
 		drawGrid(canvas);
+	}
+	
+	private boolean motionAvaible(MotionType mt) {
+		switch (mt) {
+		case JUMP:
+			if(heroY - JUMP_SPEED < TOP_BOUND) return false;
+			return true;
+		case STEP_LEFT:
+		case JUMP_LEFT:
+			if(heroX - JUMP_SPEED < LEFT_BOUND) return false;
+			return true;
+		case STEP_RIGHT:
+		case JUMP_RIGHT:
+			if(heroX + JUMP_SPEED > RIGHT_BOUND) return false;
+			return true;
+		case FALL:
+			if(heroY +JUMP_SPEED > BOTTOM_BOUND) return false;
+			return true;
+		default:
+			return false;
+		}
 	}
 	
 	public void drawGrid(Canvas canvas) {
@@ -164,25 +271,7 @@ public class GameView extends SurfaceView {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if(event.getAction() == MotionEvent.ACTION_DOWN) {
-			UserControlType moveType = getMoveType(event);
-			switch(moveType) {
-				case UP:
-					if(ySpeed == 0) {
-						ySpeed = -ANIMATION_JUMP_SPEED;
-					}
-					break;
-				case DOWN:
-					if(ySpeed < 0) {
-						ySpeed = ANIMATION_JUMP_SPEED;
-					}
-					break;
-				case LEFT:
-					moveEvent = new MoveEvent(UserControlType.LEFT, 1);
-					break;
-				case RIGHT:
-					moveEvent = new MoveEvent(UserControlType.RIGHT, 1);
-					break;
-			}
+			controlType = getMoveType(event);
 			return true;
     	}
 		return super.onTouchEvent(event);

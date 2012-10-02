@@ -1,5 +1,7 @@
 package org.ivan.simple.level;
 
+import android.graphics.Canvas;
+
 public class LevelCell {
 	private PlatformType floor = PlatformType.NONE;
 
@@ -19,4 +21,5 @@ public class LevelCell {
 	public PlatformType getFloor() {
 		return floor;
 	}
+	
 }

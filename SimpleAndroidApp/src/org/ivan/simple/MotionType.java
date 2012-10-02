@@ -17,5 +17,9 @@ public enum MotionType {
 	JUMP,
 	FALL,
 	JUMP_LEFT,
-	JUMP_RIGHT
+	JUMP_RIGHT,
+	STEP_LEFT,
+	STEP_RIGHT,
+	STAY,
+	NONE
 }

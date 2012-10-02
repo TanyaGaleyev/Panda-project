@@ -28,6 +28,7 @@ public class GameManager extends Thread {
 			try {
 				c = view.getHolder().lockCanvas();
 				synchronized (view.getHolder()) {
+					updateGame();
 					view.onDraw(c);
 				}
 			} catch(Exception ex) {
@@ -38,6 +39,7 @@ public class GameManager extends Thread {
 				}
 			}
 			
+			// calculate sleep time to reach needed fps
 			sleepTime = ticksPS-(System.currentTimeMillis() - startTime);
             try {
                    if (sleepTime > 10)
@@ -46,5 +48,8 @@ public class GameManager extends Thread {
                           sleep(10);
             } catch (Exception e) {}
 		}
+	}
+	
+	private void updateGame() {
 	}
 }
