@@ -7,7 +7,7 @@ import org.ivan.simple.level.LevelStorage;
 
 public class LevelView {
 
-	private LevelModel model;
+	public LevelModel model;
 	public LevelView(int lev) {
 		model = new LevelModel(lev);
 	}
