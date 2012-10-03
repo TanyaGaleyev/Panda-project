@@ -240,4 +240,8 @@ public class LevelModel {
 			return false;
 		}
 	}
+	
+	public MotionType getMotionType() {
+		return motionType;
+	}
 }

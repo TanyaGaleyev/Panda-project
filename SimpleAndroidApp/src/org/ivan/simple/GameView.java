@@ -92,7 +92,7 @@ public class GameView extends SurfaceView {
 	
 	private void initImages() {
 //		hero = new Sprite(ImageProvider.getBitmap(R.drawable.ic_launcher),	1, 8);
-		hero = new Sprite(ImageProvider.getBitmap(R.drawable.ic_launcher3),	1, 17);
+		hero = new Sprite(ImageProvider.getBitmap(R.drawable.ic_launcher3),	2, 16);
 		hero.setAnimating(true);
 		
 		GRID_STEP = hero.getWidth() % 4 == 0 ? hero.getWidth() : (hero.getWidth() / 4  + 1) * 4;
@@ -103,7 +103,7 @@ public class GameView extends SurfaceView {
 		RIGHT_BOUND = getWidth() - hero.getWidth();
 		RIGHT_BOUND -= RIGHT_BOUND % GRID_STEP;
 		JUMP_SPEED = GRID_STEP;
-		ANIMATION_JUMP_SPEED = JUMP_SPEED / 4;
+		ANIMATION_JUMP_SPEED = JUMP_SPEED / 8;
 		
 		heroX = LEFT_BOUND;
 		heroY = BOTTOM_BOUND;
@@ -163,7 +163,12 @@ public class GameView extends SurfaceView {
 	
 	public boolean readyForUpdate() {
 		// change behavior only if hero is on grid point
-		return (heroX % GRID_STEP == 0) && (heroY % GRID_STEP == 0);
+		return (heroX % GRID_STEP == 0) && (heroY % GRID_STEP == 0) && hero.isInControlState();
+	}
+	
+	public void updateGame() {
+		level.model.updateGame();
+		hero.changeSet(level.model.getMotionType());
 	}
 
 }

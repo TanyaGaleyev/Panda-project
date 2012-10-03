@@ -29,7 +29,7 @@ public class GameManager extends Thread {
 				c = view.getHolder().lockCanvas();
 				synchronized (view.getHolder()) {
 					if(view.readyForUpdate()) {
-						view.level.model.updateGame();
+						view.updateGame();
 					}
 					view.onDraw(c);
 				}

@@ -1,5 +1,7 @@
 package org.ivan.simple.hero;
 
+import org.ivan.simple.MotionType;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -12,6 +14,8 @@ public class Sprite {
 	private final int BMP_COLS;
 	
 	private int currentFrame = 0;
+	
+	private int currentSet = 0;
 	
 	private final int singleWidth;
 	
@@ -29,7 +33,7 @@ public class Sprite {
 
 	public void onDraw(Canvas canvas, int x, int y) {
 		int srcX = currentFrame * singleWidth;
-        int srcY = 0 * singleHeight;
+        int srcY = currentSet * singleHeight;
         Rect src = new Rect(srcX, srcY, srcX + singleWidth, srcY + singleHeight);
         Rect dst = new Rect(x, y, x + singleWidth, y + singleHeight);
         canvas.drawBitmap(bmp, src, dst, null);
@@ -48,5 +52,28 @@ public class Sprite {
 	
 	public void setAnimating(boolean animating) {
 		this.animating = animating;
+	}
+	
+	public int getFrame() {
+		return currentFrame;
+	}
+	
+	public boolean isInControlState() {
+		if(currentSet == 0) {
+			return currentFrame == 0;
+		}
+		return true;
+	}
+	
+	public void changeSet(MotionType mt) {
+		currentFrame = 0;
+		switch (mt) {
+		case STAY:
+			currentSet = 0;
+			break;
+		default:
+			currentSet = 1;
+			break;
+		}
 	}
 }
