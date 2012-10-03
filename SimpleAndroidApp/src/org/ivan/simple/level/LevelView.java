@@ -35,13 +35,13 @@ public class LevelView {
 			cell.getFloor().getSprite().onDraw(canvas, getXByIndex(j), getYByIndex(i)-15);
 		}
 		if(cell.getLeft().getSprite() != null) {
-			cell.getLeft().getSprite().onDraw(canvas, getXByIndex(j)-15, getYByIndex(i)-72);
+			cell.getLeft().getSprite().onDraw(canvas, getXByIndex(j)-15, getYByIndex(i)-GameView.GRID_STEP);
 		}
 		if(cell.getRoof().getSprite() != null) {
-			cell.getRoof().getSprite().onDraw(canvas, getXByIndex(j), getYByIndex(i)-15-72);
+			cell.getRoof().getSprite().onDraw(canvas, getXByIndex(j), getYByIndex(i)-15-GameView.GRID_STEP);
 		}	
 		if(cell.getRight().getSprite() != null) {
-			cell.getRight().getSprite().onDraw(canvas, getXByIndex(j)+72-15, getYByIndex(i)-72);
+			cell.getRight().getSprite().onDraw(canvas, getXByIndex(j)+GameView.GRID_STEP-15, getYByIndex(i)-GameView.GRID_STEP);
 		}
 	}
 

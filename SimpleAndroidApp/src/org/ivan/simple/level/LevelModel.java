@@ -26,34 +26,41 @@ public class LevelModel {
 				levelGrid[i][j] =new LevelCell();
 				for(int k=0;k<4;k++){	
 				if(k==0){
-					if(mylevel[i][j][k]==0){
-						
-						levelGrid[i][j].createNone();
+					// create left wall only for first column's cells
+					if(j == 0) {
+						if(mylevel[i][j][k]==0){
+							levelGrid[i][j].createNone();
+						}
+						if(mylevel[i][j][k]==1){
+							levelGrid[i][j].createSimple_V(0);
+						}
+					// else set left wall as right wall of nearest left cell
+					} else {
+						levelGrid[i][j].left_wall = levelGrid[i][j - 1].right_wall;
 					}
-            	   if(mylevel[i][j][k]==1){
-            		levelGrid[i][j].createSimple_V(0);
-						
-					}		
-					
 					
 				}
 				if(k==1){
-					if(mylevel[i][j][k]==0){
-						levelGrid[i][j].createNone();
+					// create roof only for first row's cells
+					if(i == 0) {
+						if(mylevel[i][j][k]==0){
+							levelGrid[i][j].createNone();
+						}
+	            	    if(mylevel[i][j][k]==1){
+	            	    	levelGrid[i][j] .createSimple(1);
+						}		
+            	    // else set roof as floor of nearest upper cell
+					} else {
+						levelGrid[i][j].roof = levelGrid[i - 1][j].floor;
 					}
-            	   if(mylevel[i][j][k]==1){
-            		levelGrid[i][j] .createSimple(1);
-						
-					}		
 					
 				}
 				if(k==2){
 					if(mylevel[i][j][k]==0){
 						levelGrid[i][j] .createNone();
 					}
-            	   if(mylevel[i][j][k]==1){
-            		levelGrid[i][j].createSimple_V(1);
-						
+            	    if(mylevel[i][j][k]==1){
+            	    	levelGrid[i][j].createSimple_V(1);
 					}			
 					
 				}
@@ -61,9 +68,8 @@ public class LevelModel {
 					if(mylevel[i][j][k]==0){
 						levelGrid[i][j].createNone();
 					}
-            	   if(mylevel[i][j][k]==1){
-            		levelGrid[i][j] .createSimple(0);
-						
+            	    if(mylevel[i][j][k]==1){
+            	    	levelGrid[i][j] .createSimple(0);
 					}	
 					
 				}
@@ -213,14 +219,17 @@ public class LevelModel {
 	private boolean motionAvaible(MotionType mt) {
 		switch (mt) {
 		case JUMP:
+			if(getCell(heroY, heroX).getRoof() == PlatformType.SIMPLE) return false;
 			if(heroY - 1 < 0) return false;
 			return true;
 		case STEP_LEFT:
 		case JUMP_LEFT:
+			if(getCell(heroY, heroX).getLeft() == PlatformType.SIMPLE_V) return false;
 			if(heroX - 1 < 0) return false;
 			return true;
 		case STEP_RIGHT:
 		case JUMP_RIGHT:
+			if(getCell(heroY, heroX).getRight() == PlatformType.SIMPLE_V) return false;
 			if(heroX + 1 > col - 1) return false;
 			return true;
 		case FALL:

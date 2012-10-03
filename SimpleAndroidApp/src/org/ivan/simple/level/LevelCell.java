@@ -3,10 +3,10 @@ package org.ivan.simple.level;
 import android.graphics.Canvas;
 
 public class LevelCell {
-	private PlatformType floor = PlatformType.NONE;
-	private PlatformType left_wall = PlatformType.NONE;
-	private PlatformType right_wall = PlatformType.NONE;
-	private PlatformType roof = PlatformType.NONE;
+	protected PlatformType floor = PlatformType.NONE;
+	protected PlatformType left_wall = PlatformType.NONE;
+	protected PlatformType right_wall = PlatformType.NONE;
+	protected PlatformType roof = PlatformType.NONE;
 	private int ObjectStatus=0; // LevelCell object create or not create? 
 	
 	public LevelCell() {
