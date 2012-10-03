@@ -32,6 +32,14 @@ public class LevelCell {
 		}
 	}
 	
+	public void createReduce(int side) {
+		if(side==0){
+		floor = PlatformType.REDUCE;
+		}else{
+		roof = PlatformType.REDUCE;
+		}
+	}
+	
 	public PlatformType getFloor() {
 		return floor;
 	}

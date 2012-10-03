@@ -48,7 +48,10 @@ public class LevelModel {
 						}
 	            	    if(mylevel[i][j][k]==1){
 	            	    	levelGrid[i][j] .createSimple(1);
-						}		
+						}
+	            	    if(mylevel[i][j][k]==2){
+	            	    	levelGrid[i][j] .createReduce(1);
+						}
             	    // else set roof as floor of nearest upper cell
 					} else {
 						levelGrid[i][j].roof = levelGrid[i - 1][j].floor;
@@ -70,7 +73,10 @@ public class LevelModel {
 					}
             	    if(mylevel[i][j][k]==1){
             	    	levelGrid[i][j] .createSimple(0);
-					}	
+					}
+            	    if(mylevel[i][j][k]==2){
+            	    	levelGrid[i][j] .createReduce(0);
+					}
 					
 				}
 				}
@@ -309,6 +315,7 @@ public class LevelModel {
 		switch (mt) {
 		case JUMP:
 			if(getCell(heroY, heroX).getRoof() == PlatformType.SIMPLE) return false;
+			if(getCell(heroY, heroX).getRoof() == PlatformType.REDUCE) return false;
 			if(heroY - 1 < 0) return false;
 			return true;
 		case STEP_LEFT:
@@ -323,6 +330,7 @@ public class LevelModel {
 			return true;
 		case FALL:
 			if(getCell(heroY, heroX).getFloor() == PlatformType.SIMPLE) return false;
+			if(getCell(heroY, heroX).getFloor() == PlatformType.REDUCE) return false;
 			if(heroY + 1 > row - 1) return false;
 			return true;
 		default:

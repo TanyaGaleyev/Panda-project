@@ -41,7 +41,9 @@ public class Sprite {
         	currentFrame = (currentFrame + 1) % BMP_COLS;
         }
 	}
-	
+	public void gotoAndStop(int fr){	
+		currentFrame=fr;
+	}
 	public int getWidth() {
 		return singleWidth;
 	}
