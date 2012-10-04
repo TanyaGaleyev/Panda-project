@@ -224,10 +224,10 @@ public class LevelModel {
 				}
 				break;
 			case UP:
-				if(motionAvaible(MotionType.JUMP)) {
-					motionType = MotionType.JUMP;
-				} else if(motionAvaible(MotionType.FALL)) {
+				if(motionAvaible(MotionType.FALL)) {
 					motionType = MotionType.FALL;
+				} else if(motionAvaible(MotionType.JUMP)) {
+					motionType = MotionType.JUMP;
 				} else {
 					motionType = MotionType.STAY;
 				}

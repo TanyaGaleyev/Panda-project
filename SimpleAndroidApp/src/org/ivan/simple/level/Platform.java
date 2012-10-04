@@ -43,8 +43,9 @@ public class Platform {
 		} else if(currentStatus<4){
 			currentStatus++;
 			sprite = null;
-		} else {
 			type = PlatformType.NONE;
+		} else {
+			
 		}
 	}
 }

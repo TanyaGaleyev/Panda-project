@@ -1,6 +1,7 @@
 package org.ivan.simple;
 
 import org.ivan.simple.hero.Sprite;
+import org.ivan.simple.level.LevelCell;
 import org.ivan.simple.level.LevelView;
 
 import android.content.Context;
@@ -39,7 +40,7 @@ public class GameView extends SurfaceView {
 	
 	public LevelView level;
 	
-	public UserControlType pressedControl;
+	public UserControlType pressedControl = UserControlType.IDLE;
 	
 	public GameView(Context context) {
 		super(context);
@@ -173,11 +174,12 @@ public class GameView extends SurfaceView {
 	}
 	
 	public void updateGame() {
-		level.model.getHeroCell().updateCell(level.model.getMotionType());
+		LevelCell prevCell = level.model.getHeroCell(); 
 		if(level.model.controlType == UserControlType.IDLE) {
 			level.model.controlType = pressedControl;
 		}
 		level.model.updateGame();
+		prevCell.updateCell(level.model.getMotionType());
 		hero.changeSet(level.model.getMotionType());
 	}
 
