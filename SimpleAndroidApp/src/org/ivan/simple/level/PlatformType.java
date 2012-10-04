@@ -8,61 +8,12 @@ import android.graphics.Bitmap;
 import org.ivan.simple.R;
 
 public enum PlatformType {
-	SIMPLE {
-		private Sprite sprite;
-		{
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.simple_platform), 1, 4);
-		}
-		@Override
-		public Sprite getSprite() {
-			// TODO Auto-generated method stub
-			return sprite;
-		}
-	},
+	SIMPLE,
 	//v=vertical =)
-	SIMPLE_V {
-		private Sprite sprite;
-		{
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.simple_platform_v), 1, 1);
-			
-		}
-		@Override
-		public Sprite getSprite() {
-			// TODO Auto-generated method stub
-			return sprite;
-		}
-	},
+	SIMPLE_V,
 	
-	REDUCE {
-		private Sprite sprite;
-		private int currentStatus=0;
-		{
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.reduce_platform), 1, 4);
-		}
-		public void changePlatform(){
-			if(currentStatus<3){
-			currentStatus++;
-		 sprite.gotoAndStop(currentStatus);
-		 }
-			else{
-				sprite = null;		
-			}	
-			
-		}
-		@Override
-		public Sprite getSprite() {
-			// TODO Auto-generated method stub
-			return sprite;
-		}
-	},
-	NONE {
-		@Override
-		public Sprite getSprite() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-	};
+	REDUCE,
+	NONE
 	
-	public abstract Sprite getSprite();
 }
 

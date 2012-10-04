@@ -73,8 +73,14 @@ public class Sprite {
 		case STAY:
 			currentSet = 0;
 			break;
-		default:
+		case STEP_LEFT:
+		case STEP_RIGHT:
 			currentSet = 1;
+			break;
+		case JUMP_LEFT:
+		case JUMP_RIGHT:
+		default:
+			currentSet = 2;
 			break;
 		}
 	}

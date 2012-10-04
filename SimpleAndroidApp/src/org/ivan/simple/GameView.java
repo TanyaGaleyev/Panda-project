@@ -33,13 +33,13 @@ public class GameView extends SurfaceView {
 	private int heroX;
 	private int heroY;
 	
-	private MotionType nextMotionType;
-	
 	private GameManager gameLoopThread;
 	
 	private SurfaceHolder holder;
 	
 	public LevelView level;
+	
+	public UserControlType pressedControl;
 	
 	public GameView(Context context) {
 		super(context);
@@ -92,7 +92,7 @@ public class GameView extends SurfaceView {
 	
 	private void initImages() {
 //		hero = new Sprite(ImageProvider.getBitmap(R.drawable.ic_launcher),	1, 8);
-		hero = new Sprite(ImageProvider.getBitmap(R.drawable.ic_launcher3),	2, 16);
+		hero = new Sprite(ImageProvider.getBitmap(R.drawable.ic_launcher3),	3, 16);
 		hero.setAnimating(true);
 		
 		GRID_STEP = hero.getWidth() % 4 == 0 ? hero.getWidth() : (hero.getWidth() / 4  + 1) * 4;
@@ -138,10 +138,16 @@ public class GameView extends SurfaceView {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if(event.getAction() == MotionEvent.ACTION_DOWN) {
-			level.model.controlType = getMoveType(event);
+		if(event.getAction() == MotionEvent.ACTION_DOWN ||
+				event.getAction() == MotionEvent.ACTION_MOVE) {
+			pressedControl = getMoveType(event); 
+			level.model.controlType = pressedControl;
 			return true;
     	}
+		if(event.getAction() == MotionEvent.ACTION_UP) {
+			pressedControl = UserControlType.IDLE;
+			return true;
+		}
 		return super.onTouchEvent(event);
 	}
 	
@@ -167,6 +173,10 @@ public class GameView extends SurfaceView {
 	}
 	
 	public void updateGame() {
+		level.model.getHeroCell().updateCell(level.model.getMotionType());
+		if(level.model.controlType == UserControlType.IDLE) {
+			level.model.controlType = pressedControl;
+		}
 		level.model.updateGame();
 		hero.changeSet(level.model.getMotionType());
 	}

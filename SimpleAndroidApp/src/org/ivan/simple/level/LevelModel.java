@@ -92,6 +92,10 @@ public class LevelModel {
 		return levelGrid[i][j];
 	}
 	
+	public LevelCell getHeroCell() {
+		return levelGrid[heroY][heroX];
+	}
+	
 	public void updateGame() {
 		switch (motionType) {
 		case STAY:
@@ -118,7 +122,11 @@ public class LevelModel {
 				}
 				break;
 			default:
-				motionType = MotionType.STAY;
+				if(motionAvaible(MotionType.FALL)) {
+					motionType = MotionType.FALL;
+				} else {
+					motionType = MotionType.STAY;
+				}
 				break;
 			}
 			break;
@@ -246,19 +254,19 @@ public class LevelModel {
 				}
 				break;
 			case LEFT:
-				if(motionAvaible(MotionType.STEP_LEFT)) {
-					motionType = MotionType.STEP_LEFT;
-				} else if(motionAvaible(MotionType.FALL)) {
+				if(motionAvaible(MotionType.FALL)) {
 					motionType = MotionType.FALL;
+				} else if(motionAvaible(MotionType.STEP_LEFT)) {
+					motionType = MotionType.STEP_LEFT;
 				} else {
 					motionType = MotionType.STAY;
 				}
 				break;
 			case RIGHT:
-				if(motionAvaible(MotionType.STEP_RIGHT)) {
+				if(motionAvaible(MotionType.FALL)) {
+					motionType = MotionType.FALL;				
+				} else if(motionAvaible(MotionType.STEP_RIGHT)) {
 					motionType = MotionType.STEP_RIGHT;
-				} else if(motionAvaible(MotionType.FALL)) {
-					motionType = MotionType.FALL;
 				} else {
 					motionType = MotionType.STAY;
 				}
@@ -314,23 +322,23 @@ public class LevelModel {
 	private boolean motionAvaible(MotionType mt) {
 		switch (mt) {
 		case JUMP:
-			if(getCell(heroY, heroX).getRoof() == PlatformType.SIMPLE) return false;
-			if(getCell(heroY, heroX).getRoof() == PlatformType.REDUCE) return false;
+			if(getCell(heroY, heroX).getRoof().getType() == PlatformType.SIMPLE) return false;
+			if(getCell(heroY, heroX).getRoof().getType() == PlatformType.REDUCE) return false;
 			if(heroY - 1 < 0) return false;
 			return true;
 		case STEP_LEFT:
 		case JUMP_LEFT:
-			if(getCell(heroY, heroX).getLeft() == PlatformType.SIMPLE_V) return false;
+			if(getCell(heroY, heroX).getLeft().getType() == PlatformType.SIMPLE_V) return false;
 			if(heroX - 1 < 0) return false;
 			return true;
 		case STEP_RIGHT:
 		case JUMP_RIGHT:
-			if(getCell(heroY, heroX).getRight() == PlatformType.SIMPLE_V) return false;
+			if(getCell(heroY, heroX).getRight().getType() == PlatformType.SIMPLE_V) return false;
 			if(heroX + 1 > col - 1) return false;
 			return true;
 		case FALL:
-			if(getCell(heroY, heroX).getFloor() == PlatformType.SIMPLE) return false;
-			if(getCell(heroY, heroX).getFloor() == PlatformType.REDUCE) return false;
+			if(getCell(heroY, heroX).getFloor().getType() == PlatformType.SIMPLE) return false;
+			if(getCell(heroY, heroX).getFloor().getType() == PlatformType.REDUCE) return false;
 			if(heroY + 1 > row - 1) return false;
 			return true;
 		default:
