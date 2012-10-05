@@ -101,21 +101,27 @@ public class LevelModel {
 		case STAY:
 			switch (controlType) {
 			case UP:
-				if(motionAvaible(MotionType.JUMP)) {
+				if(motionAvaible(MotionType.FALL)) {
+					motionType = MotionType.FALL;
+				} else if(motionAvaible(MotionType.JUMP)) {
 					motionType = MotionType.JUMP;
 				} else {
 					motionType = MotionType.STAY;
 				}
 				break;
 			case LEFT:
-				if(motionAvaible(MotionType.STEP_LEFT)) {
+				if(motionAvaible(MotionType.FALL)) {
+					motionType = MotionType.FALL;
+				} else if(motionAvaible(MotionType.STEP_LEFT)) {
 					motionType = MotionType.STEP_LEFT;
 				} else {
 					motionType = MotionType.STAY;
 				}
 				break;
 			case RIGHT:
-				if(motionAvaible(MotionType.STEP_RIGHT)) {
+				if(motionAvaible(MotionType.FALL)) {
+					motionType = MotionType.FALL;
+				} else if(motionAvaible(MotionType.STEP_RIGHT)) {
 					motionType = MotionType.STEP_RIGHT;
 				} else {
 					motionType = MotionType.STAY;
