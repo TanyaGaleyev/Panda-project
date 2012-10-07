@@ -55,5 +55,6 @@ public class LevelCell {
 	
 	public void updateCell(MotionType mt) {
 		floor.changePlatform();
+		floor.changeSet(mt);
 	}
 }

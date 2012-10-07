@@ -153,19 +153,25 @@ public class GameView extends SurfaceView {
 	}
 	
 	public UserControlType getMoveType(MotionEvent event) {
-		if((event.getX() - heroX) > (GRID_STEP / 2)) {
-			return UserControlType.RIGHT;
+		float dX = heroX - event.getX(); // positive dx move left
+		float dY = heroY - event.getY(); // positive dy move up
+		// use for get control max by absolute value dx, dy
+		// max(|dx|, |dy|)
+		if(Math.abs(dY) > Math.abs(dX)) {
+			// up or down
+			if(dY < 0) {
+				return UserControlType.DOWN;
+			} else {
+				return UserControlType.UP;
+			}
+		} else {
+			// left or right
+			if(dX < 0) {
+				return UserControlType.RIGHT;
+			} else {
+				return UserControlType.LEFT;
+			}
 		}
-		if((heroX - event.getX()) > (GRID_STEP / 2)) {
-			return UserControlType.LEFT;
-		}
-		if((event.getY() - heroY) > (GRID_STEP / 2)) {
-			return UserControlType.DOWN;
-		}
-		if((heroY - event.getY()) > (GRID_STEP / 2)) {
-			return UserControlType.UP;
-		}
-		return UserControlType.IDLE;
 	}
 	
 	public boolean readyForUpdate() {

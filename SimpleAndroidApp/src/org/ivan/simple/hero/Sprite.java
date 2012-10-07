@@ -23,6 +23,8 @@ public class Sprite {
 	
 	private boolean animating = false;
 	
+	public boolean playOnce = false;
+	
 	public Sprite(Bitmap bmp, int rows, int cols) {
 		this.bmp = bmp;
 		BMP_ROWS = rows;
@@ -39,6 +41,9 @@ public class Sprite {
         canvas.drawBitmap(bmp, src, dst, null);
         if(animating) {
         	currentFrame = (currentFrame + 1) % BMP_COLS;
+        }
+        if(currentFrame == 0 && playOnce) {
+        	animating = false;
         }
 	}
 	public void gotoAndStop(int fr){	
@@ -64,24 +69,30 @@ public class Sprite {
 		if(currentSet == 0) {
 			return currentFrame == 0;
 		}
-		return true;
+		return currentFrame % 8 == 0;
 	}
 	
 	public void changeSet(MotionType mt) {
-		currentFrame = 0;
 		switch (mt) {
 		case STAY:
-			currentSet = 0;
+			changeSet(0);
 			break;
 		case STEP_LEFT:
 		case STEP_RIGHT:
-			currentSet = 1;
+			changeSet(1);
 			break;
 		case JUMP_LEFT:
 		case JUMP_RIGHT:
 		default:
-			currentSet = 2;
+			changeSet(2);
 			break;
 		}
+	}
+	
+	public boolean changeSet(int i ) {
+		if(i < 0 || i >= BMP_ROWS) return false;
+		currentFrame = 0;
+		currentSet = i;
+		return true;
 	}
 }

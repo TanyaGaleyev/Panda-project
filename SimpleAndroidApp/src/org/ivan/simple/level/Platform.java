@@ -1,6 +1,7 @@
 package org.ivan.simple.level;
 
 import org.ivan.simple.ImageProvider;
+import org.ivan.simple.MotionType;
 import org.ivan.simple.R;
 import org.ivan.simple.hero.Sprite;
 
@@ -14,7 +15,7 @@ public class Platform {
 		this.type = type;
 		switch(type) {
 		case SIMPLE:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.simple_platform), 1, 4);
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.simple_platform), 2, 8);
 			break;
 		case SIMPLE_V:
 			sprite  = new Sprite(ImageProvider.getBitmap(R.drawable.simple_platform_v), 1, 1);
@@ -46,6 +47,24 @@ public class Platform {
 			type = PlatformType.NONE;
 		} else {
 			
+		}
+	}
+	
+	public void changeSet(MotionType mt) {
+		if(sprite == null || type == PlatformType.REDUCE) return;
+		switch(mt) {
+		case STEP_LEFT:
+			sprite.setAnimating(sprite.changeSet(0));
+			sprite.playOnce = true;
+			break;
+		case STEP_RIGHT:
+			sprite.setAnimating(sprite.changeSet(1));
+			sprite.playOnce = true;
+			break;
+		default:
+			sprite.changeSet(0);
+			sprite.setAnimating(false);
+			break;
 		}
 	}
 }
