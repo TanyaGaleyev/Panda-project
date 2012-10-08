@@ -1,7 +1,5 @@
 package org.ivan.simple.hero;
 
-import org.ivan.simple.MotionType;
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -13,9 +11,9 @@ public class Sprite {
 
 	private final int BMP_COLS;
 	
-	private int currentFrame = 0;
+	protected int currentFrame = 0;
 	
-	private int currentSet = 0;
+	protected int currentSet = 0;
 	
 	private final int singleWidth;
 	
@@ -63,35 +61,6 @@ public class Sprite {
 	
 	public int getFrame() {
 		return currentFrame;
-	}
-	
-	public boolean isInControlState() {
-		if(currentSet == 0) {
-			return currentFrame == 0;
-		}
-		return currentFrame % 8 == 0;
-	}
-	
-	public void changeSet(MotionType mt) {
-		switch (mt) {
-		case STAY:
-			changeSet(0);
-			break;
-		case FALL:
-			changeSet(6);
-			break;
-		case STEP_LEFT:
-		case JUMP_LEFT:
-			changeSet(3);
-			break;
-		case STEP_RIGHT:
-		case JUMP_RIGHT:
-			changeSet(1);
-			break;
-		default:
-			changeSet(5);
-			break;
-		}
 	}
 	
 	public boolean changeSet(int i ) {

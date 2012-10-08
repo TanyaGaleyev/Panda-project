@@ -1,5 +1,6 @@
 package org.ivan.simple;
 
+import org.ivan.simple.hero.Hero;
 import org.ivan.simple.hero.Sprite;
 import org.ivan.simple.level.LevelCell;
 import org.ivan.simple.level.LevelView;
@@ -19,7 +20,7 @@ public class GameView extends SurfaceView {
 	
 	public static int GRID_STEP;
 	
-	private Sprite hero;
+	private Hero hero;
 	
 	private static int JUMP_SPEED;
 	private static int ANIMATION_JUMP_SPEED;
@@ -92,16 +93,15 @@ public class GameView extends SurfaceView {
 	}
 	
 	private void initImages() {
-//		hero = new Sprite(ImageProvider.getBitmap(R.drawable.ic_launcher),	1, 8);
-		hero = new Sprite(ImageProvider.getBitmap(R.drawable.ic_launcher3),	7, 16);
-		hero.setAnimating(true);
+		hero = new Hero();
+		hero.getSprite().setAnimating(true);
 		
-		GRID_STEP = hero.getWidth() % 4 == 0 ? hero.getWidth() : (hero.getWidth() / 4  + 1) * 4;
+		GRID_STEP = hero.getSprite().getWidth() % 4 == 0 ? hero.getSprite().getWidth() : (hero.getSprite().getWidth() / 4  + 1) * 4;
 		TOP_BOUND = GRID_STEP;
-		BOTTOM_BOUND = getHeight() - hero.getHeight();
+		BOTTOM_BOUND = getHeight() - hero.getSprite().getHeight();
 		BOTTOM_BOUND -= BOTTOM_BOUND % GRID_STEP;
 		LEFT_BOUND = GRID_STEP;
-		RIGHT_BOUND = getWidth() - hero.getWidth();
+		RIGHT_BOUND = getWidth() - hero.getSprite().getWidth();
 		RIGHT_BOUND -= RIGHT_BOUND % GRID_STEP;
 		JUMP_SPEED = GRID_STEP;
 		ANIMATION_JUMP_SPEED = JUMP_SPEED / 8;
@@ -122,7 +122,7 @@ public class GameView extends SurfaceView {
 		canvas.drawColor(Color.WHITE);
 		//canvas.drawBitmap(background, BACKGROUND_LEFT, BACKGROUND_TOP, null);
 		level.onDraw(canvas);
-		hero.onDraw(canvas, heroX - hero.getWidth() / 2, heroY - hero.getHeight() / 2);
+		hero.onDraw(canvas, heroX, heroY);
 		drawGrid(canvas);
 	}
 	
