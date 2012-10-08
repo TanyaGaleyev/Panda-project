@@ -93,7 +93,7 @@ public class GameView extends SurfaceView {
 	
 	private void initImages() {
 //		hero = new Sprite(ImageProvider.getBitmap(R.drawable.ic_launcher),	1, 8);
-		hero = new Sprite(ImageProvider.getBitmap(R.drawable.ic_launcher3),	3, 16);
+		hero = new Sprite(ImageProvider.getBitmap(R.drawable.ic_launcher3),	7, 16);
 		hero.setAnimating(true);
 		
 		GRID_STEP = hero.getWidth() % 4 == 0 ? hero.getWidth() : (hero.getWidth() / 4  + 1) * 4;
