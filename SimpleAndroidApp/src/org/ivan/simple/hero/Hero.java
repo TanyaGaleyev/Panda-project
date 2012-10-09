@@ -8,7 +8,7 @@ import android.graphics.Canvas;
 
 public class Hero {
 	private MotionType prevMotion = MotionType.NONE;
-	private Sprite sprite = new Sprite(ImageProvider.getBitmap(R.drawable.ic_launcher3), 7, 16);
+	private Sprite sprite = new Sprite(ImageProvider.getBitmap(R.drawable.ic_launcher3), 12, 16);
 	
 	public Hero() {
 	}
@@ -18,7 +18,9 @@ public class Hero {
 	}
 	
 	public boolean isInControlState() {
-		if(sprite.currentSet == 0) {
+		if(sprite.currentSet == 0 ||
+				sprite.currentSet == 7 ||
+				sprite.currentSet == 8) {
 			return sprite.currentFrame == 0;
 		}
 		return sprite.currentFrame % 8 == 0;
@@ -27,26 +29,40 @@ public class Hero {
 	public void changeSet(MotionType mt) {
 		switch (mt) {
 		case STAY:
-			sprite.changeSet(0);
+			if(prevMotion == MotionType.STEP_LEFT) {
+				sprite.changeSet(7);
+			} else if(prevMotion == MotionType.STEP_RIGHT) {
+				sprite.changeSet(8);
+			} else {
+				sprite.changeSet(0);
+			}
 			break;
 		case FALL:
-			sprite.changeSet(6);
+			if(Math.random() > 0.5) {
+				sprite.changeSet(6);
+			} else {
+				sprite.changeSet(11);
+			}
 			break;
 		case STEP_LEFT:
-		case JUMP_LEFT:
 			if(prevMotion == mt) {
 				sprite.changeSet(3);
 			} else {
 				sprite.changeSet(4);
 			}
 			break;
+		case JUMP_LEFT:
+			sprite.changeSet(10);
+			break;
 		case STEP_RIGHT:
-		case JUMP_RIGHT:
 			if(prevMotion == mt) {
 				sprite.changeSet(1);
 			} else {
 				sprite.changeSet(2);
 			}
+			break;
+		case JUMP_RIGHT:
+			sprite.changeSet(9);
 			break;
 		default:
 			sprite.changeSet(5);

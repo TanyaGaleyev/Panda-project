@@ -98,7 +98,7 @@ public class GameView extends SurfaceView {
 		
 		GRID_STEP = hero.getSprite().getWidth() % 4 == 0 ? hero.getSprite().getWidth() : (hero.getSprite().getWidth() / 4  + 1) * 4;
 		TOP_BOUND = GRID_STEP;
-		BOTTOM_BOUND = 6*72 - GRID_STEP;
+		BOTTOM_BOUND = getHeight() - GRID_STEP;
 		BOTTOM_BOUND -= BOTTOM_BOUND % GRID_STEP;
 		LEFT_BOUND = GRID_STEP;
 		RIGHT_BOUND = getWidth() - GRID_STEP;
