@@ -98,10 +98,10 @@ public class GameView extends SurfaceView {
 		
 		GRID_STEP = hero.getSprite().getWidth() % 4 == 0 ? hero.getSprite().getWidth() : (hero.getSprite().getWidth() / 4  + 1) * 4;
 		TOP_BOUND = GRID_STEP;
-		BOTTOM_BOUND = getHeight() - hero.getSprite().getHeight();
+		BOTTOM_BOUND = 6*72 - GRID_STEP;
 		BOTTOM_BOUND -= BOTTOM_BOUND % GRID_STEP;
 		LEFT_BOUND = GRID_STEP;
-		RIGHT_BOUND = getWidth() - hero.getSprite().getWidth();
+		RIGHT_BOUND = getWidth() - GRID_STEP;
 		RIGHT_BOUND -= RIGHT_BOUND % GRID_STEP;
 		JUMP_SPEED = GRID_STEP;
 		ANIMATION_JUMP_SPEED = JUMP_SPEED / 8;
