@@ -3,7 +3,6 @@ package org.ivan.simple.level;
 import org.ivan.simple.GameView;
 
 import android.graphics.Canvas;
-import org.ivan.simple.level.LevelStorage;
 
 public class LevelView {
 

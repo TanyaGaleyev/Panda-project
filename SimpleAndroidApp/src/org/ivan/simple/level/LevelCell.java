@@ -2,8 +2,6 @@ package org.ivan.simple.level;
 
 import org.ivan.simple.MotionType;
 
-import android.graphics.Canvas;
-
 public class LevelCell {
 	protected Platform floor = new Platform(PlatformType.NONE);
 	protected Platform left_wall = new Platform(PlatformType.NONE);

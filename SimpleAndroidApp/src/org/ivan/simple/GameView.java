@@ -1,7 +1,6 @@
 package org.ivan.simple;
 
 import org.ivan.simple.hero.Hero;
-import org.ivan.simple.hero.Sprite;
 import org.ivan.simple.level.LevelCell;
 import org.ivan.simple.level.LevelView;
 
