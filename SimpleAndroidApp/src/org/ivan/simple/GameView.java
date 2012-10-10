@@ -128,6 +128,17 @@ public class GameView extends SurfaceView {
 		level.onDraw(canvas);
 		hero.onDraw(canvas, heroX, heroY);
 		drawGrid(canvas);
+		drawFPS(canvas);
+		
+	}
+	
+	public void drawFPS(Canvas canvas) {
+		Paint paint = new Paint(); 
+		paint.setColor(Color.BLACK); 
+		paint.setStyle(Paint.Style.FILL); 
+		paint.setTextSize(25); 
+		paint.setColor(Color.BLUE);
+		canvas.drawText("FPS: " + GameManager.getFPS(), 5, 25, paint);
 	}
 	
 	public void drawGrid(Canvas canvas) {

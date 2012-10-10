@@ -7,7 +7,24 @@ public class GameManager extends Thread {
 
 	private boolean running = false;
 	
-	static final long FPS = 25;
+	private static long FPS;
+	private static long ticksPS;
+	
+	static {
+		FPS = 25;
+		ticksPS = 1000 / FPS;;
+	}
+	
+	public static void changeFPS(int dFPS) {
+		if(FPS + dFPS > 0) {
+			FPS += dFPS;
+			ticksPS = 1000 / FPS;
+		}
+	}
+	
+	public static long getFPS() {
+		return FPS;
+	}
 	
 	public GameManager(GameView view) {
 		this.view = view;
@@ -19,7 +36,7 @@ public class GameManager extends Thread {
 	
 	@Override
 	public void run() {
-		long ticksPS = 1000 / FPS;
+		
         long startTime;
         long sleepTime;
 		while(running) {

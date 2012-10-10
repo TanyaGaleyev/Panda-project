@@ -3,6 +3,7 @@ package org.ivan.simple;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.Window;
 
 public class MainActivity extends Activity {
@@ -22,6 +23,22 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
+    }
+    
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	// TODO Auto-generated method stub
+    	switch (item.getItemId()) {
+    	case R.id.increaseFPS:
+    		GameManager.changeFPS(5); 
+    		return true;
+    	case R.id.decreaseFPS:
+    		GameManager.changeFPS(-5);
+    		return true;
+    	default:
+    		return super.onOptionsItemSelected(item);
+    	}
     }
     
 //    public void bugaga(View view) {
