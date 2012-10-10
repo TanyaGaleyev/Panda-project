@@ -43,6 +43,8 @@ public class GameView extends SurfaceView {
 	
 	public UserControlType pressedControl = UserControlType.IDLE;
 	
+	private Bitmap background;
+	
 	public GameView(Context context) {
 		super(context);
 		init();
@@ -93,8 +95,11 @@ public class GameView extends SurfaceView {
 	}
 	
 	private void initImages() {
+		
 		hero = new Hero();
 		hero.getSprite().setAnimating(true);
+		
+		background = BitmapFactory.decodeResource(getResources(), R.drawable.background_1);
 		
 		GRID_STEP = hero.getSprite().getWidth() % 4 == 0 ? hero.getSprite().getWidth() : (hero.getSprite().getWidth() / 4  + 1) * 4;
 		TOP_BOUND = GRID_STEP;
@@ -120,7 +125,7 @@ public class GameView extends SurfaceView {
 		heroX += xSpeed;
 		heroY += ySpeed;
 		canvas.drawColor(Color.WHITE);
-		//canvas.drawBitmap(background, BACKGROUND_LEFT, BACKGROUND_TOP, null);
+		canvas.drawBitmap(background, 0, 0, null);
 		level.onDraw(canvas);
 		hero.onDraw(canvas, heroX, heroY);
 		drawGrid(canvas);

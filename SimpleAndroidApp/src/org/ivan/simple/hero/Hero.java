@@ -8,7 +8,7 @@ import android.graphics.Canvas;
 
 public class Hero {
 	private MotionType prevMotion = MotionType.NONE;
-	private Sprite sprite = new Sprite(ImageProvider.getBitmap(R.drawable.ic_launcher3), 12, 16);
+	private Sprite sprite = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite), 12, 16);
 	
 	public Hero() {
 	}

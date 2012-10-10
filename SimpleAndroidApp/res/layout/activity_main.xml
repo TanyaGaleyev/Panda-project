@@ -1,12 +1,13 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:background="#C47633">
     
     <org.ivan.simple.GameView
         android:id="@+id/game"
         android:layout_width="792px"
-        android:layout_height="432px" />
+        android:layout_height="432px"
+        android:layout_centerInParent="true" />
 
-</LinearLayout>
+</RelativeLayout>
