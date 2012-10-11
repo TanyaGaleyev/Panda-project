@@ -195,10 +195,10 @@ public class GameView extends SurfaceView {
 	}
 	
 	public void updateGame() {
-		LevelCell prevCell = level.model.getHeroCell(); 
 		if(level.model.controlType == UserControlType.IDLE) {
 			level.model.controlType = pressedControl;
 		}
+		LevelCell prevCell = level.model.getHeroCell();
 		level.model.updateGame();
 		prevCell.updateCell(level.model.getMotionType());
 		hero.changeSet(level.model.getMotionType());

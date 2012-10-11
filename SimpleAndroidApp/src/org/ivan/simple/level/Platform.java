@@ -15,7 +15,7 @@ public class Platform {
 		this.type = type;
 		switch(type) {
 		case SIMPLE:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.simple_platform), 2, 8);
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.simple_platform), 3, 8);
 			break;
 		case SIMPLE_V:
 			sprite  = new Sprite(ImageProvider.getBitmap(R.drawable.simple_platform_v), 1, 1);
@@ -54,16 +54,19 @@ public class Platform {
 		if(sprite == null || type == PlatformType.REDUCE) return;
 		switch(mt) {
 		case STEP_LEFT:
-			sprite.setAnimating(sprite.changeSet(0));
-			sprite.playOnce = true;
-			break;
-		case STEP_RIGHT:
 			sprite.setAnimating(sprite.changeSet(1));
 			sprite.playOnce = true;
 			break;
-		default:
-			sprite.changeSet(0);
+		case STEP_RIGHT:
+			sprite.setAnimating(sprite.changeSet(2));
+			sprite.playOnce = true;
+			break;
+		case JUMP:
 			sprite.setAnimating(false);
+			break;
+		default:
+			sprite.setAnimating(sprite.changeSet(0));
+			sprite.playOnce = true;;
 			break;
 		}
 	}

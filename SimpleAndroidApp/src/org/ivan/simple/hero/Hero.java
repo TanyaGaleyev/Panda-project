@@ -18,7 +18,7 @@ public class Hero {
 	}
 	
 	public boolean isInControlState() {
-		if(sprite.currentSet == 12) return sprite.currentFrame == 7;
+		if(sprite.currentSet == 12) return sprite.currentFrame == 8;
 		if(sprite.currentSet == 0 ||
 				sprite.currentSet == 7 ||
 				sprite.currentSet == 8) {
@@ -30,20 +30,20 @@ public class Hero {
 	public void changeSet(MotionType mt) {
 		switch (mt) {
 		case STAY:
-			if(prevMotion == MotionType.STEP_LEFT) {
+			if(prevMotion == MotionType.STEP_LEFT || prevMotion == MotionType.JUMP_LEFT) {
 				sprite.changeSet(7);
-			} else if(prevMotion == MotionType.STEP_RIGHT) {
+			} else if(prevMotion == MotionType.STEP_RIGHT || prevMotion == MotionType.JUMP_RIGHT) {
 				sprite.changeSet(8);
 			} else {
 				sprite.changeSet(0);
 			}
 			break;
 		case FALL:
-//			if(Math.random() > 0.5) {
+			if(Math.random() > 0.5) {
 				sprite.changeSet(6);
-//			} else {
-//				sprite.changeSet(11);
-//			}
+			} else {
+				sprite.changeSet(11);
+			}
 			break;
 		case STEP_LEFT:
 			if(prevMotion == mt) {
