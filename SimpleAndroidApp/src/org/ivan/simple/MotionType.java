@@ -15,6 +15,7 @@ package org.ivan.simple;
  */
 public enum MotionType {
 	JUMP,
+	PRE_JUMP,
 	FALL,
 	JUMP_LEFT,
 	JUMP_RIGHT,

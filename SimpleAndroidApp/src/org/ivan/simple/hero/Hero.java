@@ -8,7 +8,7 @@ import android.graphics.Canvas;
 
 public class Hero {
 	private MotionType prevMotion = MotionType.NONE;
-	private Sprite sprite = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite), 12, 16);
+	private Sprite sprite = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite), 13, 16);
 	
 	public Hero() {
 	}
@@ -18,6 +18,7 @@ public class Hero {
 	}
 	
 	public boolean isInControlState() {
+		if(sprite.currentSet == 12) return sprite.currentFrame == 7;
 		if(sprite.currentSet == 0 ||
 				sprite.currentSet == 7 ||
 				sprite.currentSet == 8) {
@@ -38,11 +39,11 @@ public class Hero {
 			}
 			break;
 		case FALL:
-			if(Math.random() > 0.5) {
+//			if(Math.random() > 0.5) {
 				sprite.changeSet(6);
-			} else {
-				sprite.changeSet(11);
-			}
+//			} else {
+//				sprite.changeSet(11);
+//			}
 			break;
 		case STEP_LEFT:
 			if(prevMotion == mt) {
@@ -63,6 +64,9 @@ public class Hero {
 			break;
 		case JUMP_RIGHT:
 			sprite.changeSet(9);
+			break;
+		case PRE_JUMP:
+			sprite.changeSet(12);
 			break;
 		default:
 			sprite.changeSet(5);
