@@ -116,10 +116,13 @@ public class LevelModel {
 	public void updateGame() {
 		switch(getHeroCell().getFloor().getType()) {
 		case TRAMPOLINE:
-			if(motionAvaible(MotionType.JUMP)){
-				motionType = MotionType.JUMP;
+			if(motionAvaible(MotionType.JUMP) &motionType!=MotionType.PRE_JUMP ){
+				motionType = MotionType.PRE_JUMP;}
+			
+			else {
+				if(motionAvaible(MotionType.JUMP)){
+					motionType = MotionType.JUMP;}
 			}
-			else {}
 			break;
 		case ANGLE_RIGHT:
 			if(motionAvaible(MotionType.STEP_RIGHT)) {
