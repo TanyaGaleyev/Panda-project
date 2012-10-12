@@ -23,6 +23,12 @@ public class Platform {
 		case REDUCE:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.reduce_platform), 1, 4);
 			break;
+		case ANGLE_RIGHT:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.angle_platform_right), 1, 1);
+			break;
+		case ANGLE_LEFT:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.angle_platform_left), 1, 1);
+			break;	
 		case NONE:
 			break;
 		}

@@ -52,6 +52,12 @@ public class LevelModel {
 	            	    if(mylevel[i][j][k]==2){
 	            	    	levelGrid[i][j] .createReduce(1);
 						}
+	            	    if(mylevel[i][j][k]==3){
+	            	    	levelGrid[i][j] .createAngleRight(1);
+						}
+	            	    if(mylevel[i][j][k]==4){
+	            	    	levelGrid[i][j] .createAngleLeft(1);
+						}
             	    // else set roof as floor of nearest upper cell
 					} else {
 						levelGrid[i][j].roof = levelGrid[i - 1][j].floor;
@@ -77,6 +83,12 @@ public class LevelModel {
             	    if(mylevel[i][j][k]==2){
             	    	levelGrid[i][j] .createReduce(0);
 					}
+            	    if(mylevel[i][j][k]==3){
+            	    	levelGrid[i][j] .createAngleRight(0);
+					}
+            	    if(mylevel[i][j][k]==4){
+            	    	levelGrid[i][j] .createAngleLeft(0);
+					}
 					
 				}
 				}
@@ -97,6 +109,14 @@ public class LevelModel {
 	}
 	
 	public void updateGame() {
+		switch(getCell(heroY, heroX).getFloor().getType()) {
+		case  ANGLE_RIGHT:
+		motionType = MotionType.STEP_RIGHT;	
+		break;
+		case ANGLE_LEFT:
+			motionType = MotionType.STEP_LEFT;	
+		break;
+		default:
 		switch (motionType) {
 		case STAY:
 			switch (controlType) {
@@ -291,7 +311,7 @@ public class LevelModel {
 			break;
 		default:
 			break;
-		}
+		}}
 		controlType = UserControlType.IDLE;
 		
 		switch (motionType) {
@@ -333,6 +353,8 @@ public class LevelModel {
 		case JUMP:
 			if(getCell(heroY, heroX).getRoof().getType() == PlatformType.SIMPLE) return false;
 			if(getCell(heroY, heroX).getRoof().getType() == PlatformType.REDUCE) return false;
+			if(getCell(heroY, heroX).getRoof().getType() == PlatformType.ANGLE_RIGHT) return false;
+			if(getCell(heroY, heroX).getRoof().getType() == PlatformType.ANGLE_LEFT) return false;
 			if(heroY - 1 < 0) return false;
 			return true;
 		case STEP_LEFT:
@@ -348,6 +370,8 @@ public class LevelModel {
 		case FALL:
 			if(getCell(heroY, heroX).getFloor().getType() == PlatformType.SIMPLE) return false;
 			if(getCell(heroY, heroX).getFloor().getType() == PlatformType.REDUCE) return false;
+			if(getCell(heroY, heroX).getFloor().getType() == PlatformType.ANGLE_RIGHT) return false;
+			if(getCell(heroY, heroX).getFloor().getType() == PlatformType.ANGLE_LEFT) return false;
 			if(heroY + 1 > row - 1) return false;
 			return true;
 		default:
