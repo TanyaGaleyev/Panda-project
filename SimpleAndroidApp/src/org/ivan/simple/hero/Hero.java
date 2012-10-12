@@ -34,6 +34,7 @@ public class Hero {
 		if(sprite.currentSet == 0 ||
 				sprite.currentSet == 7 ||
 				sprite.currentSet == 8 ||
+				sprite.currentSet == 14 ||
 				sprite.currentSet == 15 ||
 				sprite.currentSet == 16) {
 			return sprite.currentFrame == 0;
@@ -64,6 +65,9 @@ public class Hero {
 				sprite.changeSet(11);
 			}
 			break;
+		case FALL_BLANSH:
+			sprite.changeSet(14);
+			break;
 		case STEP_LEFT:
 			if(prevMotion == mt) {
 				sprite.changeSet(3);
@@ -86,6 +90,9 @@ public class Hero {
 			break;
 		case PRE_JUMP:
 			sprite.changeSet(12);
+			break;
+		case JUMP:
+			sprite.changeSet(13);
 			break;
 		case STEP_LEFT_WALL:
 			sprite.changeSet(16);

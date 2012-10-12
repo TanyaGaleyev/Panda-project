@@ -127,7 +127,7 @@ public class GameView extends SurfaceView {
 		canvas.drawBitmap(background, 0, 0, null);
 		level.onDraw(canvas);
 		hero.onDraw(canvas, heroX, heroY);
-		drawGrid(canvas);
+//		drawGrid(canvas);
 		drawFPS(canvas);
 		
 	}

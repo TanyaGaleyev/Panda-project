@@ -116,7 +116,7 @@ public class LevelModel {
 	public void updateGame() {
 		switch(getHeroCell().getFloor().getType()) {
 		case TRAMPOLINE:
-			if(motionAvaible(MotionType.JUMP) &motionType!=MotionType.PRE_JUMP ){
+			if(motionAvaible(MotionType.JUMP) && motionType!=MotionType.PRE_JUMP ){
 				motionType = MotionType.PRE_JUMP;}
 			
 			else {
@@ -142,10 +142,14 @@ public class LevelModel {
 		switch (motionType) {
 		case STEP_LEFT_WALL:
 		case STEP_RIGHT_WALL:
+		case FALL:
+		case FALL_BLANSH:
 		case STAY:
 			switch (controlType) {
 			case UP:
-				if(motionAvaible(MotionType.FALL)) {
+				if(motionAvaible(MotionType.FALL_BLANSH)) {
+					motionType = MotionType.FALL_BLANSH;
+				} else if(motionAvaible(MotionType.FALL)) {
 					motionType = MotionType.FALL;
 				} else if(motionAvaible(MotionType.JUMP)) {
 					motionType = MotionType.PRE_JUMP;
@@ -154,7 +158,9 @@ public class LevelModel {
 				}
 				break;
 			case LEFT:
-				if(motionAvaible(MotionType.FALL)) {
+				if(motionAvaible(MotionType.FALL_BLANSH)) {
+					motionType = MotionType.FALL_BLANSH;
+				} else if(motionAvaible(MotionType.FALL)) {
 					motionType = MotionType.FALL;
 				} else if(motionAvaible(MotionType.STEP_LEFT)) {
 					motionType = MotionType.STEP_LEFT;
@@ -165,7 +171,9 @@ public class LevelModel {
 				}
 				break;
 			case RIGHT:
-				if(motionAvaible(MotionType.FALL)) {
+				if(motionAvaible(MotionType.FALL_BLANSH)) {
+					motionType = MotionType.FALL_BLANSH;
+				} else if(motionAvaible(MotionType.FALL)) {
 					motionType = MotionType.FALL;
 				} else if(motionAvaible(MotionType.STEP_RIGHT)) {
 					motionType = MotionType.STEP_RIGHT;
@@ -176,7 +184,9 @@ public class LevelModel {
 				}
 				break;
 			default:
-				if(motionAvaible(MotionType.FALL)) {
+				if(motionAvaible(MotionType.FALL_BLANSH)) {
+					motionType = MotionType.FALL_BLANSH;
+				} else if(motionAvaible(MotionType.FALL)) {
 					motionType = MotionType.FALL;
 				} else {
 					motionType = MotionType.STAY;
@@ -187,13 +197,19 @@ public class LevelModel {
 		case JUMP:
 			switch (controlType) {
 			case DOWN:
-				motionType = MotionType.FALL;
+				if(motionAvaible(MotionType.FALL_BLANSH)) {
+					motionType = MotionType.FALL_BLANSH;
+				} else {
+					motionType = MotionType.FALL;
+				}
 				break;
 			case LEFT:
 				if(motionAvaible(MotionType.JUMP_LEFT)) {
 					motionType = MotionType.JUMP_LEFT;
 				} else if(motionAvaible(MotionType.JUMP)) {
 					motionType = MotionType.JUMP;
+				} else if(motionAvaible(MotionType.FALL_BLANSH)) {
+					motionType = MotionType.FALL_BLANSH;
 				} else {
 					motionType = MotionType.FALL;
 				}
@@ -203,6 +219,8 @@ public class LevelModel {
 					motionType = MotionType.JUMP_RIGHT;
 				} else if(motionAvaible(MotionType.JUMP)) {
 					motionType = MotionType.JUMP;
+				} else if(motionAvaible(MotionType.FALL_BLANSH)) {
+					motionType = MotionType.FALL_BLANSH;
 				} else {
 					motionType = MotionType.FALL;
 				}
@@ -210,49 +228,9 @@ public class LevelModel {
 			default:
 				if(motionAvaible(MotionType.JUMP)) {
 					motionType = MotionType.JUMP;
+				} else if(motionAvaible(MotionType.FALL_BLANSH)) {
+					motionType = MotionType.FALL_BLANSH;
 				} else if (motionAvaible(MotionType.FALL)){
-					motionType = MotionType.FALL;
-				} else {
-					motionType = MotionType.STAY;
-				}
-				break;
-			}
-			break;
-		case FALL:
-			switch (controlType) {
-			case LEFT:
-				if(motionAvaible(MotionType.FALL)) {
-					motionType = MotionType.FALL;
-				} else if(motionAvaible(MotionType.STEP_LEFT)) {
-					motionType = MotionType.STEP_LEFT;
-				} else if(motionAvaible(MotionType.STEP_LEFT_WALL)) {
-					motionType = MotionType.STEP_LEFT_WALL;
-				} else {
-					motionType = MotionType.STAY;
-				}
-				break;
-			case RIGHT:
-				if(motionAvaible(MotionType.FALL)) {
-					motionType = MotionType.FALL;
-				} else if(motionAvaible(MotionType.STEP_RIGHT)) {
-					motionType = MotionType.STEP_RIGHT;
-				} else if(motionAvaible(MotionType.STEP_RIGHT_WALL)) {
-					motionType = MotionType.STEP_RIGHT_WALL;
-				} else {
-					motionType = MotionType.STAY;
-				}
-				break;
-			case UP:
-				if(motionAvaible(MotionType.FALL)) {
-					motionType = MotionType.FALL;
-				} else if(motionAvaible(MotionType.JUMP)) {
-					motionType = MotionType.PRE_JUMP;
-				} else {
-					motionType = MotionType.STAY;
-				}
-				break;
-			default:
-				if(motionAvaible(MotionType.FALL)) {
 					motionType = MotionType.FALL;
 				} else {
 					motionType = MotionType.STAY;
@@ -262,61 +240,24 @@ public class LevelModel {
 			break;
 		case STEP_LEFT:
 		case STEP_RIGHT:
-			switch(controlType) {
-			case LEFT:
-				if(motionAvaible(MotionType.FALL)) {
-					motionType = MotionType.FALL;
-				} else if(motionAvaible(MotionType.STEP_LEFT)) {
-					motionType = MotionType.STEP_LEFT;
-				} else if(motionAvaible(MotionType.STEP_LEFT_WALL)) {
-					motionType = MotionType.STEP_LEFT_WALL;
-				} else {
-					motionType = MotionType.STAY;
-				}
-				break;
-			case RIGHT:
-				if(motionAvaible(MotionType.FALL)) {
-					motionType = MotionType.FALL;
-				} else if(motionAvaible(MotionType.STEP_RIGHT)) {
-					motionType = MotionType.STEP_RIGHT;
-				} else if(motionAvaible(MotionType.STEP_RIGHT_WALL)) {
-					motionType = MotionType.STEP_RIGHT_WALL;
-				} else {
-					motionType = MotionType.STAY;
-				}
-				break;
-			case UP:
-				if(motionAvaible(MotionType.FALL)) {
-					motionType = MotionType.FALL;
-				} else if(motionAvaible(MotionType.JUMP)) {
-					motionType = MotionType.PRE_JUMP;
-				} else {
-					motionType = MotionType.STAY;
-				}
-				break;
-			default:
-				if(motionAvaible(MotionType.FALL)) {
-					motionType = MotionType.FALL;
-				} else {
-					motionType = MotionType.STAY;
-				}
-				break;
-			}
-			break;
 		case JUMP_LEFT:
 		case JUMP_RIGHT:
 			switch(controlType) {
 			case UP:
-				if(motionAvaible(MotionType.JUMP)) {
-					motionType = MotionType.PRE_JUMP;
+				if(motionAvaible(MotionType.FALL_BLANSH)) {
+					motionType = MotionType.FALL_BLANSH;
 				} else if(motionAvaible(MotionType.FALL)) {
 					motionType = MotionType.FALL;
+				} else if(motionAvaible(MotionType.JUMP)) {
+					motionType = MotionType.JUMP;
 				} else {
 					motionType = MotionType.STAY;
 				}
 				break;
 			case LEFT:
-				if(motionAvaible(MotionType.FALL)) {
+				if(motionAvaible(MotionType.FALL_BLANSH)) {
+					motionType = MotionType.FALL_BLANSH;
+				} else if(motionAvaible(MotionType.FALL)) {
 					motionType = MotionType.FALL;
 				} else if(motionAvaible(MotionType.STEP_LEFT)) {
 					motionType = MotionType.STEP_LEFT;
@@ -327,7 +268,9 @@ public class LevelModel {
 				}
 				break;
 			case RIGHT:
-				if(motionAvaible(MotionType.FALL)) {
+				if(motionAvaible(MotionType.FALL_BLANSH)) {
+					motionType = MotionType.FALL_BLANSH;
+				} else if(motionAvaible(MotionType.FALL)) {
 					motionType = MotionType.FALL;				
 				} else if(motionAvaible(MotionType.STEP_RIGHT)) {
 					motionType = MotionType.STEP_RIGHT;
@@ -338,7 +281,9 @@ public class LevelModel {
 				}
 				break;
 			default:
-				if(motionAvaible(MotionType.FALL)) {
+				if(motionAvaible(MotionType.FALL_BLANSH)) {
+					motionType = MotionType.FALL_BLANSH;
+				} else if(motionAvaible(MotionType.FALL)) {
 					motionType = MotionType.FALL;
 				} else {
 					motionType = MotionType.STAY;
@@ -359,6 +304,8 @@ public class LevelModel {
 			xSpeed = 0;
 			ySpeed = -1;
 			break;
+		case FALL_BLANSH:
+			heroY += 1;
 		case FALL:
 			xSpeed = 0;
 			ySpeed = 1;
@@ -407,6 +354,11 @@ public class LevelModel {
 		case FALL:
 			if(getHeroCell().getFloor().getType() != PlatformType.NONE) return false;
 			if(heroY + 1 > row - 1) return false;
+			return true;
+		case FALL_BLANSH:
+			if(getHeroCell().getFloor().getType() != PlatformType.NONE) return false;
+			if(heroY + 2 > row - 1) return false;
+			if(getCell(heroY + 1, heroX).getFloor().getType() != PlatformType.NONE) return false;
 			return true;
 		case STEP_LEFT_WALL:
 			return true;
