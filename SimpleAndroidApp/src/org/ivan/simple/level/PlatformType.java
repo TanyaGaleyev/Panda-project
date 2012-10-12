@@ -6,6 +6,8 @@ public enum PlatformType {
 	SIMPLE_V,
 	
 	REDUCE,
+	ANGLE_RIGHT,
+	ANGLE_LEFT,
 	NONE
 	
 }

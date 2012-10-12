@@ -38,6 +38,23 @@ public class LevelCell {
 		}
 	}
 	
+	public void createAngleRight(int side) {
+		if(side==0){
+		floor = new Platform(PlatformType.ANGLE_RIGHT);
+		}else{
+		roof = new Platform(PlatformType.ANGLE_RIGHT);
+		}
+	}
+	
+	public void createAngleLeft(int side) {
+		if(side==0){
+		floor = new Platform(PlatformType.ANGLE_LEFT);
+		}else{
+		roof = new Platform(PlatformType.ANGLE_LEFT);
+		}
+	}
+	
+	
 	public Platform getFloor() {
 		return floor;
 	}
