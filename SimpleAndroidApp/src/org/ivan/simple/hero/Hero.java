@@ -33,7 +33,9 @@ public class Hero {
 		if(sprite.currentSet == 12) return sprite.currentFrame == 8;
 		if(sprite.currentSet == 0 ||
 				sprite.currentSet == 7 ||
-				sprite.currentSet == 8) {
+				sprite.currentSet == 8 ||
+				sprite.currentSet == 15 ||
+				sprite.currentSet == 16) {
 			return sprite.currentFrame == 0;
 		}
 		return sprite.currentFrame % 8 == 0;
