@@ -28,7 +28,9 @@ public class Platform {
 			break;
 		case ANGLE_LEFT:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.angle_platform_left), 1, 1);
-			break;	
+			break;
+		case TRAMPOLINE:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.trampoline_platform),1,1);
 		case NONE:
 			break;
 		}

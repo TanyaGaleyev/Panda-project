@@ -58,6 +58,9 @@ public class LevelModel {
 	            	    if(mylevel[i][j][k]==4){
 	            	    	levelGrid[i][j] .createAngleLeft(1);
 						}
+	            	    if(mylevel[i][j][k]==5){
+	            	    	levelGrid[i][j] .createTrampoline(1);
+	            	    }
             	    // else set roof as floor of nearest upper cell
 					} else {
 						levelGrid[i][j].roof = levelGrid[i - 1][j].floor;
@@ -89,7 +92,9 @@ public class LevelModel {
             	    if(mylevel[i][j][k]==4){
             	    	levelGrid[i][j] .createAngleLeft(0);
 					}
-					
+					if(mylevel[i][j][k]==5){
+						levelGrid[i][j] .createTrampoline(0);
+					}
 				}
 				}
 			}
@@ -110,6 +115,12 @@ public class LevelModel {
 	
 	public void updateGame() {
 		switch(getHeroCell().getFloor().getType()) {
+		case TRAMPOLINE:
+			if(motionAvaible(MotionType.JUMP)){
+				motionType = MotionType.JUMP;
+			}
+			else {}
+			break;
 		case ANGLE_RIGHT:
 			if(motionAvaible(MotionType.STEP_RIGHT)) {
 				motionType = MotionType.STEP_RIGHT;

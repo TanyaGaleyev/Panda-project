@@ -54,6 +54,13 @@ public class LevelCell {
 		}
 	}
 	
+	public void createTrampoline(int side) {
+		if (side==0){
+			floor = new Platform(PlatformType.TRAMPOLINE);
+		}else{
+			roof = new Platform(PlatformType.TRAMPOLINE);
+		}
+	}
 	
 	public Platform getFloor() {
 		return floor;

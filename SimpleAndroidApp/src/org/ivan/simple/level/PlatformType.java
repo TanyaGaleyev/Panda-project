@@ -8,6 +8,7 @@ public enum PlatformType {
 	REDUCE,
 	ANGLE_RIGHT,
 	ANGLE_LEFT,
+	TRAMPOLINE,
 	NONE
 	
 }
