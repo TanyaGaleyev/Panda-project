@@ -2,6 +2,7 @@ package org.ivan.simple;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -36,6 +37,10 @@ public class MainActivity extends Activity {
     	case R.id.decreaseFPS:
     		GameManager.changeFPS(-5);
     		return true;
+    	case R.id.restart:
+    		finish();
+    		Intent intent = new Intent(this, MainActivity.class);
+    		startActivity(intent);
     	default:
     		return super.onOptionsItemSelected(item);
     	}

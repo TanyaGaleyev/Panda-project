@@ -109,15 +109,25 @@ public class LevelModel {
 	}
 	
 	public void updateGame() {
-		switch(getCell(heroY, heroX).getFloor().getType()) {
-		case  ANGLE_RIGHT:
-		motionType = MotionType.STEP_RIGHT;	
-		break;
+		switch(getHeroCell().getFloor().getType()) {
+		case ANGLE_RIGHT:
+			if(motionAvaible(MotionType.STEP_RIGHT)) {
+				motionType = MotionType.STEP_RIGHT;
+			} else if(motionAvaible(MotionType.STEP_RIGHT_WALL)) {
+				motionType = MotionType.STEP_RIGHT_WALL;
+			}
+			break;
 		case ANGLE_LEFT:
-			motionType = MotionType.STEP_LEFT;	
-		break;
+			if(motionAvaible(MotionType.STEP_LEFT)) {
+				motionType = MotionType.STEP_LEFT;	
+			} else if(motionAvaible(MotionType.STEP_LEFT_WALL)) {
+				motionType = MotionType.STEP_LEFT_WALL;
+			}
+			break;
 		default:
 		switch (motionType) {
+		case STEP_LEFT_WALL:
+		case STEP_RIGHT_WALL:
 		case STAY:
 			switch (controlType) {
 			case UP:
@@ -134,6 +144,8 @@ public class LevelModel {
 					motionType = MotionType.FALL;
 				} else if(motionAvaible(MotionType.STEP_LEFT)) {
 					motionType = MotionType.STEP_LEFT;
+				} else if(motionAvaible(MotionType.STEP_LEFT_WALL)) {
+					motionType = MotionType.STEP_LEFT_WALL;
 				} else {
 					motionType = MotionType.STAY;
 				}
@@ -143,6 +155,8 @@ public class LevelModel {
 					motionType = MotionType.FALL;
 				} else if(motionAvaible(MotionType.STEP_RIGHT)) {
 					motionType = MotionType.STEP_RIGHT;
+				} else if(motionAvaible(MotionType.STEP_RIGHT_WALL)) {
+					motionType = MotionType.STEP_RIGHT_WALL;
 				} else {
 					motionType = MotionType.STAY;
 				}
@@ -197,6 +211,8 @@ public class LevelModel {
 					motionType = MotionType.FALL;
 				} else if(motionAvaible(MotionType.STEP_LEFT)) {
 					motionType = MotionType.STEP_LEFT;
+				} else if(motionAvaible(MotionType.STEP_LEFT_WALL)) {
+					motionType = MotionType.STEP_LEFT_WALL;
 				} else {
 					motionType = MotionType.STAY;
 				}
@@ -206,6 +222,8 @@ public class LevelModel {
 					motionType = MotionType.FALL;
 				} else if(motionAvaible(MotionType.STEP_RIGHT)) {
 					motionType = MotionType.STEP_RIGHT;
+				} else if(motionAvaible(MotionType.STEP_RIGHT_WALL)) {
+					motionType = MotionType.STEP_RIGHT_WALL;
 				} else {
 					motionType = MotionType.STAY;
 				}
@@ -236,6 +254,8 @@ public class LevelModel {
 					motionType = MotionType.FALL;
 				} else if(motionAvaible(MotionType.STEP_LEFT)) {
 					motionType = MotionType.STEP_LEFT;
+				} else if(motionAvaible(MotionType.STEP_LEFT_WALL)) {
+					motionType = MotionType.STEP_LEFT_WALL;
 				} else {
 					motionType = MotionType.STAY;
 				}
@@ -245,6 +265,8 @@ public class LevelModel {
 					motionType = MotionType.FALL;
 				} else if(motionAvaible(MotionType.STEP_RIGHT)) {
 					motionType = MotionType.STEP_RIGHT;
+				} else if(motionAvaible(MotionType.STEP_RIGHT_WALL)) {
+					motionType = MotionType.STEP_RIGHT_WALL;
 				} else {
 					motionType = MotionType.STAY;
 				}
@@ -284,6 +306,8 @@ public class LevelModel {
 					motionType = MotionType.FALL;
 				} else if(motionAvaible(MotionType.STEP_LEFT)) {
 					motionType = MotionType.STEP_LEFT;
+				} else if(motionAvaible(MotionType.STEP_LEFT_WALL)) {
+					motionType = MotionType.STEP_LEFT_WALL;
 				} else {
 					motionType = MotionType.STAY;
 				}
@@ -293,6 +317,8 @@ public class LevelModel {
 					motionType = MotionType.FALL;				
 				} else if(motionAvaible(MotionType.STEP_RIGHT)) {
 					motionType = MotionType.STEP_RIGHT;
+				} else if(motionAvaible(MotionType.STEP_RIGHT_WALL)) {
+					motionType = MotionType.STEP_RIGHT_WALL;
 				} else {
 					motionType = MotionType.STAY;
 				}
@@ -351,28 +377,26 @@ public class LevelModel {
 	private boolean motionAvaible(MotionType mt) {
 		switch (mt) {
 		case JUMP:
-			if(getCell(heroY, heroX).getRoof().getType() == PlatformType.SIMPLE) return false;
-			if(getCell(heroY, heroX).getRoof().getType() == PlatformType.REDUCE) return false;
-			if(getCell(heroY, heroX).getRoof().getType() == PlatformType.ANGLE_RIGHT) return false;
-			if(getCell(heroY, heroX).getRoof().getType() == PlatformType.ANGLE_LEFT) return false;
+			if(getHeroCell().getRoof().getType() != PlatformType.NONE) return false;
 			if(heroY - 1 < 0) return false;
 			return true;
 		case STEP_LEFT:
 		case JUMP_LEFT:
-			if(getCell(heroY, heroX).getLeft().getType() == PlatformType.SIMPLE_V) return false;
+			if(getHeroCell().getLeft().getType() != PlatformType.NONE) return false;
 			if(heroX - 1 < 0) return false;
 			return true;
 		case STEP_RIGHT:
 		case JUMP_RIGHT:
-			if(getCell(heroY, heroX).getRight().getType() == PlatformType.SIMPLE_V) return false;
+			if(getHeroCell().getRight().getType() != PlatformType.NONE) return false;
 			if(heroX + 1 > col - 1) return false;
 			return true;
 		case FALL:
-			if(getCell(heroY, heroX).getFloor().getType() == PlatformType.SIMPLE) return false;
-			if(getCell(heroY, heroX).getFloor().getType() == PlatformType.REDUCE) return false;
-			if(getCell(heroY, heroX).getFloor().getType() == PlatformType.ANGLE_RIGHT) return false;
-			if(getCell(heroY, heroX).getFloor().getType() == PlatformType.ANGLE_LEFT) return false;
+			if(getHeroCell().getFloor().getType() != PlatformType.NONE) return false;
 			if(heroY + 1 > row - 1) return false;
+			return true;
+		case STEP_LEFT_WALL:
+			return true;
+		case STEP_RIGHT_WALL:
 			return true;
 		default:
 			return false;

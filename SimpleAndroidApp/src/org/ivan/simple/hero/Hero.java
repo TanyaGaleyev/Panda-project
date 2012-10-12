@@ -7,8 +7,13 @@ import org.ivan.simple.R;
 import android.graphics.Canvas;
 
 public class Hero {
+	/**
+	 * Save prev motion after set changed. Prev motion used to get proper animation.
+	 * For example, if prev motion was STEP_LEFT and next motion will be STAY,
+	 * Panda schould turn 90 degrees right in air while jumping on place.
+	 */
 	private MotionType prevMotion = MotionType.NONE;
-	private Sprite sprite = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite), 14, 16);
+	private Sprite sprite = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite), 17, 16);
 	
 	public Hero() {
 	}
@@ -17,6 +22,13 @@ public class Hero {
 		return sprite;
 	}
 	
+	/**
+	 * Check if hero is in control state: ready for begin new motion type.
+	 * Used each game loop iteration to know is it time to process user controls
+	 * and achieve new motion type.
+	 * More often there is control state when next frame is first frame of animation.   
+	 * @return
+	 */
 	public boolean isInControlState() {
 		if(sprite.currentSet == 12) return sprite.currentFrame == 8;
 		if(sprite.currentSet == 0 ||
@@ -27,6 +39,11 @@ public class Hero {
 		return sprite.currentFrame % 8 == 0;
 	}
 	
+	/**
+	 * Change hero behavior (animation) depending on motion type.
+	 * Used after new motion type is obtained. 
+	 * @param mt
+	 */
 	public void changeSet(MotionType mt) {
 		switch (mt) {
 		case STAY:
@@ -67,6 +84,12 @@ public class Hero {
 			break;
 		case PRE_JUMP:
 			sprite.changeSet(12);
+			break;
+		case STEP_LEFT_WALL:
+			sprite.changeSet(16);
+			break;
+		case STEP_RIGHT_WALL:
+			sprite.changeSet(15);
 			break;
 		default:
 			sprite.changeSet(5);

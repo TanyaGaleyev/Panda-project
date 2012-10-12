@@ -69,6 +69,7 @@ public class LevelCell {
 	}
 	
 	public void updateCell(MotionType mt) {
+		// TODO combine all changes to changeSet method
 		floor.changePlatform();
 		floor.changeSet(mt);
 	}

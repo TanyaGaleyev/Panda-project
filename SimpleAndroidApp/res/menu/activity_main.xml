@@ -9,4 +9,7 @@
     <item android:id="@+id/decreaseFPS"
         android:title="Decrease FPS"
         android:showAsAction="always"/>
+    <item android:id="@+id/restart"
+        android:title="Restart"
+        android:showAsAction="always"/>
 </menu>
