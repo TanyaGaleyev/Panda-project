@@ -11,6 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -166,7 +167,19 @@ public class GameView extends SurfaceView {
 //			pressedControl = UserControlType.IDLE;
 //			return true;
 //		}
-		switch(event.getAction()) {
+		int actionMask = event.getActionMasked();
+		switch(actionMask) {
+		case MotionEvent.ACTION_POINTER_DOWN:
+			if(event.getX(event.getActionIndex()) > getWidth() / 2) {
+				pressedControl = UserControlType.RIGHT;
+				level.model.controlType = pressedControl;
+			} else {
+				pressedControl = UserControlType.LEFT;
+				level.model.controlType = pressedControl;
+			}
+			return true;
+		case MotionEvent.ACTION_POINTER_UP:
+			return true;
 		case MotionEvent.ACTION_DOWN:
 			startPressedY = event.getY();
 			if(event.getX() > getWidth() / 2) {
@@ -176,26 +189,6 @@ public class GameView extends SurfaceView {
 				pressedControl = UserControlType.LEFT;
 				level.model.controlType = pressedControl;
 			}
-			return true;
-		case MotionEvent.ACTION_MOVE:
-			if(event.getX() > getWidth() / 2) {
-				pressedControl = UserControlType.RIGHT;
-				level.model.controlType = pressedControl;
-			} else {
-				pressedControl = UserControlType.LEFT;
-				level.model.controlType = pressedControl;
-			}
-			return true;
-//		case MotionEvent.ACTION_POINTER_DOWN:
-//			if(event.getX() > getWidth() / 2) {
-//				pressedControl = UserControlType.RIGHT;
-//				level.model.controlType = pressedControl;
-//			} else {
-//				pressedControl = UserControlType.LEFT;
-//				level.model.controlType = pressedControl;
-//			}
-//			return true;
-		case MotionEvent.ACTION_POINTER_UP:
 			return true;
 		case MotionEvent.ACTION_UP:
 			if(event.getY() - startPressedY > 5) {
