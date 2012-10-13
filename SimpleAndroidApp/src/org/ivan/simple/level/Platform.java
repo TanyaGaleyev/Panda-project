@@ -27,7 +27,7 @@ public class Platform {
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.angle_platform_right), 1, 1);
 			break;
 		case ANGLE_LEFT:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.angle_platform_left), 1, 1);
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.angle_platform_left), 1, 4);
 			break;
 		case TRAMPOLINE:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.trampoline_platform),1,1);
@@ -60,6 +60,16 @@ public class Platform {
 	
 	public void changeSet(MotionType mt) {
 		if(sprite == null || type == PlatformType.REDUCE) return;
+		if(type == PlatformType.ANGLE_LEFT) {
+			sprite.setAnimating(true);
+			sprite.playOnce = true;
+			return;
+		}
+		if(type == PlatformType.TRAMPOLINE) {
+			sprite.setAnimating(true);
+			sprite.playOnce = true;
+			return;
+		}
 		switch(mt) {
 		case STEP_LEFT:
 			sprite.setAnimating(sprite.changeSet(1));
