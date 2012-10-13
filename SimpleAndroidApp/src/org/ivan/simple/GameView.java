@@ -41,6 +41,9 @@ public class GameView extends SurfaceView {
 	public LevelView level;
 	
 	public UserControlType pressedControl = UserControlType.IDLE;
+	private boolean pressed = false;
+	private float startPressedY;
+	private float endPressedY;
 	
 	private Bitmap background;
 	
@@ -96,7 +99,6 @@ public class GameView extends SurfaceView {
 	private void initImages() {
 		
 		hero = new Hero();
-		hero.getSprite().setAnimating(true);
 		
 		background = BitmapFactory.decodeResource(getResources(), R.drawable.background_1);
 		
@@ -154,13 +156,53 @@ public class GameView extends SurfaceView {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if(event.getAction() == MotionEvent.ACTION_DOWN ||
-				event.getAction() == MotionEvent.ACTION_MOVE) {
-			pressedControl = getMoveType(event); 
-			level.model.controlType = pressedControl;
+//		if(event.getAction() == MotionEvent.ACTION_DOWN ||
+//				event.getAction() == MotionEvent.ACTION_MOVE) {
+//			pressedControl = getMoveType(event); 
+//			level.model.controlType = pressedControl;
+//			return true;
+//    	}
+//		if(event.getAction() == MotionEvent.ACTION_UP) {
+//			pressedControl = UserControlType.IDLE;
+//			return true;
+//		}
+		switch(event.getAction()) {
+		case MotionEvent.ACTION_DOWN:
+			startPressedY = event.getY();
+			if(event.getX() > getWidth() / 2) {
+				pressedControl = UserControlType.RIGHT;
+				level.model.controlType = pressedControl;
+			} else {
+				pressedControl = UserControlType.LEFT;
+				level.model.controlType = pressedControl;
+			}
 			return true;
-    	}
-		if(event.getAction() == MotionEvent.ACTION_UP) {
+		case MotionEvent.ACTION_MOVE:
+			if(event.getX() > getWidth() / 2) {
+				pressedControl = UserControlType.RIGHT;
+				level.model.controlType = pressedControl;
+			} else {
+				pressedControl = UserControlType.LEFT;
+				level.model.controlType = pressedControl;
+			}
+			return true;
+//		case MotionEvent.ACTION_POINTER_DOWN:
+//			if(event.getX() > getWidth() / 2) {
+//				pressedControl = UserControlType.RIGHT;
+//				level.model.controlType = pressedControl;
+//			} else {
+//				pressedControl = UserControlType.LEFT;
+//				level.model.controlType = pressedControl;
+//			}
+//			return true;
+		case MotionEvent.ACTION_POINTER_UP:
+			return true;
+		case MotionEvent.ACTION_UP:
+			if(event.getY() - startPressedY > 5) {
+				level.model.controlType = UserControlType.DOWN;
+			} else if(event.getY() - startPressedY < -5) {
+				level.model.controlType = UserControlType.UP;
+			}
 			pressedControl = UserControlType.IDLE;
 			return true;
 		}

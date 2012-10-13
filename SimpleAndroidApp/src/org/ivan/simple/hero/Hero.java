@@ -13,13 +13,18 @@ public class Hero {
 	 * Panda schould turn 90 degrees right in air while jumping on place.
 	 */
 	private MotionType prevMotion = MotionType.NONE;
-	private Sprite sprite = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite), 17, 16);
+	private Sprite sprite8 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite8), 11, 8);
+	private Sprite sprite16 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite16), 6, 16);
+	private Sprite activeSprite;
 	
 	public Hero() {
+		sprite16.setAnimating(true);
+		sprite8.setAnimating(true);
+		activeSprite = sprite16;
 	}
 	
 	public Sprite getSprite() {
-		return sprite;
+		return activeSprite;
 	}
 	
 	/**
@@ -30,16 +35,16 @@ public class Hero {
 	 * @return
 	 */
 	public boolean isInControlState() {
-		if(sprite.currentSet == 12) return sprite.currentFrame == 8;
-		if(sprite.currentSet == 0 ||
-				sprite.currentSet == 7 ||
-				sprite.currentSet == 8 ||
-				sprite.currentSet == 14 ||
-				sprite.currentSet == 15 ||
-				sprite.currentSet == 16) {
-			return sprite.currentFrame == 0;
+		switch(prevMotion) {
+		case NONE:
+		case STAY:
+		case FALL_BLANSH:
+		case STEP_LEFT_WALL:
+		case STEP_RIGHT_WALL:
+			return activeSprite.currentFrame == 0;
+		default:
+			return activeSprite.currentFrame % 8 == 0;
 		}
-		return sprite.currentFrame % 8 == 0;
 	}
 	
 	/**
@@ -48,66 +53,85 @@ public class Hero {
 	 * @param mt
 	 */
 	public void changeSet(MotionType mt) {
+		pickActiveSprite(mt);
 		switch (mt) {
 		case STAY:
 			if(prevMotion == MotionType.STEP_LEFT || prevMotion == MotionType.JUMP_LEFT) {
-				sprite.changeSet(7);
+				activeSprite.changeSet(1);
 			} else if(prevMotion == MotionType.STEP_RIGHT || prevMotion == MotionType.JUMP_RIGHT) {
-				sprite.changeSet(8);
+				activeSprite.changeSet(2);
 			} else {
-				sprite.changeSet(0);
+				activeSprite.changeSet(0);
 			}
 			break;
 		case FALL:
 			if(Math.random() > 0.5) {
-				sprite.changeSet(6);
+				activeSprite.changeSet(5);
 			} else {
-				sprite.changeSet(11);
+				activeSprite.changeSet(6);
 			}
 			break;
 		case FALL_BLANSH:
-			sprite.changeSet(14);
+			activeSprite.changeSet(3);
 			break;
 		case STEP_LEFT:
 			if(prevMotion == mt) {
-				sprite.changeSet(3);
+				activeSprite.changeSet(2);
 			} else {
-				sprite.changeSet(4);
+				activeSprite.changeSet(3);
 			}
 			break;
 		case JUMP_LEFT:
-			sprite.changeSet(10);
+			activeSprite.changeSet(8);
 			break;
 		case STEP_RIGHT:
 			if(prevMotion == mt) {
-				sprite.changeSet(1);
+				activeSprite.changeSet(0);
 			} else {
-				sprite.changeSet(2);
+				activeSprite.changeSet(1);
 			}
 			break;
 		case JUMP_RIGHT:
-			sprite.changeSet(9);
+			activeSprite.changeSet(7);
 			break;
 		case PRE_JUMP:
-			sprite.changeSet(12);
+			activeSprite.changeSet(9);
 			break;
 		case JUMP:
-			sprite.changeSet(13);
+			activeSprite.changeSet(4);
 			break;
 		case STEP_LEFT_WALL:
-			sprite.changeSet(16);
+			activeSprite.changeSet(5);
 			break;
 		case STEP_RIGHT_WALL:
-			sprite.changeSet(15);
+			activeSprite.changeSet(4);
+			break;
+		case BEAT_ROOF:
+			activeSprite.changeSet(10);
 			break;
 		default:
-			sprite.changeSet(5);
+			activeSprite.changeSet(4);
 			break;
 		}
 		prevMotion = mt;
 	}
 	
+	private void pickActiveSprite(MotionType mt) {
+		switch(mt) {
+		case NONE:
+		case STAY:
+		case FALL_BLANSH:
+		case STEP_LEFT_WALL:
+		case STEP_RIGHT_WALL:
+			activeSprite = sprite16;
+			break;
+		default:
+			activeSprite = sprite8;
+			break;
+		}
+	}
+	
 	public void onDraw(Canvas canvas, int x, int y) {
-		sprite.onDraw(canvas, x - sprite.getWidth() / 2, y - sprite.getHeight() / 2);
+		activeSprite.onDraw(canvas, x - activeSprite.getWidth() / 2, y - activeSprite.getHeight() / 2);
 	}
 }
