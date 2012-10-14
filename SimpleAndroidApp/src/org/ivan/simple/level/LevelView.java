@@ -42,6 +42,13 @@ public class LevelView {
 		if(cell.getRight().getSprite() != null) {
 			cell.getRight().getSprite().onDraw(canvas, getXByIndex(j)+GameView.GRID_STEP-15, getYByIndex(i)-GameView.GRID_STEP);
 		}
+		if(cell.prize != null) {
+			cell.prize.onDraw(canvas, getXByIndex(j), getYByIndex(i));
+		}
+	}
+	
+	public boolean isComplete() {
+		return model.isComplete();
 	}
 
 }

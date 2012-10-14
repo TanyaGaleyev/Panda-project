@@ -7,6 +7,7 @@ public class LevelCell {
 	protected Platform left_wall = new Platform(PlatformType.NONE);
 	protected Platform right_wall = new Platform(PlatformType.NONE);
 	protected Platform roof = new Platform(PlatformType.NONE);
+	protected Prize prize = null;
 	private int ObjectStatus=0; // LevelCell object create or not create? 
 	
 	public LevelCell() {
@@ -60,6 +61,20 @@ public class LevelCell {
 		}else{
 			roof = new Platform(PlatformType.TRAMPOLINE);
 		}
+	}
+	
+	public void setPrize(int prizeType) {
+		if(prizeType != 0) {
+			prize = new Prize();
+		} else {
+			prize = null;
+		}
+	}
+	
+	public int removePrize() {
+		if(prize == null) return 0;
+		prize = null;
+		return 1;
 	}
 	
 	public Platform getFloor() {

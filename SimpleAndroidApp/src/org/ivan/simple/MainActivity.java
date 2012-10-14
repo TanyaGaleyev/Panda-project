@@ -40,12 +40,16 @@ public class MainActivity extends Activity {
     		GameManager.changeFPS(-5);
     		return true;
     	case R.id.restart:
-    		finish();
-    		Intent intent = new Intent(this, MainActivity.class);
-    		startActivity(intent);
+    		restart();
     	default:
     		return super.onOptionsItemSelected(item);
     	}
+    }
+    
+    public void restart() {
+    	finish();
+		Intent intent = new Intent(this, MainActivity.class);
+		startActivity(intent);
     }
     
 	/** Show an event in the LogCat view, for debugging */

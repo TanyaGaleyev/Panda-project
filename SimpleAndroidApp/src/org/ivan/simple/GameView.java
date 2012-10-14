@@ -10,11 +10,13 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 public class GameView extends SurfaceView {
 	
@@ -132,16 +134,30 @@ public class GameView extends SurfaceView {
 		hero.onDraw(canvas, heroX, heroY);
 //		drawGrid(canvas);
 		drawFPS(canvas);
-		
+		if(level.isComplete()) {
+			drawWin(canvas);
+		}
 	}
 	
 	public void drawFPS(Canvas canvas) {
 		Paint paint = new Paint(); 
-		paint.setColor(Color.BLACK); 
 		paint.setStyle(Paint.Style.FILL); 
 		paint.setTextSize(25); 
 		paint.setColor(Color.BLUE);
 		canvas.drawText("FPS: " + GameManager.getFPS(), 5, 25, paint);
+	}
+	
+	public void drawWin(Canvas canvas) {
+		String complete = "COMPLETE";
+		Paint paint = new Paint(); 		
+		paint.setTextSize(80);
+		Rect textRect = new Rect();
+		paint.getTextBounds(complete, 0, complete.length(), textRect);
+		canvas.rotate(-35, getWidth() / 2, getHeight() / 2);
+		paint.setStyle(Paint.Style.FILL);
+		paint.setColor(Color.RED);
+		canvas.drawText(complete, getWidth() / 2 - textRect.exactCenterX(), getHeight() / 2 - textRect.exactCenterY(), paint);
+		canvas.restore();
 	}
 	
 	public void drawGrid(Canvas canvas) {

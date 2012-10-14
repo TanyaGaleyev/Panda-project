@@ -13,17 +13,22 @@ public class LevelModel {
 	public int heroY;
 	public UserControlType controlType = UserControlType.IDLE;
 	private MotionType motionType = MotionType.STAY;
+	private int prizesLeft = 0;
 	
 	public LevelModel(int lev) {
 		row=5;
 		col=10;
 		heroX = 0;
 		heroY = row - 1;
-		int[][][] mylevel = new LevelStorage().getLevel(lev);
+		LevelStorage storage = new LevelStorage();
+		int[][][] mylevel = storage.getLevel(lev);
+		int[][] prizes = storage.getPrizesMap(lev);
 		levelGrid = new LevelCell[row][col];
 		for(int i=0;i<row;i++){
 			for(int j=0;j<col;j++){
-				levelGrid[i][j] =new LevelCell();
+				levelGrid[i][j] = new LevelCell();
+				levelGrid[i][j].setPrize(prizes[i][j]);
+				prizesLeft += prizes[i][j];
 				for(int k=0;k<4;k++){	
 				if(k==0){
 					// create left wall only for first column's cells
@@ -114,6 +119,7 @@ public class LevelModel {
 	}
 	
 	public void updateGame() {
+		prizesLeft -= getHeroCell().removePrize();
 		switch(getHeroCell().getFloor().getType()) {
 		case TRAMPOLINE:
 			if(motionAvaible(MotionType.JUMP) && motionType!=MotionType.PRE_JUMP ){
@@ -434,5 +440,9 @@ public class LevelModel {
 	
 	public MotionType getMotionType() {
 		return motionType;
+	}
+	
+	public boolean isComplete() {
+		return prizesLeft == 0;
 	}
 }
