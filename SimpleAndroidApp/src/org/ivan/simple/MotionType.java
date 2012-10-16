@@ -26,5 +26,7 @@ public enum MotionType {
 	STAY,
 	STEP_LEFT_WALL,
 	STEP_RIGHT_WALL,
+	JUMP_RIGHT_WALL,
+	JUMP_LEFT_WALL,
 	NONE
 }

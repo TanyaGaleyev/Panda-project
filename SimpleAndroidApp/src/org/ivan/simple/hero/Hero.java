@@ -13,7 +13,7 @@ public class Hero {
 	 * Panda schould turn 90 degrees right in air while jumping on place.
 	 */
 	private MotionType prevMotion = MotionType.NONE;
-	private Sprite sprite8 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite8), 11, 8);
+	private Sprite sprite8 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite8), 13, 8);
 	private Sprite sprite16 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite16), 6, 16);
 	private Sprite activeSprite;
 	
@@ -106,6 +106,12 @@ public class Hero {
 		case STEP_RIGHT_WALL:
 			activeSprite.changeSet(4);
 			break;
+		case JUMP_LEFT_WALL:
+			activeSprite.changeSet(12);
+			break;
+		case JUMP_RIGHT_WALL:
+			activeSprite.changeSet(11);
+			break;	
 		case BEAT_ROOF:
 			activeSprite.changeSet(10);
 			break;

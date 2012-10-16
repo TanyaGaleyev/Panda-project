@@ -151,6 +151,8 @@ public class LevelModel {
 		case FALL:
 		case FALL_BLANSH:
 		case STAY:
+		case JUMP_RIGHT_WALL:
+		case JUMP_LEFT_WALL:
 			switch (controlType) {
 			case UP:
 				if(motionAvaible(MotionType.FALL)) {
@@ -203,6 +205,8 @@ public class LevelModel {
 				break;
 			}
 			break;
+		//--------------------------
+		
 		case JUMP:
 			switch (controlType) {
 			case DOWN:
@@ -215,20 +219,24 @@ public class LevelModel {
 			case LEFT:
 				if(motionAvaible(MotionType.JUMP_LEFT)) {
 					motionType = MotionType.JUMP_LEFT;
-				} else if(motionAvaible(MotionType.JUMP)) {
-					motionType = MotionType.JUMP;
 				} else {
-					motionType = MotionType.FALL;
-				}
+					motionType = MotionType.JUMP_LEFT_WALL;
+				} 
+				
+				//else {
+				//	motionType = MotionType.FALL;
+				//}
 				break;
 			case RIGHT:
 				if(motionAvaible(MotionType.JUMP_RIGHT)) {
 					motionType = MotionType.JUMP_RIGHT;
-				} else if(motionAvaible(MotionType.JUMP)) {
-					motionType = MotionType.JUMP;
 				} else {
-					motionType = MotionType.FALL;
-				}
+					motionType = MotionType.JUMP_RIGHT_WALL;
+				} 
+				
+			//	else {
+			//		motionType = MotionType.FALL;
+			//	}
 				break;
 			default:
 				if(motionAvaible(MotionType.JUMP)) {
