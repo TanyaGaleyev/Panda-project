@@ -50,22 +50,19 @@ public class Platform {
 		return sprite;
 	}
 	
-	public void changePlatform() {
-		if(type != PlatformType.REDUCE) return;
-		if(currentStatus<3) {
-			currentStatus++;
-			sprite.gotoAndStop(currentStatus);
-		} else if(currentStatus<4){
-			currentStatus++;
-			sprite = null;
-			type = PlatformType.NONE;
-		} else {
-			
-		}
-	}
-	
 	public void changeSet(MotionType mt) {
-		if(sprite == null || type == PlatformType.REDUCE) return;
+		if(sprite == null || mt == MotionType.MAGNET || mt == MotionType.BEAT_ROOF) return;
+		if(type == PlatformType.REDUCE) {
+			if(currentStatus<3) {
+				currentStatus++;
+				sprite.gotoAndStop(currentStatus);
+			} else if(currentStatus<4){
+				currentStatus++;
+				sprite = null;
+				type = PlatformType.NONE;
+			}
+			return;
+		}
 		if(type == PlatformType.ANGLE_LEFT) {
 			sprite.setAnimating(true);
 			sprite.playOnce = true;

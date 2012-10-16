@@ -75,7 +75,7 @@ public class Hero {
 			activeSprite.changeSet(3);
 			break;
 		case STEP_LEFT:
-			if(prevMotion == mt) {
+			if(prevMotion == mt || prevMotion == MotionType.JUMP_LEFT) {
 				activeSprite.changeSet(2);
 			} else {
 				activeSprite.changeSet(3);
@@ -85,7 +85,7 @@ public class Hero {
 			activeSprite.changeSet(8);
 			break;
 		case STEP_RIGHT:
-			if(prevMotion == mt) {
+			if(prevMotion == mt || prevMotion == MotionType.JUMP_RIGHT) {
 				activeSprite.changeSet(0);
 			} else {
 				activeSprite.changeSet(1);

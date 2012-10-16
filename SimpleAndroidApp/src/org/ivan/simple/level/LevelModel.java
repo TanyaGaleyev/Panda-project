@@ -30,83 +30,83 @@ public class LevelModel {
 				levelGrid[i][j].setPrize(prizes[i][j]);
 				prizesLeft += prizes[i][j];
 				for(int k=0;k<4;k++){	
-				if(k==0){
-					// create left wall only for first column's cells
-					if(j == 0) {
-						if(mylevel[i][j][k]==0){
-							levelGrid[i][j].createNone();
+					if(k==0){
+						// create left wall only for first column's cells
+						if(j == 0) {
+							if(mylevel[i][j][k]==0){
+								levelGrid[i][j].createNone();
+							}
+							if(mylevel[i][j][k]==1){
+								levelGrid[i][j].createSimple_V(0);
+							}
+						// else set left wall as right wall of nearest left cell
+						} else {
+							levelGrid[i][j].left_wall = levelGrid[i][j - 1].right_wall;
 						}
-						if(mylevel[i][j][k]==1){
-							levelGrid[i][j].createSimple_V(0);
-						}
-					// else set left wall as right wall of nearest left cell
-					} else {
-						levelGrid[i][j].left_wall = levelGrid[i][j - 1].right_wall;
+						
 					}
-					
-				}
-				if(k==1){
-					// create roof only for first row's cells
-					if(i == 0) {
+					if(k==1){
+						// create roof only for first row's cells
+						if(i == 0) {
+							if(mylevel[i][j][k]==0){
+								levelGrid[i][j].createNone();
+							}
+		            	    if(mylevel[i][j][k]==1){
+		            	    	levelGrid[i][j] .createSimple(1);
+							}
+		            	    if(mylevel[i][j][k]==2){
+		            	    	levelGrid[i][j] .createReduce(1);
+							}
+		            	    if(mylevel[i][j][k]==3){
+		            	    	levelGrid[i][j] .createAngleRight(1);
+							}
+		            	    if(mylevel[i][j][k]==4){
+		            	    	levelGrid[i][j] .createAngleLeft(1);
+							}
+		            	    if(mylevel[i][j][k]==5){
+		            	    	levelGrid[i][j] .createTrampoline(1);
+		            	    }
+		            	    if(mylevel[i][j][k]==6){
+		            	    	levelGrid[i][j] .createElecrto(1);
+		            	    }
+	            	    // else set roof as floor of nearest upper cell
+						} else {
+							levelGrid[i][j].roof = levelGrid[i - 1][j].floor;
+						}
+						
+					}
+					if(k==2){
+						if(mylevel[i][j][k]==0){
+							levelGrid[i][j] .createNone();
+						}
+	            	    if(mylevel[i][j][k]==1){
+	            	    	levelGrid[i][j].createSimple_V(1);
+						}			
+						
+					}
+					if(k==3){
 						if(mylevel[i][j][k]==0){
 							levelGrid[i][j].createNone();
 						}
 	            	    if(mylevel[i][j][k]==1){
-	            	    	levelGrid[i][j] .createSimple(1);
+	            	    	levelGrid[i][j] .createSimple(0);
 						}
 	            	    if(mylevel[i][j][k]==2){
-	            	    	levelGrid[i][j] .createReduce(1);
+	            	    	levelGrid[i][j] .createReduce(0);
 						}
 	            	    if(mylevel[i][j][k]==3){
-	            	    	levelGrid[i][j] .createAngleRight(1);
+	            	    	levelGrid[i][j] .createAngleRight(0);
 						}
 	            	    if(mylevel[i][j][k]==4){
-	            	    	levelGrid[i][j] .createAngleLeft(1);
+	            	    	levelGrid[i][j] .createAngleLeft(0);
 						}
-	            	    if(mylevel[i][j][k]==5){
-	            	    	levelGrid[i][j] .createTrampoline(1);
-	            	    }
-	            	    if(mylevel[i][j][k]==6){
-	            	    	levelGrid[i][j] .createElecrto(1);
-	            	    }
-            	    // else set roof as floor of nearest upper cell
-					} else {
-						levelGrid[i][j].roof = levelGrid[i - 1][j].floor;
-					}
-					
-				}
-				if(k==2){
-					if(mylevel[i][j][k]==0){
-						levelGrid[i][j] .createNone();
-					}
-            	    if(mylevel[i][j][k]==1){
-            	    	levelGrid[i][j].createSimple_V(1);
-					}			
-					
-				}
-				if(k==3){
-					if(mylevel[i][j][k]==0){
-						levelGrid[i][j].createNone();
-					}
-            	    if(mylevel[i][j][k]==1){
-            	    	levelGrid[i][j] .createSimple(0);
-					}
-            	    if(mylevel[i][j][k]==2){
-            	    	levelGrid[i][j] .createReduce(0);
-					}
-            	    if(mylevel[i][j][k]==3){
-            	    	levelGrid[i][j] .createAngleRight(0);
-					}
-            	    if(mylevel[i][j][k]==4){
-            	    	levelGrid[i][j] .createAngleLeft(0);
-					}
-					if(mylevel[i][j][k]==5){
-						levelGrid[i][j] .createTrampoline(0);
-					}
-					  if(mylevel[i][j][k]==6){
+						if(mylevel[i][j][k]==5){
+							levelGrid[i][j] .createTrampoline(0);
+						}
+						if(mylevel[i][j][k]==6){
 	            	    	levelGrid[i][j] .createElecrto(0);
 	            	    }
-				}
+					}
 				}
 			}
 			
@@ -128,15 +128,6 @@ public class LevelModel {
 		prizesLeft -= getHeroCell().removePrize();
 		switch(getHeroCell().getFloor().getType()) {
 		
-		case TRAMPOLINE:
-			if(motionAvaible(MotionType.JUMP) && motionType!=MotionType.PRE_JUMP ){
-				motionType = MotionType.PRE_JUMP;}
-			
-			else {
-				if(motionAvaible(MotionType.JUMP)){
-					motionType = MotionType.JUMP;}
-			}
-			break;
 		case ANGLE_RIGHT:
 			if(motionAvaible(MotionType.STEP_RIGHT)) {
 				motionType = MotionType.STEP_RIGHT;
@@ -151,6 +142,12 @@ public class LevelModel {
 				motionType = MotionType.STEP_LEFT_WALL;
 			}
 			break;
+		case TRAMPOLINE:
+			if(motionType != MotionType.PRE_JUMP) {
+				motionType = MotionType.PRE_JUMP;
+				break;
+			}
+			// replace break to handle pre-jump in motionTypeSwitch
 		default:
 		switch (motionType) {
 		case STEP_LEFT_WALL:
@@ -216,22 +213,19 @@ public class LevelModel {
 		case MAGNET:
 			switch (controlType) {
 			case DOWN:
-				if(motionAvaible(MotionType.FALL)){
 				if(motionAvaible(MotionType.FALL_BLANSH)) {
 					motionType = MotionType.FALL_BLANSH;
-				} else {
+				} else if(motionAvaible(MotionType.FALL)) {
 					motionType = MotionType.FALL;
+				} else {
+					motionType = MotionType.STAY;
 				}
-				}
-				else{
-					motionType = MotionType.STAY;	
-				}
-			break;
+				break;
 			default:
 				motionType = MotionType.MAGNET;
 				break;
 			}
-		break;	
+			break;	
 		case JUMP:
 			switch (controlType) {
 			case DOWN:

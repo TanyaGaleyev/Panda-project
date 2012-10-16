@@ -99,9 +99,6 @@ public class LevelCell {
 	}
 	
 	public void updateCell(MotionType mt) {
-		// TODO combine all changes to changeSet method
-		if(mt!=MotionType.MAGNET){
-		floor.changePlatform();
-		floor.changeSet(mt);}
+		floor.changeSet(mt);
 	}
 }
