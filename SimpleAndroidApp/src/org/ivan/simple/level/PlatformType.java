@@ -9,6 +9,7 @@ public enum PlatformType {
 	ANGLE_RIGHT,
 	ANGLE_LEFT,
 	TRAMPOLINE,
+	ELECTRO,
 	NONE
 	
 }

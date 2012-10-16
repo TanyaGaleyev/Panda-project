@@ -30,7 +30,13 @@ public class Platform {
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.angle_platform_left), 1, 8);
 			break;
 		case TRAMPOLINE:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.trampoline_platform),1,1);
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.trampoline_platform),1,18);
+			break;
+		case ELECTRO:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.electro_platform),1,4);
+			sprite.setAnimating(true);
+			sprite.playOnce = false;
+			break;
 		case NONE:
 			break;
 		}

@@ -31,6 +31,14 @@ public class LevelCell {
 		}
 	}
 	
+	public void createElecrto(int side) {
+		if(side==0){
+		floor = new Platform(PlatformType.ELECTRO);
+		}else{
+		roof = new Platform(PlatformType.ELECTRO);
+		}
+	}
+	
 	public void createReduce(int side) {
 		if(side==0){
 		floor = new Platform(PlatformType.REDUCE);
@@ -92,7 +100,8 @@ public class LevelCell {
 	
 	public void updateCell(MotionType mt) {
 		// TODO combine all changes to changeSet method
+		if(mt!=MotionType.MAGNET){
 		floor.changePlatform();
-		floor.changeSet(mt);
+		floor.changeSet(mt);}
 	}
 }

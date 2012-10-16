@@ -66,6 +66,9 @@ public class LevelModel {
 	            	    if(mylevel[i][j][k]==5){
 	            	    	levelGrid[i][j] .createTrampoline(1);
 	            	    }
+	            	    if(mylevel[i][j][k]==6){
+	            	    	levelGrid[i][j] .createElecrto(1);
+	            	    }
             	    // else set roof as floor of nearest upper cell
 					} else {
 						levelGrid[i][j].roof = levelGrid[i - 1][j].floor;
@@ -100,6 +103,9 @@ public class LevelModel {
 					if(mylevel[i][j][k]==5){
 						levelGrid[i][j] .createTrampoline(0);
 					}
+					  if(mylevel[i][j][k]==6){
+	            	    	levelGrid[i][j] .createElecrto(0);
+	            	    }
 				}
 				}
 			}
@@ -121,6 +127,7 @@ public class LevelModel {
 	public void updateGame() {
 		prizesLeft -= getHeroCell().removePrize();
 		switch(getHeroCell().getFloor().getType()) {
+		
 		case TRAMPOLINE:
 			if(motionAvaible(MotionType.JUMP) && motionType!=MotionType.PRE_JUMP ){
 				motionType = MotionType.PRE_JUMP;}
@@ -206,7 +213,25 @@ public class LevelModel {
 			}
 			break;
 		//--------------------------
-		
+		case MAGNET:
+			switch (controlType) {
+			case DOWN:
+				if(motionAvaible(MotionType.FALL)){
+				if(motionAvaible(MotionType.FALL_BLANSH)) {
+					motionType = MotionType.FALL_BLANSH;
+				} else {
+					motionType = MotionType.FALL;
+				}
+				}
+				else{
+					motionType = MotionType.STAY;	
+				}
+			break;
+			default:
+				motionType = MotionType.MAGNET;
+				break;
+			}
+		break;	
 		case JUMP:
 			switch (controlType) {
 			case DOWN:
@@ -241,7 +266,12 @@ public class LevelModel {
 			default:
 				if(motionAvaible(MotionType.JUMP)) {
 					motionType = MotionType.JUMP;
-				} else if (motionAvaible(MotionType.BEAT_ROOF)){
+					
+				} 
+				else if (motionAvaible(MotionType.MAGNET)){
+					motionType = MotionType.PRE_MAGNET;
+				} 
+				else if (motionAvaible(MotionType.BEAT_ROOF)){
 					motionType = MotionType.BEAT_ROOF;
 				} else if (motionAvaible(MotionType.FALL)){
 					motionType = MotionType.FALL;
@@ -310,9 +340,14 @@ public class LevelModel {
 		case PRE_JUMP:
 			if(motionAvaible(MotionType.JUMP)) {
 				motionType = MotionType.JUMP;
+			}else if(motionAvaible(MotionType.MAGNET)){
+				motionType = MotionType.PRE_MAGNET;
 			} else {
 				motionType = MotionType.BEAT_ROOF;
 			}
+			break;
+		case PRE_MAGNET:
+			motionType = MotionType.MAGNET;
 			break;
 		case BEAT_ROOF:
 			switch (controlType) {
@@ -441,6 +476,9 @@ public class LevelModel {
 			if(getHeroCell().getRoof().getType() != PlatformType.NONE) return true;
 			if(heroY - 1 < 0) return true;
 			return false;
+		case MAGNET:
+			if(getHeroCell().getRoof().getType() == PlatformType.ELECTRO) return true;
+			return false;	
 		default:
 			return false;
 		}

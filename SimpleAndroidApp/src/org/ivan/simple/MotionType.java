@@ -28,5 +28,7 @@ public enum MotionType {
 	STEP_RIGHT_WALL,
 	JUMP_RIGHT_WALL,
 	JUMP_LEFT_WALL,
+	MAGNET,
+	PRE_MAGNET,
 	NONE
 }
