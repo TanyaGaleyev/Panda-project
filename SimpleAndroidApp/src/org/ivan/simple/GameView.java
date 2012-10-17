@@ -46,6 +46,7 @@ public class GameView extends SurfaceView {
 	public UserControlType pressedControl = UserControlType.IDLE;
 	
 	private float[] startPressedY = new float[2];
+	private float[] startPressedX = new float[2];
 	private int slideSenderID;
 	
 	private Bitmap background;
@@ -173,16 +174,83 @@ public class GameView extends SurfaceView {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-//		if(event.getAction() == MotionEvent.ACTION_DOWN ||
-//				event.getAction() == MotionEvent.ACTION_MOVE) {
-//			pressedControl = getMoveType(event); 
-//			level.model.controlType = pressedControl;
-//			return true;
-//    	}
-//		if(event.getAction() == MotionEvent.ACTION_UP) {
-//			pressedControl = UserControlType.IDLE;
-//			return true;
-//		}
+		return oneHandControl(event);
+	}
+	
+	private boolean oneHandControl(MotionEvent event) {
+		int actionMask = event.getActionMasked();
+		int actionIndex = event.getActionIndex();
+		int pointerId = event.getPointerId(actionIndex);
+		switch(actionMask) {
+		case MotionEvent.ACTION_DOWN:
+			startPressedY[0] = event.getY();
+			startPressedX[0] = event.getX();
+			return true;
+		case MotionEvent.ACTION_POINTER_DOWN:
+			if(event.getPointerCount() > 2) return true;
+			startPressedY[pointerId] = event.getY(actionIndex);
+			startPressedX[pointerId] = event.getX(actionIndex);
+			return true;
+		case MotionEvent.ACTION_POINTER_UP:
+			if(event.getPointerCount() > 2) return true;
+			return true;
+		case MotionEvent.ACTION_UP:
+			pressedControl = UserControlType.IDLE;
+			return true;
+		case MotionEvent.ACTION_MOVE:
+			if(event.getPointerCount() > 2) return true;
+			for(int ai = 0; ai < event.getPointerCount(); ai++) {
+				pointerId = event.getPointerId(ai); 
+				if(event.getX(ai) - startPressedX[pointerId] > 20) {
+					pressedControl = UserControlType.RIGHT;
+					level.model.controlType = pressedControl;
+					startPressedY[pointerId] = event.getY(ai);
+					startPressedX[pointerId] = event.getX(ai);
+					slideSenderID = pointerId;
+					break;
+				} else if(event.getX(ai) - startPressedX[pointerId] < -20) {
+					pressedControl = UserControlType.LEFT;
+					level.model.controlType = pressedControl;
+					startPressedY[pointerId] = event.getY(ai);
+					startPressedX[pointerId] = event.getX(ai);
+					slideSenderID = pointerId;
+					break;
+				} else if(event.getY(ai) - startPressedY[pointerId] > 20) {
+					pressedControl = UserControlType.DOWN;
+					level.model.controlType = pressedControl;
+					startPressedY[pointerId] = event.getY(ai);
+					startPressedX[pointerId] = event.getX(ai);
+					slideSenderID = pointerId;
+					break;
+				} else if(event.getY(ai) - startPressedY[pointerId] < -20) {
+					pressedControl = UserControlType.UP;
+					level.model.controlType = pressedControl;
+					startPressedY[pointerId] = event.getY(ai);
+					startPressedX[pointerId] = event.getX(ai);
+					slideSenderID = pointerId;
+					break;
+				}
+			}
+			return true;
+		}
+		return super.onTouchEvent(event);
+	}
+	
+	private boolean simpleControl(MotionEvent event) {
+		if(event.getAction() == MotionEvent.ACTION_DOWN ||
+			event.getAction() == MotionEvent.ACTION_MOVE) {
+			pressedControl = getMoveType(event); 
+			level.model.controlType = pressedControl;
+			return true;
+		}
+		if(event.getAction() == MotionEvent.ACTION_UP) {
+			pressedControl = UserControlType.IDLE;
+			return true;
+		}
+		return super.onTouchEvent(event);
+	}
+	
+	private boolean twoHandedControl(MotionEvent event) {
 		int actionMask = event.getActionMasked();
 		int actionIndex = event.getActionIndex();
 		int pointerId = event.getPointerId(actionIndex);
@@ -199,8 +267,6 @@ public class GameView extends SurfaceView {
 			return true;
 		case MotionEvent.ACTION_POINTER_DOWN:
 			if(event.getPointerCount() > 2) return true;
-			actionIndex = event.getActionIndex();
-			pointerId = event.getPointerId(actionIndex); 
 			startPressedY[pointerId] = event.getY(actionIndex);
 			if(event.getX(actionIndex) > getWidth() / 2) {
 				pressedControl = UserControlType.RIGHT;
