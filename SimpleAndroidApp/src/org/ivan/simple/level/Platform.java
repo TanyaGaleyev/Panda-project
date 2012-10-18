@@ -29,6 +29,13 @@ public class Platform {
 		case ANGLE_LEFT:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.angle_platform_left), 1, 8);
 			break;
+			
+		case TROW_OUT_RIGHT:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.throw_out_platform_right), 1, 8);
+			break;
+		case TROW_OUT_LEFT:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.throw_out_platform_left), 1, 8);
+			break;	
 		case TRAMPOLINE:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.trampoline_platform),1,18);
 			break;
@@ -51,7 +58,7 @@ public class Platform {
 	}
 	
 	public void changeSet(MotionType mt) {
-		if(sprite == null || mt == MotionType.MAGNET || mt == MotionType.BEAT_ROOF) return;
+		if(sprite == null || mt == MotionType.MAGNET || mt == MotionType.BEAT_ROOF || mt == MotionType.TROW_LEFT &&  this.getType()!=PlatformType.TROW_OUT_LEFT|| mt == MotionType.TROW_RIGHT && this.getType()!=PlatformType.TROW_OUT_RIGHT) return;
 		if(type == PlatformType.REDUCE) {
 			if(currentStatus<3) {
 				currentStatus++;

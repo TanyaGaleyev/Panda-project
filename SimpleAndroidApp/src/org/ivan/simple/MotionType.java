@@ -30,5 +30,7 @@ public enum MotionType {
 	JUMP_LEFT_WALL,
 	MAGNET,
 	PRE_MAGNET,
+	TROW_LEFT,
+	TROW_RIGHT,
 	NONE
 }

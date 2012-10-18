@@ -63,6 +63,21 @@ public class LevelCell {
 		}
 	}
 	
+	public void createTrowOutLeft(int side) {
+		if(side==0){
+		floor = new Platform(PlatformType.TROW_OUT_LEFT);
+		}else{
+		roof = new Platform(PlatformType.TROW_OUT_LEFT);
+		}
+	}
+	public void createTrowOutRight(int side) {
+		if(side==0){
+		floor = new Platform(PlatformType.TROW_OUT_RIGHT);
+		}else{
+		roof = new Platform(PlatformType.TROW_OUT_RIGHT);
+		}
+	}
+	
 	public void createTrampoline(int side) {
 		if (side==0){
 			floor = new Platform(PlatformType.TRAMPOLINE);
