@@ -143,7 +143,7 @@ public class LevelModel {
 		}else{
 			switch(controlType){
 			case UP:
-				motionType=MotionType.PRE_JUMP;
+				motionType=MotionType.JUMP;
 				break;
 			case LEFT:
 				if(motionAvaible(MotionType.STEP_LEFT) ){
@@ -167,13 +167,14 @@ public class LevelModel {
 				break;
 
 			}}}
+	
 	private void jump(){    	
 		if(motionAvaible(MotionType.JUMP) ){
 			motionType=MotionType.JUMP;
 		}
 		else{
 			if(motionAvaible(MotionType.MAGNET)){
-				motionType=MotionType.MAGNET;	
+				motionType = MotionType.MAGNET;
 			}else{
 				motionType=MotionType.BEAT_ROOF;	}
 		}
@@ -222,7 +223,7 @@ public class LevelModel {
 				stayCheck();
 				break;
 			default:
-				motionType=MotionType.MAGNET;
+				motionType = MotionType.MAGNET;
 				break;
 			}
 
@@ -311,54 +312,15 @@ public class LevelModel {
 			break;
 		}
 		updatePosition();
-
 	}
-private void updatePosition(){
-	controlType = UserControlType.IDLE;
-	switch (motionType) {
-	case JUMP:
-		xSpeed = 0;
-		ySpeed = -1;
-		break;
-	case FALL_BLANSH:
-		heroY += 1;
-	case FALL:
-		xSpeed = 0;
-		ySpeed = 1;
-		break;
-	case STEP_LEFT:
-		xSpeed = -1;
-		ySpeed = 0;
-		break;
-	case TROW_LEFT:
-		xSpeed = -1;
-		ySpeed = 0;
-		break;	
-	case STEP_RIGHT:
-		xSpeed = 1;
-		ySpeed = 0;
-		break;
-	case TROW_RIGHT:
-		xSpeed = 1;
-		ySpeed = 0;
-		break;	
-	case JUMP_LEFT:
-		xSpeed = -1;
-		ySpeed = 0;
-		break;
-	case JUMP_RIGHT:
-		xSpeed = 1;
-		ySpeed = 0;
-		break;
-	default:
-		xSpeed = 0;
-		ySpeed = 0;
-		break;
-	}
-	heroX += xSpeed;
-	heroY += ySpeed;
 	
-}
+	private void updatePosition() {
+		controlType = UserControlType.IDLE;
+		if(motionType == MotionType.FALL_BLANSH) heroY++;
+		heroX += motionType.getXSpeed();
+		heroY += motionType.getYSpeed();
+		
+	}
 	private boolean motionAvaible(MotionType mt) {
 		switch (mt) {
 		case JUMP:
@@ -401,7 +363,7 @@ private void updatePosition(){
 			return false;
 		}
 	}
-
+	
 	public MotionType getMotionType() {
 		return motionType;
 	}

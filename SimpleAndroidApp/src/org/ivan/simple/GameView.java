@@ -1,5 +1,8 @@
 package org.ivan.simple;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.ivan.simple.hero.Hero;
 import org.ivan.simple.level.LevelCell;
 import org.ivan.simple.level.LevelView;
@@ -36,6 +39,7 @@ public class GameView extends SurfaceView {
 	
 	private int heroX;
 	private int heroY;
+	LevelCell prevCell;
 	
 	private GameManager gameLoopThread;
 	
@@ -44,6 +48,8 @@ public class GameView extends SurfaceView {
 	public LevelView level;
 	
 	public UserControlType pressedControl = UserControlType.IDLE;
+	public UserControlType delayedControl = UserControlType.IDLE;
+	private TimerTask useDelayedControl;
 	
 	private float[] startPressedY = new float[2];
 	private float[] startPressedX = new float[2];
@@ -120,12 +126,13 @@ public class GameView extends SurfaceView {
 		heroY = BOTTOM_BOUND;
 		
 		level = new LevelView(1);
+		prevCell = level.model.getHeroCell();
 	}
 	
 	@Override
 	protected void onDraw(Canvas canvas) {
-		xSpeed = level.model.xSpeed * ANIMATION_JUMP_SPEED;
-		ySpeed = level.model.ySpeed * ANIMATION_JUMP_SPEED;
+		xSpeed = hero.getRealMotion().getXSpeed() * ANIMATION_JUMP_SPEED;
+		ySpeed = hero.getRealMotion().getYSpeed() * ANIMATION_JUMP_SPEED;
 		
 		heroX += xSpeed;
 		heroY += ySpeed;
@@ -185,6 +192,19 @@ public class GameView extends SurfaceView {
 		case MotionEvent.ACTION_DOWN:
 			startPressedY[0] = event.getY();
 			startPressedX[0] = event.getX();
+			if(event.getX() > heroX) {
+				delayedControl = UserControlType.RIGHT;
+			} else {
+				delayedControl = UserControlType.LEFT;
+			}
+			useDelayedControl = new TimerTask() {				
+				@Override
+				public void run() {
+					pressedControl = delayedControl;
+					level.model.controlType = delayedControl;
+				}
+			};
+			new Timer().schedule(useDelayedControl, 100);
 			return true;
 		case MotionEvent.ACTION_POINTER_DOWN:
 			if(event.getPointerCount() > 2) return true;
@@ -195,45 +215,44 @@ public class GameView extends SurfaceView {
 			if(event.getPointerCount() > 2) return true;
 			return true;
 		case MotionEvent.ACTION_UP:
+			useDelayedControl.cancel();
+			if(level.model.controlType == UserControlType.IDLE) {
+				level.model.controlType = delayedControl;
+			}
 			pressedControl = UserControlType.IDLE;
 			return true;
 		case MotionEvent.ACTION_MOVE:
 			if(event.getPointerCount() > 2) return true;
 			for(int ai = 0; ai < event.getPointerCount(); ai++) {
 				pointerId = event.getPointerId(ai); 
+				float x = event.getX(ai);
+				float y = event.getY(ai);
 				if(event.getX(ai) - startPressedX[pointerId] > 20) {
-					pressedControl = UserControlType.RIGHT;
-					level.model.controlType = pressedControl;
-					startPressedY[pointerId] = event.getY(ai);
-					startPressedX[pointerId] = event.getX(ai);
-					slideSenderID = pointerId;
+					receiveSlideControl(UserControlType.RIGHT, pointerId, x, y);
 					break;
 				} else if(event.getX(ai) - startPressedX[pointerId] < -20) {
-					pressedControl = UserControlType.LEFT;
-					level.model.controlType = pressedControl;
-					startPressedY[pointerId] = event.getY(ai);
-					startPressedX[pointerId] = event.getX(ai);
-					slideSenderID = pointerId;
+					receiveSlideControl(UserControlType.LEFT, pointerId, x, y);
 					break;
 				} else if(event.getY(ai) - startPressedY[pointerId] > 20) {
-					pressedControl = UserControlType.DOWN;
-					level.model.controlType = pressedControl;
-					startPressedY[pointerId] = event.getY(ai);
-					startPressedX[pointerId] = event.getX(ai);
-					slideSenderID = pointerId;
+					receiveSlideControl(UserControlType.DOWN, pointerId, x, y);
 					break;
 				} else if(event.getY(ai) - startPressedY[pointerId] < -20) {
-					pressedControl = UserControlType.UP;
-					level.model.controlType = pressedControl;
-					startPressedY[pointerId] = event.getY(ai);
-					startPressedX[pointerId] = event.getX(ai);
-					slideSenderID = pointerId;
+					receiveSlideControl(UserControlType.UP, pointerId, x, y);
 					break;
 				}
 			}
 			return true;
 		}
 		return super.onTouchEvent(event);
+	}
+	
+	private void receiveSlideControl(UserControlType control, int pointerId, float x, float y) {
+		useDelayedControl.cancel();
+		pressedControl = control;
+		level.model.controlType = control;
+		startPressedY[pointerId] = y;
+		startPressedX[pointerId] = x;
+		slideSenderID = pointerId;
 	}
 	
 	private boolean simpleControl(MotionEvent event) {
@@ -338,18 +357,38 @@ public class GameView extends SurfaceView {
 	}
 	
 	public boolean readyForUpdate() {
+		boolean controlState = hero.isInControlState();
+		boolean readyOnFinishing;
+		if(hero.isFinishing()) {
+			readyOnFinishing = !hero.tryToEndFinishMotion();
+			// when motion at last switches
+			if(!readyOnFinishing) {
+				prevCell.updateCell(level.model.getMotionType());
+			}
+		} else {
+			readyOnFinishing = true;
+		}
+		boolean readyOnStarting;
+		if(hero.isStarting()) {
+			readyOnStarting = !hero.tryToEndStartMotion();
+		} else {
+			readyOnStarting = true;
+		}
+		boolean stateReady = controlState && readyOnFinishing && readyOnStarting;
 		// change behavior only if hero is on grid point
-		return (heroX % GRID_STEP == 0) && (heroY % GRID_STEP == 0) && hero.isInControlState();
+		return stateReady && (heroX % GRID_STEP == 0) && (heroY % GRID_STEP == 0);
 	}
 	
 	public void updateGame() {
 		if(level.model.controlType == UserControlType.IDLE) {
 			level.model.controlType = pressedControl;
 		}
-		LevelCell prevCell = level.model.getHeroCell();
+		prevCell = level.model.getHeroCell();
 		level.model.updateGame();
-		prevCell.updateCell(level.model.getMotionType());
-		hero.changeSet(level.model.getMotionType());
+		hero.changeMotion(level.model.getMotionType());
+		if(!hero.isFinishing()) {
+			prevCell.updateCell(level.model.getMotionType());
+		}
 	}
 
 }

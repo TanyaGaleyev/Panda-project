@@ -3,6 +3,7 @@ package org.ivan.simple.hero;
 import org.ivan.simple.ImageProvider;
 import org.ivan.simple.MotionType;
 import org.ivan.simple.R;
+import org.ivan.simple.UserControlType;
 
 import android.graphics.Canvas;
 
@@ -12,7 +13,8 @@ public class Hero {
 	 * For example, if prev motion was STEP_LEFT and next motion will be STAY,
 	 * Panda schould turn 90 degrees right in air while jumping on place.
 	 */
-	private MotionType prevMotion = MotionType.NONE;
+	private MotionType currentMotion = MotionType.NONE;
+	private MotionType finishingMotion = MotionType.NONE;
 	private Sprite sprite8 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite8), 16, 8);
 	private Sprite sprite16 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite16), 6, 16);
 	private Sprite activeSprite;
@@ -27,6 +29,34 @@ public class Hero {
 		return activeSprite;
 	}
 	
+	public boolean isFinishing() {
+		return finishingMotion.isFinishing();
+	}
+	
+	public boolean isStarting() {
+		return currentMotion.isStarting();
+	}
+	
+	public boolean tryToEndFinishMotion() {
+		if(activeSprite.currentFrame == 0) {
+			finishingMotion.startMotion();
+			switchToCurrentMotion();
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean tryToEndStartMotion() {
+		if(activeSprite.currentFrame == 0) {
+			currentMotion.continueMotion();
+			switchToCurrentMotion();
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	/**
 	 * Check if hero is in control state: ready for begin new motion type.
 	 * Used each game loop iteration to know is it time to process user controls
@@ -35,30 +65,57 @@ public class Hero {
 	 * @return
 	 */
 	public boolean isInControlState() {
-		switch(prevMotion) {
-		case NONE:
-		case STAY:
-		case FALL_BLANSH:
-		case STEP_LEFT_WALL:
-		case STEP_RIGHT_WALL:
-			return activeSprite.currentFrame == 0;
-		default:
-			return activeSprite.currentFrame % 8 == 0;
-		}
+//		if(!finishingMotion.isFinishing()) {
+			switch(currentMotion) {
+			case NONE:
+			case STAY:
+			case FALL_BLANSH:
+			case STEP_LEFT_WALL:
+			case STEP_RIGHT_WALL:
+				return activeSprite.currentFrame == 0;
+			default:
+				return activeSprite.currentFrame % 8 == 0;
+			}
+//		} else if(activeSprite.currentFrame == 0) {
+//			finishingMotion = MotionType.NONE;
+//			switchToCurrentMotion();
+//			return false;
+//		}
+//		return false;
 	}
 	
 	/**
 	 * Change hero behavior (animation) depending on motion type.
 	 * Used after new motion type is obtained. 
-	 * @param mt
+	 * @param newMotion
 	 */
-	public void changeSet(MotionType mt) {
-		pickActiveSprite(mt);
-		switch (mt) {
+	public void changeMotion(MotionType newMotion) {
+		startFinishMotions(newMotion);
+		if (finishingMotion.isFinishing()) {
+			switch(finishingMotion) {
+			case MAGNET:
+				activeSprite.changeSet(15);
+				break;
+			}
+		} else if(currentMotion.isStarting()) {
+			pickActiveSprite(currentMotion);
+			switch(currentMotion) {
+			case JUMP:
+				activeSprite.changeSet(9);
+				break;
+			}
+		} else {
+			switchToCurrentMotion();
+		}
+	}
+	
+	public void switchToCurrentMotion() {
+		pickActiveSprite(currentMotion);
+		switch (currentMotion) {
 		case STAY:
-			if(prevMotion == MotionType.STEP_LEFT || prevMotion == MotionType.JUMP_LEFT) {
+			if(finishingMotion == MotionType.STEP_LEFT || finishingMotion == MotionType.JUMP_LEFT) {
 				activeSprite.changeSet(1);
-			} else if(prevMotion == MotionType.STEP_RIGHT || prevMotion == MotionType.JUMP_RIGHT) {
+			} else if(finishingMotion == MotionType.STEP_RIGHT || finishingMotion == MotionType.JUMP_RIGHT) {
 				activeSprite.changeSet(2);
 			} else {
 				activeSprite.changeSet(0);
@@ -75,7 +132,7 @@ public class Hero {
 			activeSprite.changeSet(3);
 			break;
 		case STEP_LEFT:
-			if(prevMotion == mt || prevMotion == MotionType.JUMP_LEFT) {
+			if(finishingMotion == currentMotion || finishingMotion == MotionType.JUMP_LEFT) {
 				activeSprite.changeSet(2);
 			} else {
 				activeSprite.changeSet(3);
@@ -85,7 +142,7 @@ public class Hero {
 			activeSprite.changeSet(8);
 			break;
 		case STEP_RIGHT:
-			if(prevMotion == mt || prevMotion == MotionType.JUMP_RIGHT) {
+			if(finishingMotion == currentMotion || finishingMotion == MotionType.JUMP_RIGHT) {
 				activeSprite.changeSet(0);
 			} else {
 				activeSprite.changeSet(1);
@@ -98,6 +155,8 @@ public class Hero {
 			activeSprite.changeSet(9);
 			break;
 		case JUMP:
+			activeSprite.changeSet(4);
+			break;
 		case TROW_LEFT:
 		case TROW_RIGHT:
 			activeSprite.changeSet(15);
@@ -118,7 +177,11 @@ public class Hero {
 			activeSprite.changeSet(10);
 			break;
 		case MAGNET:
-			activeSprite.changeSet(14);
+			if(currentMotion.getStage() == 0) {
+				activeSprite.changeSet(13);
+			} else {
+				activeSprite.changeSet(14);
+			}
 			break;
 		case PRE_MAGNET:
 			activeSprite.changeSet(13);
@@ -127,8 +190,20 @@ public class Hero {
 			activeSprite.changeSet(4);
 			break;
 		}
-		prevMotion = mt;
 	}
+	
+	
+	public void startFinishMotions(MotionType newMotion) {
+		finishingMotion = currentMotion;
+		if(currentMotion == newMotion) {
+			currentMotion.continueMotion();
+		} else {
+			currentMotion.finishMotion();
+			currentMotion = newMotion;
+			currentMotion.startMotion();
+		}
+	}
+
 	
 	private void pickActiveSprite(MotionType mt) {
 		switch(mt) {
@@ -147,5 +222,15 @@ public class Hero {
 	
 	public void onDraw(Canvas canvas, int x, int y) {
 		activeSprite.onDraw(canvas, x - activeSprite.getWidth() / 2, y - activeSprite.getHeight() / 2);
+	}
+	
+	public MotionType getRealMotion() {
+		if(currentMotion.isStarting()) {
+			return MotionType.NONE;
+		} else if(finishingMotion.isFinishing()) {
+			return finishingMotion;
+		} else {
+			return currentMotion;
+		}
 	}
 }

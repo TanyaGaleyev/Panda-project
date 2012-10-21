@@ -14,23 +14,132 @@ package org.ivan.simple;
  *
  */
 public enum MotionType {
-	JUMP,
-	PRE_JUMP,
+	JUMP {
+		public int getYSpeed() {
+			return -1;
+		}
+		
+		public void startMotion() {
+			stage = 0;
+		}
+		
+		public void continueMotion() {
+			stage = 1;
+		}
+		
+		public void finishMotion() {
+			stage = 1;
+		}
+		
+		public boolean isStarting() {
+			return stage == 0;
+		}
+	},
+	PRE_JUMP ,
 	BEAT_ROOF,
-	FALL,
-	FALL_BLANSH,
-	JUMP_LEFT,
-	JUMP_RIGHT,
-	STEP_LEFT,
-	STEP_RIGHT,
+	FALL {
+		public int getYSpeed() {
+			return 1;
+		}
+	},
+	FALL_BLANSH {
+		public int getYSpeed() {
+			return 1;
+		}
+	},
+	JUMP_LEFT {
+		public int getXSpeed() {
+			return -1;
+		}
+	},
+	JUMP_RIGHT {
+		public int getXSpeed() {
+			return 1;
+		}
+	},
+	STEP_LEFT {
+		public int getXSpeed() {
+			return -1;
+		}
+	},
+	STEP_RIGHT {
+		public int getXSpeed() {
+			return 1;
+		}
+	},
 	STAY,
 	STEP_LEFT_WALL,
 	STEP_RIGHT_WALL,
 	JUMP_RIGHT_WALL,
 	JUMP_LEFT_WALL,
-	MAGNET,
+	MAGNET {
+		public void startMotion() {
+			stage = 0;
+		}
+		
+		public void continueMotion() {
+			stage = 1;
+		}
+		
+		public void finishMotion() {
+			stage = 2;
+		}
+		
+		@Override
+		public boolean isFinishing() {
+			return stage == 2;
+		}
+	},
 	PRE_MAGNET,
-	TROW_LEFT,
-	TROW_RIGHT,
-	NONE
+	TROW_LEFT {
+		public int getXSpeed() {
+			return -1;
+		}
+	},
+	TROW_RIGHT {
+		public int getXSpeed() {
+			return 1;
+		}
+	},
+	NONE;
+	
+	
+	/**
+	 * Try to group sets of motion animations to single motion
+	 * (for example group JUMP and PRE_JUMP to single jump motion) 
+	 */
+	int stage = 0;
+	private int stages = 1;
+	
+	public void startMotion() {
+		stage = 0;
+	}
+	
+	public void continueMotion() {
+		stage = 0;
+	}
+	
+	public void finishMotion() {
+		stage = 0;
+	}
+	
+	public int getStage() {
+		return stage;
+	}
+	
+	public boolean isFinishing() {
+		return false;
+	}
+	
+	public boolean isStarting() {
+		return false;
+	}
+	
+	public int getXSpeed() {
+		return 0;
+	}
+	
+	public int getYSpeed() {
+		return 0;
+	}
 }
