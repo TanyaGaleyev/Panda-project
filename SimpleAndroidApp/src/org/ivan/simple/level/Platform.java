@@ -58,7 +58,7 @@ public class Platform {
 	}
 	
 	public void changeSet(MotionType mt) {
-		if(sprite == null || mt == MotionType.MAGNET || mt == MotionType.BEAT_ROOF || mt == MotionType.TROW_LEFT &&  this.getType()!=PlatformType.TROW_OUT_LEFT|| mt == MotionType.TROW_RIGHT && this.getType()!=PlatformType.TROW_OUT_RIGHT) return;
+		if(sprite == null || mt == MotionType.MAGNET || mt == MotionType.BEAT_ROOF || mt == MotionType.TROW_LEFT &&  this.getType()!=PlatformType.TROW_OUT_LEFT|| mt == MotionType.TROW_RIGHT && this.getType()!=PlatformType.TROW_OUT_RIGHT || mt == MotionType.JUMP) return;
 		if(type == PlatformType.REDUCE) {
 			if(currentStatus<3) {
 				currentStatus++;

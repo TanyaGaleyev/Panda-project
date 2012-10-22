@@ -142,7 +142,9 @@ public class GameView extends SurfaceView {
 		hero.onDraw(canvas, heroX, heroY);
 //		drawGrid(canvas);
 		drawFPS(canvas);
-		if(level.isComplete()) {
+		if(level.model.isLost()) {
+			drawLose(canvas);
+		} else if(level.model.isComplete()) {
 			drawWin(canvas);
 		}
 	}
@@ -164,6 +166,19 @@ public class GameView extends SurfaceView {
 		canvas.rotate(-35, getWidth() / 2, getHeight() / 2);
 		paint.setStyle(Paint.Style.FILL);
 		paint.setColor(Color.RED);
+		canvas.drawText(complete, getWidth() / 2 - textRect.exactCenterX(), getHeight() / 2 - textRect.exactCenterY(), paint);
+		canvas.restore();
+	}
+	
+	public void drawLose(Canvas canvas) {
+		String complete = "GAME OVER";
+		Paint paint = new Paint(); 		
+		paint.setTextSize(80);
+		Rect textRect = new Rect();
+		paint.getTextBounds(complete, 0, complete.length(), textRect);
+		canvas.rotate(-35, getWidth() / 2, getHeight() / 2);
+		paint.setStyle(Paint.Style.FILL);
+		paint.setColor(Color.BLACK);
 		canvas.drawText(complete, getWidth() / 2 - textRect.exactCenterX(), getHeight() / 2 - textRect.exactCenterY(), paint);
 		canvas.restore();
 	}
@@ -357,6 +372,7 @@ public class GameView extends SurfaceView {
 	}
 	
 	public boolean readyForUpdate() {
+		if(level.model.isLost()) return false;
 		boolean controlState = hero.isInControlState();
 		boolean readyOnFinishing;
 		if(hero.isFinishing()) {

@@ -15,6 +15,7 @@ public class LevelModel {
 	private MotionType motionType = MotionType.STAY;
 	private int trowOutCounter=0;
 	private int prizesLeft = 0;
+	private boolean lose = false;
 
 	public LevelModel(int lev) {
 		row=5;
@@ -143,7 +144,7 @@ public class LevelModel {
 		}else{
 			switch(controlType){
 			case UP:
-				motionType=MotionType.JUMP;
+				motionType=MotionType.PRE_JUMP;
 				break;
 			case LEFT:
 				if(motionAvaible(MotionType.STEP_LEFT) ){
@@ -341,7 +342,7 @@ public class LevelModel {
 			return true;
 		case FALL:
 			if(getHeroCell().getFloor().getType() != PlatformType.NONE) return false;
-			if(heroY + 1 > row - 1) return false;
+			if(heroY + 1 > row - 1) lose = true;
 			return true;
 		case FALL_BLANSH:
 			if(getHeroCell().getFloor().getType() != PlatformType.NONE) return false;
@@ -370,5 +371,9 @@ public class LevelModel {
 
 	public boolean isComplete() {
 		return prizesLeft == 0;
+	}
+	
+	public boolean isLost() {
+		return lose;
 	}
 }

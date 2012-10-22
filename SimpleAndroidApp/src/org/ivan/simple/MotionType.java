@@ -19,21 +19,21 @@ public enum MotionType {
 			return -1;
 		}
 		
-		public void startMotion() {
-			stage = 0;
-		}
-		
-		public void continueMotion() {
-			stage = 1;
-		}
-		
-		public void finishMotion() {
-			stage = 1;
-		}
-		
-		public boolean isStarting() {
-			return stage == 0;
-		}
+//		public void startMotion() {
+//			stage = 0;
+//		}
+//		
+//		public void continueMotion() {
+//			stage = 1;
+//		}
+//		
+//		public void finishMotion() {
+//			stage = 1;
+//		}
+//		
+//		public boolean isStarting() {
+//			return stage == 0;
+//		}
 	},
 	PRE_JUMP ,
 	BEAT_ROOF,

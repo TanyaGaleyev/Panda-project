@@ -46,9 +46,5 @@ public class LevelView {
 			cell.prize.onDraw(canvas, getXByIndex(j), getYByIndex(i));
 		}
 	}
-	
-	public boolean isComplete() {
-		return model.isComplete();
-	}
 
 }
