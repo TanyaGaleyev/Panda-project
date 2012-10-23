@@ -144,7 +144,8 @@ public class LevelModel {
 		}else{
 			switch(controlType){
 			case UP:
-				motionType=MotionType.PRE_JUMP;
+				motionType=MotionType.JUMP;
+				motionType.startMotion();
 				break;
 			case LEFT:
 				if(motionAvaible(MotionType.STEP_LEFT) ){
@@ -188,6 +189,11 @@ public class LevelModel {
 			jump();
 			break;
 		case JUMP:
+			if(motionType.getStage() == 0) {
+				motionType.continueMotion();
+				jump();
+				break;
+			}
 			switch(controlType){
 			case DOWN:
 				if(motionAvaible(MotionType.FALL_BLANSH) )
@@ -283,7 +289,7 @@ public class LevelModel {
 				break;
 
 			case  TRAMPOLINE:
-				motionType=MotionType.PRE_JUMP;
+				motionType=MotionType.JUMP;
 				break;
 
 			case  TROW_OUT_LEFT:
@@ -326,7 +332,7 @@ public class LevelModel {
 		switch (mt) {
 		case JUMP:
 			if(getHeroCell().getRoof().getType() != PlatformType.NONE) return false;
-			if(heroY - 1 < 0) return false;
+			if(heroY + mt.getYSpeed() < 0) return false;
 			return true;
 		case STEP_LEFT:
 		case JUMP_LEFT:

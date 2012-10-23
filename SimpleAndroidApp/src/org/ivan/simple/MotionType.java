@@ -16,24 +16,26 @@ package org.ivan.simple;
 public enum MotionType {
 	JUMP {
 		public int getYSpeed() {
+			if(stage == 0) return 0;
 			return -1;
 		}
 		
-//		public void startMotion() {
-//			stage = 0;
-//		}
-//		
-//		public void continueMotion() {
-//			stage = 1;
-//		}
-//		
-//		public void finishMotion() {
-//			stage = 1;
-//		}
-//		
+		public void startMotion() {
+			stage = 0;
+		}
+		
+		public void continueMotion() {
+			stage = 1;
+		}
+		
+		public void finishMotion() {
+			stage = 1;
+		}
+		
 //		public boolean isStarting() {
 //			return stage == 0;
 //		}
+		
 	},
 	PRE_JUMP ,
 	BEAT_ROOF,

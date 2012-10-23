@@ -39,6 +39,7 @@ public class Hero {
 	
 	public boolean tryToEndFinishMotion() {
 		if(activeSprite.currentFrame == 0) {
+			// convert motion to initial stage (stage == 0)
 			finishingMotion.startMotion();
 			switchToCurrentMotion();
 			return true;
@@ -155,7 +156,11 @@ public class Hero {
 			activeSprite.changeSet(9);
 			break;
 		case JUMP:
-			activeSprite.changeSet(4);
+			if(finishingMotion == currentMotion) {
+				activeSprite.changeSet(4);
+			} else {
+				activeSprite.changeSet(9);
+			}
 			break;
 		case TROW_LEFT:
 		case TROW_RIGHT:
@@ -195,11 +200,11 @@ public class Hero {
 	
 	public void startFinishMotions(MotionType newMotion) {
 		finishingMotion = currentMotion;
-		if(currentMotion == newMotion) {
+		currentMotion = newMotion;
+		if(finishingMotion == currentMotion) {
 			currentMotion.continueMotion();
 		} else {
-			currentMotion.finishMotion();
-			currentMotion = newMotion;
+			finishingMotion.finishMotion();
 			currentMotion.startMotion();
 		}
 	}
