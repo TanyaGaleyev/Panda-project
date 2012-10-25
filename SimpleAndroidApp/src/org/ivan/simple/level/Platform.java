@@ -58,7 +58,7 @@ public class Platform {
 	}
 	
 	public void changeSet(MotionType mt) {
-		if(sprite == null || mt == MotionType.MAGNET || mt == MotionType.BEAT_ROOF || mt == MotionType.TROW_LEFT &&  this.getType()!=PlatformType.TROW_OUT_LEFT|| mt == MotionType.TROW_RIGHT && this.getType()!=PlatformType.TROW_OUT_RIGHT || mt == MotionType.JUMP) return;
+		if(sprite == null || mt == MotionType.MAGNET || mt == MotionType.BEAT_ROOF || mt == MotionType.TROW_LEFT &&  this.getType()!=PlatformType.TROW_OUT_LEFT|| mt == MotionType.TROW_RIGHT && this.getType()!=PlatformType.TROW_OUT_RIGHT || (mt == MotionType.JUMP && mt.getStage() != 0)) return;
 		if(type == PlatformType.REDUCE) {
 			if(currentStatus<3) {
 				currentStatus++;
@@ -95,8 +95,8 @@ public class Platform {
 			sprite.playOnce = true;
 			break;
 		case JUMP:
-			sprite.setAnimating(false);
-			break;
+//			sprite.setAnimating(false);
+//			break;
 		default:
 			sprite.setAnimating(sprite.changeSet(0));
 			sprite.playOnce = true;;

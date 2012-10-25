@@ -13,7 +13,6 @@ public class LevelModel {
 	public int heroY;
 	public UserControlType controlType = UserControlType.IDLE;
 	private MotionType motionType = MotionType.STAY;
-	private int trowOutCounter=0;
 	private int prizesLeft = 0;
 	private boolean lose = false;
 
@@ -152,7 +151,7 @@ public class LevelModel {
 					motionType=MotionType.STEP_LEFT;
 				}
 				else{
-					motionType=MotionType.STEP_LEFT_WALL;
+					motionType=MotionType.JUMP_LEFT_WALL;
 				}
 				break;
 			case RIGHT:
@@ -160,7 +159,7 @@ public class LevelModel {
 					motionType=MotionType.STEP_RIGHT;
 				}
 				else{
-					motionType=MotionType.STEP_RIGHT_WALL;
+					motionType=MotionType.JUMP_RIGHT_WALL;
 				}
 				break;
 			case IDLE:
@@ -184,17 +183,21 @@ public class LevelModel {
 	}
 	public void updateGame() {
 		prizesLeft -= getHeroCell().removePrize();
+		if(motionType.isUncontrolable()) {
+			controlType = UserControlType.IDLE;
+		}
+		motionType.continueMotion();
 		switch(motionType){
 		case  PRE_JUMP:
 			jump();
 			break;
 		case JUMP:
-			if(motionType.getStage() == 0) {
-				motionType.continueMotion();
-				jump();
-				break;
-			}
-			switch(controlType){
+//			if(motionType.getStage() == 0) {
+//				motionType.continueMotion();
+//				jump();
+//				break;
+//			}
+			switch(controlType) {
 			case DOWN:
 				if(motionAvaible(MotionType.FALL_BLANSH) )
 				{
@@ -236,30 +239,30 @@ public class LevelModel {
 
 			break;	
 		case TROW_LEFT:
-			if(trowOutCounter==0){
+			if(motionType.getStage() == 1){
 				if(motionAvaible(MotionType.TROW_LEFT) ){
-					trowOutCounter++;
+					//motionType.continueMotion();
 				}
 				else{
 					motionType=MotionType.JUMP_LEFT_WALL;
 				}
 			}else{
-				trowOutCounter=0;
+				motionType.startMotion();
 				motionType=MotionType.STAY;
 				updateGame();
 				return;
 			}
 			break;
 		case TROW_RIGHT:
-			if(trowOutCounter==0){
+			if(motionType.getStage() == 1){
 				if(motionAvaible(MotionType.TROW_RIGHT) ){
-					trowOutCounter++;
+					//motionType.continueMotion();
 				}
 				else{
 					motionType=MotionType.JUMP_RIGHT_WALL;
 				}
 			}else{
-				trowOutCounter=0;
+				motionType.startMotion();
 				motionType=MotionType.STAY;
 				updateGame();
 				return;
@@ -274,7 +277,7 @@ public class LevelModel {
 
 				}   
 				else{
-					motionType=MotionType.STEP_RIGHT_WALL;
+					motionType=MotionType.JUMP_RIGHT_WALL;
 				}				
 				break;	
 			case  ANGLE_LEFT:
@@ -283,13 +286,14 @@ public class LevelModel {
 
 				}   
 				else{
-					motionType=MotionType.STEP_LEFT_WALL;
+					motionType=MotionType.JUMP_LEFT_WALL;
 				}		
 
 				break;
 
 			case  TRAMPOLINE:
 				motionType=MotionType.JUMP;
+				motionType.startMotion();
 				break;
 
 			case  TROW_OUT_LEFT:
@@ -297,7 +301,7 @@ public class LevelModel {
 					motionType=MotionType.TROW_LEFT;
 
 				}   else{
-					motionType=MotionType.STEP_LEFT_WALL;
+					motionType=MotionType.JUMP_LEFT_WALL;
 				}	
 				break;
 
@@ -306,7 +310,7 @@ public class LevelModel {
 					motionType=MotionType.TROW_RIGHT;
 
 				}   else{
-					motionType=MotionType.STEP_RIGHT_WALL;
+					motionType=MotionType.JUMP_RIGHT_WALL;
 				}	
 				break;
 			default:

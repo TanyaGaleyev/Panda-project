@@ -21,6 +21,7 @@ public enum MotionType {
 		}
 		
 		public void startMotion() {
+			super.startMotion();
 			stage = 0;
 		}
 		
@@ -29,12 +30,17 @@ public enum MotionType {
 		}
 		
 		public void finishMotion() {
+			super.finishMotion();
 			stage = 1;
 		}
 		
 //		public boolean isStarting() {
 //			return stage == 0;
 //		}
+		
+		public boolean isUncontrolable() {
+			return stage == 0;
+		}
 		
 	},
 	PRE_JUMP ,
@@ -76,6 +82,7 @@ public enum MotionType {
 	JUMP_LEFT_WALL,
 	MAGNET {
 		public void startMotion() {
+			super.startMotion();
 			stage = 0;
 		}
 		
@@ -84,6 +91,7 @@ public enum MotionType {
 		}
 		
 		public void finishMotion() {
+			super.finishMotion();
 			stage = 2;
 		}
 		
@@ -97,10 +105,28 @@ public enum MotionType {
 		public int getXSpeed() {
 			return -1;
 		}
+		
+		public void startMotion() {
+			super.startMotion();
+			stage = 0;
+		}
+		
+		public void continueMotion() {
+			stage++;
+		}
 	},
 	TROW_RIGHT {
 		public int getXSpeed() {
 			return 1;
+		}
+		
+		public void startMotion() {
+			super.startMotion();
+			stage = 0;
+		}
+		
+		public void continueMotion() {
+			stage++;
 		}
 	},
 	NONE;
@@ -112,9 +138,11 @@ public enum MotionType {
 	 */
 	int stage = 0;
 	private int stages = 1;
+	private boolean active = false;
 	
 	public void startMotion() {
 		stage = 0;
+		active = true;
 	}
 	
 	public void continueMotion() {
@@ -123,6 +151,7 @@ public enum MotionType {
 	
 	public void finishMotion() {
 		stage = 0;
+		active = false;
 	}
 	
 	public int getStage() {
@@ -143,5 +172,13 @@ public enum MotionType {
 	
 	public int getYSpeed() {
 		return 0;
+	}
+	
+	public boolean isUncontrolable() {
+		return false;
+	}
+	
+	public boolean isActive() {
+		return active;
 	}
 }

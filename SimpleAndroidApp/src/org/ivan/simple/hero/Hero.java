@@ -67,16 +67,16 @@ public class Hero {
 	 */
 	public boolean isInControlState() {
 //		if(!finishingMotion.isFinishing()) {
-			switch(currentMotion) {
-			case NONE:
-			case STAY:
-			case FALL_BLANSH:
-			case STEP_LEFT_WALL:
-			case STEP_RIGHT_WALL:
+//			switch(currentMotion) {
+//			case NONE:
+//			case STAY:
+//			case FALL_BLANSH:
+//			case STEP_LEFT_WALL:
+//			case STEP_RIGHT_WALL:
 				return activeSprite.currentFrame == 0;
-			default:
-				return activeSprite.currentFrame % 8 == 0;
-			}
+//			default:
+//				return activeSprite.currentFrame % 8 == 0;
+//			}
 //		} else if(activeSprite.currentFrame == 0) {
 //			finishingMotion = MotionType.NONE;
 //			switchToCurrentMotion();
@@ -173,10 +173,30 @@ public class Hero {
 			activeSprite.changeSet(4);
 			break;
 		case JUMP_LEFT_WALL:
-			activeSprite.changeSet(12);
+			switch(finishingMotion) {
+			case JUMP:
+			case TROW_LEFT:
+			case TROW_RIGHT:
+				activeSprite.changeSet(12);
+				break;
+			default:
+				activeSprite = sprite16;
+				activeSprite.changeSet(5);
+				break;
+			}
 			break;
 		case JUMP_RIGHT_WALL:
-			activeSprite.changeSet(11);
+			switch(finishingMotion) {
+			case JUMP:
+			case TROW_LEFT:
+			case TROW_RIGHT:
+				activeSprite.changeSet(11);
+				break;
+			default:
+				activeSprite = sprite16;
+				activeSprite.changeSet(4);
+				break;
+			}
 			break;	
 		case BEAT_ROOF:
 			activeSprite.changeSet(10);
