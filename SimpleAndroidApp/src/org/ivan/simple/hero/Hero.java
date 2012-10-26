@@ -114,9 +114,9 @@ public class Hero {
 		pickActiveSprite(currentMotion);
 		switch (currentMotion) {
 		case STAY:
-			if(finishingMotion == MotionType.STEP_LEFT || finishingMotion == MotionType.JUMP_LEFT) {
+			if(/*finishingMotion == MotionType.STEP_LEFT || */finishingMotion == MotionType.JUMP_LEFT) {
 				activeSprite.changeSet(1);
-			} else if(finishingMotion == MotionType.STEP_RIGHT || finishingMotion == MotionType.JUMP_RIGHT) {
+			} else if(/*finishingMotion == MotionType.STEP_RIGHT || */finishingMotion == MotionType.JUMP_RIGHT) {
 				activeSprite.changeSet(2);
 			} else {
 				activeSprite.changeSet(0);
@@ -132,25 +132,37 @@ public class Hero {
 		case FALL_BLANSH:
 			activeSprite.changeSet(3);
 			break;
-		case STEP_LEFT:
-			if(finishingMotion == currentMotion || finishingMotion == MotionType.JUMP_LEFT) {
+//		case STEP_LEFT:
+//			if(finishingMotion == currentMotion || finishingMotion == MotionType.JUMP_LEFT) {
+//				activeSprite.changeSet(2);
+//			} else {
+//				activeSprite.changeSet(3);
+//			}
+//			break;
+		case JUMP_LEFT:
+			if(finishingMotion == MotionType.JUMP) {
+				activeSprite.changeSet(8);
+			} else if(finishingMotion == currentMotion || finishingMotion == MotionType.JUMP_LEFT) {
 				activeSprite.changeSet(2);
 			} else {
 				activeSprite.changeSet(3);
 			}
 			break;
-		case JUMP_LEFT:
-			activeSprite.changeSet(8);
-			break;
-		case STEP_RIGHT:
-			if(finishingMotion == currentMotion || finishingMotion == MotionType.JUMP_RIGHT) {
+//		case STEP_RIGHT:
+//			if(finishingMotion == currentMotion || finishingMotion == MotionType.JUMP_RIGHT) {
+//				activeSprite.changeSet(0);
+//			} else {
+//				activeSprite.changeSet(1);
+//			}
+//			break;
+		case JUMP_RIGHT:
+			if(finishingMotion == MotionType.JUMP) {
+				activeSprite.changeSet(7);
+			} else if(finishingMotion == currentMotion || finishingMotion == MotionType.JUMP_RIGHT) {
 				activeSprite.changeSet(0);
 			} else {
 				activeSprite.changeSet(1);
 			}
-			break;
-		case JUMP_RIGHT:
-			activeSprite.changeSet(7);
 			break;
 		case PRE_JUMP:
 			activeSprite.changeSet(9);
@@ -166,17 +178,19 @@ public class Hero {
 		case TROW_RIGHT:
 			activeSprite.changeSet(15);
 			break;
-		case STEP_LEFT_WALL:
-			activeSprite.changeSet(5);
-			break;
-		case STEP_RIGHT_WALL:
-			activeSprite.changeSet(4);
-			break;
+//		case STEP_LEFT_WALL:
+//			activeSprite.changeSet(5);
+//			break;
+//		case STEP_RIGHT_WALL:
+//			activeSprite.changeSet(4);
+//			break;
 		case JUMP_LEFT_WALL:
 			switch(finishingMotion) {
 			case JUMP:
 			case TROW_LEFT:
 			case TROW_RIGHT:
+			case FLY_LEFT:
+			case FLY_RIGHT:
 				activeSprite.changeSet(12);
 				break;
 			default:
@@ -190,6 +204,8 @@ public class Hero {
 			case JUMP:
 			case TROW_LEFT:
 			case TROW_RIGHT:
+			case FLY_LEFT:
+			case FLY_RIGHT:
 				activeSprite.changeSet(11);
 				break;
 			default:
@@ -211,6 +227,9 @@ public class Hero {
 		case PRE_MAGNET:
 			activeSprite.changeSet(13);
 			break;	
+		case FLY_RIGHT:
+			activeSprite.changeSet(15);
+			break;
 		default:
 			activeSprite.changeSet(4);
 			break;
@@ -221,9 +240,7 @@ public class Hero {
 	public void startFinishMotions(MotionType newMotion) {
 		finishingMotion = currentMotion;
 		currentMotion = newMotion;
-		if(finishingMotion == currentMotion) {
-			currentMotion.continueMotion();
-		} else {
+		if(finishingMotion != currentMotion) {
 			finishingMotion.finishMotion();
 			currentMotion.startMotion();
 		}
@@ -235,8 +252,8 @@ public class Hero {
 		case NONE:
 		case STAY:
 		case FALL_BLANSH:
-		case STEP_LEFT_WALL:
-		case STEP_RIGHT_WALL:
+//		case STEP_LEFT_WALL:
+//		case STEP_RIGHT_WALL:
 			activeSprite = sprite16;
 			break;
 		default:

@@ -15,28 +15,16 @@ package org.ivan.simple;
  */
 public enum MotionType {
 	JUMP {
+
 		public int getYSpeed() {
 			if(stage == 0) return 0;
 			return -1;
 		}
 		
-		public void startMotion() {
-			super.startMotion();
-			stage = 0;
-		}
-		
 		public void continueMotion() {
 			stage = 1;
+			super.continueMotion();
 		}
-		
-		public void finishMotion() {
-			super.finishMotion();
-			stage = 1;
-		}
-		
-//		public boolean isStarting() {
-//			return stage == 0;
-//		}
 		
 		public boolean isUncontrolable() {
 			return stage == 0;
@@ -65,33 +53,29 @@ public enum MotionType {
 			return 1;
 		}
 	},
-	STEP_LEFT {
-		public int getXSpeed() {
-			return -1;
-		}
-	},
-	STEP_RIGHT {
-		public int getXSpeed() {
-			return 1;
-		}
-	},
+//	STEP_LEFT {
+//		public int getXSpeed() {
+//			return -1;
+//		}
+//	},
+//	STEP_RIGHT {
+//		public int getXSpeed() {
+//			return 1;
+//		}
+//	},
 	STAY,
-	STEP_LEFT_WALL,
-	STEP_RIGHT_WALL,
+//	STEP_LEFT_WALL,
+//	STEP_RIGHT_WALL,
 	JUMP_RIGHT_WALL,
 	JUMP_LEFT_WALL,
 	MAGNET {
-		public void startMotion() {
-			super.startMotion();
-			stage = 0;
-		}
 		
 		public void continueMotion() {
 			stage = 1;
+			super.continueMotion();
 		}
 		
 		public void finishMotion() {
-			super.finishMotion();
 			stage = 2;
 		}
 		
@@ -106,13 +90,9 @@ public enum MotionType {
 			return -1;
 		}
 		
-		public void startMotion() {
-			super.startMotion();
-			stage = 0;
-		}
-		
 		public void continueMotion() {
-			stage++;
+			stage = (stage + 1) % 2;
+			super.continueMotion();
 		}
 	},
 	TROW_RIGHT {
@@ -120,13 +100,39 @@ public enum MotionType {
 			return 1;
 		}
 		
-		public void startMotion() {
-			super.startMotion();
-			stage = 0;
+		public void continueMotion() {
+			stage = (stage + 1) % 2;
+			super.continueMotion();
+		}
+	},
+	FLY_RIGHT {
+		public int getXSpeed() {
+			if(stage == 0) return 0;
+			return 1;
 		}
 		
 		public void continueMotion() {
-			stage++;
+			stage = 1;
+			super.continueMotion();
+		}
+		
+		public boolean isUncontrolable() {
+			return stage == 0;
+		}
+	},
+	FLY_LEFT {
+		public int getXSpeed() {
+			if(stage == 0) return 0;
+			return -1;
+		}
+		
+		public void continueMotion() {
+			stage = 1;
+			super.continueMotion();
+		}
+		
+		public boolean isUncontrolable() {
+			return stage == 0;
 		}
 	},
 	NONE;
@@ -138,20 +144,17 @@ public enum MotionType {
 	 */
 	int stage = 0;
 	private int stages = 1;
-	private boolean active = false;
 	
 	public void startMotion() {
 		stage = 0;
-		active = true;
 	}
 	
 	public void continueMotion() {
-		stage = 0;
+		if(isFinishing()) stage = 0;
 	}
 	
 	public void finishMotion() {
 		stage = 0;
-		active = false;
 	}
 	
 	public int getStage() {
@@ -178,7 +181,4 @@ public enum MotionType {
 		return false;
 	}
 	
-	public boolean isActive() {
-		return active;
-	}
 }

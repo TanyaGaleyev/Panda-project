@@ -86,6 +86,14 @@ public class LevelCell {
 		}
 	}
 	
+	public void createSpring(int side) {
+		if(side==0){
+		left_wall = new Platform(PlatformType.SPRING);
+		}else{
+		right_wall = new Platform(PlatformType.SPRING);
+		}
+	}
+	
 	public void setPrize(int prizeType) {
 		if(prizeType != 0) {
 			prize = new Prize();

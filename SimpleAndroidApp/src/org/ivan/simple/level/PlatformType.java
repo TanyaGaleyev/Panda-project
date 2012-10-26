@@ -12,6 +12,7 @@ public enum PlatformType {
 	ELECTRO,
 	TROW_OUT_LEFT,
 	TROW_OUT_RIGHT,
+	SPRING,
 	
 	NONE
 	

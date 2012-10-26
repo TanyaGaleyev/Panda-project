@@ -44,6 +44,9 @@ public class Platform {
 			sprite.setAnimating(true);
 			sprite.playOnce = false;
 			break;
+		case SPRING:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.spring_platform),1,1);
+			break;
 		case NONE:
 			break;
 		}
@@ -58,7 +61,16 @@ public class Platform {
 	}
 	
 	public void changeSet(MotionType mt) {
-		if(sprite == null || mt == MotionType.MAGNET || mt == MotionType.BEAT_ROOF || mt == MotionType.TROW_LEFT &&  this.getType()!=PlatformType.TROW_OUT_LEFT|| mt == MotionType.TROW_RIGHT && this.getType()!=PlatformType.TROW_OUT_RIGHT || (mt == MotionType.JUMP && mt.getStage() != 0)) return;
+		if(sprite == null || 
+				mt == MotionType.MAGNET || 
+				mt == MotionType.BEAT_ROOF || 
+				mt == MotionType.TROW_LEFT &&  this.getType()!=PlatformType.TROW_OUT_LEFT|| 
+				mt == MotionType.TROW_RIGHT && this.getType()!=PlatformType.TROW_OUT_RIGHT || 
+				mt == MotionType.JUMP && mt.getStage() != 0 ||
+				mt == MotionType.FLY_LEFT ||
+				mt == MotionType.FLY_RIGHT ||
+				mt == MotionType.JUMP_LEFT_WALL ||
+				mt == MotionType.JUMP_RIGHT_WALL) return;
 		if(type == PlatformType.REDUCE) {
 			if(currentStatus<3) {
 				currentStatus++;
@@ -86,11 +98,19 @@ public class Platform {
 			return;
 		}
 		switch(mt) {
-		case STEP_LEFT:
+//		case STEP_LEFT:
+//			sprite.setAnimating(sprite.changeSet(1));
+//			sprite.playOnce = true;
+//			break;
+//		case STEP_RIGHT:
+//			sprite.setAnimating(sprite.changeSet(2));
+//			sprite.playOnce = true;
+//			break;
+		case JUMP_LEFT:
 			sprite.setAnimating(sprite.changeSet(1));
 			sprite.playOnce = true;
 			break;
-		case STEP_RIGHT:
+		case JUMP_RIGHT:
 			sprite.setAnimating(sprite.changeSet(2));
 			sprite.playOnce = true;
 			break;
