@@ -18,6 +18,8 @@ public class Hero {
 	private Sprite sprite8 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite8), 16, 8);
 	private Sprite sprite16 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite16), 6, 16);
 	private Sprite activeSprite;
+	public int heroX;
+	public int heroY;
 	
 	public Hero() {
 		sprite16.setAnimating(true);
@@ -262,8 +264,8 @@ public class Hero {
 		}
 	}
 	
-	public void onDraw(Canvas canvas, int x, int y) {
-		activeSprite.onDraw(canvas, x - activeSprite.getWidth() / 2, y - activeSprite.getHeight() / 2);
+	public void onDraw(Canvas canvas) {
+		activeSprite.onDraw(canvas, heroX - activeSprite.getWidth() / 2, heroY - activeSprite.getHeight() / 2);
 	}
 	
 	public MotionType getRealMotion() {
