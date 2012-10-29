@@ -31,7 +31,7 @@ public enum MotionType {
 		}
 		
 	},
-	PRE_JUMP ,
+//	PRE_JUMP ,
 	BEAT_ROOF,
 	FALL {
 		public int getYSpeed() {
@@ -85,24 +85,22 @@ public enum MotionType {
 		}
 	},
 	PRE_MAGNET,
-	TROW_LEFT {
+	THROW_LEFT {
 		public int getXSpeed() {
 			return -1;
 		}
 		
 		public void continueMotion() {
 			stage = (stage + 1) % 2;
-			super.continueMotion();
 		}
 	},
-	TROW_RIGHT {
+	THROW_RIGHT {
 		public int getXSpeed() {
 			return 1;
 		}
 		
 		public void continueMotion() {
 			stage = (stage + 1) % 2;
-			super.continueMotion();
 		}
 	},
 	FLY_RIGHT {
@@ -116,6 +114,16 @@ public enum MotionType {
 			super.continueMotion();
 		}
 		
+		public void finishMotion() {
+			stage = 2;
+		}
+		
+		@Override
+		public boolean isFinishing() {
+			return stage == 2;
+		}
+		
+		@Override
 		public boolean isUncontrolable() {
 			return stage == 0;
 		}
@@ -131,6 +139,16 @@ public enum MotionType {
 			super.continueMotion();
 		}
 		
+		public void finishMotion() {
+			stage = 2;
+		}
+		
+		@Override
+		public boolean isFinishing() {
+			return stage == 2;
+		}
+		
+		@Override
 		public boolean isUncontrolable() {
 			return stage == 0;
 		}

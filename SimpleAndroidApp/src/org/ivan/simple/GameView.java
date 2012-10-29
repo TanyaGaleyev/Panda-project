@@ -1,8 +1,5 @@
 package org.ivan.simple;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import org.ivan.simple.hero.Hero;
 import org.ivan.simple.level.LevelCell;
 import org.ivan.simple.level.LevelView;
@@ -15,38 +12,34 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 
 public class GameView extends SurfaceView {
 	
 	public static int GRID_STEP;
 	
-	private Hero hero;
-	
 	private static int JUMP_SPEED;
 	private static int ANIMATION_JUMP_SPEED;
-	private int ySpeed = 0;
-	private int xSpeed = 0;
 	
 	private static int LEFT_BOUND;
 	private static int RIGHT_BOUND;
 	private static int TOP_BOUND;
 	private static int BOTTOM_BOUND;
 	
-	LevelCell prevCell;
-	
 	private GameManager gameLoopThread;
 	
 	private SurfaceHolder holder;
 	
-	public LevelView level;
+	private Hero hero;
+	private LevelView level;
+	
 	private GameControl control;
 	
 	private Bitmap background;
+	
+	private LevelCell prevCell;
 	
 	public GameView(Context context) {
 		super(context);
@@ -83,7 +76,7 @@ public class GameView extends SurfaceView {
 			}
 			
 			public void surfaceCreated(SurfaceHolder holder) {
-				initImages();
+				initSurface();
 				gameLoopThread.setRunning(true);
 				gameLoopThread.start();
 			}
@@ -96,7 +89,7 @@ public class GameView extends SurfaceView {
 
 	}
 	
-	private void initImages() {
+	private void initSurface() {
 		
 		hero = new Hero();
 		
@@ -122,8 +115,8 @@ public class GameView extends SurfaceView {
 	
 	@Override
 	protected void onDraw(Canvas canvas) {
-		xSpeed = hero.getRealMotion().getXSpeed() * ANIMATION_JUMP_SPEED;
-		ySpeed = hero.getRealMotion().getYSpeed() * ANIMATION_JUMP_SPEED;
+		int xSpeed = hero.getRealMotion().getXSpeed() * ANIMATION_JUMP_SPEED;
+		int ySpeed = hero.getRealMotion().getYSpeed() * ANIMATION_JUMP_SPEED;
 		
 		hero.heroX += xSpeed;
 		hero.heroY += ySpeed;
@@ -134,6 +127,7 @@ public class GameView extends SurfaceView {
 //		drawGrid(canvas);
 		drawFPS(canvas);
 		if(level.model.isLost()) {
+			moveLose();
 			drawLose(canvas);
 		} else if(level.model.isComplete()) {
 			drawWin(canvas);
@@ -174,6 +168,24 @@ public class GameView extends SurfaceView {
 		canvas.restore();
 	}
 	
+	public void moveLose() {
+		while((LEFT_BOUND < hero.heroX && hero.heroX < RIGHT_BOUND) || (TOP_BOUND < hero.heroY && hero.heroY < BOTTOM_BOUND)) {
+			hero.changeMotion(MotionType.FALL);
+			double rand = Math.random();
+			if(rand < 0.33) {
+				hero.heroX += ANIMATION_JUMP_SPEED;
+			} else if(rand < 0.66) {
+				hero.heroX -= ANIMATION_JUMP_SPEED;
+			}
+			rand = Math.random();
+			if(rand < 0.33) {
+				hero.heroY += ANIMATION_JUMP_SPEED;
+			} else if(rand < 0.66) {
+				hero.heroY -= ANIMATION_JUMP_SPEED;
+			}
+		}
+	}
+	
 	public void drawGrid(Canvas canvas) {
 		Paint paint = new Paint();
 		paint.setColor(Color.BLUE);
@@ -185,48 +197,60 @@ public class GameView extends SurfaceView {
 		}
 	}
 	
+	public boolean readyForUpdate() {
+		// if the level is complete or lost the game should be not updatable on this level 
+		if(level.model.isLost()) return false;
+//		if(level.model.isComplete()) return false;
+		
+		boolean inControlState = hero.isInControlState();
+		
+		boolean inFinishingState = hero.isFinishing();
+		if(inFinishingState) {
+			// when motion at last switches
+			if(hero.tryToEndFinishMotion()) {
+				prevCell.updateCell(level.model.getMotionType());
+			}
+		}
+
+		boolean inStartingState = hero.isStarting();
+		if(inStartingState) {
+			hero.tryToEndStartMotion();
+		}
+		/*
+		 * Hero is in control state usually when motion animation has ended
+		 * If hero animation is in starting state game model should not be updated
+		 * (after starting animation main animation will be played)
+		 * If hero animation is in finishing state game model should not be updated
+		 * (after finishing animation next motion animation will begin)   
+		 */
+		boolean stateReady = inControlState && !inStartingState && !inFinishingState;
+		// change behavior only if hero is in ready for update state AND is on grid point
+		return stateReady && (hero.heroX % GRID_STEP == 0) && (hero.heroY % GRID_STEP == 0);
+	}
+	
+	public void updateGame() {
+		// Used to remember pressed control (action down performed and no other actions after)
+		if(level.model.controlType == UserControlType.IDLE) {
+			level.model.controlType = control.pressedControl;
+		}
+		// Store cell before update in purpose to play cell animation (like floor movement while jump) 
+		prevCell = level.model.getHeroCell();
+		// calculate new motion depending on current motion, hero cell and user control
+		level.model.updateGame();
+		// switch hero animation
+		hero.changeMotion(level.model.getMotionType());
+		// play cell reaction to new motion
+		if(!hero.isFinishing()) {
+			prevCell.updateCell(level.model.getMotionType());
+		}
+	}
+	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if(control.oneHandControl(event)) {
 			return true;
 		}
 		return super.onTouchEvent(event);
-	}
-	
-	public boolean readyForUpdate() {
-		if(level.model.isLost()) return false;
-		boolean controlState = hero.isInControlState();
-		boolean readyOnFinishing;
-		if(hero.isFinishing()) {
-			readyOnFinishing = !hero.tryToEndFinishMotion();
-			// when motion at last switches
-			if(!readyOnFinishing) {
-				prevCell.updateCell(level.model.getMotionType());
-			}
-		} else {
-			readyOnFinishing = true;
-		}
-		boolean readyOnStarting;
-		if(hero.isStarting()) {
-			readyOnStarting = !hero.tryToEndStartMotion();
-		} else {
-			readyOnStarting = true;
-		}
-		boolean stateReady = controlState && readyOnFinishing && readyOnStarting;
-		// change behavior only if hero is on grid point
-		return stateReady && (hero.heroX % GRID_STEP == 0) && (hero.heroY % GRID_STEP == 0);
-	}
-	
-	public void updateGame() {
-		if(level.model.controlType == UserControlType.IDLE) {
-			level.model.controlType = control.pressedControl;
-		}
-		prevCell = level.model.getHeroCell();
-		level.model.updateGame();
-		hero.changeMotion(level.model.getMotionType());
-		if(!hero.isFinishing()) {
-			prevCell.updateCell(level.model.getMotionType());
-		}
 	}
 
 }

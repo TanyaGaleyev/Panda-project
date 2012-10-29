@@ -99,6 +99,22 @@ public class Hero {
 			case MAGNET:
 				activeSprite.changeSet(15);
 				break;
+			case FLY_LEFT:
+				if(newMotion == MotionType.JUMP_LEFT_WALL) {
+					finishingMotion.startMotion();
+					switchToCurrentMotion();
+				} else {
+					activeSprite.changeSet(15);
+				}
+				break;
+			case FLY_RIGHT:
+				if(newMotion == MotionType.JUMP_RIGHT_WALL) {
+					finishingMotion.startMotion();
+					switchToCurrentMotion();
+				} else {
+					activeSprite.changeSet(15);
+				}
+				break;
 			}
 		} else if(currentMotion.isStarting()) {
 			pickActiveSprite(currentMotion);
@@ -166,9 +182,9 @@ public class Hero {
 				activeSprite.changeSet(1);
 			}
 			break;
-		case PRE_JUMP:
-			activeSprite.changeSet(9);
-			break;
+//		case PRE_JUMP:
+//			activeSprite.changeSet(9);
+//			break;
 		case JUMP:
 			if(finishingMotion == currentMotion) {
 				activeSprite.changeSet(4);
@@ -176,8 +192,8 @@ public class Hero {
 				activeSprite.changeSet(9);
 			}
 			break;
-		case TROW_LEFT:
-		case TROW_RIGHT:
+		case THROW_LEFT:
+		case THROW_RIGHT:
 			activeSprite.changeSet(15);
 			break;
 //		case STEP_LEFT_WALL:
@@ -189,10 +205,9 @@ public class Hero {
 		case JUMP_LEFT_WALL:
 			switch(finishingMotion) {
 			case JUMP:
-			case TROW_LEFT:
-			case TROW_RIGHT:
+			case THROW_LEFT:
 			case FLY_LEFT:
-			case FLY_RIGHT:
+			case JUMP_RIGHT_WALL: 
 				activeSprite.changeSet(12);
 				break;
 			default:
@@ -204,10 +219,9 @@ public class Hero {
 		case JUMP_RIGHT_WALL:
 			switch(finishingMotion) {
 			case JUMP:
-			case TROW_LEFT:
-			case TROW_RIGHT:
-			case FLY_LEFT:
+			case THROW_RIGHT:
 			case FLY_RIGHT:
+			case JUMP_LEFT_WALL:
 				activeSprite.changeSet(11);
 				break;
 			default:
@@ -229,8 +243,19 @@ public class Hero {
 		case PRE_MAGNET:
 			activeSprite.changeSet(13);
 			break;	
+		case FLY_LEFT:
+			if(finishingMotion == currentMotion) {
+				activeSprite.changeSet(4);
+			} else {
+				activeSprite.changeSet(15);
+			}
+			break;
 		case FLY_RIGHT:
-			activeSprite.changeSet(15);
+			if(finishingMotion == currentMotion) {
+				activeSprite.changeSet(4);
+			} else {
+				activeSprite.changeSet(15);
+			}
 			break;
 		default:
 			activeSprite.changeSet(4);
@@ -272,7 +297,7 @@ public class Hero {
 		if(currentMotion.isStarting()) {
 			return MotionType.NONE;
 		} else if(finishingMotion.isFinishing()) {
-			return finishingMotion;
+			return MotionType.NONE;
 		} else {
 			return currentMotion;
 		}

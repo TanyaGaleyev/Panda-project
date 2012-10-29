@@ -44,6 +44,9 @@ public class LevelModel {
 					if(leftWallType==9) {
 						levelGrid[i][j].createSpring(0);
 					}
+					if(leftWallType==10) {
+						levelGrid[i][j].createSpike_V(0);
+					}
 					// else set left wall as right wall of nearest left cell
 				} else {
 					levelGrid[i][j].left_wall = levelGrid[i][j - 1].right_wall;
@@ -79,6 +82,9 @@ public class LevelModel {
 					if(roofType==8){
 						levelGrid[i][j] .createTrowOutLeft(1);
 					}
+					if(roofType==10){
+						levelGrid[i][j] .createSpike(1);
+					}
 					// else set roof as floor of nearest upper cell
 				} else {
 					levelGrid[i][j].roof = levelGrid[i - 1][j].floor;
@@ -94,6 +100,10 @@ public class LevelModel {
 				if(rightWallType==9) {
 					levelGrid[i][j].createSpring(1);
 				}
+				if(rightWallType==10) {
+					levelGrid[i][j].createSpike_V(1);
+				}
+				
 				
 				int floorType = mylevel[i][j][3];
 				if(floorType==0){
@@ -123,6 +133,9 @@ public class LevelModel {
 				if(floorType==8){
 					levelGrid[i][j] .createTrowOutLeft(0);
 				}
+				if(floorType==10){
+					levelGrid[i][j] .createSpike(0);
+				}
 			}
 		}
 	}
@@ -143,29 +156,13 @@ public class LevelModel {
 		} else {
 			switch(controlType){
 			case UP:
-				motionType=MotionType.JUMP;
+				jump();
 				break;
 			case LEFT:
-//				if(motionAvaible(MotionType.STEP_LEFT) ){
-//					motionType=MotionType.STEP_LEFT;
-//				}
-				if(motionAvaible(MotionType.JUMP_LEFT) ){
-					motionType=MotionType.JUMP_LEFT;
-				}
-				else{
-					motionType=MotionType.JUMP_LEFT_WALL;
-				}
+				moveLeft();
 				break;
 			case RIGHT:
-//				if(motionAvaible(MotionType.STEP_RIGHT) ){
-//					motionType=MotionType.STEP_RIGHT;
-//				}
-				if(motionAvaible(MotionType.JUMP_RIGHT) ){
-					motionType=MotionType.JUMP_RIGHT;
-				}
-				else{
-					motionType=MotionType.JUMP_RIGHT_WALL;
-				}
+				moveRight();
 				break;
 			case DOWN:
 			case IDLE:
@@ -180,10 +177,30 @@ public class LevelModel {
 	private void jump() {    	
 		if(motionAvaible(MotionType.JUMP)) {
 			motionType=MotionType.JUMP;
-		} else if(motionAvaible(MotionType.MAGNET)){
-				motionType = MotionType.MAGNET;
+		} else if(motionAvaible(MotionType.MAGNET)) {
+			motionType = MotionType.MAGNET;
 		} else {
-				motionType=MotionType.BEAT_ROOF;	
+			motionType=MotionType.BEAT_ROOF;	
+		}
+	}
+	
+	private void moveLeft() {
+		if(motionAvaible(MotionType.JUMP_LEFT) ) {
+			motionType=MotionType.JUMP_LEFT;
+		} else if(getHeroCell().getLeft().getType() == PlatformType.SPRING) {
+			motionType=MotionType.FLY_RIGHT;
+		} else {
+			motionType=MotionType.JUMP_LEFT_WALL;
+		}
+	}
+	
+	private void moveRight() {
+		if(motionAvaible(MotionType.JUMP_RIGHT) ) {
+			motionType=MotionType.JUMP_RIGHT;
+		} else if(getHeroCell().getRight().getType() == PlatformType.SPRING) {
+			motionType=MotionType.FLY_LEFT;
+		} else {
+			motionType=MotionType.JUMP_RIGHT_WALL;
 		}
 	}
 	
@@ -191,50 +208,26 @@ public class LevelModel {
 		switch (getHeroCell().getFloor().getType()){
 
 		case ANGLE_RIGHT:
-//			if(motionAvaible(MotionType.STEP_RIGHT)){
-//				motionType=MotionType.STEP_RIGHT;
-//
-//			}   
-			if(motionAvaible(MotionType.JUMP_RIGHT) ){
-				motionType=MotionType.JUMP_RIGHT;
-			}
-			else{
-				motionType=MotionType.JUMP_RIGHT_WALL;
-			}				
+			moveRight();			
 			break;	
 		case  ANGLE_LEFT:
-//			if(motionAvaible(MotionType.STEP_LEFT)){
-//				motionType=MotionType.STEP_LEFT;
-//
-//			}
-			if(motionAvaible(MotionType.JUMP_LEFT) ){
-				motionType=MotionType.JUMP_LEFT;
-			}
-			else{
-				motionType=MotionType.JUMP_LEFT_WALL;
-			}		
-
+			moveLeft();
 			break;
-
 		case  TRAMPOLINE:
-			motionType=MotionType.JUMP;
+			jump();
 			break;
-
-		case  TROW_OUT_LEFT:
+		case  THROW_OUT_LEFT:
 			if(motionAvaible(MotionType.JUMP_LEFT)){
-				motionType=MotionType.TROW_LEFT;
-
-			}   else{
-				motionType=MotionType.JUMP_LEFT_WALL;
+				motionType=MotionType.THROW_LEFT;
+			} else {
+				moveLeft();
 			}	
 			break;
-
-		case  TROW_OUT_RIGHT:
+		case  THROW_OUT_RIGHT:
 			if(motionAvaible(MotionType.JUMP_RIGHT)){
-				motionType=MotionType.TROW_RIGHT;
-
-			}   else{
-				motionType=MotionType.JUMP_RIGHT_WALL;
+				motionType=MotionType.THROW_RIGHT;
+			} else {
+				moveRight();
 			}	
 			break;
 		default:
@@ -242,6 +235,7 @@ public class LevelModel {
 			break;	
 		}
 	}
+
 	
 	public void updateGame() {
 		prizesLeft -= getHeroCell().removePrize();
@@ -250,40 +244,21 @@ public class LevelModel {
 		}
 		motionType.continueMotion();
 		switch(motionType){
-		case  PRE_JUMP:
-			jump();
-			break;
 		case JUMP:
-//			if(motionType.getStage() == 0) {
-//				motionType.continueMotion();
-//				jump();
-//				break;
-//			}
 			switch(controlType) {
 			case DOWN:
-				stayCheck();
+				platformsCheck();
 				break;
 			case LEFT:
-				if(motionAvaible(MotionType.JUMP_LEFT) ){
-					motionType=MotionType.JUMP_LEFT;
-				}
-				else{
-					motionType=MotionType.JUMP_LEFT_WALL;
-				}
+				moveLeft();
 				break;
 			case RIGHT:
-				if(motionAvaible(MotionType.JUMP_RIGHT) ){
-					motionType=MotionType.JUMP_RIGHT;
-				}
-				else{
-					motionType=MotionType.JUMP_RIGHT_WALL;
-				}
+				moveRight();
 				break;
 			case IDLE:
 			case UP:	
 				jump();
 				break;
-
 			}
 			break;
 		case  MAGNET:
@@ -295,33 +270,32 @@ public class LevelModel {
 				motionType = MotionType.MAGNET;
 				break;
 			}
-
 			break;	
-		case TROW_LEFT:
-			if(motionType.getStage() == 1){
-				if(!motionAvaible(MotionType.TROW_LEFT) ){
-					motionType=MotionType.JUMP_LEFT_WALL;
+		case THROW_LEFT:
+			if(motionType.getStage() == 1) {
+				if(!motionAvaible(MotionType.JUMP_LEFT) ) {
+					moveLeft();
 				}
-			}else{				
-				motionType=MotionType.STAY;
-				updateGame();
-				return;
+			} else {				
+				platformsCheck();
 			}
 			break;
-		case TROW_RIGHT:
-			if(motionType.getStage() == 1){
-				if(!motionAvaible(MotionType.TROW_RIGHT) ){
-					motionType=MotionType.JUMP_RIGHT_WALL;
+		case THROW_RIGHT:
+			if(motionType.getStage() == 1) {
+				if(!motionAvaible(MotionType.JUMP_RIGHT) ) {
+					moveRight();
 				}
-			}else{
-				motionType=MotionType.STAY;
-				updateGame();
-				return;
+			} else {
+				platformsCheck();
 			}
 			break;
 		case JUMP_LEFT_WALL:
 			if(getHeroCell().getLeft().getType() == PlatformType.SPRING) {
-				motionType = MotionType.FLY_RIGHT;
+				if(motionAvaible(MotionType.JUMP_RIGHT)) {
+					motionType = MotionType.FLY_RIGHT;
+				} else {
+					motionType = MotionType.JUMP_RIGHT_WALL;
+				}
 			} else {
 				platformsCheck();
 			}
@@ -344,7 +318,11 @@ public class LevelModel {
 			break;
 		case JUMP_RIGHT_WALL:
 			if(getHeroCell().getRight().getType() == PlatformType.SPRING) {
-				motionType = MotionType.FLY_LEFT;
+				if(motionAvaible(MotionType.JUMP_LEFT)) {
+					motionType = MotionType.FLY_LEFT;
+				} else {
+					motionType = MotionType.JUMP_LEFT_WALL;
+				}
 			} else {
 				platformsCheck();
 			}
@@ -382,18 +360,21 @@ public class LevelModel {
 	private boolean motionAvaible(MotionType mt) {
 		switch (mt) {
 		case JUMP:
-			if(getHeroCell().getRoof().getType() != PlatformType.NONE) return false;
+			if(getHeroCell().getRoof().getType() == PlatformType.SPIKE) lose = true;
+			if(mt.getYSpeed() != 0 && getHeroCell().getRoof().getType() != PlatformType.NONE) return false;
 			if(heroY + mt.getYSpeed() < 0) return false;
 			return true;
 //		case STEP_LEFT:
 		case JUMP_LEFT:
-		case TROW_LEFT:
+		case THROW_LEFT:
+			if(getHeroCell().getLeft().getType() == PlatformType.SPIKE_V) lose = true;
 			if(getHeroCell().getLeft().getType() != PlatformType.NONE) return false;
 			if(heroX + mt.getXSpeed() < 0) return false;
 			return true;
 //		case STEP_RIGHT:
 		case JUMP_RIGHT:
-		case TROW_RIGHT:	
+		case THROW_RIGHT:	
+			if(getHeroCell().getRight().getType() == PlatformType.SPIKE_V) lose = true;
 			if(getHeroCell().getRight().getType() != PlatformType.NONE) return false;
 			if(heroX + mt.getXSpeed() > col - 1) return false;
 			return true;
@@ -433,4 +414,5 @@ public class LevelModel {
 	public boolean isLost() {
 		return lose;
 	}
+	
 }

@@ -30,10 +30,10 @@ public class Platform {
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.angle_platform_left), 1, 8);
 			break;
 			
-		case TROW_OUT_RIGHT:
+		case THROW_OUT_RIGHT:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.throw_out_platform_right), 1, 8);
 			break;
-		case TROW_OUT_LEFT:
+		case THROW_OUT_LEFT:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.throw_out_platform_left), 1, 8);
 			break;	
 		case TRAMPOLINE:
@@ -46,6 +46,12 @@ public class Platform {
 			break;
 		case SPRING:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.spring_platform),1,1);
+			break;
+		case SPIKE:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.spike),1,1);
+			break;
+		case SPIKE_V:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.spike_v), 1, 1);
 			break;
 		case NONE:
 			break;
@@ -64,8 +70,8 @@ public class Platform {
 		if(sprite == null || 
 				mt == MotionType.MAGNET || 
 				mt == MotionType.BEAT_ROOF || 
-				mt == MotionType.TROW_LEFT &&  this.getType()!=PlatformType.TROW_OUT_LEFT|| 
-				mt == MotionType.TROW_RIGHT && this.getType()!=PlatformType.TROW_OUT_RIGHT || 
+				mt == MotionType.THROW_LEFT &&  this.getType()!=PlatformType.THROW_OUT_LEFT|| 
+				mt == MotionType.THROW_RIGHT && this.getType()!=PlatformType.THROW_OUT_RIGHT || 
 				mt == MotionType.JUMP && mt.getStage() != 0 ||
 				mt == MotionType.FLY_LEFT ||
 				mt == MotionType.FLY_RIGHT ||
