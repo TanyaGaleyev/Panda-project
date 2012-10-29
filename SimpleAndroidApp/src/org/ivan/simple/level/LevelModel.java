@@ -13,7 +13,8 @@ public class LevelModel {
 	public int ySpeed = 0;
 	public int heroX;
 	public int heroY;
-	public UserControlType controlType = UserControlType.IDLE;
+	private UserControlType controlType = UserControlType.IDLE;
+	private UserControlType bufferedControlType = UserControlType.IDLE;
 	private MotionType motionType = MotionType.STAY;
 	private int prizesLeft = 0;
 	private boolean lose = false;
@@ -238,6 +239,15 @@ public class LevelModel {
 
 	
 	public void updateGame() {
+		/* 
+		 * buffering needed to prevent control type changing 
+		 * before update finished
+		 */
+		synchronized(bufferedControlType) {
+			controlType = bufferedControlType;
+			bufferedControlType = UserControlType.IDLE;
+		}
+		
 		prizesLeft -= getHeroCell().removePrize();
 		if(motionType.isUncontrolable()) {
 			controlType = UserControlType.IDLE;
@@ -351,7 +361,6 @@ public class LevelModel {
 	}
 	
 	private void updatePosition() {
-		controlType = UserControlType.IDLE;
 		if(motionType == MotionType.FALL_BLANSH) heroY++;
 		heroX += motionType.getXSpeed();
 		heroY += motionType.getYSpeed();
@@ -413,6 +422,16 @@ public class LevelModel {
 	
 	public boolean isLost() {
 		return lose;
+	}
+	
+	public void setControlType(UserControlType control) {
+		synchronized(bufferedControlType) {
+			bufferedControlType = control;
+		}
+	}
+	
+	public UserControlType getControlType() {
+		return bufferedControlType;
 	}
 	
 }

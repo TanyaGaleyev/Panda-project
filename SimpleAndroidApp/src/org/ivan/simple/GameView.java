@@ -235,8 +235,8 @@ public class GameView extends SurfaceView {
 	
 	public void updateGame() {
 		// Used to remember pressed control (action down performed and no other actions after)
-		if(level.model.controlType == UserControlType.IDLE) {
-			level.model.controlType = control.pressedControl;
+		if(level.model.getControlType() == UserControlType.IDLE) {
+			level.model.setControlType(control.pressedControl);
 		}
 		// Store cell before update in purpose to play cell animation (like floor movement while jump) 
 		prevCell = level.model.getHeroCell();

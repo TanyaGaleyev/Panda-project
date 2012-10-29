@@ -41,7 +41,7 @@ public class GameControl {
 				@Override
 				public void run() {
 					pressedControl = delayedControl;
-					model.controlType = delayedControl;
+					model.setControlType(delayedControl);
 				}
 			};
 			new Timer().schedule(useDelayedControl, 100);
@@ -55,9 +55,11 @@ public class GameControl {
 			if(event.getPointerCount() > 2) return true;
 			return true;
 		case MotionEvent.ACTION_UP:
-			if(useDelayedControl.cancel() &&
-					model.controlType == UserControlType.IDLE) {
-				model.controlType = delayedControl;
+			if(pressedControl != UserControlType.IDLE) {
+				model.setControlType(pressedControl);
+			} else if(useDelayedControl.cancel() &&
+					model.getControlType() == UserControlType.IDLE) {
+				model.setControlType(delayedControl);
 			}
 			pressedControl = UserControlType.IDLE;
 			return true;
@@ -89,7 +91,7 @@ public class GameControl {
 	private void receiveSlideControl(UserControlType control, int pointerId, float x, float y) {
 		useDelayedControl.cancel();
 		pressedControl = control;
-		model.controlType = control;
+		model.setControlType(control);
 		startPressedY[pointerId] = y;
 		startPressedX[pointerId] = x;
 		slideSenderID = pointerId;
@@ -99,7 +101,7 @@ public class GameControl {
 		if(event.getAction() == MotionEvent.ACTION_DOWN ||
 			event.getAction() == MotionEvent.ACTION_MOVE) {
 			pressedControl = getMoveType(event); 
-			model.controlType = pressedControl;
+			model.setControlType(pressedControl);
 			return true;
 		}
 		if(event.getAction() == MotionEvent.ACTION_UP) {
