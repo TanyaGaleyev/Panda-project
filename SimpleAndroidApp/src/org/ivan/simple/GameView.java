@@ -115,19 +115,24 @@ public class GameView extends SurfaceView {
 	
 	@Override
 	protected void onDraw(Canvas canvas) {
-		int xSpeed = hero.getRealMotion().getXSpeed() * ANIMATION_JUMP_SPEED;
-		int ySpeed = hero.getRealMotion().getYSpeed() * ANIMATION_JUMP_SPEED;
-		
-		hero.heroX += xSpeed;
-		hero.heroY += ySpeed;
 		canvas.drawColor(Color.WHITE);
 		canvas.drawBitmap(background, 0, 0, null);
 		level.onDraw(canvas);
+		if(level.model.isLost()) {
+			moveLose();
+		} else if(level.model.isComplete()) {
+			hero.playWinAnimation();
+		} else {
+			int xSpeed = hero.getRealMotion().getXSpeed() * ANIMATION_JUMP_SPEED;
+			int ySpeed = hero.getRealMotion().getYSpeed() * ANIMATION_JUMP_SPEED;
+			
+			hero.heroX += xSpeed;
+			hero.heroY += ySpeed;
+		}
 		hero.onDraw(canvas);
 //		drawGrid(canvas);
 		drawFPS(canvas);
 		if(level.model.isLost()) {
-			moveLose();
 			drawLose(canvas);
 		} else if(level.model.isComplete()) {
 			drawWin(canvas);
@@ -169,19 +174,19 @@ public class GameView extends SurfaceView {
 	}
 	
 	public void moveLose() {
-		while((LEFT_BOUND < hero.heroX && hero.heroX < RIGHT_BOUND) || (TOP_BOUND < hero.heroY && hero.heroY < BOTTOM_BOUND)) {
-			hero.changeMotion(MotionType.FALL);
+		if((-GRID_STEP < hero.heroX && hero.heroX < getWidth() + GRID_STEP) || (-GRID_STEP < hero.heroY && hero.heroY < getHeight() + GRID_STEP)) {
+			hero.playLoseAnimation();
 			double rand = Math.random();
 			if(rand < 0.33) {
-				hero.heroX += ANIMATION_JUMP_SPEED;
+				hero.heroX += JUMP_SPEED;
 			} else if(rand < 0.66) {
-				hero.heroX -= ANIMATION_JUMP_SPEED;
+				hero.heroX -= JUMP_SPEED;
 			}
 			rand = Math.random();
 			if(rand < 0.33) {
-				hero.heroY += ANIMATION_JUMP_SPEED;
+				hero.heroY += JUMP_SPEED;
 			} else if(rand < 0.66) {
-				hero.heroY -= ANIMATION_JUMP_SPEED;
+				hero.heroY -= JUMP_SPEED;
 			}
 		}
 	}
@@ -200,7 +205,7 @@ public class GameView extends SurfaceView {
 	public boolean readyForUpdate() {
 		// if the level is complete or lost the game should be not updatable on this level 
 		if(level.model.isLost()) return false;
-//		if(level.model.isComplete()) return false;
+		if(level.model.isComplete()) return false;
 		
 		boolean inControlState = hero.isInControlState();
 		

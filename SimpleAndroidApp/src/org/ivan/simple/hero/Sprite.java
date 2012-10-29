@@ -19,7 +19,7 @@ public class Sprite {
 	
 	private final int singleHeight;
 	
-	private boolean animating = false;
+	protected boolean animating = false;
 	
 	public boolean playOnce = false;
 	

@@ -15,7 +15,7 @@ public class Hero {
 	 */
 	private MotionType currentMotion = MotionType.NONE;
 	private MotionType finishingMotion = MotionType.NONE;
-	private Sprite sprite8 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite8), 16, 8);
+	private Sprite sprite8 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite8), 17, 8);
 	private Sprite sprite16 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite16), 6, 16);
 	private Sprite activeSprite;
 	public int heroX;
@@ -300,6 +300,20 @@ public class Hero {
 			return MotionType.NONE;
 		} else {
 			return currentMotion;
+		}
+	}
+	
+	public void playLoseAnimation() {
+		activeSprite = sprite8;
+		activeSprite.currentSet = 5;
+	}
+	
+	public void playWinAnimation() {
+		activeSprite = sprite8;
+		activeSprite.currentSet = 16;
+		activeSprite.playOnce = true;
+		if(!activeSprite.animating) {
+			activeSprite.gotoAndStop(7);
 		}
 	}
 }
