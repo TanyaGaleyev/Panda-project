@@ -62,6 +62,8 @@ public class GameView extends SurfaceView {
 		holder.addCallback(new SurfaceHolder.Callback() {
 			
 			public void surfaceDestroyed(SurfaceHolder holder) {
+				// turn motion to initial stage (stage == 0)
+				level.model.getMotionType().startMotion();
 				boolean retry = true;
                 gameLoopThread.setRunning(false);
                 while (retry) {

@@ -32,11 +32,12 @@ public class GameControl {
 		case MotionEvent.ACTION_DOWN:
 			startPressedY[0] = event.getY();
 			startPressedX[0] = event.getX();
-			if(event.getX() > hero.heroX) {
-				delayedControl = UserControlType.RIGHT;
-			} else {
-				delayedControl = UserControlType.LEFT;
-			}
+//			if(event.getX() > hero.heroX) {
+//				delayedControl = UserControlType.RIGHT;
+//			} else {
+//				delayedControl = UserControlType.LEFT;
+//			}
+			delayedControl = getMoveType(event);
 			useDelayedControl = new TimerTask() {				
 				@Override
 				public void run() {
@@ -55,9 +56,9 @@ public class GameControl {
 			if(event.getPointerCount() > 2) return true;
 			return true;
 		case MotionEvent.ACTION_UP:
-			if(pressedControl != UserControlType.IDLE) {
+			/*if(pressedControl != UserControlType.IDLE) {
 				model.setControlType(pressedControl);
-			} else if(useDelayedControl.cancel() &&
+			} else */if(useDelayedControl.cancel() &&
 					model.getControlType() == UserControlType.IDLE) {
 				model.setControlType(delayedControl);
 			}
@@ -66,7 +67,8 @@ public class GameControl {
 		case MotionEvent.ACTION_MOVE:
 			if(event.getPointerCount() > 2) return true;
 			for(int ai = 0; ai < event.getPointerCount(); ai++) {
-				pointerId = event.getPointerId(ai); 
+				pointerId = event.getPointerId(ai);
+				if(pointerId > 1) continue;
 				float x = event.getX(ai);
 				float y = event.getY(ai);
 				if(event.getX(ai) - startPressedX[pointerId] > 20) {

@@ -369,7 +369,7 @@ public class LevelModel {
 	private boolean motionAvaible(MotionType mt) {
 		switch (mt) {
 		case JUMP:
-			if(getHeroCell().getRoof().getType() == PlatformType.SPIKE) lose = true;
+			if(mt.getYSpeed() != 0 && getHeroCell().getRoof().getType() == PlatformType.SPIKE) lose = true;
 			if(mt.getYSpeed() != 0 && getHeroCell().getRoof().getType() != PlatformType.NONE) return false;
 			if(heroY + mt.getYSpeed() < 0) return false;
 			return true;

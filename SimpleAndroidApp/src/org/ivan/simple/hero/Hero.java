@@ -41,7 +41,7 @@ public class Hero {
 	
 	public boolean tryToEndFinishMotion() {
 		if(activeSprite.currentFrame == 0) {
-			// convert motion to initial stage (stage == 0)
+			// turn motion to initial stage (stage == 0)
 			finishingMotion.startMotion();
 			switchToCurrentMotion();
 			return true;
@@ -100,6 +100,7 @@ public class Hero {
 				activeSprite.changeSet(15);
 				break;
 			case FLY_LEFT:
+				// skip finishing fall down after FLY if finish because wall
 				if(newMotion == MotionType.JUMP_LEFT_WALL) {
 					finishingMotion.startMotion();
 					switchToCurrentMotion();
@@ -108,6 +109,7 @@ public class Hero {
 				}
 				break;
 			case FLY_RIGHT:
+				// skip finishing fall down after FLY if finish because wall
 				if(newMotion == MotionType.JUMP_RIGHT_WALL) {
 					finishingMotion.startMotion();
 					switchToCurrentMotion();
