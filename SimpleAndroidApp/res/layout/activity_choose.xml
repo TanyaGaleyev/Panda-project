@@ -5,7 +5,7 @@
     android:background="#0000ff">
     
     <org.ivan.simple.LevelChooseView
-        android:id="@+id/game"
+        android:id="@+id/choose"
         android:layout_width="792px"
         android:layout_height="432px"
         android:layout_centerInParent="true"/>
