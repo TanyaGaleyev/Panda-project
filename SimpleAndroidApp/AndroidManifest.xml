@@ -14,11 +14,12 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.ivan.sample.StartActivity" />
+                android:value="org.ivan.sample.LevelChooseActivity" />
         </activity>
+        
         <activity
             android:name=".SecondActivity"
             android:label="@string/title_activity_second" >
@@ -30,12 +31,21 @@
         <activity
             android:name=".StartActivity"
             android:label="@string/title_activity_start"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        
+        <activity
+            android:name=".LevelChooseActivity"
+            android:label="@string/title_activity_choose"
+            android:screenOrientation="landscape" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.ivan.sample.StartActivity" />
         </activity>
     </application>
 

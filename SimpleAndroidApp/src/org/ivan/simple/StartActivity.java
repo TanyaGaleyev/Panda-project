@@ -40,7 +40,7 @@ public class StartActivity extends Activity {
     }
 	
 	private void startGame() {
-		Intent intent = new Intent(this, MainActivity.class);
+		Intent intent = new Intent(this, LevelChooseActivity.class);
 		startActivity(intent);
 	}
 	
