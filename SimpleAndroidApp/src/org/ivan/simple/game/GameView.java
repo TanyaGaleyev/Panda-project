@@ -3,11 +3,13 @@ package org.ivan.simple.game;
 import org.ivan.simple.R;
 import org.ivan.simple.UserControlType;
 import org.ivan.simple.R.drawable;
-import org.ivan.simple.hero.Hero;
-import org.ivan.simple.level.LevelCell;
-import org.ivan.simple.level.LevelView;
+import org.ivan.simple.game.hero.Hero;
+import org.ivan.simple.game.level.LevelCell;
+import org.ivan.simple.game.level.LevelView;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -33,8 +35,6 @@ public class GameView extends SurfaceView {
 	
 	private GameManager gameLoopThread;
 	
-	private SurfaceHolder holder;
-	
 	private Hero hero;
 	private LevelView level;
 	
@@ -44,7 +44,7 @@ public class GameView extends SurfaceView {
 	
 	private LevelCell prevCell;
 	
-	public int levId = 0;
+	protected int levId = 0;
 	
 	public GameView(Context context) {
 		super(context);
@@ -63,8 +63,7 @@ public class GameView extends SurfaceView {
 	
 	private final void init() {
 		gameLoopThread = new GameManager(this);
-		holder = getHolder();
-		holder.addCallback(new SurfaceHolder.Callback() {
+		getHolder().addCallback(new SurfaceHolder.Callback() {
 			
 			public void surfaceDestroyed(SurfaceHolder holder) {
 				// turn motion to initial stage (stage == 0)
@@ -126,9 +125,13 @@ public class GameView extends SurfaceView {
 		canvas.drawBitmap(background, 0, 0, null);
 		level.onDraw(canvas);
 		if(level.model.isLost()) {
-			moveLose();
+			if(!moveLose()) {
+				((GameActivity) getContext()).finish();
+			}
 		} else if(level.model.isComplete()) {
-			hero.playWinAnimation();
+			if(!hero.playWinAnimation()) {
+				((GameActivity) getContext()).finish();
+			}
 		} else {
 			int xSpeed = hero.getRealMotion().getXSpeed() * ANIMATION_JUMP_SPEED;
 			int ySpeed = hero.getRealMotion().getYSpeed() * ANIMATION_JUMP_SPEED;
@@ -180,8 +183,8 @@ public class GameView extends SurfaceView {
 		canvas.restore();
 	}
 	
-	public void moveLose() {
-		if((-GRID_STEP < hero.heroX && hero.heroX < getWidth() + GRID_STEP) || (-GRID_STEP < hero.heroY && hero.heroY < getHeight() + GRID_STEP)) {
+	public boolean moveLose() {
+		if((-GRID_STEP < hero.heroX && hero.heroX < getWidth() + GRID_STEP) && (-GRID_STEP < hero.heroY && hero.heroY < getHeight() + GRID_STEP)) {
 			hero.playLoseAnimation();
 			double rand = Math.random();
 			if(rand < 0.33) {
@@ -195,7 +198,9 @@ public class GameView extends SurfaceView {
 			} else if(rand < 0.66) {
 				hero.heroY -= JUMP_SPEED;
 			}
+			return true;
 		}
+		return false;
 	}
 	
 	public void drawGrid(Canvas canvas) {
@@ -218,7 +223,7 @@ public class GameView extends SurfaceView {
 		
 		boolean inFinishingState = hero.isFinishing();
 		if(inFinishingState) {
-			// when motion at last switches
+			// when motion at last switches we need to play cell animation
 			if(hero.tryToEndFinishMotion()) {
 				prevCell.updateCell(level.model.getMotionType());
 			}

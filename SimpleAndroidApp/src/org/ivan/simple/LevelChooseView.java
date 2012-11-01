@@ -14,24 +14,38 @@ public class LevelChooseView extends SurfaceView {
 	private static final int LEFT_BOUND = GRID_STEP / 4;
 	private static final int TOP_BOUND = GRID_STEP / 4;
 	private static final int MARKER_SPEED = GRID_STEP / 8;
+	// selected level coordinates in array
 	private int levelX = 0;
 	private int levelY = 0;
-	private int[][] levels = {{1,1},{1,1}};
+	/**
+	 * Matrix with levels IDs
+	 */
+	private int[][] levels = {{1,2},{2,1}};
 	
 	private SurfaceHolder holder;
 	
+	/**
+	 * Border of levels to select
+	 */
 	private Bitmap border;
 	
+	// Backgroung image of LevelChooseView
 	private Bitmap background;
 	
+	/**
+	 * Marker is a panda image moving from one level to another (choosing level)
+	 */
 	private Bitmap marker;
+	// coordinates of marker center on screen
 	private int markerX = LEFT_BOUND + GRID_STEP / 2;
 	private int markerY = TOP_BOUND + GRID_STEP / 2;
 	
+	// Thread redrawing view
 	private Redrawer redrawer;
 	
 	private boolean chooseReady = true;
 	
+	// buffer choose level action
 	private UserControlType performingAction = UserControlType.IDLE;
 	private UserControlType chooseAcion = UserControlType.IDLE;
 
@@ -84,6 +98,7 @@ public class LevelChooseView extends SurfaceView {
 	
 	@Override
 	protected void onDraw(Canvas canvas) {
+		// move marker
 		switch(performingAction) {
 		case UP:
 			markerY -= MARKER_SPEED;
@@ -103,31 +118,40 @@ public class LevelChooseView extends SurfaceView {
 		canvas.drawBitmap(background, 0, 0, null);
 		for(int i = 0; i < levels.length; i++) {
 			for(int j = 0; j < levels[i].length; j++) {
-				canvas.drawBitmap(border, getScreenX(j), getScreenY(i), null);
+				drawOnCenterCoordinates(border, getScreenX(j), getScreenY(i), canvas);
 			}
 		}
-		canvas.drawBitmap(marker, markerX - marker.getWidth() / 2, markerY - marker.getHeight() / 2, null);
+		drawOnCenterCoordinates(marker, markerX, markerY, canvas);
+	}
+	
+	private void drawOnCenterCoordinates(Bitmap bitmap, int x, int y, Canvas canvas) {
+		canvas.drawBitmap(bitmap, x - bitmap.getWidth() / 2, y - bitmap.getHeight() / 2, null);
 	}
 	
 	private int getScreenX(int col) {
-		return LEFT_BOUND + col * GRID_STEP + GRID_STEP / 2 - border.getWidth() / 2;
+		return LEFT_BOUND + col * GRID_STEP + GRID_STEP / 2;
 	}
 	
 	private int getScreenY(int row) {
-		return TOP_BOUND + row * GRID_STEP + GRID_STEP / 2 - border.getHeight() / 2;
+		return TOP_BOUND + row * GRID_STEP + GRID_STEP / 2;
 	}
 	
 	public synchronized int getLevelId(MotionEvent event) {
+		// ignore other actions
 		if(event.getAction() != MotionEvent.ACTION_DOWN) return 0;
+		// if marker is moving choosing are not allowed 
 		if(!chooseReady) return 0;
+		// switch to moving state
 		chooseReady = false;
-		UserControlType tempAction = getMoveType(event);
-		if(getScreenX(levelX) < event.getX() &&
-				event.getX() < getScreenX(levelX + 1) &&
-				getScreenY(levelY) < event.getY() && 
-				event.getY() < getScreenY(levelY + 1)) {
-			return 1 + levelY * levels.length + levelX;
+		// Click on markered cell means level choise
+		if(markerX - GRID_STEP / 2 < event.getX() &&
+				event.getX() < markerX + GRID_STEP / 2 &&
+				markerY - GRID_STEP / 2 < event.getY() && 
+				event.getY() < markerY + GRID_STEP / 2) {
+			return levels[levelY][levelX];
 		}
+		// Get choise direction
+		UserControlType tempAction = getMoveType(event);
 		switch(tempAction) {
 		case UP:
 			if(levelY == 0) tempAction = UserControlType.IDLE;
@@ -174,20 +198,27 @@ public class LevelChooseView extends SurfaceView {
 		}
 	}
 	
+	private boolean isOnGridCenter(int x, int y) {
+		if((x - GRID_STEP / 2 - LEFT_BOUND) % GRID_STEP == 0 &&
+				(y - GRID_STEP / 2 - TOP_BOUND) % GRID_STEP == 0) {
+			return true;
+		}
+		return false;
+	}
+	
 	private class Redrawer extends Thread {
 		boolean running = true;
 		@Override
 		public void run() {
 			while(running) {
-				if((markerX - GRID_STEP / 2 - LEFT_BOUND) % GRID_STEP == 0 &&
-						(markerY - GRID_STEP / 2 - TOP_BOUND) % GRID_STEP == 0) {
+				if(isOnGridCenter(markerX, markerY)) {
 					chooseReady = true;
 					performingAction = chooseAcion;
 					chooseAcion = UserControlType.IDLE;
 				}
-				Canvas c = getHolder().lockCanvas();
+				Canvas c = holder.lockCanvas();
 				onDraw(c);
-				getHolder().unlockCanvasAndPost(c);
+				holder.unlockCanvasAndPost(c);
 				try {
 					sleep(40);
 				} catch (InterruptedException e) {

@@ -1,4 +1,4 @@
-package org.ivan.simple.level;
+package org.ivan.simple.game.level;
 public class LevelStorage {
 	public int[][][] getLevel(int num) {
 		switch (num)

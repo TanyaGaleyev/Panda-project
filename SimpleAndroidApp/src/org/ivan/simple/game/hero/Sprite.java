@@ -1,4 +1,4 @@
-package org.ivan.simple.hero;
+package org.ivan.simple.game.hero;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

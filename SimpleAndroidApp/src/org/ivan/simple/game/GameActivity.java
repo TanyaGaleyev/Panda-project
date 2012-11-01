@@ -17,8 +17,6 @@ import android.view.Window;
 
 public class GameActivity extends Activity {
 	
-	public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
-	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +56,8 @@ public class GameActivity extends Activity {
     public void restart() {
     	finish();
 		Intent intent = new Intent(this, GameActivity.class);
+		GameView gView = (GameView) findViewById(R.id.game);
+		intent.putExtra(LevelChooseActivity.LEVEL_ID, gView.levId);
 		startActivity(intent);
     }
     
@@ -88,12 +88,5 @@ public class GameActivity extends Activity {
 		if(actionCode == MotionEvent.ACTION_MOVE) return;
 		Log.d("DumpEvent", sb.toString());
 	}
-    
-//    public void bugaga(View view) {
-//    	Intent intent = new Intent(this, SecondActivity.class);
-//    	EditText editText = (EditText) findViewById(R.id.edit_message);
-//    	String message = editText.getText().toString();
-//    	intent.putExtra(EXTRA_MESSAGE, message);
-//    	startActivity(intent);
-//    }
+	
 }

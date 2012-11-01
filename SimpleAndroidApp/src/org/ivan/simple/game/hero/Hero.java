@@ -1,4 +1,4 @@
-package org.ivan.simple.hero;
+package org.ivan.simple.game.hero;
 
 import org.ivan.simple.ImageProvider;
 import org.ivan.simple.R;
@@ -90,6 +90,7 @@ public class Hero {
 	/**
 	 * Change hero behavior (animation) depending on motion type.
 	 * Used after new motion type is obtained. 
+	 * Goal is to play start/end animations of motions.
 	 * @param newMotion
 	 */
 	public void changeMotion(MotionType newMotion) {
@@ -130,6 +131,9 @@ public class Hero {
 		}
 	}
 	
+	/**
+	 * Begins main animation, after finish/start animations became complete
+	 */
 	public void switchToCurrentMotion() {
 		pickActiveSprite(currentMotion);
 		switch (currentMotion) {
@@ -266,7 +270,11 @@ public class Hero {
 	}
 	
 	
-	public void startFinishMotions(MotionType newMotion) {
+	/**
+	 * Used to properly switch motion type and play start/finish animations
+	 * @param newMotion
+	 */
+	private void startFinishMotions(MotionType newMotion) {
 		finishingMotion = currentMotion;
 		currentMotion = newMotion;
 		if(finishingMotion != currentMotion) {
@@ -276,6 +284,10 @@ public class Hero {
 	}
 
 	
+	/**
+	 * Used to get proper bitmap for motion
+	 * @param mt
+	 */
 	private void pickActiveSprite(MotionType mt) {
 		switch(mt) {
 		case NONE:
@@ -291,10 +303,18 @@ public class Hero {
 		}
 	}
 	
+	/**
+	 * Draw proper hero animation frame by center coordinates
+	 * @param canvas
+	 */
 	public void onDraw(Canvas canvas) {
 		activeSprite.onDraw(canvas, heroX - activeSprite.getWidth() / 2, heroY - activeSprite.getHeight() / 2);
 	}
 	
+	/**
+	 * Real motion type used to get proper hero speed on start/finish/main animations
+	 * @return
+	 */
 	public MotionType getRealMotion() {
 		if(currentMotion.isStarting()) {
 			return MotionType.NONE;
@@ -305,17 +325,26 @@ public class Hero {
 		}
 	}
 	
+	/**
+	 * Play loose animation
+	 */
 	public void playLoseAnimation() {
 		activeSprite = sprite8;
 		activeSprite.currentSet = 5;
 	}
 	
-	public void playWinAnimation() {
+	/**
+	 * Play win animation
+	 * @return is sprite animating?
+	 */
+	public boolean playWinAnimation() {
 		activeSprite = sprite8;
 		activeSprite.currentSet = 16;
 		activeSprite.playOnce = true;
 		if(!activeSprite.animating) {
 			activeSprite.gotoAndStop(7);
+			return false;
 		}
+		return true;
 	}
 }

@@ -23,14 +23,6 @@ public class SecondActivity extends Activity {
         // Get the message from the intent
         setContentView(R.layout.activity_second);
         
-        Intent intent = getIntent();
-        String message = intent.getStringExtra(GameActivity.EXTRA_MESSAGE);
-        TextView textView = (TextView) findViewById(R.id.text_view);
-        textView.setText(message);
-        /*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-        	getActionBar().setDisplayHomeAsUpEnabled(true);
-        }*/
-        
         ImageView rocketImage = (ImageView) findViewById(R.id.rocket_image);
         rocketImage.setBackgroundResource(R.drawable.rocket_thrust);
         rocketAnimation = (AnimationDrawable) rocketImage.getBackground();

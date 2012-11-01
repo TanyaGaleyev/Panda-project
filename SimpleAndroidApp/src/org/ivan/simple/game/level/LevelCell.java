@@ -1,4 +1,4 @@
-package org.ivan.simple.level;
+package org.ivan.simple.game.level;
 
 import org.ivan.simple.game.MotionType;
 

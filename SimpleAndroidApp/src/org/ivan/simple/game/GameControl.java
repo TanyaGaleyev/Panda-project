@@ -4,8 +4,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.ivan.simple.UserControlType;
-import org.ivan.simple.hero.Hero;
-import org.ivan.simple.level.LevelModel;
+import org.ivan.simple.game.hero.Hero;
+import org.ivan.simple.game.level.LevelModel;
 
 import android.view.MotionEvent;
 

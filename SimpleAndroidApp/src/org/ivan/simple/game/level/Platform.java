@@ -1,9 +1,9 @@
-package org.ivan.simple.level;
+package org.ivan.simple.game.level;
 
 import org.ivan.simple.ImageProvider;
 import org.ivan.simple.R;
 import org.ivan.simple.game.MotionType;
-import org.ivan.simple.hero.Sprite;
+import org.ivan.simple.game.hero.Sprite;
 
 public class Platform {
 	private PlatformType type = PlatformType.NONE;
