@@ -20,7 +20,7 @@ public class LevelChooseView extends SurfaceView {
 	/**
 	 * Matrix with levels IDs
 	 */
-	private int[][] levels = {{1,2},{2,1}};
+	private int[][] levels = {{3,2,1},{1,2,3}};
 	
 	private SurfaceHolder holder;
 	
