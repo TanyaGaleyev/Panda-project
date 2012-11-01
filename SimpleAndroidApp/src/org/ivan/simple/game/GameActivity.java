@@ -1,4 +1,10 @@
-package org.ivan.simple;
+package org.ivan.simple.game;
+
+import org.ivan.simple.LevelChooseActivity;
+import org.ivan.simple.R;
+import org.ivan.simple.R.id;
+import org.ivan.simple.R.layout;
+import org.ivan.simple.R.menu;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -9,7 +15,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.Window;
 
-public class MainActivity extends Activity {
+public class GameActivity extends Activity {
 	
 	public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 	
@@ -18,8 +24,11 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         // hide screen title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        Intent intent = getIntent();
+        int levId = intent.getIntExtra(LevelChooseActivity.LEVEL_ID, 0);
         setContentView(R.layout.activity_main);
-        ImageProvider.resources = getResources();
+        GameView gView = (GameView) findViewById(R.id.game);
+        gView.levId = levId;
     }
 
     @Override
@@ -48,7 +57,7 @@ public class MainActivity extends Activity {
     
     public void restart() {
     	finish();
-		Intent intent = new Intent(this, MainActivity.class);
+		Intent intent = new Intent(this, GameActivity.class);
 		startActivity(intent);
     }
     

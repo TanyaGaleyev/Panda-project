@@ -1,8 +1,9 @@
-package org.ivan.simple;
+package org.ivan.simple.game;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.ivan.simple.UserControlType;
 import org.ivan.simple.hero.Hero;
 import org.ivan.simple.level.LevelModel;
 

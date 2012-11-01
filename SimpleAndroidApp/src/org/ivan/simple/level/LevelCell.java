@@ -1,6 +1,6 @@
 package org.ivan.simple.level;
 
-import org.ivan.simple.MotionType;
+import org.ivan.simple.game.MotionType;
 
 public class LevelCell {
 	protected Platform floor = new Platform(PlatformType.NONE);

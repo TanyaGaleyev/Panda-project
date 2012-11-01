@@ -1,11 +1,7 @@
 package org.ivan.simple;
 
-import java.util.ResourceBundle.Control;
-
 import android.content.Context;
-import android.drm.DrmStore.RightsStatus;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -29,8 +25,8 @@ public class LevelChooseView extends SurfaceView {
 	private Bitmap background;
 	
 	private Bitmap marker;
-	private int markerX = LEFT_BOUND;
-	private int markerY = TOP_BOUND;
+	private int markerX = LEFT_BOUND + GRID_STEP / 2;
+	private int markerY = TOP_BOUND + GRID_STEP / 2;
 	
 	private Redrawer redrawer;
 	
@@ -72,9 +68,9 @@ public class LevelChooseView extends SurfaceView {
 			}
 			
 			public void surfaceCreated(SurfaceHolder holder) {
-				border = BitmapFactory.decodeResource(getResources(), R.drawable.border);
-				background = BitmapFactory.decodeResource(getResources(), R.drawable.background_2);
-				marker = BitmapFactory.decodeResource(getResources(), R.drawable.single_panda);
+				border = ImageProvider.getBitmap(R.drawable.border);
+				background = ImageProvider.getBitmap(R.drawable.background_2);
+				marker = ImageProvider.getBitmap(R.drawable.single_panda);
 				redrawer = new Redrawer();
 				redrawer.start();
 			}
@@ -110,15 +106,15 @@ public class LevelChooseView extends SurfaceView {
 				canvas.drawBitmap(border, getScreenX(j), getScreenY(i), null);
 			}
 		}
-		canvas.drawBitmap(marker, markerX + 16, markerY + 16, null);
+		canvas.drawBitmap(marker, markerX - marker.getWidth() / 2, markerY - marker.getHeight() / 2, null);
 	}
 	
 	private int getScreenX(int col) {
-		return LEFT_BOUND + col * GRID_STEP;
+		return LEFT_BOUND + col * GRID_STEP + GRID_STEP / 2 - border.getWidth() / 2;
 	}
 	
 	private int getScreenY(int row) {
-		return TOP_BOUND + row * GRID_STEP;
+		return TOP_BOUND + row * GRID_STEP + GRID_STEP / 2 - border.getHeight() / 2;
 	}
 	
 	public synchronized int getLevelId(MotionEvent event) {
@@ -183,8 +179,8 @@ public class LevelChooseView extends SurfaceView {
 		@Override
 		public void run() {
 			while(running) {
-				if((markerX - LEFT_BOUND) % GRID_STEP == 0 &&
-						(markerY - TOP_BOUND) % GRID_STEP == 0) {
+				if((markerX - GRID_STEP / 2 - LEFT_BOUND) % GRID_STEP == 0 &&
+						(markerY - GRID_STEP / 2 - TOP_BOUND) % GRID_STEP == 0) {
 					chooseReady = true;
 					performingAction = chooseAcion;
 					chooseAcion = UserControlType.IDLE;

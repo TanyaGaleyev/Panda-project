@@ -1,9 +1,9 @@
 package org.ivan.simple.level;
 
 import org.ivan.simple.ImageProvider;
-import org.ivan.simple.MotionType;
 import org.ivan.simple.R;
 import org.ivan.simple.UserControlType;
+import org.ivan.simple.game.MotionType;
 
 public class LevelModel {
 	private LevelCell[][] levelGrid;

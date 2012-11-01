@@ -1,4 +1,5 @@
-package org.ivan.simple;
+package org.ivan.simple.game;
+
 
 import android.graphics.Canvas;
 

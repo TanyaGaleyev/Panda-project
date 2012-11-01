@@ -1,5 +1,8 @@
-package org.ivan.simple;
+package org.ivan.simple.game;
 
+import org.ivan.simple.R;
+import org.ivan.simple.UserControlType;
+import org.ivan.simple.R.drawable;
 import org.ivan.simple.hero.Hero;
 import org.ivan.simple.level.LevelCell;
 import org.ivan.simple.level.LevelView;
@@ -40,6 +43,8 @@ public class GameView extends SurfaceView {
 	private Bitmap background;
 	
 	private LevelCell prevCell;
+	
+	public int levId = 0;
 	
 	public GameView(Context context) {
 		super(context);
@@ -110,7 +115,7 @@ public class GameView extends SurfaceView {
 		hero.heroX = LEFT_BOUND;
 		hero.heroY = BOTTOM_BOUND;
 		
-		level = new LevelView(1);
+		level = new LevelView(levId);
 		control = new GameControl(level.model, hero);
 		prevCell = level.model.getHeroCell();
 	}

@@ -1,5 +1,7 @@
 package org.ivan.simple;
 
+import org.ivan.simple.game.GameActivity;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -22,7 +24,7 @@ public class SecondActivity extends Activity {
         setContentView(R.layout.activity_second);
         
         Intent intent = getIntent();
-        String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        String message = intent.getStringExtra(GameActivity.EXTRA_MESSAGE);
         TextView textView = (TextView) findViewById(R.id.text_view);
         textView.setText(message);
         /*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {

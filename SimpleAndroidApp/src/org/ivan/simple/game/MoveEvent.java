@@ -1,4 +1,6 @@
-package org.ivan.simple;
+package org.ivan.simple.game;
+
+import org.ivan.simple.UserControlType;
 
 public class MoveEvent {
 	UserControlType type = UserControlType.IDLE;

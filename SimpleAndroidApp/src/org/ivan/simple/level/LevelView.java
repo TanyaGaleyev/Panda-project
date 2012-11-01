@@ -1,6 +1,6 @@
 package org.ivan.simple.level;
 
-import org.ivan.simple.GameView;
+import org.ivan.simple.game.GameView;
 
 import android.graphics.Canvas;
 

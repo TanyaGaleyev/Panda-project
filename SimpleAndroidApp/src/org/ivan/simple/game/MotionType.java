@@ -1,4 +1,4 @@
-package org.ivan.simple;
+package org.ivan.simple.game;
 
 /**
  * This enumeration represents type of motion that hero can do.

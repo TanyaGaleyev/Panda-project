@@ -12,12 +12,12 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".game.GameActivity"
             android:label="@string/title_activity_main"
             android:screenOrientation="landscape" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.ivan.sample.LevelChooseActivity" />
+                android:value="org.ivan.simple.LevelChooseActivity" />
         </activity>
         
         <activity
@@ -25,7 +25,7 @@
             android:label="@string/title_activity_second" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.ivan.sample.StartActivity" />
+                android:value="org.ivan.simple.StartActivity" />
         </activity>
         
         <activity
@@ -45,7 +45,7 @@
             android:screenOrientation="landscape" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.ivan.sample.StartActivity" />
+                android:value="org.ivan.simple.StartActivity" />
         </activity>
     </application>
 

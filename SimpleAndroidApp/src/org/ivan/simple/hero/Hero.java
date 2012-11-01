@@ -1,9 +1,9 @@
 package org.ivan.simple.hero;
 
 import org.ivan.simple.ImageProvider;
-import org.ivan.simple.MotionType;
 import org.ivan.simple.R;
 import org.ivan.simple.UserControlType;
+import org.ivan.simple.game.MotionType;
 
 import android.graphics.Canvas;
 

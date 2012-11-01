@@ -1,5 +1,7 @@
 package org.ivan.simple;
 
+import org.ivan.simple.game.GameActivity;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.Window;
 
 public class LevelChooseActivity extends Activity {
+	public static final String LEVEL_ID = "levId";
 	
 	private LevelChooseView view;
 	
@@ -23,7 +26,8 @@ public class LevelChooseActivity extends Activity {
 	public boolean onTouchEvent(MotionEvent event) {
 		int levId = view.getLevelId(event); 
 		if(levId != 0) {
-			Intent intent = new Intent(this, MainActivity.class);
+			Intent intent = new Intent(this, GameActivity.class);
+			intent.putExtra(LEVEL_ID, levId);
 			startActivity(intent);
 			return true;
 		}

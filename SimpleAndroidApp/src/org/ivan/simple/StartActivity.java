@@ -16,6 +16,7 @@ public class StartActivity extends Activity {
         // hide screen title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_start);
+        ImageProvider.resources = getResources();
         
         final Button playButton = (Button) findViewById(R.id.play);
         playButton.setOnClickListener(new View.OnClickListener() {
