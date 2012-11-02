@@ -126,11 +126,11 @@ public class GameView extends SurfaceView {
 		level.onDraw(canvas);
 		if(level.model.isLost()) {
 			if(!moveLose()) {
-				((GameActivity) getContext()).finish();
+				((GameActivity) getContext()).switchBackToChooseActivity(false);
 			}
 		} else if(level.model.isComplete()) {
 			if(!hero.playWinAnimation()) {
-				((GameActivity) getContext()).finish();
+				((GameActivity) getContext()).switchBackToChooseActivity(true);
 			}
 		} else {
 			int xSpeed = hero.getRealMotion().getXSpeed() * ANIMATION_JUMP_SPEED;

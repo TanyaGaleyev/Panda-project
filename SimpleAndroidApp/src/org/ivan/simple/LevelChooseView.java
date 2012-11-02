@@ -21,6 +21,7 @@ public class LevelChooseView extends SurfaceView {
 	 * Matrix with levels IDs
 	 */
 	private int[][] levels = {{3,2,1},{1,2,3}};
+	private int[][] finishedLevels;
 	
 	private SurfaceHolder holder;
 	
@@ -28,6 +29,11 @@ public class LevelChooseView extends SurfaceView {
 	 * Border of levels to select
 	 */
 	private Bitmap border;
+	
+	/**
+	 * Marks complete levels
+	 */
+	private Bitmap cross;
 	
 	// Backgroung image of LevelChooseView
 	private Bitmap background;
@@ -65,6 +71,10 @@ public class LevelChooseView extends SurfaceView {
 	}
 	
 	private final void init() {
+		finishedLevels = new int[levels.length][];
+		for(int i = 0; i < levels.length; i++) {
+			finishedLevels[i] = new int[levels[i].length];
+		}
 		holder = getHolder();
 		holder.addCallback(new SurfaceHolder.Callback() {
 			
@@ -83,6 +93,7 @@ public class LevelChooseView extends SurfaceView {
 			
 			public void surfaceCreated(SurfaceHolder holder) {
 				border = ImageProvider.getBitmap(R.drawable.border);
+				cross = ImageProvider.getBitmap(R.drawable.cross);
 				background = ImageProvider.getBitmap(R.drawable.background_2);
 				marker = ImageProvider.getBitmap(R.drawable.single_panda);
 				redrawer = new Redrawer();
@@ -119,6 +130,9 @@ public class LevelChooseView extends SurfaceView {
 		for(int i = 0; i < levels.length; i++) {
 			for(int j = 0; j < levels[i].length; j++) {
 				drawOnCenterCoordinates(border, getScreenX(j), getScreenY(i), canvas);
+				if(finishedLevels[i][j] != 0) {
+					drawOnCenterCoordinates(cross, getScreenX(j), getScreenY(i), canvas);
+				}
 			}
 		}
 		drawOnCenterCoordinates(marker, markerX, markerY, canvas);
@@ -204,6 +218,10 @@ public class LevelChooseView extends SurfaceView {
 			return true;
 		}
 		return false;
+	}
+	
+	public void completeCurrentLevel() {
+		finishedLevels[levelY][levelX] = 1;
 	}
 	
 	private class Redrawer extends Thread {

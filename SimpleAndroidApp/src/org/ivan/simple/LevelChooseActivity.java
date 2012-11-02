@@ -10,6 +10,8 @@ import android.view.Window;
 
 public class LevelChooseActivity extends Activity {
 	public static final String LEVEL_ID = "levId";
+	public static final String LEVEL_COMPLETE = "complete";
+	public static final int CHOOSE_LEVEL_ID = 1;
 	
 	private LevelChooseView view;
 	
@@ -30,9 +32,18 @@ public class LevelChooseActivity extends Activity {
 		if(levId != 0) {
 			Intent intent = new Intent(this, GameActivity.class);
 			intent.putExtra(LEVEL_ID, levId);
-			startActivity(intent);
+			startActivityForResult(intent, CHOOSE_LEVEL_ID);
 			return true;
 		}
 		return super.onTouchEvent(event);
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if(requestCode == CHOOSE_LEVEL_ID && resultCode == Activity.RESULT_OK) {
+			boolean complete = data.getBooleanExtra(LEVEL_COMPLETE, false);
+			if(complete) view.completeCurrentLevel();
+		}
 	}
 }

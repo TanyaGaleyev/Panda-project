@@ -61,6 +61,13 @@ public class GameActivity extends Activity {
 		startActivity(intent);
     }
     
+    public void switchBackToChooseActivity(boolean complete) {
+		Intent resultIntent = new Intent();
+		resultIntent.putExtra(LevelChooseActivity.LEVEL_COMPLETE, complete);
+		setResult(Activity.RESULT_OK, resultIntent);
+		finish();
+	}
+    
 	/** Show an event in the LogCat view, for debugging */
 	private void dumpEvent(MotionEvent event) {
 		String names[] = { "DOWN" , "UP" , "MOVE" , "CANCEL" , "OUTSIDE" ,
