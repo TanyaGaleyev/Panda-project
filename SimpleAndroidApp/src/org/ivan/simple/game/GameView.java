@@ -185,6 +185,10 @@ public class GameView extends SurfaceView {
 	
 	public boolean moveLose() {
 		if((-GRID_STEP < hero.heroX && hero.heroX < getWidth() + GRID_STEP) && (-GRID_STEP < hero.heroY && hero.heroY < getHeight() + GRID_STEP)) {
+			if(hero.getRealMotion() == MotionType.FALL) {
+				hero.heroY += ANIMATION_JUMP_SPEED;
+				return true;
+			}
 			hero.playLoseAnimation();
 			double rand = Math.random();
 			if(rand < 0.33) {

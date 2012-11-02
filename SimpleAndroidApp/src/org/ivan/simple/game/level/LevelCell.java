@@ -138,6 +138,9 @@ public class LevelCell {
 	}
 	
 	public void updateCell(MotionType mt) {
+		if(mt == MotionType.BEAT_ROOF) {
+			roof.reactBeatRoof();
+		}
 		floor.changeSet(mt);
 	}
 }

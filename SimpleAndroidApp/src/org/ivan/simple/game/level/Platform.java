@@ -15,7 +15,7 @@ public class Platform {
 		this.type = type;
 		switch(type) {
 		case SIMPLE:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.simple_platform), 3, 8);
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.simple_platform), 4, 8);
 			break;
 		case SIMPLE_V:
 			sprite  = new Sprite(ImageProvider.getBitmap(R.drawable.simple_platform_v), 1, 1);
@@ -127,6 +127,13 @@ public class Platform {
 			sprite.setAnimating(sprite.changeSet(0));
 			sprite.playOnce = true;;
 			break;
+		}
+	}
+	
+	public void reactBeatRoof() {
+		if(type == PlatformType.SIMPLE) {
+			sprite.setAnimating(sprite.changeSet(3));
+			sprite.playOnce = true;
 		}
 	}
 }
