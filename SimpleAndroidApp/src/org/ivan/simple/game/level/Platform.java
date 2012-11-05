@@ -45,13 +45,17 @@ public class Platform {
 			sprite.playOnce = false;
 			break;
 		case SPRING:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.spring_platform),1,1);
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.spring_platform),1,8);
 			break;
 		case SPIKE:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.spike),1,1);
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.spike),1,8);
+			sprite.setAnimating(true);
+			sprite.playOnce = false;
 			break;
 		case SPIKE_V:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.spike_v), 1, 1);
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.spike_v), 1, 8);
+			sprite.setAnimating(true);
+			sprite.playOnce = false;
 			break;
 		case NONE:
 			break;
