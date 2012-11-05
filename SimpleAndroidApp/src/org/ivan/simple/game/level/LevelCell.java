@@ -141,6 +141,12 @@ public class LevelCell {
 		if(mt == MotionType.BEAT_ROOF) {
 			roof.reactBeatRoof();
 		}
+		if(mt == MotionType.FLY_LEFT) {
+			right_wall.highlightSpring();
+		}
+		if(mt == MotionType.FLY_RIGHT) {
+			left_wall.highlightSpring();
+		}
 		floor.changeSet(mt);
 	}
 }

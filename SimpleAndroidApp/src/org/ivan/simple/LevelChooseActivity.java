@@ -25,20 +25,6 @@ public class LevelChooseActivity extends Activity {
 	}
 	
 	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		// get level Id depending on by click on screen selection
-		int levId = view.getLevelId(event);
-		// if level selected (levId != 0) start next GameActivity with specified level
-		if(levId != 0) {
-			Intent intent = new Intent(this, GameActivity.class);
-			intent.putExtra(LEVEL_ID, levId);
-			startActivityForResult(intent, FINISHED_LEVEL_ID);
-			return true;
-		}
-		return super.onTouchEvent(event);
-	}
-	
-	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if(requestCode == FINISHED_LEVEL_ID && resultCode == Activity.RESULT_OK) {

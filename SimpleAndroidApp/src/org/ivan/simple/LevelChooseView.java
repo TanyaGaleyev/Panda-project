@@ -1,6 +1,10 @@
 package org.ivan.simple;
 
+import org.ivan.simple.game.GameActivity;
+
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
@@ -148,6 +152,21 @@ public class LevelChooseView extends SurfaceView {
 	
 	private int getScreenY(int row) {
 		return TOP_BOUND + row * GRID_STEP + GRID_STEP / 2;
+	}
+	
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		// get level Id depending on by click on screen selection
+		int levId = getLevelId(event);
+		// if level selected (levId != 0) start next GameActivity with specified level
+		if(levId != 0) {
+			Activity parent = (Activity) getContext();
+			Intent intent = new Intent(parent, GameActivity.class);
+			intent.putExtra(LevelChooseActivity.LEVEL_ID, levId);
+			parent.startActivityForResult(intent, LevelChooseActivity.FINISHED_LEVEL_ID);
+			return true;
+		}
+		return super.onTouchEvent(event);
 	}
 	
 	public synchronized int getLevelId(MotionEvent event) {

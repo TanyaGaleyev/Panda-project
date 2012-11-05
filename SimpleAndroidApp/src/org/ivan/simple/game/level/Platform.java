@@ -140,4 +140,11 @@ public class Platform {
 			sprite.playOnce = true;
 		}
 	}
+	
+	public void highlightSpring() {
+		if(type == PlatformType.SPRING) {
+			sprite.setAnimating(true);
+			sprite.playOnce = true;
+		}
+	}
 }
