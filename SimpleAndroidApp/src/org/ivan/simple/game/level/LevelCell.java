@@ -8,7 +8,6 @@ public class LevelCell {
 	protected Platform right_wall = new Platform(PlatformType.NONE);
 	protected Platform roof = new Platform(PlatformType.NONE);
 	protected Prize prize = null;
-	private int ObjectStatus=0; // LevelCell object create or not create? 
 	
 	public LevelCell() {
 	}
@@ -141,10 +140,10 @@ public class LevelCell {
 		if(mt == MotionType.BEAT_ROOF) {
 			roof.reactBeatRoof();
 		}
-		if(mt == MotionType.FLY_LEFT) {
+		if(mt == MotionType.FLY_LEFT && mt.isUncontrolable()) {
 			right_wall.highlightSpring();
 		}
-		if(mt == MotionType.FLY_RIGHT) {
+		if(mt == MotionType.FLY_RIGHT && mt.isUncontrolable()) {
 			left_wall.highlightSpring();
 		}
 		floor.changeSet(mt);

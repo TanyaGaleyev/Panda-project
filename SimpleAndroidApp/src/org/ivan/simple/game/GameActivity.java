@@ -2,9 +2,6 @@ package org.ivan.simple.game;
 
 import org.ivan.simple.LevelChooseActivity;
 import org.ivan.simple.R;
-import org.ivan.simple.R.id;
-import org.ivan.simple.R.layout;
-import org.ivan.simple.R.menu;
 
 import android.os.Bundle;
 import android.app.Activity;

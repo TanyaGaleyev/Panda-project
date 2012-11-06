@@ -1,7 +1,5 @@
 package org.ivan.simple.game.level;
 
-import org.ivan.simple.ImageProvider;
-import org.ivan.simple.R;
 import org.ivan.simple.UserControlType;
 import org.ivan.simple.game.MotionType;
 
@@ -150,9 +148,9 @@ public class LevelModel {
 	}
 
 	private void stayCheck() {
-		if(controlType == UserControlType.DOWN && motionAvaible(MotionType.FALL_BLANSH)) {
+		/*if(controlType == UserControlType.DOWN && motionAvaible(MotionType.FALL_BLANSH)) {
 			motionType=MotionType.FALL_BLANSH;
-		} else if(motionAvaible(MotionType.FALL)) {
+		} else */if(motionAvaible(MotionType.FALL)) {
 			motionType=MotionType.FALL;
 		} else {
 			switch(controlType){

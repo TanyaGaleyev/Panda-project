@@ -1,16 +1,12 @@
 package org.ivan.simple;
 
-import org.ivan.simple.game.GameActivity;
-
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.support.v4.app.NavUtils;
 
 public class SecondActivity extends Activity {

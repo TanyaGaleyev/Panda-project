@@ -2,7 +2,6 @@ package org.ivan.simple.game.hero;
 
 import org.ivan.simple.ImageProvider;
 import org.ivan.simple.R;
-import org.ivan.simple.UserControlType;
 import org.ivan.simple.game.MotionType;
 
 import android.graphics.Canvas;
@@ -134,7 +133,7 @@ public class Hero {
 	/**
 	 * Begins main animation, after finish/start animations became complete
 	 */
-	public void switchToCurrentMotion() {
+	private void switchToCurrentMotion() {
 		pickActiveSprite(currentMotion);
 		switch (currentMotion) {
 		case STAY:

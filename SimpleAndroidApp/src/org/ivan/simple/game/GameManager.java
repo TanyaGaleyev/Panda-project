@@ -49,7 +49,11 @@ public class GameManager extends Thread {
 					if(view.readyForUpdate()) {
 						view.updateGame();
 					}
+					view.updateHeroScreenPosition();
 					view.onDraw(c);
+					if(view.finished) {
+						((GameActivity) view.getContext()).switchBackToChooseActivity(view.isComplete());
+					}
 				}
 			} catch(Exception ex) {
 				// TODO process exception!
