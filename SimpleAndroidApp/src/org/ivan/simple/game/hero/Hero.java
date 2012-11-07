@@ -205,18 +205,18 @@ public class Hero {
 			}
 			break;
 		case THROW_LEFT:
-			if(finishingMotion == currentMotion) {
+			if(finishingMotion == currentMotion && finishingMotion.getStage() == 1) {
 				activeSprite.changeSet(24);
-			} else if(finishingMotion == MotionType.JUMP_LEFT) {
+			} else if(finishingMotion == MotionType.JUMP_LEFT || finishingMotion == MotionType.THROW_LEFT) {
 				activeSprite.changeSet(21);
 			} else {
 				activeSprite.changeSet(20);
 			}
 			break;
 		case THROW_RIGHT:
-			if(finishingMotion == currentMotion) {
+			if(finishingMotion == currentMotion  && finishingMotion.getStage() == 1) {
 				activeSprite.changeSet(25);
-			} else if(finishingMotion == MotionType.JUMP_RIGHT) {
+			} else if(finishingMotion == MotionType.JUMP_RIGHT || finishingMotion == MotionType.THROW_RIGHT) {
 				activeSprite.changeSet(19);
 			} else {
 				activeSprite.changeSet(18);

@@ -16,6 +16,8 @@ public class LevelModel {
 	private MotionType motionType = MotionType.STAY;
 	private int prizesLeft = 0;
 	private boolean lose = false;
+	private boolean complete = false;
+	private LevelCell winCell;
 
 	public LevelModel(int lev) {
 		row=5;
@@ -25,6 +27,7 @@ public class LevelModel {
 		LevelStorage storage = new LevelStorage();
 		int[][][] mylevel = storage.getLevel(lev);
 		int[][] prizes = storage.getPrizesMap(lev);
+		int[] winCellCoord = storage.getWinCell(lev);
 		levelGrid = new LevelCell[row][col];
 		for(int i=0;i<row;i++){
 			for(int j=0;j<col;j++){
@@ -134,6 +137,10 @@ public class LevelModel {
 				}
 				if(floorType==10){
 					levelGrid[i][j] .createSpike(0);
+				}
+				
+				if(i == winCellCoord[0] && j == winCellCoord[1]) {
+					winCell = levelGrid[i][j];
 				}
 			}
 		}
@@ -246,7 +253,20 @@ public class LevelModel {
 			bufferedControlType = UserControlType.IDLE;
 		}
 		
+		// collect prize
 		prizesLeft -= getHeroCell().removePrize();
+		/*
+		 * if all prizes are collected show win platform
+		 * level will be complete after hero reaches win cell (with win floor platform now)
+		 */
+		if(prizesLeft == 0) {
+			if(winCell.getFloor().getType() != PlatformType.WIN) {
+				winCell.createWin(0);
+			}
+			if(getHeroCell() == winCell) {
+				complete = true;
+			}
+		}
 		if(motionType.isUncontrolable()) {
 			controlType = UserControlType.IDLE;
 		}
@@ -415,7 +435,7 @@ public class LevelModel {
 	}
 
 	public boolean isComplete() {
-		return prizesLeft == 0;
+		return complete;
 	}
 	
 	public boolean isLost() {

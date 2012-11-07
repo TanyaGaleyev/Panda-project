@@ -57,6 +57,9 @@ public class Platform {
 			sprite.setAnimating(true);
 			sprite.playOnce = false;
 			break;
+		case WIN:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.win_platform), 1, 1);
+			break;
 		case NONE:
 			break;
 		}

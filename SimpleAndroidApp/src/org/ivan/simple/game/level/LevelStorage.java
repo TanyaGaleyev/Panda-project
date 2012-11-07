@@ -19,6 +19,16 @@ public class LevelStorage {
 		}
 	}
 	
+	public int[] getWinCell(int num) {
+		switch (num)
+		{
+		case 1: return winCell1();
+		case 2: return winCell2();
+		case 3: return winCell3();
+		default:return winCell1();
+		}
+	}
+	
 	private int[][][] level1() {
 		int[][][] lev={
 				{{9,0,0,0},{0,1,0,3},{0,6,0,2},{0,0,0,2},{0,0,0,2},{0,0,0,2},{0,0,0,2},{0,0,0,7},{0,0,0,8},{0,6,0,0}},
@@ -91,6 +101,18 @@ public class LevelStorage {
 				{0,0,0,0,0,0,0,0,0,0},
 				{0,0,0,0,0,0,0,0,0,0}};
 		return map;	
+	}
+	
+	private int[] winCell1() {
+		return new int[]{4,9};
+	}
+	
+	private int[] winCell2() {
+		return new int[]{4,9};
+	}
+	
+	private int[] winCell3() {
+		return new int[]{4,9};
 	}
 	
 

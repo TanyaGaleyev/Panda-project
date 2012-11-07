@@ -109,6 +109,14 @@ public class LevelCell {
 		}
 	}
 	
+	public void createWin(int side) {
+		if(side==0){
+		floor = new Platform(PlatformType.WIN);
+		}else{
+		roof = new Platform(PlatformType.WIN);
+		}
+	}
+	
 	public void setPrize(int prizeType) {
 		if(prizeType != 0) {
 			prize = new Prize();

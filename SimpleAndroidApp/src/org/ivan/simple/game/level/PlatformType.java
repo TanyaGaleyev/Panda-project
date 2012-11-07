@@ -15,6 +15,7 @@ public enum PlatformType {
 	SPRING,
 	SPIKE,
 	SPIKE_V,
+	WIN,
 	
 	NONE
 	
