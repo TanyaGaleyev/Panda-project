@@ -16,6 +16,8 @@ public enum PlatformType {
 	SPIKE,
 	SPIKE_V,
 	WIN,
+	TELEPORT_L_V,
+	TELEPORT_R_V,
 	
 	NONE
 	

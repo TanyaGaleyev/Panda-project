@@ -117,6 +117,22 @@ public class LevelCell {
 		}
 	}
 	
+	public void createTeleport_l_V(int side) {
+		if(side==0){
+		left_wall = new Platform(PlatformType.TELEPORT_L_V);
+		}else{
+		right_wall = new Platform(PlatformType.TELEPORT_L_V);
+		}
+	}
+	
+	public void createTeleport_r_V(int side) {
+		if(side==0){
+		left_wall = new Platform(PlatformType.TELEPORT_R_V);
+		}else{
+		right_wall = new Platform(PlatformType.TELEPORT_R_V);
+		}
+	}
+	
 	public void setPrize(int prizeType) {
 		if(prizeType != 0) {
 			prize = new Prize();

@@ -60,6 +60,12 @@ public class Platform {
 		case WIN:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.win_platform), 1, 1);
 			break;
+		case TELEPORT_L_V:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.teleport_l_v), 1, 1);
+			break;
+		case TELEPORT_R_V:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.teleport_r_v), 1, 1);
+			break;
 		case NONE:
 			break;
 		}

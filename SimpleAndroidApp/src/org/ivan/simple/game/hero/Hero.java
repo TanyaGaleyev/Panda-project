@@ -17,13 +17,17 @@ public class Hero {
 	private Sprite sprite8 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite8), 28, 8);
 	private Sprite sprite16 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite16), 8, 16);
 	private Sprite activeSprite;
+	private Sprite shadeSprite = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite8), 28, 8);
 	public int heroX;
 	public int heroY;
+	private int prevX;
+	private int prevY;
 	
 	public Hero() {
 		sprite16.setAnimating(true);
 		sprite8.setAnimating(true);
 		activeSprite = sprite16;
+		shadeSprite.setAnimating(true);
 	}
 	
 	public Sprite getSprite() {
@@ -100,6 +104,8 @@ public class Hero {
 	 * @param newMotion
 	 */
 	public void changeMotion(MotionType newMotion) {
+		prevX = heroX;
+		prevY = heroY;
 		startFinishMotions(newMotion);
 		if (finishingMotion.isFinishing()) {
 			switch(finishingMotion) {
@@ -108,7 +114,9 @@ public class Hero {
 				break;
 			case FLY_LEFT:
 				// skip finishing fall down after FLY if finish because wall
-				if(newMotion == MotionType.JUMP_LEFT_WALL) {
+				if(newMotion == MotionType.JUMP_LEFT_WALL|| 
+				newMotion == MotionType.FLY_RIGHT ||
+				newMotion == MotionType.TP_LEFT) {
 					finishingMotion.startMotion();
 					switchToCurrentMotion();
 				} else {
@@ -117,7 +125,9 @@ public class Hero {
 				break;
 			case FLY_RIGHT:
 				// skip finishing fall down after FLY if finish because wall
-				if(newMotion == MotionType.JUMP_RIGHT_WALL) {
+				if(newMotion == MotionType.JUMP_RIGHT_WALL || 
+				newMotion == MotionType.FLY_LEFT ||
+				newMotion == MotionType.TP_RIGHT) {
 					finishingMotion.startMotion();
 					switchToCurrentMotion();
 				} else {
@@ -144,9 +154,13 @@ public class Hero {
 		pickActiveSprite(currentMotion);
 		switch (currentMotion) {
 		case STAY:
-			if(finishingMotion == MotionType.THROW_LEFT || finishingMotion == MotionType.JUMP_LEFT) {
+			if(finishingMotion == MotionType.THROW_LEFT || 
+			finishingMotion == MotionType.JUMP_LEFT ||
+			finishingMotion == MotionType.TP_LEFT) {
 				activeSprite.changeSet(1);
-			} else if(finishingMotion == MotionType.THROW_RIGHT || finishingMotion == MotionType.JUMP_RIGHT) {
+			} else if(finishingMotion == MotionType.THROW_RIGHT || 
+					finishingMotion == MotionType.JUMP_RIGHT ||
+					finishingMotion == MotionType.TP_RIGHT) {
 				activeSprite.changeSet(2);
 			} else {
 				activeSprite.changeSet(0);
@@ -172,7 +186,9 @@ public class Hero {
 		case JUMP_LEFT:
 			if(finishingMotion == MotionType.JUMP) {
 				activeSprite.changeSet(8);
-			} else if(finishingMotion == currentMotion || finishingMotion == MotionType.THROW_LEFT) {
+			} else if(finishingMotion == currentMotion || 
+					finishingMotion == MotionType.THROW_LEFT ||
+					finishingMotion == MotionType.TP_LEFT) {
 				activeSprite.changeSet(2);
 			} else {
 				activeSprite.changeSet(3);
@@ -188,7 +204,9 @@ public class Hero {
 		case JUMP_RIGHT:
 			if(finishingMotion == MotionType.JUMP) {
 				activeSprite.changeSet(7);
-			} else if(finishingMotion == currentMotion || finishingMotion == MotionType.THROW_RIGHT) {
+			} else if(finishingMotion == currentMotion || 
+					finishingMotion == MotionType.THROW_RIGHT ||
+					finishingMotion == MotionType.TP_RIGHT) {
 				activeSprite.changeSet(0);
 			} else {
 				activeSprite.changeSet(1);
@@ -272,6 +290,8 @@ public class Hero {
 		case FLY_LEFT:
 			if(finishingMotion == currentMotion) {
 				activeSprite.changeSet(22);
+			} else if(finishingMotion == MotionType.JUMP || finishingMotion == MotionType.FLY_RIGHT) {
+				activeSprite.changeSet(11);
 			} else {
 				activeSprite = sprite16;
 				activeSprite.changeSet(7);
@@ -280,10 +300,20 @@ public class Hero {
 		case FLY_RIGHT:
 			if(finishingMotion == currentMotion) {
 				activeSprite.changeSet(23);
+			} else if(finishingMotion == MotionType.JUMP || finishingMotion == MotionType.FLY_LEFT) {
+				activeSprite.changeSet(12);
 			} else {
 				activeSprite = sprite16;
 				activeSprite.changeSet(6);
 			}
+			break;
+		case TP_LEFT:
+			shadeSprite.changeSet(8);
+			activeSprite.changeSet(8);
+			break;
+		case TP_RIGHT:
+			shadeSprite.changeSet(7);
+			activeSprite.changeSet(7);
 			break;
 		default:
 			activeSprite.changeSet(4);
@@ -331,6 +361,18 @@ public class Hero {
 	 */
 	public void onDraw(Canvas canvas) {
 		activeSprite.onDraw(canvas, heroX - activeSprite.getWidth() / 2, heroY - activeSprite.getHeight() / 2);
+		if(currentMotion == MotionType.TP_LEFT || currentMotion == MotionType.TP_RIGHT) {
+			shadeSprite.onDraw(canvas, prevX - shadeSprite.getWidth() / 2, prevY - shadeSprite.getHeight() / 2);
+		}
+	}
+	
+	public void onDrawShade() {
+		if(currentMotion == MotionType.TP_LEFT) {
+			
+		}
+		if(currentMotion == MotionType.TP_RIGHT) {
+			
+		}
 	}
 	
 	/**

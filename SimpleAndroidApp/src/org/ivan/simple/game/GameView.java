@@ -266,6 +266,10 @@ public class GameView extends SurfaceView {
 		} else if(level.model.isComplete()) {
 			finished = !hero.playWinAnimation();
 		} else {
+			if(hero.getRealMotion() == MotionType.TP_LEFT || hero.getRealMotion() == MotionType.TP_RIGHT) {
+				hero.heroX = LEFT_BOUND + level.model.heroX * GRID_STEP;
+				hero.heroY = TOP_BOUND + level.model.heroY * GRID_STEP;
+			}
 			int xSpeed = hero.getRealMotion().getXSpeed() * ANIMATION_JUMP_SPEED;
 			int ySpeed = hero.getRealMotion().getYSpeed() * ANIMATION_JUMP_SPEED;
 			

@@ -1,5 +1,8 @@
 package org.ivan.simple.game.level;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.ivan.simple.UserControlType;
 import org.ivan.simple.game.MotionType;
 
@@ -18,6 +21,17 @@ public class LevelModel {
 	private boolean lose = false;
 	private boolean complete = false;
 	private LevelCell winCell;
+	private tpCoords tpStart;
+	private tpCoords tpEnd;
+	
+	private class tpCoords {
+		public tpCoords(int i, int j) {
+			this.i = i;
+			this.j = j;
+		}
+		int i;
+		int j;
+	}
 
 	public LevelModel(int lev) {
 		row=5;
@@ -48,6 +62,14 @@ public class LevelModel {
 					}
 					if(leftWallType==10) {
 						levelGrid[i][j].createSpike_V(0);
+					}
+					if(leftWallType==11) {
+						levelGrid[i][j].createTeleport_l_V(0);
+						tpStart = new tpCoords(i, j);
+					}
+					if(leftWallType==12) {
+						levelGrid[i][j].createTeleport_r_V(0);
+						tpEnd = new tpCoords(i, j);
 					}
 					// else set left wall as right wall of nearest left cell
 				} else {
@@ -105,6 +127,14 @@ public class LevelModel {
 				if(rightWallType==10) {
 					levelGrid[i][j].createSpike_V(1);
 				}
+				if(rightWallType==11) {
+					levelGrid[i][j].createTeleport_l_V(1);
+					tpStart = new tpCoords(i, j);
+				}
+				if(rightWallType==12) {
+					levelGrid[i][j].createTeleport_r_V(1);
+					tpEnd = new tpCoords(i, j);
+				}
 				
 				
 				int floorType = mylevel[i][j][3];
@@ -155,9 +185,9 @@ public class LevelModel {
 	}
 
 	private void stayCheck() {
-		/*if(controlType == UserControlType.DOWN && motionAvaible(MotionType.FALL_BLANSH)) {
+		if(controlType == UserControlType.DOWN && motionAvaible(MotionType.FALL_BLANSH)) {
 			motionType=MotionType.FALL_BLANSH;
-		} else */if(motionAvaible(MotionType.FALL)) {
+		} else if(motionAvaible(MotionType.FALL)) {
 			motionType=MotionType.FALL;
 		} else {
 			switch(controlType){
@@ -195,6 +225,8 @@ public class LevelModel {
 			motionType=MotionType.JUMP_LEFT;
 		} else if(getHeroCell().getLeft().getType() == PlatformType.SPRING) {
 			motionType=MotionType.FLY_RIGHT;
+		} else if(getHeroCell().getLeft().getType() == PlatformType.TELEPORT_L_V) {
+			motionType=MotionType.TP_LEFT;
 		} else {
 			motionType=MotionType.JUMP_LEFT_WALL;
 		}
@@ -205,6 +237,8 @@ public class LevelModel {
 			motionType=MotionType.JUMP_RIGHT;
 		} else if(getHeroCell().getRight().getType() == PlatformType.SPRING) {
 			motionType=MotionType.FLY_LEFT;
+		} else if(getHeroCell().getRight().getType() == PlatformType.TELEPORT_R_V) {
+			motionType=MotionType.TP_RIGHT;
 		} else {
 			motionType=MotionType.JUMP_RIGHT_WALL;
 		}
@@ -318,15 +352,7 @@ public class LevelModel {
 			}
 			break;
 		case JUMP_LEFT_WALL:
-			if(getHeroCell().getLeft().getType() == PlatformType.SPRING) {
-				if(motionAvaible(MotionType.JUMP_RIGHT)) {
-					motionType = MotionType.FLY_RIGHT;
-				} else {
-					motionType = MotionType.JUMP_RIGHT_WALL;
-				}
-			} else {
-				platformsCheck();
-			}
+			platformsCheck();
 			break;
 		case FLY_LEFT:
 			switch(controlType) {
@@ -339,21 +365,13 @@ public class LevelModel {
 				if(motionAvaible(MotionType.JUMP_LEFT)) {
 					motionType = MotionType.FLY_LEFT;
 				} else {
-					motionType = MotionType.JUMP_LEFT_WALL;
+					moveLeft();
 				}
 				break;
 			}
 			break;
 		case JUMP_RIGHT_WALL:
-			if(getHeroCell().getRight().getType() == PlatformType.SPRING) {
-				if(motionAvaible(MotionType.JUMP_LEFT)) {
-					motionType = MotionType.FLY_LEFT;
-				} else {
-					motionType = MotionType.JUMP_LEFT_WALL;
-				}
-			} else {
-				platformsCheck();
-			}
+			platformsCheck();
 			break;
 		case FLY_RIGHT:
 			switch(controlType) {
@@ -366,7 +384,7 @@ public class LevelModel {
 				if(motionAvaible(MotionType.JUMP_RIGHT)) {
 					motionType = MotionType.FLY_RIGHT;
 				} else {
-					motionType = MotionType.JUMP_RIGHT_WALL;
+					moveRight();
 				}
 				break;
 			}
@@ -379,6 +397,16 @@ public class LevelModel {
 	}
 	
 	private void updatePosition() {
+		if(motionType == MotionType.TP_LEFT) {
+			heroX = tpEnd.j;
+			heroY = tpEnd.i;
+			return;
+		}
+		if(motionType == MotionType.TP_RIGHT) {
+			heroX = tpStart.j;
+			heroY = tpStart.i;
+			return;
+		}
 		if(motionType == MotionType.FALL_BLANSH) heroY++;
 		heroX += motionType.getXSpeed();
 		heroY += motionType.getYSpeed();

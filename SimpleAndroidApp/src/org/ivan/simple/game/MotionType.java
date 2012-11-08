@@ -153,6 +153,8 @@ public enum MotionType {
 			return stage == 0;
 		}
 	},
+	TP_RIGHT,
+	TP_LEFT,
 	NONE;
 	
 	
