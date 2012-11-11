@@ -41,7 +41,7 @@ public class GameView extends SurfaceView {
 	
 	private LevelCell prevCell;
 	
-	protected int levId = 0;
+	private int levId = 0;
 	
 	protected boolean finished = false;
 	
@@ -61,7 +61,6 @@ public class GameView extends SurfaceView {
 	}
 	
 	private final void init() {
-		gameLoopThread = new GameManager(this);
 		getHolder().addCallback(new SurfaceHolder.Callback() {
 			
 			public void surfaceDestroyed(SurfaceHolder holder) {
@@ -82,6 +81,7 @@ public class GameView extends SurfaceView {
 			
 			public void surfaceCreated(SurfaceHolder holder) {
 				initSurface();
+				gameLoopThread = new GameManager(GameView.this);
 				gameLoopThread.setRunning(true);
 				gameLoopThread.start();
 			}
@@ -95,9 +95,6 @@ public class GameView extends SurfaceView {
 	}
 	
 	private void initSurface() {
-		
-		hero = new Hero();
-		
 		background = ImageProvider.getBitmap(R.drawable.background_1);
 		
 		GRID_STEP = hero.getSprite().getWidth() % 4 == 0 ? hero.getSprite().getWidth() : (hero.getSprite().getWidth() / 4  + 1) * 4;
@@ -110,12 +107,8 @@ public class GameView extends SurfaceView {
 		JUMP_SPEED = GRID_STEP;
 		ANIMATION_JUMP_SPEED = JUMP_SPEED / 8;
 		
-		hero.heroX = LEFT_BOUND;
-		hero.heroY = BOTTOM_BOUND;
-		
-		level = new LevelView(levId);
-		control = new GameControl(level.model, hero);
-		prevCell = level.model.getHeroCell();
+		hero.heroX = LEFT_BOUND + level.model.heroX * GRID_STEP;
+		hero.heroY = TOP_BOUND + level.model.heroY * GRID_STEP;
 	}
 	
 	/**
@@ -308,6 +301,17 @@ public class GameView extends SurfaceView {
 	
 	public boolean isComplete() {
 		return level.model.isComplete();
+	}
+	
+	protected void initLevel(int levId) {
+		hero = new Hero();
+		level = new LevelView(levId);
+		control = new GameControl(level.model, hero);
+		prevCell = level.model.getHeroCell();
+	}
+	
+	protected int getLevId() {
+		return levId;
 	}
 	
 	@Override

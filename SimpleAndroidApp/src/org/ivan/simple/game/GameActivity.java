@@ -23,7 +23,7 @@ public class GameActivity extends Activity {
         int levId = intent.getIntExtra(LevelChooseActivity.LEVEL_ID, 0);
         setContentView(R.layout.activity_main);
         GameView gView = (GameView) findViewById(R.id.game);
-        gView.levId = levId;
+        gView.initLevel(levId);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class GameActivity extends Activity {
     	finish();
 		Intent intent = new Intent(this, GameActivity.class);
 		GameView gView = (GameView) findViewById(R.id.game);
-		intent.putExtra(LevelChooseActivity.LEVEL_ID, gView.levId);
+		intent.putExtra(LevelChooseActivity.LEVEL_ID, gView.getLevId());
 		startActivity(intent);
     }
     

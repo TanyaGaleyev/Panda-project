@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -15,8 +17,8 @@ import android.view.SurfaceView;
 public class LevelChooseView extends SurfaceView {
 	
 	private static final int GRID_STEP = 128;
-	private static final int LEFT_BOUND = GRID_STEP / 4;
-	private static final int TOP_BOUND = GRID_STEP / 4;
+	private static final int LEFT_BOUND = GRID_STEP / 2;
+	private static final int TOP_BOUND = GRID_STEP / 2;
 	private static final int MARKER_SPEED = GRID_STEP / 8;
 	// selected level coordinates in array
 	private int levelX = 0;
@@ -24,7 +26,7 @@ public class LevelChooseView extends SurfaceView {
 	/**
 	 * Matrix with levels IDs
 	 */
-	private int[][] levels = {{3,2,1},{1,2,3}};
+	private int[][] levels = {{3,2,1,1},{1,2,3,3}};
 	private int[][] finishedLevels;
 	
 	private SurfaceHolder holder;
@@ -133,9 +135,15 @@ public class LevelChooseView extends SurfaceView {
 		canvas.drawBitmap(background, 0, 0, null);
 		for(int i = 0; i < levels.length; i++) {
 			for(int j = 0; j < levels[i].length; j++) {
-				drawOnCenterCoordinates(border, getScreenX(j), getScreenY(i), canvas);
+				int x = getScreenX(j);
+				int y = getScreenY(i);
+				drawOnCenterCoordinates(border, x, y, canvas);
+				Paint paint = new Paint();
+				paint.setColor(Color.WHITE);
+				paint.setTextSize(48);
+				canvas.drawText("" + levels[i][j], x - 16, y + 16, paint);
 				if(finishedLevels[i][j] != 0) {
-					drawOnCenterCoordinates(cross, getScreenX(j), getScreenY(i), canvas);
+					drawOnCenterCoordinates(cross, x + border.getWidth() / 4, y + border.getHeight() / 4, canvas);
 				}
 			}
 		}

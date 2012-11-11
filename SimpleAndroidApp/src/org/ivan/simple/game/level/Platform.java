@@ -120,30 +120,30 @@ public class Platform {
 			sprite.playOnce = true;
 			return;
 		}
-		switch(mt) {
-//		case STEP_LEFT:
-//			sprite.setAnimating(sprite.changeSet(1));
-//			sprite.playOnce = true;
-//			break;
-//		case STEP_RIGHT:
-//			sprite.setAnimating(sprite.changeSet(2));
-//			sprite.playOnce = true;
-//			break;
-		case JUMP_LEFT:
-			sprite.setAnimating(sprite.changeSet(1));
-			sprite.playOnce = true;
-			break;
-		case JUMP_RIGHT:
-			sprite.setAnimating(sprite.changeSet(2));
-			sprite.playOnce = true;
-			break;
-		case JUMP:
-//			sprite.setAnimating(false);
-//			break;
-		default:
-			sprite.setAnimating(sprite.changeSet(0));
-			sprite.playOnce = true;;
-			break;
+		if(type == PlatformType.SIMPLE) {
+			switch(mt) {
+	//		case STEP_LEFT:
+	//			sprite.setAnimating(sprite.changeSet(1));
+	//			sprite.playOnce = true;
+	//			break;
+	//		case STEP_RIGHT:
+	//			sprite.setAnimating(sprite.changeSet(2));
+	//			sprite.playOnce = true;
+	//			break;
+			case JUMP_LEFT:
+				sprite.setAnimating(sprite.changeSet(1));
+				sprite.playOnce = true;
+				break;
+			case JUMP_RIGHT:
+				sprite.setAnimating(sprite.changeSet(2));
+				sprite.playOnce = true;
+				break;
+			case JUMP:
+			default:
+				sprite.setAnimating(sprite.changeSet(0));
+				sprite.playOnce = true;;
+				break;
+			}
 		}
 	}
 	
