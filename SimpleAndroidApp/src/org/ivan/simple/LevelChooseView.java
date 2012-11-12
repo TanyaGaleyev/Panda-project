@@ -1,5 +1,11 @@
 package org.ivan.simple;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
+
 import org.ivan.simple.game.GameActivity;
 
 import android.app.Activity;
@@ -27,7 +33,7 @@ public class LevelChooseView extends SurfaceView {
 	 * Matrix with levels IDs
 	 */
 	private int[][] levels = {{3,2,1,1},{1,2,3,3}};
-	private int[][] finishedLevels;
+	private byte[][] finishedLevels;
 	
 	private SurfaceHolder holder;
 	
@@ -60,6 +66,8 @@ public class LevelChooseView extends SurfaceView {
 	// buffer choose level action
 	private UserControlType performingAction = UserControlType.IDLE;
 	private UserControlType chooseAcion = UserControlType.IDLE;
+	
+	private int lvNumColor = Color.WHITE;
 
 	public LevelChooseView(Context context) {
 		super(context);
@@ -77,9 +85,17 @@ public class LevelChooseView extends SurfaceView {
 	}
 	
 	private final void init() {
-		finishedLevels = new int[levels.length][];
+		double r = Math.random();
+		if(r < 0.33) {
+			lvNumColor = Color.RED;
+		} else if(r < 0.66) {
+			lvNumColor = Color.CYAN;
+		} else {
+			lvNumColor = Color.GREEN;
+		}
+		finishedLevels = new byte[levels.length][];
 		for(int i = 0; i < levels.length; i++) {
-			finishedLevels[i] = new int[levels[i].length];
+			finishedLevels[i] = new byte[levels[i].length];
 		}
 		holder = getHolder();
 		holder.addCallback(new SurfaceHolder.Callback() {
@@ -139,7 +155,7 @@ public class LevelChooseView extends SurfaceView {
 				int y = getScreenY(i);
 				drawOnCenterCoordinates(border, x, y, canvas);
 				Paint paint = new Paint();
-				paint.setColor(Color.WHITE);
+				paint.setColor(lvNumColor);
 				paint.setTextSize(48);
 				canvas.drawText("" + levels[i][j], x - 16, y + 16, paint);
 				if(finishedLevels[i][j] != 0) {
@@ -249,6 +265,27 @@ public class LevelChooseView extends SurfaceView {
 	
 	public void completeCurrentLevel() {
 		finishedLevels[levelY][levelX] = 1;
+	}
+	
+	protected String getFinishedLevels() {
+		String finishedArray = "";
+		for(int i = 0; i < levels.length; i++) {
+			for(int j = 0; j < levels[i].length; j++) {
+				finishedArray += finishedLevels[i][j];
+				finishedArray += ",";
+			}
+		}
+		return finishedArray;
+	}
+	
+	protected void setFinishedLevels(String finishedArray) {
+		StringTokenizer st = new StringTokenizer(finishedArray, ",");
+		for(int i = 0; i < levels.length; i++) {
+			for(int j = 0; j < levels[i].length; j++) {
+				if(!st.hasMoreTokens()) break;
+				finishedLevels[i][j] = Byte.parseByte(st.nextToken());
+			}
+		}
 	}
 	
 	private class Redrawer extends Thread {
