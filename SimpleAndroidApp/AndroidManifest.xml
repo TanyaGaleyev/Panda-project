@@ -14,7 +14,8 @@
         <activity
             android:name=".game.GameActivity"
             android:label="@string/title_activity_main"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+            android:configChanges="orientation" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.ivan.simple.LevelChooseActivity" />

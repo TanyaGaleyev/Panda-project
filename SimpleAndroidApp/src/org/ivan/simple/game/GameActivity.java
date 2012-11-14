@@ -6,7 +6,10 @@ import org.ivan.simple.game.pause.PauseActivity;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +24,11 @@ public class GameActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        IntentFilter filter = new IntentFilter();
+//        filter.addAction(Intent.ACTION_SCREEN_OFF);
+//        filter.addAction(Intent.ACTION_SCREEN_ON);
+//        BroadcastReceiver receiver = new ScreenReceiver();
+//        registerReceiver(receiver, filter);
         // hide screen title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         Intent intent = getIntent();
@@ -79,17 +87,20 @@ public class GameActivity extends Activity {
     @Override
     protected void onStop() {
     	super.onStop();
-    	if(goToPauseScreen) {
-    		goToPauseScreen = true;
-    		Intent pauseGame = new Intent(this, PauseActivity.class);
-    		startActivity(pauseGame);
-    	}
+//    	gView.stopManager();
+//    	if(goToPauseScreen) {
+//    		goToPauseScreen = true;
+//    		Intent pauseGame = new Intent(this, PauseActivity.class);
+//    		startActivity(pauseGame);
+//    	}
     }
     
     @Override
     protected void onRestart() {
     	super.onRestart();
+//    	gView.startManager();
     }
+
     
 	/** Show an event in the LogCat view, for debugging */
 	private void dumpEvent(MotionEvent event) {
@@ -117,6 +128,18 @@ public class GameActivity extends Activity {
 		sb.append("]" );
 		if(actionCode == MotionEvent.ACTION_MOVE) return;
 		Log.d("DumpEvent", sb.toString());
+	}
+	
+	private class ScreenReceiver extends BroadcastReceiver {
+
+	    @Override
+	    public void onReceive(Context context, Intent intent) {
+	        if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+	        	gView.stopManager();
+	        } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+	        	gView.startManager();
+	        }
+	    }
 	}
 	
 }

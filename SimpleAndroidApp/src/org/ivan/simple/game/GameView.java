@@ -66,24 +66,12 @@ public class GameView extends SurfaceView {
 			public void surfaceDestroyed(SurfaceHolder holder) {
 				// turn motion to initial stage (stage == 0)
 				level.model.getMotionType().startMotion();
-				boolean retry = true;
-                gameLoopThread.setRunning(false);
-                while (retry) {
-                   try {
-                         gameLoopThread.join();
-                         retry = false;
-                   } catch (InterruptedException e) {
-                	   
-                   }
-                }
-                
+                stopManager();
 			}
 			
 			public void surfaceCreated(SurfaceHolder holder) {
 				initSurface();
-				gameLoopThread = new GameManager(GameView.this);
-				gameLoopThread.setRunning(true);
-				gameLoopThread.start();
+				startManager();
 			}
 			
 			public void surfaceChanged(SurfaceHolder holder, int format, int width,
@@ -92,6 +80,25 @@ public class GameView extends SurfaceView {
 			}
 		});
 
+	}
+	
+	protected void startManager() {
+		gameLoopThread = new GameManager(this);
+		gameLoopThread.setRunning(true);
+		gameLoopThread.start();
+	}
+	
+	protected void stopManager() {
+		boolean retry = true;
+        gameLoopThread.setRunning(false);
+        while (retry) {
+           try {
+                 gameLoopThread.join();
+                 retry = false;
+           } catch (InterruptedException e) {
+        	   
+           }
+        }
 	}
 	
 	private void initSurface() {
