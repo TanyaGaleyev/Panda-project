@@ -305,6 +305,7 @@ public class GameView extends SurfaceView {
 	
 	protected void initLevel(int levId) {
 		hero = new Hero();
+		this.levId = levId; 
 		level = new LevelView(levId);
 		control = new GameControl(level.model, hero);
 		prevCell = level.model.getHeroCell();

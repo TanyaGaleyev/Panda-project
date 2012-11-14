@@ -47,6 +47,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.ivan.simple.StartActivity" />
         </activity>
+        
+        <activity
+            android:name=".game.pause.PauseActivity"
+            android:label="@string/title_activity_pause"
+            android:screenOrientation="landscape" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.ivan.simple.game.GameActivity" />
+        </activity>
     </application>
 
 </manifest>

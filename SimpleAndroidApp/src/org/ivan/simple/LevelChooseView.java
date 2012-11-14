@@ -1,9 +1,5 @@
 package org.ivan.simple;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.ivan.simple.game.GameActivity;

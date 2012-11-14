@@ -1,6 +1,5 @@
 package org.ivan.simple;
 
-import java.util.Set;
 
 import android.app.Activity;
 import android.content.Intent;

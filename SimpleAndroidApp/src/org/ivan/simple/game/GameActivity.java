@@ -2,6 +2,7 @@ package org.ivan.simple.game;
 
 import org.ivan.simple.LevelChooseActivity;
 import org.ivan.simple.R;
+import org.ivan.simple.game.pause.PauseActivity;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -14,6 +15,9 @@ import android.view.Window;
 
 public class GameActivity extends Activity {
 	
+	private GameView gView;
+	private boolean goToPauseScreen = true;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +26,7 @@ public class GameActivity extends Activity {
         Intent intent = getIntent();
         int levId = intent.getIntExtra(LevelChooseActivity.LEVEL_ID, 0);
         setContentView(R.layout.activity_main);
-        GameView gView = (GameView) findViewById(R.id.game);
+        gView = (GameView) findViewById(R.id.game);
         gView.initLevel(levId);
     }
 
@@ -51,19 +55,41 @@ public class GameActivity extends Activity {
     }
     
     public void restart() {
+    	goToPauseScreen = false; 
     	finish();
 		Intent intent = new Intent(this, GameActivity.class);
-		GameView gView = (GameView) findViewById(R.id.game);
 		intent.putExtra(LevelChooseActivity.LEVEL_ID, gView.getLevId());
 		startActivity(intent);
     }
     
     public void switchBackToChooseActivity(boolean complete) {
+    	goToPauseScreen = false;
 		Intent resultIntent = new Intent();
 		resultIntent.putExtra(LevelChooseActivity.LEVEL_COMPLETE, complete);
 		setResult(Activity.RESULT_OK, resultIntent);
 		finish();
 	}
+    
+    @Override
+    public void onBackPressed() {
+    	goToPauseScreen = false;
+    	super.onBackPressed();
+    }
+    
+    @Override
+    protected void onStop() {
+    	super.onStop();
+    	if(goToPauseScreen) {
+    		goToPauseScreen = true;
+    		Intent pauseGame = new Intent(this, PauseActivity.class);
+    		startActivity(pauseGame);
+    	}
+    }
+    
+    @Override
+    protected void onRestart() {
+    	super.onRestart();
+    }
     
 	/** Show an event in the LogCat view, for debugging */
 	private void dumpEvent(MotionEvent event) {
