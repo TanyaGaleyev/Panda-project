@@ -71,7 +71,7 @@ public class GameView extends SurfaceView {
 			
 			public void surfaceCreated(SurfaceHolder holder) {
 				initSurface();
-				startManager();
+				firstStartManager();
 			}
 			
 			public void surfaceChanged(SurfaceHolder holder, int format, int width,
@@ -83,12 +83,18 @@ public class GameView extends SurfaceView {
 	}
 	
 	protected void startManager() {
+		if(gameLoopThread == null) return;
+		firstStartManager();
+	}
+	
+	private void firstStartManager() {
 		gameLoopThread = new GameManager(this);
 		gameLoopThread.setRunning(true);
 		gameLoopThread.start();
 	}
 	
 	protected void stopManager() {
+		if(gameLoopThread == null) return;
 		boolean retry = true;
         gameLoopThread.setRunning(false);
         while (retry) {
@@ -324,6 +330,14 @@ public class GameView extends SurfaceView {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+		if(control.pause(event)) {
+			if(gameLoopThread.isRunning()) {
+				stopManager();
+			} else {
+				startManager();
+			}
+			return true;
+		}
 		if(control.oneHandControl(event)) {
 			return true;
 		}

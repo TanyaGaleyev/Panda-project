@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +20,6 @@ import android.view.Window;
 public class GameActivity extends Activity {
 	
 	private GameView gView;
-	private boolean goToPauseScreen = true;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,7 +63,6 @@ public class GameActivity extends Activity {
     }
     
     public void restart() {
-    	goToPauseScreen = false; 
     	finish();
 		Intent intent = new Intent(this, GameActivity.class);
 		intent.putExtra(LevelChooseActivity.LEVEL_ID, gView.getLevId());
@@ -71,7 +70,6 @@ public class GameActivity extends Activity {
     }
     
     public void switchBackToChooseActivity(boolean complete) {
-    	goToPauseScreen = false;
 		Intent resultIntent = new Intent();
 		resultIntent.putExtra(LevelChooseActivity.LEVEL_COMPLETE, complete);
 		setResult(Activity.RESULT_OK, resultIntent);
@@ -80,25 +78,24 @@ public class GameActivity extends Activity {
     
     @Override
     public void onBackPressed() {
-    	goToPauseScreen = false;
     	super.onBackPressed();
     }
     
     @Override
-    protected void onStop() {
-    	super.onStop();
-//    	gView.stopManager();
-//    	if(goToPauseScreen) {
-//    		goToPauseScreen = true;
-//    		Intent pauseGame = new Intent(this, PauseActivity.class);
-//    		startActivity(pauseGame);
-//    	}
+    protected void onPause() {
+    	super.onPause();
+    	gView.stopManager();
     }
     
     @Override
-    protected void onRestart() {
-    	super.onRestart();
+    protected void onResume() {
+    	super.onResume();
 //    	gView.startManager();
+    }
+    
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+    	super.onConfigurationChanged(newConfig);
     }
 
     
@@ -130,16 +127,16 @@ public class GameActivity extends Activity {
 		Log.d("DumpEvent", sb.toString());
 	}
 	
-	private class ScreenReceiver extends BroadcastReceiver {
-
-	    @Override
-	    public void onReceive(Context context, Intent intent) {
-	        if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-	        	gView.stopManager();
-	        } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-	        	gView.startManager();
-	        }
-	    }
-	}
+//	private class ScreenReceiver extends BroadcastReceiver {
+//
+//	    @Override
+//	    public void onReceive(Context context, Intent intent) {
+//	        if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+//	        	gView.stopManager();
+//	        } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+//	        	gView.startManager();
+//	        }
+//	    }
+//	}
 	
 }

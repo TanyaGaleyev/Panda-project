@@ -35,6 +35,10 @@ public class GameManager extends Thread {
 		running = run;
 	}
 	
+	public boolean isRunning() {
+		return running;
+	}
+	
 	@Override
 	public void run() {
 		

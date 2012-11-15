@@ -200,4 +200,11 @@ public class GameControl {
 			}
 		}
 	}
+	
+	protected boolean pause(MotionEvent event) {
+		if(event.getAction() == MotionEvent.ACTION_DOWN) {
+			return (event.getX() < 100 && event.getY() < 100);
+		}
+		return false;
+	}
 }
