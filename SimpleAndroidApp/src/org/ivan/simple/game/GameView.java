@@ -38,12 +38,14 @@ public class GameView extends SurfaceView {
 	private GameControl control;
 	
 	private Bitmap background;
+	private Bitmap pause;
 	
 	private LevelCell prevCell;
 	
 	private int levId = 0;
 	
 	protected boolean finished = false;
+	private boolean paused = true;
 	
 	public GameView(Context context) {
 		super(context);
@@ -76,7 +78,6 @@ public class GameView extends SurfaceView {
 			
 			public void surfaceChanged(SurfaceHolder holder, int format, int width,
 					int height) {
-				
 			}
 		});
 
@@ -91,10 +92,12 @@ public class GameView extends SurfaceView {
 		gameLoopThread = new GameManager(this);
 		gameLoopThread.setRunning(true);
 		gameLoopThread.start();
+		paused = false;
 	}
 	
 	protected void stopManager() {
 		if(gameLoopThread == null) return;
+		paused = true;
 		boolean retry = true;
         gameLoopThread.setRunning(false);
         while (retry) {
@@ -109,6 +112,7 @@ public class GameView extends SurfaceView {
 	
 	private void initSurface() {
 		background = ImageProvider.getBitmap(R.drawable.background_1);
+		pause = ImageProvider.getBitmap(R.drawable.pause);
 		
 		GRID_STEP = hero.getSprite().getWidth() % 4 == 0 ? hero.getSprite().getWidth() : (hero.getSprite().getWidth() / 4  + 1) * 4;
 		TOP_BOUND = GRID_STEP;
@@ -131,6 +135,7 @@ public class GameView extends SurfaceView {
 	protected void onDraw(Canvas canvas) {
 		canvas.drawColor(Color.WHITE);
 		canvas.drawBitmap(background, 0, 0, null);
+		canvas.drawBitmap(pause, 10, 30, null);
 		level.onDraw(canvas);
 		hero.onDraw(canvas);
 //		drawGrid(canvas);
@@ -338,8 +343,10 @@ public class GameView extends SurfaceView {
 			}
 			return true;
 		}
-		if(control.oneHandControl(event)) {
-			return true;
+		if(!paused) {
+			if(control.oneHandControl(event)) {
+				return true;
+			}
 		}
 		return super.onTouchEvent(event);
 	}

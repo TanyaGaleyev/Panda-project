@@ -46,27 +46,16 @@ public class GameManager extends Thread {
         long sleepTime;
 		while(running) {
 			startTime = System.currentTimeMillis();
-			Canvas c = null;
-			try {
-				c = view.getHolder().lockCanvas();
-				synchronized (view.getHolder()) {
-					if(view.readyForUpdate()) {
-						view.updateGame();
-					}
-					view.updateHeroScreenPosition();
-					view.onDraw(c);
-					if(view.finished) {
-						((GameActivity) view.getContext()).switchBackToChooseActivity(view.isComplete());
-					}
-				}
-			} catch(Exception ex) {
-				// TODO process exception!
-			} finally {
-				if(c != null) {
-					view.getHolder().unlockCanvasAndPost(c);
-				}
-			}
 			
+			if(view.readyForUpdate()) {
+				view.updateGame();
+			}
+			view.updateHeroScreenPosition();
+			doDraw();
+			if(view.finished) {
+				((GameActivity) view.getContext()).switchBackToChooseActivity(view.isComplete());
+			}
+
 			// calculate sleep time to reach needed fps
 			sleepTime = ticksPS-(System.currentTimeMillis() - startTime);
             try {
@@ -75,6 +64,22 @@ public class GameManager extends Thread {
                    else
                           sleep(10);
             } catch (Exception e) {}
+		}
+	}
+	
+	protected void doDraw() {
+		Canvas c = null;
+		try {
+			c = view.getHolder().lockCanvas();
+			synchronized (view.getHolder()) {
+				view.onDraw(c);
+			}
+		} catch(Exception ex) {
+			// TODO process exception!
+		} finally {
+			if(c != null) {
+				view.getHolder().unlockCanvasAndPost(c);
+			}
 		}
 	}
 	

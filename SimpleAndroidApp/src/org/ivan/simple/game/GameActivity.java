@@ -90,7 +90,6 @@ public class GameActivity extends Activity {
     @Override
     protected void onResume() {
     	super.onResume();
-//    	gView.startManager();
     }
     
     @Override

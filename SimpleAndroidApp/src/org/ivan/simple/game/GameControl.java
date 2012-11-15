@@ -59,7 +59,8 @@ public class GameControl {
 		case MotionEvent.ACTION_UP:
 			/*if(pressedControl != UserControlType.IDLE) {
 				model.setControlType(pressedControl);
-			} else */if(useDelayedControl.cancel() &&
+			} else */if(useDelayedControl != null &&
+					useDelayedControl.cancel() &&
 					model.getControlType() == UserControlType.IDLE) {
 				model.setControlType(delayedControl);
 			}
@@ -92,7 +93,9 @@ public class GameControl {
 	}
 	
 	private void receiveSlideControl(UserControlType control, int pointerId, float x, float y) {
-		useDelayedControl.cancel();
+		if(useDelayedControl != null) {
+			useDelayedControl.cancel();
+		}
 		pressedControl = control;
 		model.setControlType(control);
 		startPressedY[pointerId] = y;
@@ -202,8 +205,9 @@ public class GameControl {
 	}
 	
 	protected boolean pause(MotionEvent event) {
-		if(event.getAction() == MotionEvent.ACTION_DOWN) {
-			return (event.getX() < 100 && event.getY() < 100);
+		if(event.getX() < 100 && event.getY() < 100 &&
+				event.getAction() == MotionEvent.ACTION_DOWN) {
+			return true;
 		}
 		return false;
 	}

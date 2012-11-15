@@ -43,7 +43,8 @@
         <activity
             android:name=".LevelChooseActivity"
             android:label="@string/title_activity_choose"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.ivan.simple.StartActivity" />
