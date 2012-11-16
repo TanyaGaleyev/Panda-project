@@ -327,15 +327,15 @@ public class Hero {
 	private void startFinishMotions(MotionType newMotion) {
 		finishingMotion = currentMotion;
 		currentMotion = newMotion;
-		if(currentMotion == MotionType.TP_LEFT || currentMotion == MotionType.TP_RIGHT) {
-			return;
-		}
-		if(finishingMotion == MotionType.TP_LEFT || finishingMotion == MotionType.TP_RIGHT) {
-			return;
-		}
 		if(finishingMotion != currentMotion) {
-			finishingMotion.finishMotion();
-			currentMotion.startMotion();
+			if(!(finishingMotion == MotionType.FLY_LEFT && currentMotion == MotionType.TP_LEFT) &&
+					!(finishingMotion == MotionType.FLY_RIGHT && currentMotion == MotionType.TP_RIGHT)) {
+				finishingMotion.finishMotion();
+			}
+			if(!(finishingMotion == MotionType.TP_LEFT && currentMotion == MotionType.FLY_LEFT) &&
+					!(finishingMotion == MotionType.TP_RIGHT && currentMotion == MotionType.FLY_RIGHT)) {
+				currentMotion.startMotion();
+			}
 		}
 	}
 
