@@ -21,11 +21,11 @@ public class LevelModel {
 	private boolean lose = false;
 	private boolean complete = false;
 	private LevelCell winCell;
-	private tpCoords tpStart;
-	private tpCoords tpEnd;
+	private TpCoords tpStart;
+	private TpCoords tpEnd;
 	
-	private class tpCoords {
-		public tpCoords(int i, int j) {
+	private class TpCoords {
+		public TpCoords(int i, int j) {
 			this.i = i;
 			this.j = j;
 		}
@@ -65,11 +65,11 @@ public class LevelModel {
 					}
 					if(leftWallType==11) {
 						levelGrid[i][j].createTeleport_l_V(0);
-						tpStart = new tpCoords(i, j);
+						tpStart = new TpCoords(i, j);
 					}
 					if(leftWallType==12) {
 						levelGrid[i][j].createTeleport_r_V(0);
-						tpEnd = new tpCoords(i, j);
+						tpEnd = new TpCoords(i, j);
 					}
 					// else set left wall as right wall of nearest left cell
 				} else {
@@ -129,11 +129,11 @@ public class LevelModel {
 				}
 				if(rightWallType==11) {
 					levelGrid[i][j].createTeleport_l_V(1);
-					tpStart = new tpCoords(i, j);
+					tpStart = new TpCoords(i, j);
 				}
 				if(rightWallType==12) {
 					levelGrid[i][j].createTeleport_r_V(1);
-					tpEnd = new tpCoords(i, j);
+					tpEnd = new TpCoords(i, j);
 				}
 				
 				
@@ -354,6 +354,13 @@ public class LevelModel {
 		case JUMP_LEFT_WALL:
 			platformsCheck();
 			break;
+		case TP_LEFT:
+			if(!MotionType.FLY_LEFT.isUncontrolable() && motionAvaible(MotionType.JUMP_LEFT)) {
+				motionType = MotionType.FLY_LEFT;
+			} else {
+				platformsCheck();
+			}
+			break;
 		case FLY_LEFT:
 			switch(controlType) {
 			case UP:
@@ -372,6 +379,13 @@ public class LevelModel {
 			break;
 		case JUMP_RIGHT_WALL:
 			platformsCheck();
+			break;
+		case TP_RIGHT:
+			if(!MotionType.FLY_RIGHT.isUncontrolable() && motionAvaible(MotionType.JUMP_RIGHT)) {
+				motionType = MotionType.FLY_RIGHT;
+			} else {
+				platformsCheck();
+			}
 			break;
 		case FLY_RIGHT:
 			switch(controlType) {
@@ -419,14 +433,14 @@ public class LevelModel {
 			if(mt.getYSpeed() != 0 && getHeroCell().getRoof().getType() != PlatformType.NONE) return false;
 			if(heroY + mt.getYSpeed() < 0) return false;
 			return true;
-//		case STEP_LEFT:
+		case FLY_LEFT:
 		case JUMP_LEFT:
 		case THROW_LEFT:
 			if(getHeroCell().getLeft().getType() == PlatformType.SPIKE_V) lose = true;
 			if(getHeroCell().getLeft().getType() != PlatformType.NONE) return false;
 			if(heroX + mt.getXSpeed() < 0) return false;
 			return true;
-//		case STEP_RIGHT:
+		case FLY_RIGHT:
 		case JUMP_RIGHT:
 		case THROW_RIGHT:	
 			if(getHeroCell().getRight().getType() == PlatformType.SPIKE_V) lose = true;

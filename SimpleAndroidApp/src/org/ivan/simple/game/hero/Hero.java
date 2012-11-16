@@ -115,8 +115,7 @@ public class Hero {
 			case FLY_LEFT:
 				// skip finishing fall down after FLY if finish because wall
 				if(newMotion == MotionType.JUMP_LEFT_WALL|| 
-				newMotion == MotionType.FLY_RIGHT ||
-				newMotion == MotionType.TP_LEFT) {
+				newMotion == MotionType.FLY_RIGHT) {
 					finishingMotion.startMotion();
 					switchToCurrentMotion();
 				} else {
@@ -126,8 +125,7 @@ public class Hero {
 			case FLY_RIGHT:
 				// skip finishing fall down after FLY if finish because wall
 				if(newMotion == MotionType.JUMP_RIGHT_WALL || 
-				newMotion == MotionType.FLY_LEFT ||
-				newMotion == MotionType.TP_RIGHT) {
+				newMotion == MotionType.FLY_LEFT) {
 					finishingMotion.startMotion();
 					switchToCurrentMotion();
 				} else {
@@ -288,7 +286,7 @@ public class Hero {
 			activeSprite.changeSet(13);
 			break;	
 		case FLY_LEFT:
-			if(finishingMotion == currentMotion) {
+			if(finishingMotion == currentMotion || finishingMotion == MotionType.TP_LEFT) {
 				activeSprite.changeSet(22);
 			} else if(finishingMotion == MotionType.JUMP || finishingMotion == MotionType.FLY_RIGHT) {
 				activeSprite.changeSet(11);
@@ -298,7 +296,7 @@ public class Hero {
 			}
 			break;
 		case FLY_RIGHT:
-			if(finishingMotion == currentMotion) {
+			if(finishingMotion == currentMotion || finishingMotion == MotionType.TP_RIGHT) {
 				activeSprite.changeSet(23);
 			} else if(finishingMotion == MotionType.JUMP || finishingMotion == MotionType.FLY_LEFT) {
 				activeSprite.changeSet(12);
@@ -329,6 +327,12 @@ public class Hero {
 	private void startFinishMotions(MotionType newMotion) {
 		finishingMotion = currentMotion;
 		currentMotion = newMotion;
+		if(currentMotion == MotionType.TP_LEFT || currentMotion == MotionType.TP_RIGHT) {
+			return;
+		}
+		if(finishingMotion == MotionType.TP_LEFT || finishingMotion == MotionType.TP_RIGHT) {
+			return;
+		}
 		if(finishingMotion != currentMotion) {
 			finishingMotion.finishMotion();
 			currentMotion.startMotion();
