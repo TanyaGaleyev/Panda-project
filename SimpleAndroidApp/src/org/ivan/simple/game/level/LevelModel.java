@@ -109,6 +109,12 @@ public class LevelModel {
 					if(roofType==10){
 						levelGrid[i][j] .createSpike(1);
 					}
+					if(roofType==13) {
+						levelGrid[i][j] .createSlick(1);
+					}
+					if(roofType==14) {
+						levelGrid[i][j] .createSlope(1);
+					}
 					// else set roof as floor of nearest upper cell
 				} else {
 					levelGrid[i][j].roof = levelGrid[i - 1][j].floor;
@@ -167,6 +173,12 @@ public class LevelModel {
 				}
 				if(floorType==10){
 					levelGrid[i][j] .createSpike(0);
+				}
+				if(floorType==13){
+					levelGrid[i][j] .createSlick(0);
+				}
+				if(floorType==14){
+					levelGrid[i][j] .createSlope(0);
 				}
 				
 				if(i == winCellCoord[0] && j == winCellCoord[1]) {
@@ -269,6 +281,24 @@ public class LevelModel {
 			} else {
 				moveRight();
 			}	
+			break;
+		case SLICK:
+			if(motionType == MotionType.JUMP_LEFT && controlType == UserControlType.IDLE) {
+				moveLeft();
+			} else if (motionType == MotionType.JUMP_RIGHT && controlType == UserControlType.IDLE) {
+				moveRight();
+			} else {
+				stayCheck();
+			}
+			break;
+		case SLOPE:
+			if(getHeroCell().getFloor().getStatus() == 1) {
+				moveLeft();
+			} else if(getHeroCell().getFloor().getStatus() == 2) {
+				moveRight();
+			} else {
+				stayCheck();
+			}
 			break;
 		default:
 			stayCheck();

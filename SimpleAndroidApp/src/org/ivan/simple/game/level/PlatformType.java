@@ -18,6 +18,8 @@ public enum PlatformType {
 	WIN,
 	TELEPORT_L_V,
 	TELEPORT_R_V,
+	SLICK,
+	SLOPE,
 	
 	NONE
 	

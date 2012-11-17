@@ -73,7 +73,10 @@ public class GameView extends SurfaceView {
 			
 			public void surfaceCreated(SurfaceHolder holder) {
 				initSurface();
-				firstStartManager();
+				if(gameLoopThread == null) {
+					startManager();
+				}
+				gameLoopThread.doDraw();
 			}
 			
 			public void surfaceChanged(SurfaceHolder holder, int format, int width,
@@ -84,11 +87,6 @@ public class GameView extends SurfaceView {
 	}
 	
 	protected void startManager() {
-		if(gameLoopThread == null) return;
-		firstStartManager();
-	}
-	
-	private void firstStartManager() {
 		gameLoopThread = new GameManager(this);
 		gameLoopThread.setRunning(true);
 		gameLoopThread.start();
@@ -97,6 +95,7 @@ public class GameView extends SurfaceView {
 	
 	protected void stopManager() {
 		if(gameLoopThread == null) return;
+		System.out.println("Stop game loop");
 		paused = true;
 		boolean retry = true;
         gameLoopThread.setRunning(false);

@@ -85,6 +85,7 @@ public class GameActivity extends Activity {
     protected void onPause() {
     	super.onPause();
     	gView.stopManager();
+    	System.out.println("onPause!");
     }
     
     @Override

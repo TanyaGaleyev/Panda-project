@@ -133,6 +133,22 @@ public class LevelCell {
 		}
 	}
 	
+	public void createSlick(int side) {
+		if(side==0){
+		floor = new Platform(PlatformType.SLICK);
+		}else{
+		roof = new Platform(PlatformType.SLICK);
+		}
+	}
+	
+	public void createSlope(int side) {
+		if(side==0){
+		floor = new Platform(PlatformType.SLOPE);
+		}else{
+		roof = new Platform(PlatformType.SLOPE);
+		}
+	}
+	
 	public void setPrize(int prizeType) {
 		if(prizeType != 0) {
 			prize = new Prize();

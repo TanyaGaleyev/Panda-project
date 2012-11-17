@@ -70,6 +70,12 @@ public class Platform {
 			sprite.setAnimating(true);
 			sprite.playOnce = false;
 			break;
+		case SLICK:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.slick), 1, 1);
+			break;
+		case SLOPE:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.slope), 3, 1);
+			break;
 		case NONE:
 			break;
 		}
@@ -120,6 +126,21 @@ public class Platform {
 			sprite.playOnce = true;
 			return;
 		}
+		if(type == PlatformType.SLOPE) {
+			switch(mt) {
+			case JUMP_LEFT:
+				currentStatus = 1;
+				sprite.changeSet(1);
+				break;
+			case JUMP_RIGHT:
+				currentStatus = 2;
+				sprite.changeSet(2);
+				break;
+			default:
+				break;
+			}
+			return;
+		}
 		if(type == PlatformType.SIMPLE) {
 			switch(mt) {
 	//		case STEP_LEFT:
@@ -159,5 +180,9 @@ public class Platform {
 			sprite.setAnimating(true);
 			sprite.playOnce = true;
 		}
+	}
+	
+	public int getStatus() {
+		return currentStatus;
 	}
 }
