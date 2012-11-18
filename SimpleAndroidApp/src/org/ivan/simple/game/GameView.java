@@ -41,6 +41,7 @@ public class GameView extends SurfaceView {
 	private Bitmap pause;
 	
 	private LevelCell prevCell;
+	private MotionType prevMotion;
 	
 	private int levId = 0;
 	
@@ -76,11 +77,12 @@ public class GameView extends SurfaceView {
 				if(gameLoopThread == null) {
 					startManager();
 				}
-				gameLoopThread.doDraw();
+				gameLoopThread.doDraw(false);
 			}
 			
 			public void surfaceChanged(SurfaceHolder holder, int format, int width,
 					int height) {
+				gameLoopThread.doDraw(false);
 			}
 		});
 
@@ -132,11 +134,15 @@ public class GameView extends SurfaceView {
 	 */
 	@Override
 	protected void onDraw(Canvas canvas) {
+		onDraw(canvas, false);
+	}
+	
+	protected void onDraw(Canvas canvas, boolean update) {
 		canvas.drawColor(Color.WHITE);
 		canvas.drawBitmap(background, 0, 0, null);
 		canvas.drawBitmap(pause, 10, 30, null);
-		level.onDraw(canvas);
-		hero.onDraw(canvas);
+		level.onDraw(canvas, update);
+		hero.onDraw(canvas, update);
 //		drawGrid(canvas);
 		drawFPS(canvas);
 		if(level.model.isLost()) {
@@ -210,7 +216,7 @@ public class GameView extends SurfaceView {
 		 */
 		boolean stateReady = inControlState;
 		// change behavior only if hero is in ready for update state AND is on grid point
-		return stateReady && (hero.heroX % GRID_STEP == 0) && (hero.heroY % GRID_STEP == 0);
+		return stateReady;// && (hero.heroX % GRID_STEP == 0) && (hero.heroY % GRID_STEP == 0);
 	}
 	
 	/**
@@ -235,15 +241,17 @@ public class GameView extends SurfaceView {
 		if(level.model.getControlType() == UserControlType.IDLE) {
 			level.model.setControlType(control.pressedControl);
 		}
+		prevMotion = level.model.getMotionType();
 		// Store cell before update in purpose to play cell animation (like floor movement while jump) 
 		prevCell = level.model.getHeroCell();
 		// calculate new motion depending on current motion, hero cell and user control
 		level.model.updateGame();
 		// switch hero animation
-		hero.changeMotion(level.model.getMotionType());
+		MotionType curMotion = level.model.getMotionType();
+		hero.changeMotion(curMotion);
 		// play cell reaction to new motion
 		if(!hero.isFinishing()) {
-			prevCell.updateCell(level.model.getMotionType());
+			prevCell.updateCell(curMotion, prevMotion);
 		}
 	}
 	
@@ -255,7 +263,7 @@ public class GameView extends SurfaceView {
 		if(hero.isFinishing()) {
 			// when motion at last switches we need to play cell animation
 			if(hero.tryToEndFinishMotion()) {
-				prevCell.updateCell(level.model.getMotionType());
+				prevCell.updateCell(level.model.getMotionType(), prevMotion);
 			}
 			return true;
 		}
@@ -326,6 +334,7 @@ public class GameView extends SurfaceView {
 		level = new LevelView(levId);
 		control = new GameControl(level.model, hero);
 		prevCell = level.model.getHeroCell();
+		prevMotion = level.model.getMotionType();
 	}
 	
 	protected int getLevId() {

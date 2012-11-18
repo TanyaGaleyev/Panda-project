@@ -176,15 +176,15 @@ public class LevelCell {
 		return right_wall;
 	}
 	
-	public void updateCell(MotionType mt) {
+	public void updateCell(MotionType mt, MotionType prevMt) {
 		if(mt == MotionType.BEAT_ROOF) {
 			roof.reactBeatRoof();
 		}
 		if(mt == MotionType.FLY_LEFT && mt.isUncontrolable()) {
-			right_wall.highlightSpring();
+			right_wall.highlightSpring(prevMt);
 		}
 		if(mt == MotionType.FLY_RIGHT && mt.isUncontrolable()) {
-			left_wall.highlightSpring();
+			left_wall.highlightSpring(prevMt);
 		}
 		floor.changeSet(mt);
 	}

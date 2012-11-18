@@ -37,7 +37,7 @@ public class Platform {
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.throw_out_platform_left), 1, 8);
 			break;	
 		case TRAMPOLINE:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.trampoline_platform),1,18);
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.trampoline_platform),1,12);
 			break;
 		case ELECTRO:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.electro_platform),1,4);
@@ -45,7 +45,7 @@ public class Platform {
 			sprite.playOnce = false;
 			break;
 		case SPRING:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.spring_platform),1,8);
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.spring_platform),2,16);
 			break;
 		case SPIKE:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.spike),1,8);
@@ -175,8 +175,18 @@ public class Platform {
 		}
 	}
 	
-	public void highlightSpring() {
+	public void highlightSpring(MotionType prevMt) {
 		if(type == PlatformType.SPRING) {
+			switch(prevMt) {
+			case JUMP:
+			case FLY_LEFT:
+			case FLY_RIGHT:
+				sprite.changeSet(0);
+				break;
+			default:
+				sprite.changeSet(1);
+				break;
+			}
 			sprite.setAnimating(true);
 			sprite.playOnce = true;
 		}

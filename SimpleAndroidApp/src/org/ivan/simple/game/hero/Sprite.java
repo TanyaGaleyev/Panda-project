@@ -31,12 +31,18 @@ public class Sprite {
         singleHeight = bmp.getHeight() / BMP_ROWS;
 	}
 
-	public void onDraw(Canvas canvas, int x, int y) {
+	public void onDraw(Canvas canvas, int x, int y, boolean update) {
 		int srcX = currentFrame * singleWidth;
         int srcY = currentSet * singleHeight;
         Rect src = new Rect(srcX, srcY, srcX + singleWidth, srcY + singleHeight);
         Rect dst = new Rect(x, y, x + singleWidth, y + singleHeight);
         canvas.drawBitmap(bmp, src, dst, null);
+        if(update) {
+        	update(canvas, srcX, srcY);
+        }
+	}
+	
+	public void update(Canvas canvas, int x, int y) {
         if(animating) {
         	currentFrame = (currentFrame + 1) % BMP_COLS;
         }
@@ -44,6 +50,7 @@ public class Sprite {
         	animating = false;
         }
 	}
+	
 	public void gotoAndStop(int fr){	
 		currentFrame=fr;
 	}

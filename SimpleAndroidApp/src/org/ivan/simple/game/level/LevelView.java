@@ -11,11 +11,11 @@ public class LevelView {
 		model = new LevelModel(lev);
 	}
 	
-	public void onDraw(Canvas canvas) {
+	public void onDraw(Canvas canvas, boolean update) {
 		
 		for(int i = 0; i <model.row; i++) {
 			for(int j = 0; j <model.col; j++) {
-				drawCell(canvas, i, j);
+				drawCell(canvas, i, j, update);
 			}
 		}
 	}
@@ -28,22 +28,25 @@ public class LevelView {
 		return (GameView.GRID_STEP * (i + 1) + GameView.GRID_STEP / 2);
 	}
 	
-	private void drawCell(Canvas canvas, int i, int j) {
+	private void drawCell(Canvas canvas, int i, int j, boolean update) {
 		LevelCell cell = model.getCell(i, j);
+		// Careful with duplicated walls
 		if(cell.getFloor().getSprite() != null) {
-			cell.getFloor().getSprite().onDraw(canvas, getXByIndex(j), getYByIndex(i)-15);
+			cell.getFloor().getSprite().onDraw(canvas, getXByIndex(j), getYByIndex(i)-15, update);
 		}
-		if(cell.getLeft().getSprite() != null) {
-			cell.getLeft().getSprite().onDraw(canvas, getXByIndex(j)-15, getYByIndex(i)-GameView.GRID_STEP);
+		// Draw left wall ONLY for most left cells 
+		if(cell.getLeft().getSprite() != null && j == 0) {
+			cell.getLeft().getSprite().onDraw(canvas, getXByIndex(j)-15, getYByIndex(i)-GameView.GRID_STEP, update);
 		}
-		if(cell.getRoof().getSprite() != null) {
-			cell.getRoof().getSprite().onDraw(canvas, getXByIndex(j), getYByIndex(i)-15-GameView.GRID_STEP);
+		// Draw roof ONLY for highest cells
+		if(cell.getRoof().getSprite() != null && i == 0) {
+			cell.getRoof().getSprite().onDraw(canvas, getXByIndex(j), getYByIndex(i)-15-GameView.GRID_STEP, update);
 		}	
 		if(cell.getRight().getSprite() != null) {
-			cell.getRight().getSprite().onDraw(canvas, getXByIndex(j)+GameView.GRID_STEP-15, getYByIndex(i)-GameView.GRID_STEP);
+			cell.getRight().getSprite().onDraw(canvas, getXByIndex(j)+GameView.GRID_STEP-15, getYByIndex(i)-GameView.GRID_STEP, update);
 		}
 		if(cell.prize != null) {
-			cell.prize.onDraw(canvas, getXByIndex(j), getYByIndex(i));
+			cell.prize.onDraw(canvas, getXByIndex(j), getYByIndex(i), update);
 		}
 	}
 

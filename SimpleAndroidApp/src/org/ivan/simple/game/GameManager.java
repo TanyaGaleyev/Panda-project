@@ -51,7 +51,7 @@ public class GameManager extends Thread {
 				view.updateGame();
 			}
 			view.updateHeroScreenPosition();
-			doDraw();
+			doDraw(true);
 			if(view.finished) {
 				((GameActivity) view.getContext()).switchBackToChooseActivity(view.isComplete());
 			}
@@ -67,12 +67,12 @@ public class GameManager extends Thread {
 		}
 	}
 	
-	protected void doDraw() {
+	protected void doDraw(boolean update) {
 		Canvas c = null;
 		try {
 			c = view.getHolder().lockCanvas();
 			synchronized (view.getHolder()) {
-				view.onDraw(c);
+				view.onDraw(c, update);
 			}
 		} catch(Exception ex) {
 			// TODO process exception!

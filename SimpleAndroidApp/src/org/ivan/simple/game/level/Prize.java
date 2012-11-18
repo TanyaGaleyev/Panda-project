@@ -17,7 +17,7 @@ public class Prize {
 		return sprite;
 	}
 	
-	public void onDraw(Canvas canvas, int x, int y) {
-		sprite.onDraw(canvas, x, y - sprite.getHeight());
+	public void onDraw(Canvas canvas, int x, int y, boolean update) {
+		sprite.onDraw(canvas, x, y - sprite.getHeight(), update);
 	}
 }
