@@ -14,10 +14,10 @@ public class Hero {
 	 */
 	private MotionType currentMotion = MotionType.NONE;
 	private MotionType finishingMotion = MotionType.NONE;
-	private Sprite sprite8 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite8), 28, 8);
+	private Sprite sprite8 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite8), 30, 8);
 	private Sprite sprite16 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite16), 8, 16);
 	private Sprite activeSprite;
-	private Sprite shadeSprite = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite8), 28, 8);
+	private Sprite shadeSprite = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite8), 30, 8);
 	public int heroX;
 	public int heroY;
 	private int prevX;
@@ -310,8 +310,8 @@ public class Hero {
 			activeSprite.changeSet(8);
 			break;
 		case TP_RIGHT:
-			shadeSprite.changeSet(7);
-			activeSprite.changeSet(7);
+			shadeSprite.changeSet(28);
+			activeSprite.changeSet(29);
 			break;
 		default:
 			activeSprite.changeSet(4);
