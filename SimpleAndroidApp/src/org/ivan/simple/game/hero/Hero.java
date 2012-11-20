@@ -184,10 +184,8 @@ public class Hero {
 //			}
 //			break;
 		case JUMP_LEFT:
-			tpSprite.changeSet(3);
-			shadeSprite.changeSet(2);
 			if(finishingMotion == MotionType.JUMP) {
-				shadeSprite.changeSet(6);
+				activeSprite.changeSet(8);
 			} else if(finishingMotion == currentMotion || 
 					finishingMotion == MotionType.THROW_LEFT ||
 					finishingMotion == MotionType.TP_LEFT) {
@@ -204,10 +202,8 @@ public class Hero {
 //			}
 //			break;
 		case JUMP_RIGHT:
-			tpSprite.changeSet(1);
-			shadeSprite.changeSet(0);
 			if(finishingMotion == MotionType.JUMP) {
-				shadeSprite.changeSet(4);
+				activeSprite.changeSet(7);
 			} else if(finishingMotion == currentMotion || 
 					finishingMotion == MotionType.THROW_RIGHT ||
 					finishingMotion == MotionType.TP_RIGHT) {
@@ -292,8 +288,6 @@ public class Hero {
 			activeSprite.changeSet(13);
 			break;	
 		case FLY_LEFT:
-			tpSprite.changeSet(11);
-			shadeSprite.changeSet(10);
 			if(finishingMotion == currentMotion || finishingMotion == MotionType.TP_LEFT) {
 				activeSprite.changeSet(22);
 			} else if(finishingMotion == MotionType.JUMP || finishingMotion == MotionType.FLY_RIGHT) {
@@ -304,8 +298,6 @@ public class Hero {
 			}
 			break;
 		case FLY_RIGHT:
-			tpSprite.changeSet(9);
-			shadeSprite.changeSet(8);
 			if(finishingMotion == currentMotion || finishingMotion == MotionType.TP_RIGHT) {
 				activeSprite.changeSet(23);
 			} else if(finishingMotion == MotionType.JUMP || finishingMotion == MotionType.FLY_LEFT) {
@@ -316,15 +308,37 @@ public class Hero {
 			}
 			break;
 		case TP_LEFT:
-			if(finishingMotion == MotionType.STAY) {
-				tpSprite.changeSet(3);
+			if(finishingMotion == MotionType.JUMP) {
+				shadeSprite.changeSet(6);
+				tpSprite.changeSet(7);
+			} else if(finishingMotion == currentMotion || 
+					finishingMotion == MotionType.THROW_LEFT ||
+					finishingMotion == MotionType.TP_LEFT) {
 				shadeSprite.changeSet(2);
+				tpSprite.changeSet(3);
+			} else if(finishingMotion == MotionType.FLY_LEFT) {
+				shadeSprite.changeSet(10);
+				tpSprite.changeSet(11);
+			} else {
+				shadeSprite.changeSet(2);
+				tpSprite.changeSet(3);
 			}
 			break;
 		case TP_RIGHT:
-			if(finishingMotion == MotionType.STAY) {
-				tpSprite.changeSet(1);
+			if(finishingMotion == MotionType.JUMP) {
+				shadeSprite.changeSet(4);
+				tpSprite.changeSet(5);
+			} else if(finishingMotion == currentMotion || 
+					finishingMotion == MotionType.THROW_RIGHT ||
+					finishingMotion == MotionType.TP_RIGHT) {
 				shadeSprite.changeSet(0);
+				tpSprite.changeSet(1);
+			} else if(finishingMotion == MotionType.FLY_RIGHT) {
+				shadeSprite.changeSet(8);
+				tpSprite.changeSet(9);
+			} else {
+				shadeSprite.changeSet(0);
+				tpSprite.changeSet(1);
 			}
 			break;
 		default:

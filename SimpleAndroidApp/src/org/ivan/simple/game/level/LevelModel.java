@@ -21,16 +21,52 @@ public class LevelModel {
 	private boolean lose = false;
 	private boolean complete = false;
 	private LevelCell winCell;
-	private TpCoords tpStart;
-	private TpCoords tpEnd;
+	private HashMap<CellCoords, TpPeer> tpGroupMap = new HashMap<CellCoords, TpPeer>();
 	
-	private class TpCoords {
-		public TpCoords(int i, int j) {
+	private class CellCoords {
+		int i;
+		int j;
+		
+		CellCoords(int i, int j) {
 			this.i = i;
 			this.j = j;
 		}
-		int i;
-		int j;
+		
+		
+		// hash and equals methods are needed to properly get right mapping for
+		// cells with equal coordinates
+		@Override
+		public boolean equals(Object o) {
+			if(o == null) return false;
+			if(o == this) return true;
+			if(!(o instanceof CellCoords)) return false;
+			CellCoords oCell = (CellCoords) o;
+			if(this.i != oCell.i) return false;
+			if(this.j != oCell.j) return false;
+			return true;
+		}
+		
+		@Override
+		public int hashCode() {
+			return i * 100 + j;
+		}
+	}
+	
+	private class TpPeer {
+		int startRow;
+		int startCol;
+		int endRow;
+		int endCol;
+		
+		void setStartCoords(CellCoords coords) {
+			startRow = coords.i;
+			startCol = coords.j;
+		}
+		
+		void setEndCoords(CellCoords coords) {
+			endRow = coords.i;
+			endCol = coords.j;
+		}
 	}
 
 	public LevelModel(int lev) {
@@ -43,6 +79,9 @@ public class LevelModel {
 		int[][] prizes = storage.getPrizesMap(lev);
 		int[] winCellCoord = storage.getWinCell(lev);
 		levelGrid = new LevelCell[row][col];
+		ArrayList<TpPeer> groups = new ArrayList<TpPeer>();
+		int tpStartGroupId = 0;
+		int tpEndGroupId = 0;
 		for(int i=0;i<row;i++){
 			for(int j=0;j<col;j++){
 				levelGrid[i][j] = new LevelCell();
@@ -65,11 +104,34 @@ public class LevelModel {
 					}
 					if(leftWallType==11) {
 						levelGrid[i][j].createTeleport_l_V(0);
-						tpStart = new TpCoords(i, j);
+						CellCoords coords = new CellCoords(i, j);
+						if(tpStartGroupId >=
+								tpEndGroupId) {
+							TpPeer newPeer = new TpPeer();
+							newPeer.setStartCoords(coords);
+							groups.add(newPeer);
+							tpGroupMap.put(coords, newPeer);
+						} else {
+							TpPeer existedPeer = groups.get(tpStartGroupId);
+							existedPeer.setStartCoords(coords);
+							tpGroupMap.put(coords, existedPeer);
+						}
+						tpStartGroupId++;
 					}
 					if(leftWallType==12) {
 						levelGrid[i][j].createTeleport_r_V(0);
-						tpEnd = new TpCoords(i, j);
+						CellCoords coords = new CellCoords(i, j - 1);
+						if(tpEndGroupId >= tpStartGroupId) {
+							TpPeer newPeer = new TpPeer();
+							newPeer.setEndCoords(coords);
+							groups.add(newPeer);
+							tpGroupMap.put(coords, newPeer);
+						} else {
+							TpPeer existedPeer = groups.get(tpEndGroupId);
+							existedPeer.setEndCoords(coords);
+							tpGroupMap.put(coords, existedPeer);
+						}
+						tpEndGroupId++;
 					}
 					// else set left wall as right wall of nearest left cell
 				} else {
@@ -135,11 +197,34 @@ public class LevelModel {
 				}
 				if(rightWallType==11) {
 					levelGrid[i][j].createTeleport_l_V(1);
-					tpStart = new TpCoords(i, j);
+					CellCoords coords = new CellCoords(i, j + 1);
+					if(tpStartGroupId >= tpEndGroupId) {
+						TpPeer newPeer = new TpPeer();
+						newPeer.setStartCoords(coords);
+						groups.add(newPeer);
+						tpGroupMap.put(coords, newPeer);
+					} else {
+						TpPeer existedPeer = groups.get(tpStartGroupId);
+						existedPeer.setStartCoords(coords);
+						tpGroupMap.put(coords, existedPeer);
+					}
+					tpStartGroupId++;
 				}
 				if(rightWallType==12) {
 					levelGrid[i][j].createTeleport_r_V(1);
-					tpEnd = new TpCoords(i, j);
+					CellCoords coords = new CellCoords(i, j);
+					if(tpEndGroupId >= tpStartGroupId) {
+						TpPeer newPeer = new TpPeer();
+						newPeer.setEndCoords(coords);
+						groups.add(newPeer);
+						tpGroupMap.put(coords, newPeer);
+					} else {
+						TpPeer existedPeer = groups.get(tpEndGroupId);
+						existedPeer.endRow = i;
+						existedPeer.endCol = j;
+						tpGroupMap.put(coords, existedPeer);
+					}
+					tpEndGroupId++;
 				}
 				
 				
@@ -442,13 +527,15 @@ public class LevelModel {
 	
 	private void updatePosition() {
 		if(motionType == MotionType.TP_LEFT) {
-			heroX = tpEnd.j;
-			heroY = tpEnd.i;
+			TpPeer toCoords = tpGroupMap.get(new CellCoords(heroY, heroX));
+			heroX = toCoords.endCol;
+			heroY = toCoords.endRow;
 			return;
 		}
 		if(motionType == MotionType.TP_RIGHT) {
-			heroX = tpStart.j;
-			heroY = tpStart.i;
+			TpPeer toCoords = tpGroupMap.get(new CellCoords(heroY, heroX));
+			heroX = toCoords.startCol;
+			heroY = toCoords.startRow;
 			return;
 		}
 		if(motionType == MotionType.FALL_BLANSH) heroY++;
