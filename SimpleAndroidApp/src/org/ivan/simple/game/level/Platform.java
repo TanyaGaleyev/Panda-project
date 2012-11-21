@@ -76,6 +76,18 @@ public class Platform {
 		case SLOPE:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.slope), 3, 1);
 			break;
+		case ONE_WAY_LEFT:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.one_way_left), 1, 8);
+			break;
+		case ONE_WAY_RIGHT:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.one_way_right), 1, 8);
+			break;
+		case ONE_WAY_DOWN:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.one_way_down), 1, 8);
+			break;
+		case ONE_WAY_UP:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.one_way_up), 1, 8);
+			break;
 		case NONE:
 			break;
 		}
@@ -166,11 +178,19 @@ public class Platform {
 				break;
 			}
 		}
+		if(type == PlatformType.ONE_WAY_DOWN && mt == MotionType.FALL) {
+			sprite.setAnimating(true);
+			sprite.playOnce = true;
+		}
 	}
 	
-	public void reactBeatRoof() {
-		if(type == PlatformType.SIMPLE) {
+	public void updateRoof(MotionType mt) {
+		if(mt == MotionType.BEAT_ROOF && type == PlatformType.SIMPLE) {
 			sprite.setAnimating(sprite.changeSet(3));
+			sprite.playOnce = true;
+		}
+		if(mt == MotionType.JUMP && mt.getStage() != 0 && type == PlatformType.ONE_WAY_UP) {
+			sprite.setAnimating(true);
 			sprite.playOnce = true;
 		}
 	}
@@ -189,6 +209,36 @@ public class Platform {
 			}
 			sprite.setAnimating(true);
 			sprite.playOnce = true;
+		}
+	}
+	
+	public void updateLeftWall(MotionType mt) {
+		if(type == PlatformType.ONE_WAY_LEFT) {
+			switch(mt) {
+			case JUMP_LEFT:
+			case FLY_LEFT:
+			case THROW_LEFT:
+				sprite.setAnimating(true);
+				sprite.playOnce = true;
+				break;
+			default:
+				break;
+			}
+		}
+	}
+	
+	public void updateRightWall(MotionType mt) {
+		if(type == PlatformType.ONE_WAY_RIGHT) {
+			switch(mt) {
+			case JUMP_RIGHT:
+			case FLY_RIGHT:
+			case THROW_RIGHT:
+				sprite.setAnimating(true);
+				sprite.playOnce = true;
+				break;
+			default:
+				break;
+			}
 		}
 	}
 	

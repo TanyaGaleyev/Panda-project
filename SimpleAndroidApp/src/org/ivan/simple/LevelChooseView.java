@@ -31,7 +31,6 @@ public class LevelChooseView extends SurfaceView {
 	private int[][] levels = {{3,2,1,1},{1,2,3,3}};
 	private byte[][] finishedLevels;
 	
-	private SurfaceHolder holder;
 	
 	/**
 	 * Border of levels to select
@@ -93,8 +92,7 @@ public class LevelChooseView extends SurfaceView {
 		for(int i = 0; i < levels.length; i++) {
 			finishedLevels[i] = new byte[levels[i].length];
 		}
-		holder = getHolder();
-		holder.addCallback(new SurfaceHolder.Callback() {
+		getHolder().addCallback(new SurfaceHolder.Callback() {
 			
 			public void surfaceDestroyed(SurfaceHolder holder) {				
 				boolean retry = true;
@@ -294,9 +292,9 @@ public class LevelChooseView extends SurfaceView {
 					performingAction = chooseAcion;
 					chooseAcion = UserControlType.IDLE;
 				}
-				Canvas c = holder.lockCanvas();
+				Canvas c = getHolder().lockCanvas();
 				onDraw(c);
-				holder.unlockCanvasAndPost(c);
+				getHolder().unlockCanvasAndPost(c);
 				try {
 					sleep(40);
 				} catch (InterruptedException e) {

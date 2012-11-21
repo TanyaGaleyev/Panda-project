@@ -16,6 +16,7 @@ public class LevelModel {
 	public int heroY;
 	private UserControlType controlType = UserControlType.IDLE;
 	private UserControlType bufferedControlType = UserControlType.IDLE;
+	private MotionType prevMotion = MotionType.STAY;
 	private MotionType motionType = MotionType.STAY;
 	private int prizesLeft = 0;
 	private boolean lose = false;
@@ -90,20 +91,8 @@ public class LevelModel {
 				int leftWallType = mylevel[i][j][0];
 				// create left wall only for first column's cells
 				if(j == 0) {
-					if(leftWallType==0){
-						levelGrid[i][j].createNone();
-					}
-					if(leftWallType==1){
-						levelGrid[i][j].createSimple_V(0);
-					}
-					if(leftWallType==9) {
-						levelGrid[i][j].createSpring(0);
-					}
-					if(leftWallType==10) {
-						levelGrid[i][j].createSpike_V(0);
-					}
+					levelGrid[i][j].createLeft(leftWallType);
 					if(leftWallType==11) {
-						levelGrid[i][j].createTeleport_l_V(0);
 						CellCoords coords = new CellCoords(i, j);
 						if(tpStartGroupId >=
 								tpEndGroupId) {
@@ -119,7 +108,6 @@ public class LevelModel {
 						tpStartGroupId++;
 					}
 					if(leftWallType==12) {
-						levelGrid[i][j].createTeleport_r_V(0);
 						CellCoords coords = new CellCoords(i, j - 1);
 						if(tpEndGroupId >= tpStartGroupId) {
 							TpPeer newPeer = new TpPeer();
@@ -141,62 +129,15 @@ public class LevelModel {
 				int roofType = mylevel[i][j][1];
 				// create roof only for first row's cells
 				if(i == 0) {
-					if(roofType==0){
-						levelGrid[i][j].createNone();
-					}
-					if(roofType==1){
-						levelGrid[i][j] .createSimple(1);
-					}
-					if(roofType==2){
-						levelGrid[i][j] .createReduce(1);
-					}
-					if(roofType==3){
-						levelGrid[i][j] .createAngleRight(1);
-					}
-					if(roofType==4){
-						levelGrid[i][j] .createAngleLeft(1);
-					}
-					if(roofType==5){
-						levelGrid[i][j] .createTrampoline(1);
-					}
-					if(roofType==6){
-						levelGrid[i][j] .createElecrto(1);
-					}
-					if(roofType==7){
-						levelGrid[i][j] .createTrowOutRight(1);
-					}
-					if(roofType==8){
-						levelGrid[i][j] .createTrowOutLeft(1);
-					}
-					if(roofType==10){
-						levelGrid[i][j] .createSpike(1);
-					}
-					if(roofType==13) {
-						levelGrid[i][j] .createSlick(1);
-					}
-					if(roofType==14) {
-						levelGrid[i][j] .createSlope(1);
-					}
+					levelGrid[i][j].createRoof(roofType);
 					// else set roof as floor of nearest upper cell
 				} else {
 					levelGrid[i][j].roof = levelGrid[i - 1][j].floor;
 				}
 
 				int rightWallType = mylevel[i][j][2];
-				if(rightWallType==0){
-					levelGrid[i][j] .createNone();
-				}
-				if(rightWallType==1){
-					levelGrid[i][j].createSimple_V(1);
-				}			
-				if(rightWallType==9) {
-					levelGrid[i][j].createSpring(1);
-				}
-				if(rightWallType==10) {
-					levelGrid[i][j].createSpike_V(1);
-				}
+				levelGrid[i][j] .createRight(rightWallType);
 				if(rightWallType==11) {
-					levelGrid[i][j].createTeleport_l_V(1);
 					CellCoords coords = new CellCoords(i, j + 1);
 					if(tpStartGroupId >= tpEndGroupId) {
 						TpPeer newPeer = new TpPeer();
@@ -211,7 +152,6 @@ public class LevelModel {
 					tpStartGroupId++;
 				}
 				if(rightWallType==12) {
-					levelGrid[i][j].createTeleport_r_V(1);
 					CellCoords coords = new CellCoords(i, j);
 					if(tpEndGroupId >= tpStartGroupId) {
 						TpPeer newPeer = new TpPeer();
@@ -229,42 +169,7 @@ public class LevelModel {
 				
 				
 				int floorType = mylevel[i][j][3];
-				if(floorType==0){
-					levelGrid[i][j].createNone();
-				}
-				if(floorType==1){
-					levelGrid[i][j] .createSimple(0);
-				}
-				if(floorType==2){
-					levelGrid[i][j] .createReduce(0);
-				}
-				if(floorType==3){
-					levelGrid[i][j] .createAngleRight(0);
-				}
-				if(floorType==4){
-					levelGrid[i][j] .createAngleLeft(0);
-				}
-				if(floorType==5){
-					levelGrid[i][j] .createTrampoline(0);
-				}
-				if(floorType==6){
-					levelGrid[i][j] .createElecrto(0);
-				}
-				if(floorType==7){
-					levelGrid[i][j] .createTrowOutRight(0);
-				}
-				if(floorType==8){
-					levelGrid[i][j] .createTrowOutLeft(0);
-				}
-				if(floorType==10){
-					levelGrid[i][j] .createSpike(0);
-				}
-				if(floorType==13){
-					levelGrid[i][j] .createSlick(0);
-				}
-				if(floorType==14){
-					levelGrid[i][j] .createSlope(0);
-				}
+				levelGrid[i][j].createFloor(floorType);
 				
 				if(i == winCellCoord[0] && j == winCellCoord[1]) {
 					winCell = levelGrid[i][j];
@@ -358,6 +263,9 @@ public class LevelModel {
 				motionType=MotionType.THROW_LEFT;
 			} else {
 				moveLeft();
+				if(motionType == MotionType.TP_LEFT) {
+					prevMotion = MotionType.THROW_LEFT;
+				}
 			}	
 			break;
 		case  THROW_OUT_RIGHT:
@@ -365,6 +273,9 @@ public class LevelModel {
 				motionType=MotionType.THROW_RIGHT;
 			} else {
 				moveRight();
+				if(motionType == MotionType.TP_RIGHT) {
+					prevMotion = MotionType.THROW_RIGHT;
+				}
 			}	
 			break;
 		case SLICK:
@@ -381,6 +292,14 @@ public class LevelModel {
 				moveLeft();
 			} else if(getHeroCell().getFloor().getStatus() == 2) {
 				moveRight();
+			} else {
+				stayCheck();
+			}
+			break;
+		case ONE_WAY_DOWN:
+			if(controlType == UserControlType.DOWN) {
+				if(heroY + 1 > row - 1) lose = true;
+				motionType = MotionType.FALL;
 			} else {
 				stayCheck();
 			}
@@ -410,7 +329,7 @@ public class LevelModel {
 		 */
 		if(prizesLeft == 0) {
 			if(winCell.getFloor().getType() != PlatformType.WIN) {
-				winCell.createWin(0);
+				winCell.createFloor(PlatformType.WIN);
 			}
 			if(getHeroCell() == winCell) {
 				complete = true;
@@ -419,7 +338,22 @@ public class LevelModel {
 		if(motionType.isUncontrolable()) {
 			controlType = UserControlType.IDLE;
 		}
-		motionType.continueMotion();
+		if(motionType == MotionType.TP_LEFT || motionType == MotionType.TP_RIGHT) {
+			switch(prevMotion) {
+			case JUMP_LEFT:
+			case THROW_LEFT:
+			case FLY_LEFT:
+			case JUMP_RIGHT:
+			case THROW_RIGHT:
+			case FLY_RIGHT:
+				motionType = prevMotion;
+				break;
+			default: 
+				break;
+			}
+		}
+		prevMotion = motionType;
+		motionType.continueMotion();		
 		switch(motionType){
 		case JUMP:
 			switch(controlType) {
@@ -434,6 +368,7 @@ public class LevelModel {
 				break;
 			case IDLE:
 			case UP:	
+			default:
 				jump();
 				break;
 			}
@@ -470,11 +405,13 @@ public class LevelModel {
 			platformsCheck();
 			break;
 		case TP_LEFT:
-			if(!MotionType.FLY_LEFT.isUncontrolable() && motionAvaible(MotionType.JUMP_LEFT)) {
-				motionType = MotionType.FLY_LEFT;
-			} else {
+//			if(!MotionType.FLY_LEFT.isUncontrolable() && motionAvaible(MotionType.JUMP_LEFT)) {
+//				motionType = MotionType.FLY_LEFT;
+//			} else if(MotionType.THROW_LEFT.getStage() == 1 && motionAvaible(MotionType.JUMP_LEFT)) {
+//				motionType = MotionType.THROW_LEFT;
+//			} else {
 				platformsCheck();
-			}
+//			}
 			break;
 		case FLY_LEFT:
 			switch(controlType) {
@@ -496,11 +433,11 @@ public class LevelModel {
 			platformsCheck();
 			break;
 		case TP_RIGHT:
-			if(!MotionType.FLY_RIGHT.isUncontrolable() && motionAvaible(MotionType.JUMP_RIGHT)) {
-				motionType = MotionType.FLY_RIGHT;
-			} else {
+//			if(!MotionType.FLY_RIGHT.isUncontrolable() && motionAvaible(MotionType.JUMP_RIGHT)) {
+//				motionType = MotionType.FLY_RIGHT;
+//			} else {
 				platformsCheck();
-			}
+//			}
 			break;
 		case FLY_RIGHT:
 			switch(controlType) {
@@ -547,22 +484,25 @@ public class LevelModel {
 		switch (mt) {
 		case JUMP:
 			if(mt.getYSpeed() != 0 && getHeroCell().getRoof().getType() == PlatformType.SPIKE) lose = true;
-			if(mt.getYSpeed() != 0 && getHeroCell().getRoof().getType() != PlatformType.NONE) return false;
 			if(heroY + mt.getYSpeed() < 0) return false;
+			if(mt.getYSpeed() != 0 && getHeroCell().getRoof().getType() == PlatformType.ONE_WAY_UP) return true;
+			if(mt.getYSpeed() != 0 && getHeroCell().getRoof().getType() != PlatformType.NONE) return false;
 			return true;
 		case FLY_LEFT:
 		case JUMP_LEFT:
 		case THROW_LEFT:
 			if(getHeroCell().getLeft().getType() == PlatformType.SPIKE_V) lose = true;
-			if(getHeroCell().getLeft().getType() != PlatformType.NONE) return false;
 			if(heroX + mt.getXSpeed() < 0) return false;
+			if(getHeroCell().getLeft().getType() == PlatformType.ONE_WAY_LEFT) return true;
+			if(getHeroCell().getLeft().getType() != PlatformType.NONE) return false;
 			return true;
 		case FLY_RIGHT:
 		case JUMP_RIGHT:
 		case THROW_RIGHT:	
 			if(getHeroCell().getRight().getType() == PlatformType.SPIKE_V) lose = true;
-			if(getHeroCell().getRight().getType() != PlatformType.NONE) return false;
 			if(heroX + mt.getXSpeed() > col - 1) return false;
+			if(getHeroCell().getRight().getType() == PlatformType.ONE_WAY_RIGHT) return true;
+			if(getHeroCell().getRight().getType() != PlatformType.NONE) return false;
 			return true;
 		case FALL:
 			if(getHeroCell().getFloor().getType() != PlatformType.NONE) return false;

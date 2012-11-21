@@ -223,7 +223,7 @@ public class Hero {
 			}
 			break;
 		case THROW_LEFT:
-			if(finishingMotion == currentMotion && finishingMotion.getStage() == 1) {
+			if(currentMotion.getStage() == 1) {
 				activeSprite.changeSet(24);
 			} else if(finishingMotion == MotionType.JUMP_LEFT || finishingMotion == MotionType.THROW_LEFT) {
 				activeSprite.changeSet(21);
@@ -232,7 +232,7 @@ public class Hero {
 			}
 			break;
 		case THROW_RIGHT:
-			if(finishingMotion == currentMotion  && finishingMotion.getStage() == 1) {
+			if(currentMotion.getStage() == 1) {
 				activeSprite.changeSet(25);
 			} else if(finishingMotion == MotionType.JUMP_RIGHT || finishingMotion == MotionType.THROW_RIGHT) {
 				activeSprite.changeSet(19);
@@ -357,11 +357,15 @@ public class Hero {
 		currentMotion = newMotion;
 		if(finishingMotion != currentMotion) {
 			if(!(finishingMotion == MotionType.FLY_LEFT && currentMotion == MotionType.TP_LEFT) &&
-					!(finishingMotion == MotionType.FLY_RIGHT && currentMotion == MotionType.TP_RIGHT)) {
+					!(finishingMotion == MotionType.FLY_RIGHT && currentMotion == MotionType.TP_RIGHT) &&
+					!(finishingMotion == MotionType.THROW_LEFT && currentMotion == MotionType.TP_LEFT) &&
+					!(finishingMotion == MotionType.THROW_RIGHT && currentMotion == MotionType.TP_RIGHT)) {
 				finishingMotion.finishMotion();
 			}
 			if(!(finishingMotion == MotionType.TP_LEFT && currentMotion == MotionType.FLY_LEFT) &&
-					!(finishingMotion == MotionType.TP_RIGHT && currentMotion == MotionType.FLY_RIGHT)) {
+					!(finishingMotion == MotionType.TP_RIGHT && currentMotion == MotionType.FLY_RIGHT) &&
+					!(finishingMotion == MotionType.TP_LEFT && currentMotion == MotionType.THROW_LEFT) &&
+					!(finishingMotion == MotionType.TP_RIGHT && currentMotion == MotionType.THROW_RIGHT)) {
 				currentMotion.startMotion();
 			}
 		}
@@ -399,15 +403,6 @@ public class Hero {
 		activeSprite.onDraw(canvas, heroX - activeSprite.getWidth() / 2, heroY - activeSprite.getHeight() / 2, update);
 		if(currentMotion == MotionType.TP_LEFT || currentMotion == MotionType.TP_RIGHT) {
 			shadeSprite.onDraw(canvas, prevX - shadeSprite.getWidth() / 2, prevY - shadeSprite.getHeight() / 2, update);
-		}
-	}
-	
-	public void onDrawShade() {
-		if(currentMotion == MotionType.TP_LEFT) {
-			
-		}
-		if(currentMotion == MotionType.TP_RIGHT) {
-			
 		}
 	}
 	

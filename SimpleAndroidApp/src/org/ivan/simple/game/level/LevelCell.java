@@ -12,141 +12,36 @@ public class LevelCell {
 	public LevelCell() {
 	}
 	
-	public void createNone() {
-	}
-	public void createSimple(int side) {
-		if(side==0){
-		floor = new Platform(PlatformType.SIMPLE);
-		}else{
-		roof = new Platform(PlatformType.SIMPLE);
-		}
-	}
-
-	public void createSimple_V(int side) {
-		if(side==0){
-		left_wall = new Platform(PlatformType.SIMPLE_V);
-		}else{
-		right_wall = new Platform(PlatformType.SIMPLE_V);
-		}
+	public void createRoof(int typeid) {
+		roof = new Platform(PlatformType.getTypeById(typeid, true));
 	}
 	
-	public void createElecrto(int side) {
-		if(side==0){
-		floor = new Platform(PlatformType.ELECTRO);
-		}else{
-		roof = new Platform(PlatformType.ELECTRO);
-		}
+	public void createFloor(int typeid) {
+		floor = new Platform(PlatformType.getTypeById(typeid, true));
 	}
 	
-	public void createReduce(int side) {
-		if(side==0){
-		floor = new Platform(PlatformType.REDUCE);
-		}else{
-		roof = new Platform(PlatformType.REDUCE);
-		}
+	public void createLeft(int typeid) {
+		left_wall = new Platform(PlatformType.getTypeById(typeid, false));
 	}
 	
-	public void createAngleRight(int side) {
-		if(side==0){
-		floor = new Platform(PlatformType.ANGLE_RIGHT);
-		}else{
-		roof = new Platform(PlatformType.ANGLE_RIGHT);
-		}
+	public void createRight(int typeid) {
+		right_wall = new Platform(PlatformType.getTypeById(typeid, false));
 	}
 	
-	public void createAngleLeft(int side) {
-		if(side==0){
-		floor = new Platform(PlatformType.ANGLE_LEFT);
-		}else{
-		roof = new Platform(PlatformType.ANGLE_LEFT);
-		}
+	public void createRoof(PlatformType pt) {
+		roof = new Platform(pt);
 	}
 	
-	public void createTrowOutLeft(int side) {
-		if(side==0){
-		floor = new Platform(PlatformType.THROW_OUT_LEFT);
-		}else{
-		roof = new Platform(PlatformType.THROW_OUT_LEFT);
-		}
-	}
-	public void createTrowOutRight(int side) {
-		if(side==0){
-		floor = new Platform(PlatformType.THROW_OUT_RIGHT);
-		}else{
-		roof = new Platform(PlatformType.THROW_OUT_RIGHT);
-		}
+	public void createFloor(PlatformType pt) {
+		floor = new Platform(pt);
 	}
 	
-	public void createTrampoline(int side) {
-		if (side==0){
-			floor = new Platform(PlatformType.TRAMPOLINE);
-		}else{
-			roof = new Platform(PlatformType.TRAMPOLINE);
-		}
+	public void createLeft(PlatformType pt) {
+		left_wall = new Platform(pt);
 	}
 	
-	public void createSpring(int side) {
-		if(side==0){
-		left_wall = new Platform(PlatformType.SPRING);
-		}else{
-		right_wall = new Platform(PlatformType.SPRING);
-		}
-	}
-	
-	public void createSpike(int side) {
-		if(side==0){
-		floor = new Platform(PlatformType.SPIKE);
-		}else{
-		roof = new Platform(PlatformType.SPIKE);
-		}
-	}
-	
-	public void createSpike_V(int side) {
-		if(side==0){
-		left_wall = new Platform(PlatformType.SPIKE_V);
-		}else{
-		right_wall = new Platform(PlatformType.SPIKE_V);
-		}
-	}
-	
-	public void createWin(int side) {
-		if(side==0){
-		floor = new Platform(PlatformType.WIN);
-		}else{
-		roof = new Platform(PlatformType.WIN);
-		}
-	}
-	
-	public void createTeleport_l_V(int side) {
-		if(side==0){
-		left_wall = new Platform(PlatformType.TELEPORT_L_V);
-		}else{
-		right_wall = new Platform(PlatformType.TELEPORT_L_V);
-		}
-	}
-	
-	public void createTeleport_r_V(int side) {
-		if(side==0){
-		left_wall = new Platform(PlatformType.TELEPORT_R_V);
-		}else{
-		right_wall = new Platform(PlatformType.TELEPORT_R_V);
-		}
-	}
-	
-	public void createSlick(int side) {
-		if(side==0){
-		floor = new Platform(PlatformType.SLICK);
-		}else{
-		roof = new Platform(PlatformType.SLICK);
-		}
-	}
-	
-	public void createSlope(int side) {
-		if(side==0){
-		floor = new Platform(PlatformType.SLOPE);
-		}else{
-		roof = new Platform(PlatformType.SLOPE);
-		}
+	public void createRight(PlatformType pt) {
+		right_wall = new Platform(pt);
 	}
 	
 	public void setPrize(int prizeType) {
@@ -177,15 +72,15 @@ public class LevelCell {
 	}
 	
 	public void updateCell(MotionType mt, MotionType prevMt) {
-		if(mt == MotionType.BEAT_ROOF) {
-			roof.reactBeatRoof();
-		}
+		roof.updateRoof(mt);
 		if(mt == MotionType.FLY_LEFT && mt.isUncontrolable()) {
 			right_wall.highlightSpring(prevMt);
 		}
 		if(mt == MotionType.FLY_RIGHT && mt.isUncontrolable()) {
 			left_wall.highlightSpring(prevMt);
 		}
+		right_wall.updateRightWall(mt);
+		left_wall.updateLeftWall(mt);
 		floor.changeSet(mt);
 	}
 }
