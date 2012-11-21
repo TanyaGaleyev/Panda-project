@@ -77,16 +77,16 @@ public class Platform {
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.slope), 3, 1);
 			break;
 		case ONE_WAY_LEFT:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.one_way_left), 1, 8);
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.one_way_right), 1, 16);
 			break;
 		case ONE_WAY_RIGHT:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.one_way_right), 1, 8);
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.one_way_left), 1, 16);
 			break;
 		case ONE_WAY_DOWN:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.one_way_down), 1, 8);
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.one_way_down), 1, 16);
 			break;
 		case ONE_WAY_UP:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.one_way_up), 1, 8);
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.one_way_up), 1, 16);
 			break;
 		case NONE:
 			break;
