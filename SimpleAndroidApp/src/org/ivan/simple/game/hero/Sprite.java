@@ -30,6 +30,11 @@ public class Sprite {
 		singleWidth = bmp.getWidth() / BMP_COLS;
         singleHeight = bmp.getHeight() / BMP_ROWS;
 	}
+	
+	public Sprite(Bitmap bmp, int rows, int cols, int set) {
+		this(bmp, rows, cols);
+		changeSet(set);
+	}
 
 	public void onDraw(Canvas canvas, int x, int y, boolean update) {
 		int srcX = currentFrame * singleWidth;

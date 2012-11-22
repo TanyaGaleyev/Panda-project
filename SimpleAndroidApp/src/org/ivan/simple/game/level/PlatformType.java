@@ -24,6 +24,8 @@ public enum PlatformType {
 	ONE_WAY_RIGHT,
 	ONE_WAY_DOWN,
 	ONE_WAY_UP,
+	SWITCH,
+	UNLOCK,
 	
 	NONE;
 	
@@ -62,6 +64,8 @@ public enum PlatformType {
 		case 14: return SLOPE;
 		case 15: return horizontal ? ONE_WAY_DOWN : ONE_WAY_RIGHT;
 		case 16: return horizontal ? ONE_WAY_UP : ONE_WAY_LEFT;
+		case 17: return SWITCH;
+		case 18: return UNLOCK;
 		default:
 			return NONE;
 		}

@@ -79,8 +79,8 @@ public class LevelCell {
 		if(mt == MotionType.FLY_RIGHT && mt.isUncontrolable()) {
 			left_wall.highlightSpring(prevMt);
 		}
-		right_wall.updateRightWall(mt);
-		left_wall.updateLeftWall(mt);
+		right_wall.updateRightWall(mt, prevMt);
+		left_wall.updateLeftWall(mt, prevMt);
 		floor.changeSet(mt);
 	}
 }

@@ -10,6 +10,7 @@ import org.ivan.simple.game.level.LevelModel;
 import android.view.MotionEvent;
 
 public class GameControl {
+	private GameView view;
 	private LevelModel model;
 	private Hero hero;
 	public UserControlType pressedControl = UserControlType.IDLE;
@@ -20,7 +21,8 @@ public class GameControl {
 	private float[] startPressedX = new float[2];
 	private int slideSenderID;
 	
-	public GameControl(LevelModel model, Hero hero) {
+	public GameControl(GameView view, LevelModel model, Hero hero) {
+		this.view  = view;
 		this.model = model;
 		this.hero = hero;
 	}
@@ -204,10 +206,23 @@ public class GameControl {
 		}
 	}
 	
-	protected boolean pause(MotionEvent event) {
-		if(event.getX() < 100 && event.getY() < 100 &&
-				event.getAction() == MotionEvent.ACTION_DOWN) {
-			return true;
+	protected boolean processServiceButton(MotionEvent event) {
+		if(event.getX() >= 0 && event.getX() < 40 && event.getAction() == MotionEvent.ACTION_DOWN) {
+			float y = event.getY();
+			if(y >= 50 && y < 80) {
+				if(view.isRunning()) {
+					view.stopManager();
+				} else {
+					view.startManager();
+				}
+				return true;
+			} else if(y >= 90 && y < 120) {
+				((GameActivity) view.getContext()).restart();
+				return true;
+			} else if(y >= 130 && y < 160) {
+				((GameActivity) view.getContext()).switchBackToChooseActivity(view.isComplete());
+				return true;
+			}
 		}
 		return false;
 	}

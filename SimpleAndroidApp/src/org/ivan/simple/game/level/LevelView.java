@@ -31,18 +31,18 @@ public class LevelView {
 	private void drawCell(Canvas canvas, int i, int j, boolean update) {
 		LevelCell cell = model.getCell(i, j);
 		// Careful with duplicated walls
-		if(cell.getFloor().getSprite() != null) {
+		if(cell.getFloor().getType() != PlatformType.NONE) {
 			cell.getFloor().getSprite().onDraw(canvas, getXByIndex(j), getYByIndex(i)-15, update);
 		}
 		// Draw left wall ONLY for most left cells 
-		if(cell.getLeft().getSprite() != null && j == 0) {
+		if(cell.getLeft().getType() != PlatformType.NONE && j == 0) {
 			cell.getLeft().getSprite().onDraw(canvas, getXByIndex(j)-15, getYByIndex(i)-GameView.GRID_STEP, update);
 		}
 		// Draw roof ONLY for highest cells
-		if(cell.getRoof().getSprite() != null && i == 0) {
+		if(cell.getRoof().getType() != PlatformType.NONE && i == 0) {
 			cell.getRoof().getSprite().onDraw(canvas, getXByIndex(j), getYByIndex(i)-15-GameView.GRID_STEP, update);
 		}	
-		if(cell.getRight().getSprite() != null) {
+		if(cell.getRight().getType() != PlatformType.NONE) {
 			cell.getRight().getSprite().onDraw(canvas, getXByIndex(j)+GameView.GRID_STEP-15, getYByIndex(i)-GameView.GRID_STEP, update);
 		}
 		if(cell.prize != null) {

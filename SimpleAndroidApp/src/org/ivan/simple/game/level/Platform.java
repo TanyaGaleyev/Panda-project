@@ -9,6 +9,7 @@ public class Platform {
 	private PlatformType type = PlatformType.NONE;
 	private Sprite sprite = null;
 	private int currentStatus = 0;
+	private static int switchHelper = 0;
 
 	public Platform(PlatformType type) {
 		if(type == null) return;
@@ -87,6 +88,14 @@ public class Platform {
 			break;
 		case ONE_WAY_UP:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.one_way_up), 1, 16);
+			break;
+		case SWITCH:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.switch_platform), 4, 1, switchHelper);
+			currentStatus = switchHelper;
+			switchHelper = (switchHelper + 1) % 4;
+			break;
+		case UNLOCK:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.unlock_platform), 1, 1);
 			break;
 		case NONE:
 			break;
@@ -212,7 +221,7 @@ public class Platform {
 		}
 	}
 	
-	public void updateLeftWall(MotionType mt) {
+	public void updateLeftWall(MotionType mt, MotionType prevMt) {
 		if(type == PlatformType.ONE_WAY_LEFT) {
 			switch(mt) {
 			case JUMP_LEFT:
@@ -225,9 +234,13 @@ public class Platform {
 				break;
 			}
 		}
+		if(type == PlatformType.SWITCH && mt == MotionType.JUMP_LEFT_WALL) {
+			currentStatus = (currentStatus + 1) % 4;
+			sprite.changeSet(currentStatus);
+		}
 	}
 	
-	public void updateRightWall(MotionType mt) {
+	public void updateRightWall(MotionType mt, MotionType prevMt) {
 		if(type == PlatformType.ONE_WAY_RIGHT) {
 			switch(mt) {
 			case JUMP_RIGHT:
@@ -240,6 +253,14 @@ public class Platform {
 				break;
 			}
 		}
+		if(type == PlatformType.SWITCH && mt == MotionType.JUMP_RIGHT_WALL) {
+			currentStatus = (currentStatus + 1) % 4;
+			sprite.changeSet(currentStatus);
+		}
+	}
+	
+	public void unlock() {
+		type = PlatformType.NONE;
 	}
 	
 	public int getStatus() {

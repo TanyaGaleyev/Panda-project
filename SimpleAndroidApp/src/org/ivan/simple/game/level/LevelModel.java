@@ -23,6 +23,8 @@ public class LevelModel {
 	private boolean complete = false;
 	private LevelCell winCell;
 	private HashMap<CellCoords, TpPeer> tpGroupMap = new HashMap<CellCoords, TpPeer>();
+	private ArrayList<Platform> switchList = new ArrayList<Platform>();
+	private ArrayList<Platform> unlockList = new ArrayList<Platform>();
 	
 	private class CellCoords {
 		int i;
@@ -121,6 +123,12 @@ public class LevelModel {
 						}
 						tpEndGroupId++;
 					}
+					if(leftWallType==17) {
+						switchList.add(levelGrid[i][j].getLeft());
+					}
+					if(leftWallType==18) {
+						unlockList.add(levelGrid[i][j].getLeft());
+					}
 					// else set left wall as right wall of nearest left cell
 				} else {
 					levelGrid[i][j].left_wall = levelGrid[i][j - 1].right_wall;
@@ -165,6 +173,12 @@ public class LevelModel {
 						tpGroupMap.put(coords, existedPeer);
 					}
 					tpEndGroupId++;
+				}
+				if(rightWallType==17) {
+					switchList.add(levelGrid[i][j].getRight());
+				}
+				if(rightWallType==18) {
+					unlockList.add(levelGrid[i][j].getRight());
 				}
 				
 				
@@ -335,6 +349,7 @@ public class LevelModel {
 				complete = true;
 			}
 		}
+		tryToUnlock();
 		if(motionType.isUncontrolable()) {
 			controlType = UserControlType.IDLE;
 		}
@@ -539,6 +554,18 @@ public class LevelModel {
 	
 	public boolean isLost() {
 		return lose;
+	}
+	
+	public boolean tryToUnlock() {
+		if(unlockList.isEmpty()) return true;
+		if(switchList.isEmpty()) return false;
+		int status = switchList.get(0).getStatus();
+		for(Platform wall : switchList) {
+			if(wall.getStatus() != status) return false;
+		}
+		unlockList.get(0).unlock();
+		unlockList.remove(0);
+		return true;
 	}
 	
 	public void setControlType(UserControlType control) {

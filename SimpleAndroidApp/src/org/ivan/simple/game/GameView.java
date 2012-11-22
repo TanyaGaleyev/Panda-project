@@ -39,6 +39,8 @@ public class GameView extends SurfaceView {
 	
 	private Bitmap background;
 	private Bitmap pause;
+	private Bitmap restart;
+	private Bitmap back;
 	
 	private LevelCell prevCell;
 	private MotionType prevMotion;
@@ -114,6 +116,8 @@ public class GameView extends SurfaceView {
 	private void initSurface() {
 		background = ImageProvider.getBitmap(R.drawable.background_1);
 		pause = ImageProvider.getBitmap(R.drawable.pause);
+		restart = ImageProvider.getBitmap(R.drawable.restart);
+		back = ImageProvider.getBitmap(R.drawable.back);
 		
 		GRID_STEP = hero.getSprite().getWidth() % 4 == 0 ? hero.getSprite().getWidth() : (hero.getSprite().getWidth() / 4  + 1) * 4;
 		TOP_BOUND = GRID_STEP;
@@ -140,7 +144,9 @@ public class GameView extends SurfaceView {
 	protected void onDraw(Canvas canvas, boolean update) {
 		canvas.drawColor(Color.WHITE);
 		canvas.drawBitmap(background, 0, 0, null);
-		canvas.drawBitmap(pause, 10, 30, null);
+		canvas.drawBitmap(pause, 10, 50, null);
+		canvas.drawBitmap(restart, 10, 90, null);
+		canvas.drawBitmap(back, 10, 130, null);
 		level.onDraw(canvas, update);
 		hero.onDraw(canvas, update);
 //		drawGrid(canvas);
@@ -332,7 +338,7 @@ public class GameView extends SurfaceView {
 		hero = new Hero();
 		this.levId = levId; 
 		level = new LevelView(levId);
-		control = new GameControl(level.model, hero);
+		control = new GameControl(this, level.model, hero);
 		prevCell = level.model.getHeroCell();
 		prevMotion = level.model.getMotionType();
 	}
@@ -341,14 +347,13 @@ public class GameView extends SurfaceView {
 		return levId;
 	}
 	
+	protected boolean isRunning() {
+		return gameLoopThread.isRunning();
+	}
+	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if(control.pause(event)) {
-			if(gameLoopThread.isRunning()) {
-				stopManager();
-			} else {
-				startManager();
-			}
+		if(control.processServiceButton(event)) {
 			return true;
 		}
 		if(!paused) {

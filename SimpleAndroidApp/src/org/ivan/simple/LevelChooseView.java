@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -28,7 +29,7 @@ public class LevelChooseView extends SurfaceView {
 	/**
 	 * Matrix with levels IDs
 	 */
-	private int[][] levels = {{3,2,1,1},{1,2,3,3}};
+	private int[][] levels = {{3,2,1,1},{4,2,3,3}};
 	private byte[][] finishedLevels;
 	
 	
@@ -44,6 +45,8 @@ public class LevelChooseView extends SurfaceView {
 	
 	// Backgroung image of LevelChooseView
 	private Bitmap background;
+	
+	private Paint textPaint;
 	
 	/**
 	 * Marker is a panda image moving from one level to another (choosing level)
@@ -61,8 +64,6 @@ public class LevelChooseView extends SurfaceView {
 	// buffer choose level action
 	private UserControlType performingAction = UserControlType.IDLE;
 	private UserControlType chooseAcion = UserControlType.IDLE;
-	
-	private int lvNumColor = Color.WHITE;
 
 	public LevelChooseView(Context context) {
 		super(context);
@@ -80,14 +81,11 @@ public class LevelChooseView extends SurfaceView {
 	}
 	
 	private final void init() {
-		double r = Math.random();
-		if(r < 0.33) {
-			lvNumColor = Color.RED;
-		} else if(r < 0.66) {
-			lvNumColor = Color.CYAN;
-		} else {
-			lvNumColor = Color.GREEN;
-		}
+		textPaint = new Paint();
+		textPaint.setColor(Color.WHITE);
+		textPaint.setTextSize(48);
+		Typeface font = Typeface.createFromAsset(getContext().getAssets(), "fonts/PTS75F.ttf");
+		textPaint.setTypeface(font);
 		finishedLevels = new byte[levels.length][];
 		for(int i = 0; i < levels.length; i++) {
 			finishedLevels[i] = new byte[levels[i].length];
@@ -148,10 +146,7 @@ public class LevelChooseView extends SurfaceView {
 				int x = getScreenX(j);
 				int y = getScreenY(i);
 				drawOnCenterCoordinates(border, x, y, canvas);
-				Paint paint = new Paint();
-				paint.setColor(lvNumColor);
-				paint.setTextSize(48);
-				canvas.drawText("" + levels[i][j], x - 16, y + 16, paint);
+				canvas.drawText("" + levels[i][j], x - 16, y + 16, textPaint);
 				if(finishedLevels[i][j] != 0) {
 					drawOnCenterCoordinates(cross, x + border.getWidth() / 4, y + border.getHeight() / 4, canvas);
 				}
