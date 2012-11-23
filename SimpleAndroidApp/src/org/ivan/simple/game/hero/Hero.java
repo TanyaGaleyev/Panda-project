@@ -251,7 +251,7 @@ public class Hero {
 			case JUMP:
 			case THROW_LEFT:
 			case FLY_LEFT:
-			case JUMP_RIGHT_WALL: 
+//			case JUMP_RIGHT_WALL: 
 				activeSprite.changeSet(12);
 				break;
 			default:
@@ -265,7 +265,7 @@ public class Hero {
 			case JUMP:
 			case THROW_RIGHT:
 			case FLY_RIGHT:
-			case JUMP_LEFT_WALL:
+//			case JUMP_LEFT_WALL:
 				activeSprite.changeSet(11);
 				break;
 			default:

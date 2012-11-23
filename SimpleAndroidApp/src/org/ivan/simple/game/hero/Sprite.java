@@ -56,7 +56,8 @@ public class Sprite {
         }
 	}
 	
-	public void gotoAndStop(int fr){	
+	public void gotoAndStop(int fr){
+		if(fr >= BMP_COLS) return;
 		currentFrame=fr;
 	}
 	public int getWidth() {

@@ -31,20 +31,16 @@ public class LevelView {
 	private void drawCell(Canvas canvas, int i, int j, boolean update) {
 		LevelCell cell = model.getCell(i, j);
 		// Careful with duplicated walls
-		if(cell.getFloor().getType() != PlatformType.NONE) {
-			cell.getFloor().getSprite().onDraw(canvas, getXByIndex(j), getYByIndex(i)-15, update);
-		}
+		cell.getFloor().onDraw(canvas, getXByIndex(j), getYByIndex(i)-15, update);
 		// Draw left wall ONLY for most left cells 
-		if(cell.getLeft().getType() != PlatformType.NONE && j == 0) {
-			cell.getLeft().getSprite().onDraw(canvas, getXByIndex(j)-15, getYByIndex(i)-GameView.GRID_STEP, update);
+		if(j == 0) {
+			cell.getLeft().onDraw(canvas, getXByIndex(j)-15, getYByIndex(i)-GameView.GRID_STEP, update);
 		}
 		// Draw roof ONLY for highest cells
-		if(cell.getRoof().getType() != PlatformType.NONE && i == 0) {
-			cell.getRoof().getSprite().onDraw(canvas, getXByIndex(j), getYByIndex(i)-15-GameView.GRID_STEP, update);
+		if(i == 0) {
+			cell.getRoof().onDraw(canvas, getXByIndex(j), getYByIndex(i)-15-GameView.GRID_STEP, update);
 		}	
-		if(cell.getRight().getType() != PlatformType.NONE) {
-			cell.getRight().getSprite().onDraw(canvas, getXByIndex(j)+GameView.GRID_STEP-15, getYByIndex(i)-GameView.GRID_STEP, update);
-		}
+		cell.getRight().onDraw(canvas, getXByIndex(j)+GameView.GRID_STEP-15, getYByIndex(i)-GameView.GRID_STEP, update);
 		if(cell.prize != null) {
 			cell.prize.onDraw(canvas, getXByIndex(j), getYByIndex(i), update);
 		}

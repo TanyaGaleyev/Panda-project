@@ -5,6 +5,8 @@ import org.ivan.simple.R;
 import org.ivan.simple.game.MotionType;
 import org.ivan.simple.game.hero.Sprite;
 
+import android.graphics.Canvas;
+
 public class Platform {
 	private PlatformType type = PlatformType.NONE;
 	private Sprite sprite = null;
@@ -90,12 +92,18 @@ public class Platform {
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.one_way_up), 1, 16);
 			break;
 		case SWITCH:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.switch_platform), 4, 1, switchHelper);
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.switch_platform), 4, 8, switchHelper);
 			currentStatus = switchHelper;
 			switchHelper = (switchHelper + 1) % 4;
 			break;
 		case UNLOCK:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.unlock_platform), 1, 1);
+			break;
+		case STRING:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.string_platform), 1, 16);
+			break;
+		case LIMIT:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.limit_way), 4, 8);
 			break;
 		case NONE:
 			break;
@@ -104,10 +112,6 @@ public class Platform {
 	
 	public PlatformType getType() {
 		return type;
-	}
-	
-	public Sprite getSprite() {
-		return sprite;
 	}
 	
 	public void changeSet(MotionType mt) {
@@ -186,10 +190,22 @@ public class Platform {
 				sprite.playOnce = true;;
 				break;
 			}
+			return;
 		}
 		if(type == PlatformType.ONE_WAY_DOWN && mt == MotionType.FALL) {
 			sprite.setAnimating(true);
 			sprite.playOnce = true;
+			return;
+		}
+		if(type == PlatformType.STRING && mt == MotionType.STAY) {
+			sprite.setAnimating(true);
+			sprite.playOnce = true;
+			type = PlatformType.NONE;
+			return;
+		}
+		if(type == PlatformType.NONE) {
+			sprite = null;
+			return;
 		}
 	}
 	
@@ -222,48 +238,75 @@ public class Platform {
 	}
 	
 	public void updateLeftWall(MotionType mt, MotionType prevMt) {
-		if(type == PlatformType.ONE_WAY_LEFT) {
-			switch(mt) {
-			case JUMP_LEFT:
-			case FLY_LEFT:
-			case THROW_LEFT:
+		switch(mt) {
+		case JUMP_LEFT:
+		case FLY_LEFT:
+		case THROW_LEFT:
+			if(type == PlatformType.ONE_WAY_LEFT) {
 				sprite.setAnimating(true);
 				sprite.playOnce = true;
-				break;
-			default:
-				break;
 			}
+			if(type == PlatformType.LIMIT && currentStatus < 3) {
+				currentStatus = currentStatus + 1;
+				sprite.changeSet(currentStatus);
+				sprite.gotoAndStop(1);
+				sprite.setAnimating(true);
+				sprite.playOnce = true;
+			}
+			break;
+		default:
+			break;
 		}
 		if(type == PlatformType.SWITCH && mt == MotionType.JUMP_LEFT_WALL) {
 			currentStatus = (currentStatus + 1) % 4;
 			sprite.changeSet(currentStatus);
+			sprite.gotoAndStop(1);
+			sprite.setAnimating(true);
+			sprite.playOnce = true;
 		}
 	}
 	
 	public void updateRightWall(MotionType mt, MotionType prevMt) {
-		if(type == PlatformType.ONE_WAY_RIGHT) {
-			switch(mt) {
-			case JUMP_RIGHT:
-			case FLY_RIGHT:
-			case THROW_RIGHT:
+		switch(mt) {
+		case JUMP_RIGHT:
+		case FLY_RIGHT:
+		case THROW_RIGHT:
+			if(type == PlatformType.ONE_WAY_RIGHT) {
 				sprite.setAnimating(true);
 				sprite.playOnce = true;
-				break;
-			default:
-				break;
 			}
+			if(type == PlatformType.LIMIT && currentStatus < 3) {
+				currentStatus = currentStatus + 1;
+				sprite.changeSet(currentStatus);
+				sprite.gotoAndStop(1);
+				sprite.setAnimating(true);
+				sprite.playOnce = true;
+			}
+			break;
+		default:
+			break;
 		}
 		if(type == PlatformType.SWITCH && mt == MotionType.JUMP_RIGHT_WALL) {
 			currentStatus = (currentStatus + 1) % 4;
 			sprite.changeSet(currentStatus);
+			sprite.gotoAndStop(1);
+			sprite.setAnimating(true);
+			sprite.playOnce = true;
 		}
 	}
 	
 	public void unlock() {
+		sprite = null;
 		type = PlatformType.NONE;
 	}
 	
 	public int getStatus() {
 		return currentStatus;
+	}
+	
+	public void onDraw(Canvas canvas, int x, int y, boolean update) {
+		if(sprite != null) {
+			sprite.onDraw(canvas, x, y, update);
+		}
 	}
 }
