@@ -84,7 +84,7 @@ public enum MotionType {
 			return stage == 2;
 		}
 	},
-	PRE_MAGNET,
+//	PRE_MAGNET,
 	THROW_LEFT {
 		public int getXSpeed() {
 			return -1;

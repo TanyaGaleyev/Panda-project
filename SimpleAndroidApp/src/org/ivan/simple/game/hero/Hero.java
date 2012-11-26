@@ -284,9 +284,9 @@ public class Hero {
 				activeSprite.changeSet(14);
 			}
 			break;
-		case PRE_MAGNET:
-			activeSprite.changeSet(13);
-			break;	
+//		case PRE_MAGNET:
+//			activeSprite.changeSet(13);
+//			break;	
 		case FLY_LEFT:
 			if(finishingMotion == currentMotion || finishingMotion == MotionType.TP_LEFT) {
 				activeSprite.changeSet(22);

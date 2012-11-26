@@ -28,6 +28,8 @@ public enum PlatformType {
 	UNLOCK,
 	STRING,
 	LIMIT,
+	BRICK,
+	BRICK_V,
 	
 	NONE;
 	
@@ -70,6 +72,8 @@ public enum PlatformType {
 		case 18: return UNLOCK;
 		case 19: return STRING;
 		case 20: return LIMIT;
+		case 21: return BRICK;
+		case 22: return BRICK_V;
 		default:
 			return NONE;
 		}

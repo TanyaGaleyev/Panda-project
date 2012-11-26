@@ -320,6 +320,12 @@ public class LevelModel {
 				stayCheck();
 			}
 			break;
+		case BRICK:
+			if(controlType == UserControlType.UP) {
+				controlType = UserControlType.IDLE;
+			}
+			stayCheck();
+			break;
 		default:
 			stayCheck();
 			break;	

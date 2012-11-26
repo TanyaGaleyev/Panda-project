@@ -105,6 +105,12 @@ public class Platform {
 		case LIMIT:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.limit_way), 4, 8);
 			break;
+		case BRICK:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.brick), 4, 1);
+			break;
+		case BRICK_V:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.brick_v), 4, 1);
+			break;
 		case NONE:
 			break;
 		}
@@ -210,9 +216,20 @@ public class Platform {
 	}
 	
 	public void updateRoof(MotionType mt) {
-		if(mt == MotionType.BEAT_ROOF && type == PlatformType.SIMPLE) {
-			sprite.setAnimating(sprite.changeSet(3));
-			sprite.playOnce = true;
+		if(mt == MotionType.BEAT_ROOF) {
+			if(type == PlatformType.SIMPLE) {
+				sprite.setAnimating(sprite.changeSet(3));
+				sprite.playOnce = true;
+			}
+			if(type == PlatformType.BRICK) {
+				if(currentStatus < 3) {
+					currentStatus++;
+					sprite.changeSet(currentStatus);
+				} else {
+					sprite = null;
+					type = PlatformType.NONE;
+				}
+			}
 		}
 		if(mt == MotionType.JUMP && mt.getStage() != 0 && type == PlatformType.ONE_WAY_UP) {
 			sprite.setAnimating(true);
@@ -257,12 +274,23 @@ public class Platform {
 		default:
 			break;
 		}
-		if(type == PlatformType.SWITCH && mt == MotionType.JUMP_LEFT_WALL) {
-			currentStatus = (currentStatus + 1) % 4;
-			sprite.changeSet(currentStatus);
-			sprite.gotoAndStop(1);
-			sprite.setAnimating(true);
-			sprite.playOnce = true;
+		if(mt == MotionType.JUMP_LEFT_WALL) {
+			if(type == PlatformType.SWITCH) {
+				currentStatus = (currentStatus + 1) % 4;
+				sprite.changeSet(currentStatus);
+				sprite.gotoAndStop(1);
+				sprite.setAnimating(true);
+				sprite.playOnce = true;
+			}
+			if(type == PlatformType.BRICK_V) {
+				if(currentStatus < 3) {
+					currentStatus++;
+					sprite.changeSet(currentStatus);
+				} else {
+					sprite = null;
+					type = PlatformType.NONE;
+				}
+			}
 		}
 	}
 	
@@ -286,12 +314,23 @@ public class Platform {
 		default:
 			break;
 		}
-		if(type == PlatformType.SWITCH && mt == MotionType.JUMP_RIGHT_WALL) {
-			currentStatus = (currentStatus + 1) % 4;
-			sprite.changeSet(currentStatus);
-			sprite.gotoAndStop(1);
-			sprite.setAnimating(true);
-			sprite.playOnce = true;
+		if(mt == MotionType.JUMP_RIGHT_WALL) {
+			if(type == PlatformType.SWITCH) {
+				currentStatus = (currentStatus + 1) % 4;
+				sprite.changeSet(currentStatus);
+				sprite.gotoAndStop(1);
+				sprite.setAnimating(true);
+				sprite.playOnce = true;
+			}
+			if(type == PlatformType.BRICK_V) {
+				if(currentStatus < 3) {
+					currentStatus++;
+					sprite.changeSet(currentStatus);
+				} else {
+					sprite = null;
+					type = PlatformType.NONE;
+				}
+			}
 		}
 	}
 	
