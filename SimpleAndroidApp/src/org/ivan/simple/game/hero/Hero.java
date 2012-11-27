@@ -3,6 +3,8 @@ package org.ivan.simple.game.hero;
 import org.ivan.simple.ImageProvider;
 import org.ivan.simple.R;
 import org.ivan.simple.game.MotionType;
+import org.ivan.simple.game.level.LevelCell;
+import org.ivan.simple.game.level.PlatformType;
 
 import android.graphics.Canvas;
 
@@ -14,8 +16,9 @@ public class Hero {
 	 */
 	private MotionType currentMotion = MotionType.NONE;
 	private MotionType finishingMotion = MotionType.NONE;
-	private Sprite sprite8 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite8), 32, 8);
-	private Sprite sprite16 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite16), 8, 16);
+	private LevelCell prevCell;
+	private Sprite sprite8 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite8), 34, 8);
+	private Sprite sprite16 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite16), 9, 16);
 	private Sprite tpSprite = new Sprite(ImageProvider.getBitmap(R.drawable.panda_tp), 12, 8);
 	private Sprite activeSprite;
 	private Sprite shadeSprite = new Sprite(ImageProvider.getBitmap(R.drawable.panda_tp), 12, 8);
@@ -105,7 +108,8 @@ public class Hero {
 	 * Goal is to play start/end animations of motions.
 	 * @param newMotion
 	 */
-	public void changeMotion(MotionType newMotion) {
+	public void changeMotion(MotionType newMotion, LevelCell prevCell) {
+		this.prevCell = prevCell;
 		prevX = heroX;
 		prevY = heroY;
 		startFinishMotions(newMotion);
@@ -113,6 +117,12 @@ public class Hero {
 			switch(finishingMotion) {
 			case MAGNET:
 				activeSprite.changeSet(17);
+				break;
+			case STICK_LEFT:
+				activeSprite.changeSet(30);
+				break;
+			case STICK_RIGHT:
+				activeSprite.changeSet(33);
 				break;
 			case FLY_LEFT:
 				// skip finishing fall down after FLY if finish because wall
@@ -154,9 +164,11 @@ public class Hero {
 		pickActiveSprite(currentMotion);
 		switch (currentMotion) {
 		case STAY:
-			if(finishingMotion == MotionType.THROW_LEFT || 
-			finishingMotion == MotionType.JUMP_LEFT ||
-			finishingMotion == MotionType.TP_LEFT) {
+			if(prevCell.getFloor().getType() == PlatformType.GLUE){
+				activeSprite.changeSet(8);
+			} else if(finishingMotion == MotionType.THROW_LEFT || 
+					finishingMotion == MotionType.JUMP_LEFT ||
+					finishingMotion == MotionType.TP_LEFT) {
 				activeSprite.changeSet(1);
 			} else if(finishingMotion == MotionType.THROW_RIGHT || 
 					finishingMotion == MotionType.JUMP_RIGHT ||
@@ -339,6 +351,20 @@ public class Hero {
 			} else {
 				shadeSprite.changeSet(0);
 				tpSprite.changeSet(1);
+			}
+			break;
+		case STICK_LEFT:
+			if(currentMotion.getStage() == 0) {
+				activeSprite.changeSet(28);
+			} else {
+				activeSprite.changeSet(29);
+			}
+			break;
+		case STICK_RIGHT:
+			if(currentMotion.getStage() == 0) {
+				activeSprite.changeSet(31);
+			} else {
+				activeSprite.changeSet(32);
 			}
 			break;
 		default:

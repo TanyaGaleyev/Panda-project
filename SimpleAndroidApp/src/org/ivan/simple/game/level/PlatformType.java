@@ -30,6 +30,8 @@ public enum PlatformType {
 	LIMIT,
 	BRICK,
 	BRICK_V,
+	GLUE,
+	GLUE_V,
 	
 	NONE;
 	
@@ -72,8 +74,8 @@ public enum PlatformType {
 		case 18: return UNLOCK;
 		case 19: return STRING;
 		case 20: return LIMIT;
-		case 21: return BRICK;
-		case 22: return BRICK_V;
+		case 21: return horizontal ? BRICK : BRICK_V;
+		case 22: return horizontal ? GLUE : GLUE_V; 
 		default:
 			return NONE;
 		}

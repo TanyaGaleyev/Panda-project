@@ -111,6 +111,12 @@ public class Platform {
 		case BRICK_V:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.brick_v), 4, 1);
 			break;
+		case GLUE:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.glue), 1, 1);
+			break;
+		case GLUE_V:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.glue_v), 1, 1);
+			break;
 		case NONE:
 			break;
 		}

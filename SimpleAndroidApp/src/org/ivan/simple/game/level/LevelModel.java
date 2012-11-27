@@ -243,6 +243,8 @@ public class LevelModel {
 			motionType=MotionType.FLY_RIGHT;
 		} else if(getHeroCell().getLeft().getType() == PlatformType.TELEPORT_L_V) {
 			motionType=MotionType.TP_LEFT;
+		} else if(getHeroCell().getLeft().getType() == PlatformType.GLUE_V) {
+			motionType=MotionType.STICK_LEFT;
 		} else {
 			motionType=MotionType.JUMP_LEFT_WALL;
 		}
@@ -255,6 +257,8 @@ public class LevelModel {
 			motionType=MotionType.FLY_LEFT;
 		} else if(getHeroCell().getRight().getType() == PlatformType.TELEPORT_R_V) {
 			motionType=MotionType.TP_RIGHT;
+		} else if(getHeroCell().getRight().getType() == PlatformType.GLUE_V) {
+			motionType=MotionType.STICK_RIGHT;
 		} else {
 			motionType=MotionType.JUMP_RIGHT_WALL;
 		}
@@ -322,6 +326,12 @@ public class LevelModel {
 			break;
 		case BRICK:
 			if(controlType == UserControlType.UP) {
+				controlType = UserControlType.IDLE;
+			}
+			stayCheck();
+			break;
+		case GLUE:
+			if(prevMotion ==  MotionType.STAY && controlType == UserControlType.UP) {
 				controlType = UserControlType.IDLE;
 			}
 			stayCheck();
@@ -405,7 +415,29 @@ public class LevelModel {
 				motionType = MotionType.MAGNET;
 				break;
 			}
-			break;	
+			break;
+		case STICK_LEFT:
+			switch(controlType) {
+			case DOWN:
+			case RIGHT:
+				platformsCheck();
+				break;
+			default:
+				motionType = MotionType.STICK_LEFT;
+				break;
+			}
+			break;
+		case STICK_RIGHT:
+			switch(controlType) {
+			case DOWN:
+			case LEFT:
+				platformsCheck();
+				break;
+			default:
+				motionType = MotionType.STICK_RIGHT;
+				break;
+			}
+			break;
 		case THROW_LEFT:
 			if(motionType.getStage() == 1) {
 				if(!motionAvaible(MotionType.JUMP_LEFT) ) {

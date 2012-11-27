@@ -155,6 +155,38 @@ public enum MotionType {
 	},
 	TP_RIGHT,
 	TP_LEFT,
+	STICK_LEFT {
+		
+		public void continueMotion() {
+			stage = 1;
+			super.continueMotion();
+		}
+		
+		public void finishMotion() {
+			stage = 2;
+		}
+		
+		@Override
+		public boolean isFinishing() {
+			return stage == 2;
+		}
+	},
+	STICK_RIGHT {
+		
+		public void continueMotion() {
+			stage = 1;
+			super.continueMotion();
+		}
+		
+		public void finishMotion() {
+			stage = 2;
+		}
+		
+		@Override
+		public boolean isFinishing() {
+			return stage == 2;
+		}
+	},
 	NONE;
 	
 	
