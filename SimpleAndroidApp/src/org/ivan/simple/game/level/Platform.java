@@ -117,6 +117,15 @@ public class Platform {
 		case GLUE_V:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.glue_v), 1, 1);
 			break;
+		case TELEPORT:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.teleport), 1, 1);
+			break;
+		case INVISIBLE:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.invisible_platform), 2, 8);
+			break;
+		case TRANSPARENT:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.transparent_platform), 1, 8);
+			break;
 		case NONE:
 			break;
 		}
@@ -219,6 +228,12 @@ public class Platform {
 			sprite = null;
 			return;
 		}
+		if(type == PlatformType.INVISIBLE) {
+			sprite.changeSet(1);
+			sprite.setAnimating(true);
+			sprite.playOnce = true;
+			return;
+		}
 	}
 	
 	public void updateRoof(MotionType mt) {
@@ -236,6 +251,11 @@ public class Platform {
 					type = PlatformType.NONE;
 				}
 			}
+			if(type == PlatformType.INVISIBLE) {
+				sprite.changeSet(1);
+				sprite.setAnimating(true);
+				sprite.playOnce = true;
+			}
 		}
 		if(mt == MotionType.JUMP && mt.getStage() != 0 && type == PlatformType.ONE_WAY_UP) {
 			sprite.setAnimating(true);
@@ -249,6 +269,7 @@ public class Platform {
 			case JUMP:
 			case FLY_LEFT:
 			case FLY_RIGHT:
+			case TP:
 				sprite.changeSet(0);
 				break;
 			default:
@@ -261,10 +282,14 @@ public class Platform {
 	}
 	
 	public void updateLeftWall(MotionType mt, MotionType prevMt) {
+		if(type == PlatformType.NONE) {
+			sprite = null;
+		}
 		switch(mt) {
 		case JUMP_LEFT:
 		case FLY_LEFT:
 		case THROW_LEFT:
+		case JUMP_LEFT_WALL:
 			if(type == PlatformType.ONE_WAY_LEFT) {
 				sprite.setAnimating(true);
 				sprite.playOnce = true;
@@ -276,11 +301,11 @@ public class Platform {
 				sprite.setAnimating(true);
 				sprite.playOnce = true;
 			}
-			break;
-		default:
-			break;
-		}
-		if(mt == MotionType.JUMP_LEFT_WALL) {
+			if(type == PlatformType.TRANSPARENT) {
+				sprite.setAnimating(true);
+				sprite.playOnce = true;
+				type = PlatformType.NONE;
+			}
 			if(type == PlatformType.SWITCH) {
 				currentStatus = (currentStatus + 1) % 4;
 				sprite.changeSet(currentStatus);
@@ -297,14 +322,21 @@ public class Platform {
 					type = PlatformType.NONE;
 				}
 			}
+			break;
+		default:
+			break;
 		}
 	}
 	
 	public void updateRightWall(MotionType mt, MotionType prevMt) {
+		if(type == PlatformType.NONE) {
+			sprite = null;
+		}
 		switch(mt) {
 		case JUMP_RIGHT:
 		case FLY_RIGHT:
 		case THROW_RIGHT:
+		case JUMP_RIGHT_WALL:
 			if(type == PlatformType.ONE_WAY_RIGHT) {
 				sprite.setAnimating(true);
 				sprite.playOnce = true;
@@ -316,11 +348,11 @@ public class Platform {
 				sprite.setAnimating(true);
 				sprite.playOnce = true;
 			}
-			break;
-		default:
-			break;
-		}
-		if(mt == MotionType.JUMP_RIGHT_WALL) {
+			if(type == PlatformType.TRANSPARENT) {
+				sprite.setAnimating(true);
+				sprite.playOnce = true;
+				type = PlatformType.NONE;
+			}
 			if(type == PlatformType.SWITCH) {
 				currentStatus = (currentStatus + 1) % 4;
 				sprite.changeSet(currentStatus);
@@ -337,6 +369,9 @@ public class Platform {
 					type = PlatformType.NONE;
 				}
 			}
+			break;
+		default:
+			break;
 		}
 	}
 	

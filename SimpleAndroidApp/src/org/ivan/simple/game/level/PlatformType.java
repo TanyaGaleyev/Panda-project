@@ -32,6 +32,9 @@ public enum PlatformType {
 	BRICK_V,
 	GLUE,
 	GLUE_V,
+	TELEPORT,
+	INVISIBLE,
+	TRANSPARENT,
 	
 	NONE;
 	
@@ -75,7 +78,9 @@ public enum PlatformType {
 		case 19: return STRING;
 		case 20: return LIMIT;
 		case 21: return horizontal ? BRICK : BRICK_V;
-		case 22: return horizontal ? GLUE : GLUE_V; 
+		case 22: return horizontal ? GLUE : GLUE_V;
+		case 23: return TELEPORT;
+		case 24: return horizontal ? INVISIBLE : TRANSPARENT;
 		default:
 			return NONE;
 		}

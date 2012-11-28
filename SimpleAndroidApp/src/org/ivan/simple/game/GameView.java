@@ -290,7 +290,9 @@ public class GameView extends SurfaceView {
 		} else if(level.model.isComplete()) {
 			finished = !hero.playWinAnimation();
 		} else {
-			if(hero.getRealMotion() == MotionType.TP_LEFT || hero.getRealMotion() == MotionType.TP_RIGHT) {
+			if(hero.getRealMotion() == MotionType.TP_LEFT || 
+					hero.getRealMotion() == MotionType.TP_RIGHT ||
+					hero.getRealMotion() == MotionType.TP) {
 				hero.heroX = LEFT_BOUND + level.model.heroX * GRID_STEP;
 				hero.heroY = TOP_BOUND + level.model.heroY * GRID_STEP;
 			}

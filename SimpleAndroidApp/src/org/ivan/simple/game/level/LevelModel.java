@@ -25,6 +25,7 @@ public class LevelModel {
 	private HashMap<CellCoords, TpPeer> tpGroupMap = new HashMap<CellCoords, TpPeer>();
 	private ArrayList<Platform> switchList = new ArrayList<Platform>();
 	private ArrayList<Platform> unlockList = new ArrayList<Platform>();
+	private HashMap<CellCoords, CellCoords> tpSequence = new HashMap<CellCoords, CellCoords>();
 	
 	private class CellCoords {
 		int i;
@@ -83,6 +84,8 @@ public class LevelModel {
 		int[] winCellCoord = storage.getWinCell(lev);
 		levelGrid = new LevelCell[row][col];
 		ArrayList<TpPeer> groups = new ArrayList<TpPeer>();
+		CellCoords prevTpCell = null;
+		CellCoords firstTpCell = null;
 		int tpStartGroupId = 0;
 		int tpEndGroupId = 0;
 		for(int i=0;i<row;i++){
@@ -138,6 +141,15 @@ public class LevelModel {
 				// create roof only for first row's cells
 				if(i == 0) {
 					levelGrid[i][j].createRoof(roofType);
+					if(roofType == 23) {
+						CellCoords cell = new CellCoords(i, j);
+						if(prevTpCell != null) {
+							tpSequence.put(prevTpCell, cell);
+						} else {
+							firstTpCell = cell;
+						}
+						prevTpCell = cell;
+					}
 					// else set roof as floor of nearest upper cell
 				} else {
 					levelGrid[i][j].roof = levelGrid[i - 1][j].floor;
@@ -184,9 +196,22 @@ public class LevelModel {
 				
 				int floorType = mylevel[i][j][3];
 				levelGrid[i][j].createFloor(floorType);
+				if(floorType == 23) {
+					CellCoords cell = new CellCoords(i, j);
+					if(prevTpCell != null) {
+						tpSequence.put(prevTpCell, cell);
+					} else {
+						firstTpCell = cell;
+					}
+					prevTpCell = cell;
+				}
 				
 				if(i == winCellCoord[0] && j == winCellCoord[1]) {
 					winCell = levelGrid[i][j];
+				}
+				
+				if(prevTpCell != null && firstTpCell != null) {
+					tpSequence.put(prevTpCell, firstTpCell);
 				}
 			}
 		}
@@ -335,6 +360,13 @@ public class LevelModel {
 				controlType = UserControlType.IDLE;
 			}
 			stayCheck();
+			break;
+		case TELEPORT:
+			if(controlType != UserControlType.LEFT && controlType != UserControlType.RIGHT) {
+				motionType = MotionType.TP;
+			} else {
+				stayCheck();
+			}
 			break;
 		default:
 			stayCheck();
@@ -510,6 +542,17 @@ public class LevelModel {
 				break;
 			}
 			break;
+		case TP:
+			if(motionType.getStage() == 0) {
+				if(controlType == UserControlType.UP || controlType == UserControlType.IDLE) {
+					// to start without pre jump
+					MotionType.JUMP.continueMotion();
+					jump();
+				} else {
+					platformsCheck();
+				}
+			}
+			break;
 		default:
 			platformsCheck();
 			break;
@@ -529,6 +572,11 @@ public class LevelModel {
 			heroX = toCoords.startCol;
 			heroY = toCoords.startRow;
 			return;
+		}
+		if(motionType == MotionType.TP && motionType.getStage() == 1) {
+			CellCoords nextCell = tpSequence.get(new CellCoords(heroY, heroX)); 
+			heroX = nextCell.j;
+			heroY = nextCell.i;
 		}
 		if(motionType == MotionType.FALL_BLANSH) heroY++;
 		heroX += motionType.getXSpeed();
@@ -551,6 +599,7 @@ public class LevelModel {
 			if(getHeroCell().getLeft().getType() == PlatformType.ONE_WAY_LEFT) return true;
 			if(getHeroCell().getLeft().getType() == PlatformType.LIMIT &&
 					getHeroCell().getLeft().getStatus() < 3) return true;
+			if(getHeroCell().getLeft().getType() == PlatformType.TRANSPARENT) return true;
 			if(getHeroCell().getLeft().getType() != PlatformType.NONE) return false;
 			return true;
 		case FLY_RIGHT:
@@ -561,6 +610,7 @@ public class LevelModel {
 			if(getHeroCell().getRight().getType() == PlatformType.ONE_WAY_RIGHT) return true;
 			if(getHeroCell().getRight().getType() == PlatformType.LIMIT &&
 					getHeroCell().getRight().getStatus() < 3) return true;
+			if(getHeroCell().getRight().getType() == PlatformType.TRANSPARENT) return true;
 			if(getHeroCell().getRight().getType() != PlatformType.NONE) return false;
 			return true;
 		case FALL:

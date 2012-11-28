@@ -187,6 +187,12 @@ public enum MotionType {
 			return stage == 2;
 		}
 	},
+	TP {
+		public void continueMotion() {
+			stage = (stage + 1) % 2;
+			super.continueMotion();
+		}
+	},
 	NONE;
 	
 	
