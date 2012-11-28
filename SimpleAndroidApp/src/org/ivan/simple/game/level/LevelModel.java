@@ -307,6 +307,7 @@ public class LevelModel {
 			} else {
 				moveLeft();
 				if(motionType == MotionType.TP_LEFT) {
+					prevMotion.finishMotion();
 					prevMotion = MotionType.THROW_LEFT;
 				}
 			}	
@@ -317,6 +318,7 @@ public class LevelModel {
 			} else {
 				moveRight();
 				if(motionType == MotionType.TP_RIGHT) {
+					prevMotion.finishMotion();
 					prevMotion = MotionType.THROW_RIGHT;
 				}
 			}	
