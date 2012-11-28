@@ -439,7 +439,7 @@ public class Hero {
 	 */
 	public void onDraw(Canvas canvas, boolean update) {
 		activeSprite.onDraw(canvas, heroX - activeSprite.getWidth() / 2, heroY - activeSprite.getHeight() / 2, update);
-		if(currentMotion == MotionType.TP_LEFT || currentMotion == MotionType.TP_RIGHT) {
+		if(!finishingMotion.isFinishing() && (currentMotion == MotionType.TP_LEFT || currentMotion == MotionType.TP_RIGHT)) {
 			shadeSprite.onDraw(canvas, prevX - shadeSprite.getWidth() / 2, prevY - shadeSprite.getHeight() / 2, update);
 		}
 	}
