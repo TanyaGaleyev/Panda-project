@@ -17,8 +17,14 @@ public class GameManager extends Thread {
 	}
 	
 	public static void changeFPS(int dFPS) {
-		if(FPS + dFPS > 0) {
+		if(FPS == 1) {
+			FPS = 5;
+			ticksPS = 1000 / FPS;
+		} else if(FPS + dFPS > 0) {
 			FPS += dFPS;
+			ticksPS = 1000 / FPS;
+		} else {
+			FPS = 1;
 			ticksPS = 1000 / FPS;
 		}
 	}
