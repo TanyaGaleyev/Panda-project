@@ -287,9 +287,21 @@ public class LevelChooseView extends SurfaceView {
 					performingAction = chooseAcion;
 					chooseAcion = UserControlType.IDLE;
 				}
-				Canvas c = getHolder().lockCanvas();
-				onDraw(c);
-				getHolder().unlockCanvasAndPost(c);
+				Canvas c = null;
+				try {
+					c = getHolder().lockCanvas();
+					if(c != null) {
+						synchronized (getHolder()) {
+							onDraw(c);
+						}
+					}
+				} catch(Exception e) {
+					// TODO process exception
+				} finally {
+					if(c != null) {
+						getHolder().unlockCanvasAndPost(c);
+					}
+				}
 				try {
 					sleep(40);
 				} catch (InterruptedException e) {

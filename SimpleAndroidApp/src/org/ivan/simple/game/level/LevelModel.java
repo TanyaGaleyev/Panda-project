@@ -395,6 +395,7 @@ public class LevelModel {
 		 */
 		if(prizesLeft == 0) {
 			if(winCell.getFloor().getType() != PlatformType.WIN) {
+				// TODO careful with roof (of underlying cell)
 				winCell.createFloor(PlatformType.WIN);
 			}
 			if(getHeroCell() == winCell) {
@@ -555,10 +556,18 @@ public class LevelModel {
 				}
 			}
 			break;
+		case FALL_BLANSH:
+			if(motionType.getStage() == 1) {
+				motionType = MotionType.FALL_BLANSH;
+			} else {
+				platformsCheck();
+			}
+			break;
 		default:
 			platformsCheck();
 			break;
 		}
+		startFinishMotions();
 		updatePosition();
 	}
 	
@@ -580,7 +589,6 @@ public class LevelModel {
 			heroX = nextCell.j;
 			heroY = nextCell.i;
 		}
-		if(motionType == MotionType.FALL_BLANSH) heroY++;
 		heroX += motionType.getXSpeed();
 		heroY += motionType.getYSpeed();
 	}
@@ -643,6 +651,10 @@ public class LevelModel {
 	public MotionType getMotionType() {
 		return motionType;
 	}
+	
+	public MotionType getPrevMotion() {
+		return prevMotion;
+	}
 
 	public boolean isComplete() {
 		return complete;
@@ -672,6 +684,26 @@ public class LevelModel {
 	
 	public UserControlType getControlType() {
 		return bufferedControlType;
+	}
+	
+	private void startFinishMotions() {
+		if(prevMotion != motionType) {
+			if(!(prevMotion == MotionType.FLY_LEFT && motionType == MotionType.TP_LEFT) &&
+					!(prevMotion == MotionType.FLY_RIGHT && motionType == MotionType.TP_RIGHT) &&
+					!(prevMotion == MotionType.THROW_LEFT && motionType == MotionType.TP_LEFT) &&
+					!(prevMotion == MotionType.THROW_RIGHT && motionType == MotionType.TP_RIGHT)) {
+				prevMotion.finishMotion();
+			}
+			if(
+//					!(prevMotion == MotionType.TP_LEFT && motionType == MotionType.FLY_LEFT) &&
+//					!(prevMotion == MotionType.TP_RIGHT && motionType == MotionType.FLY_RIGHT) &&
+//					!(prevMotion == MotionType.TP_LEFT && motionType == MotionType.THROW_LEFT) &&
+//					!(prevMotion == MotionType.TP_RIGHT && motionType == MotionType.THROW_RIGHT) &&
+					!(prevMotion == MotionType.TP && motionType == MotionType.JUMP)
+					) {
+				motionType.startMotion();
+			}
+		}
 	}
 	
 }

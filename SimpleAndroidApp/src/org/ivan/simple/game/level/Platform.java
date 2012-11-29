@@ -45,7 +45,6 @@ public class Platform {
 		case ELECTRO:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.electro_platform),1,4);
 			sprite.setAnimating(true);
-			sprite.playOnce = false;
 			break;
 		case SPRING:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.spring_platform),2,16);
@@ -53,12 +52,10 @@ public class Platform {
 		case SPIKE:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.spike),1,8);
 			sprite.setAnimating(true);
-			sprite.playOnce = false;
 			break;
 		case SPIKE_V:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.spike_v), 1, 8);
 			sprite.setAnimating(true);
-			sprite.playOnce = false;
 			break;
 		case WIN:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.win_platform), 1, 1);
@@ -66,12 +63,10 @@ public class Platform {
 		case TELEPORT_L_V:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.teleport_l_v), 1, 16);
 			sprite.setAnimating(true);
-			sprite.playOnce = false;
 			break;
 		case TELEPORT_R_V:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.teleport_r_v), 1, 16);
 			sprite.setAnimating(true);
-			sprite.playOnce = false;
 			break;
 		case SLICK:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.slick), 1, 1);
@@ -100,7 +95,7 @@ public class Platform {
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.unlock_platform), 1, 1);
 			break;
 		case STRING:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.string_platform), 1, 16);
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.string_platform), 1, 8);
 			break;
 		case LIMIT:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.limit_way), 4, 8);
@@ -135,21 +130,21 @@ public class Platform {
 		return type;
 	}
 	
-	public void changeSet(MotionType mt) {
+	public void changeSet(MotionType mt, MotionType prevMt) {
 		if(sprite == null || 
 				mt == MotionType.MAGNET || 
 				mt == MotionType.BEAT_ROOF || 
-				mt == MotionType.THROW_LEFT &&  this.getType()!=PlatformType.THROW_OUT_LEFT|| 
-				mt == MotionType.THROW_RIGHT && this.getType()!=PlatformType.THROW_OUT_RIGHT || 
+				mt == MotionType.THROW_LEFT && mt.getStage() != 0 || 
+				mt == MotionType.THROW_RIGHT && mt.getStage() != 0 || 
 				mt == MotionType.JUMP && mt.getStage() != 0 ||
-				mt == MotionType.FLY_LEFT ||
-				mt == MotionType.FLY_RIGHT ||
-				mt == MotionType.JUMP_LEFT_WALL ||
-				mt == MotionType.JUMP_RIGHT_WALL) return;
+				mt == MotionType.FLY_LEFT && mt.getStage() != 0 ||
+				mt == MotionType.FLY_RIGHT && mt.getStage() != 0 ||
+				mt == MotionType.TP_LEFT && prevMt == MotionType.FLY_LEFT ||
+				mt == MotionType.TP_RIGHT && prevMt == MotionType.FLY_RIGHT) return;
 		if(type == PlatformType.REDUCE) {
 			if(currentStatus<3) {
 				currentStatus++;
-				sprite.gotoAndStop(currentStatus);
+				sprite.goToFrame(currentStatus);
 			} else if(currentStatus<4){
 				currentStatus++;
 				sprite = null;
@@ -158,27 +153,34 @@ public class Platform {
 			return;
 		}
 		if(type == PlatformType.ANGLE_LEFT) {
-			sprite.setAnimating(true);
-			sprite.playOnce = true;
+			sprite.playOnce(true);
 			return;
 		}
 		if(type == PlatformType.ANGLE_RIGHT) {
-			sprite.setAnimating(true);
-			sprite.playOnce = true;
+			sprite.playOnce(true);
+			return;
+		}
+		if(type == PlatformType.THROW_OUT_LEFT) {
+			sprite.playOnce(true);
+			return;
+		}
+		if(type == PlatformType.THROW_OUT_RIGHT) {
+			sprite.playOnce(true);
 			return;
 		}
 		if(type == PlatformType.TRAMPOLINE) {
-			sprite.setAnimating(true);
-			sprite.playOnce = true;
+			sprite.playOnce(true);
 			return;
 		}
 		if(type == PlatformType.SLOPE) {
 			switch(mt) {
 			case JUMP_LEFT:
+			case JUMP_LEFT_WALL:
 				currentStatus = 1;
 				sprite.changeSet(1);
 				break;
 			case JUMP_RIGHT:
+			case JUMP_RIGHT_WALL:
 				currentStatus = 2;
 				sprite.changeSet(2);
 				break;
@@ -198,40 +200,33 @@ public class Platform {
 	//			sprite.playOnce = true;
 	//			break;
 			case JUMP_LEFT:
-				sprite.setAnimating(sprite.changeSet(1));
-				sprite.playOnce = true;
+				sprite.changeSet(1);
+				sprite.playOnce(true);
 				break;
 			case JUMP_RIGHT:
-				sprite.setAnimating(sprite.changeSet(2));
-				sprite.playOnce = true;
+				sprite.changeSet(2);
+				sprite.playOnce(true);
 				break;
 			case JUMP:
 			default:
-				sprite.setAnimating(sprite.changeSet(0));
-				sprite.playOnce = true;;
+				sprite.changeSet(0);
+				sprite.playOnce(true);
 				break;
 			}
 			return;
 		}
 		if(type == PlatformType.ONE_WAY_DOWN && mt == MotionType.FALL) {
-			sprite.setAnimating(true);
-			sprite.playOnce = true;
+			sprite.playOnce(true);
 			return;
 		}
 		if(type == PlatformType.STRING && mt == MotionType.STAY) {
-			sprite.setAnimating(true);
-			sprite.playOnce = true;
+			sprite.playOnce(true);
 			type = PlatformType.NONE;
-			return;
-		}
-		if(type == PlatformType.NONE) {
-			sprite = null;
 			return;
 		}
 		if(type == PlatformType.INVISIBLE) {
 			sprite.changeSet(1);
-			sprite.setAnimating(true);
-			sprite.playOnce = true;
+			sprite.playOnce(true);
 			return;
 		}
 	}
@@ -239,8 +234,8 @@ public class Platform {
 	public void updateRoof(MotionType mt) {
 		if(mt == MotionType.BEAT_ROOF) {
 			if(type == PlatformType.SIMPLE) {
-				sprite.setAnimating(sprite.changeSet(3));
-				sprite.playOnce = true;
+				sprite.changeSet(3);
+				sprite.playOnce(true);
 			}
 			if(type == PlatformType.BRICK) {
 				if(currentStatus < 3) {
@@ -253,65 +248,55 @@ public class Platform {
 			}
 			if(type == PlatformType.INVISIBLE) {
 				sprite.changeSet(1);
-				sprite.setAnimating(true);
-				sprite.playOnce = true;
+				sprite.playOnce(true);
 			}
 		}
 		if(mt == MotionType.JUMP && mt.getStage() != 0 && type == PlatformType.ONE_WAY_UP) {
-			sprite.setAnimating(true);
-			sprite.playOnce = true;
+			sprite.playOnce(true);
 		}
 	}
 	
 	public void highlightSpring(MotionType prevMt) {
 		if(type == PlatformType.SPRING) {
 			switch(prevMt) {
-			case JUMP:
-			case FLY_LEFT:
-			case FLY_RIGHT:
-			case TP:
+//			case JUMP:
+//			case FLY_LEFT:
+//			case FLY_RIGHT:
+//			case TP:
+//				sprite.changeSet(0);
+//				break;
+			default:
+//				sprite.changeSet(1);
 				sprite.changeSet(0);
 				break;
-			default:
-				sprite.changeSet(1);
-				break;
 			}
-			sprite.setAnimating(true);
-			sprite.playOnce = true;
+			sprite.playOnce(true);
 		}
 	}
 	
 	public void updateLeftWall(MotionType mt, MotionType prevMt) {
-		if(type == PlatformType.NONE) {
-			sprite = null;
-		}
-		switch(mt) {
-		case JUMP_LEFT:
-		case FLY_LEFT:
-		case THROW_LEFT:
-		case JUMP_LEFT_WALL:
+		if(mt == MotionType.JUMP_LEFT ||
+				mt == MotionType.FLY_LEFT && mt.getStage() != 0 ||
+				mt == MotionType.THROW_LEFT ||
+				mt == MotionType.JUMP_LEFT_WALL) {
 			if(type == PlatformType.ONE_WAY_LEFT) {
-				sprite.setAnimating(true);
-				sprite.playOnce = true;
+				sprite.playOnce(true);
 			}
 			if(type == PlatformType.LIMIT && currentStatus < 3) {
 				currentStatus = currentStatus + 1;
 				sprite.changeSet(currentStatus);
-				sprite.gotoAndStop(1);
-				sprite.setAnimating(true);
-				sprite.playOnce = true;
+				sprite.goToFrame(1);
+				sprite.playOnce(true);
 			}
 			if(type == PlatformType.TRANSPARENT) {
-				sprite.setAnimating(true);
-				sprite.playOnce = true;
+				sprite.playOnce(true);
 				type = PlatformType.NONE;
 			}
 			if(type == PlatformType.SWITCH) {
 				currentStatus = (currentStatus + 1) % 4;
 				sprite.changeSet(currentStatus);
-				sprite.gotoAndStop(1);
-				sprite.setAnimating(true);
-				sprite.playOnce = true;
+				sprite.goToFrame(1);
+				sprite.playOnce(true);
 			}
 			if(type == PlatformType.BRICK_V) {
 				if(currentStatus < 3) {
@@ -322,43 +307,32 @@ public class Platform {
 					type = PlatformType.NONE;
 				}
 			}
-			break;
-		default:
-			break;
 		}
 	}
 	
 	public void updateRightWall(MotionType mt, MotionType prevMt) {
-		if(type == PlatformType.NONE) {
-			sprite = null;
-		}
-		switch(mt) {
-		case JUMP_RIGHT:
-		case FLY_RIGHT:
-		case THROW_RIGHT:
-		case JUMP_RIGHT_WALL:
+		if(mt == MotionType.JUMP_RIGHT ||
+				mt == MotionType.FLY_RIGHT && mt.getStage() != 0 ||
+				mt == MotionType.THROW_RIGHT ||
+				mt == MotionType.JUMP_RIGHT_WALL) {
 			if(type == PlatformType.ONE_WAY_RIGHT) {
-				sprite.setAnimating(true);
-				sprite.playOnce = true;
+				sprite.playOnce(true);
 			}
 			if(type == PlatformType.LIMIT && currentStatus < 3) {
 				currentStatus = currentStatus + 1;
 				sprite.changeSet(currentStatus);
-				sprite.gotoAndStop(1);
-				sprite.setAnimating(true);
-				sprite.playOnce = true;
+				sprite.goToFrame(1);
+				sprite.playOnce(true);
 			}
 			if(type == PlatformType.TRANSPARENT) {
-				sprite.setAnimating(true);
-				sprite.playOnce = true;
+				sprite.playOnce(true);
 				type = PlatformType.NONE;
 			}
 			if(type == PlatformType.SWITCH) {
 				currentStatus = (currentStatus + 1) % 4;
 				sprite.changeSet(currentStatus);
-				sprite.gotoAndStop(1);
-				sprite.setAnimating(true);
-				sprite.playOnce = true;
+				sprite.goToFrame(1);
+				sprite.playOnce(true);
 			}
 			if(type == PlatformType.BRICK_V) {
 				if(currentStatus < 3) {
@@ -369,9 +343,6 @@ public class Platform {
 					type = PlatformType.NONE;
 				}
 			}
-			break;
-		default:
-			break;
 		}
 	}
 	
@@ -386,7 +357,11 @@ public class Platform {
 	
 	public void onDraw(Canvas canvas, int x, int y, boolean update) {
 		if(sprite != null) {
-			sprite.onDraw(canvas, x, y, update);
+			if(type == PlatformType.NONE && !sprite.isAnimating()) {
+				sprite = null;
+			} else {
+				sprite.onDraw(canvas, x, y, update);
+			}
 		}
 	}
 }

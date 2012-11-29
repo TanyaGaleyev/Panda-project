@@ -42,6 +42,15 @@ public enum MotionType {
 		public int getYSpeed() {
 			return 1;
 		}
+		
+		public void continueMotion() {
+			stage = (stage + 1) % 2;
+			super.continueMotion();
+		}
+		
+		public boolean isUncontrolable() {
+			return stage == 0;
+		}
 	},
 	JUMP_LEFT {
 		public int getXSpeed() {

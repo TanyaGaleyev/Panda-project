@@ -81,6 +81,6 @@ public class LevelCell {
 		}
 		right_wall.updateRightWall(mt, prevMt);
 		left_wall.updateLeftWall(mt, prevMt);
-		floor.changeSet(mt);
+		floor.changeSet(mt, prevMt);
 	}
 }

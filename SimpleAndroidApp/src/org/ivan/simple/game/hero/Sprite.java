@@ -11,17 +11,17 @@ public class Sprite {
 
 	private final int BMP_COLS;
 	
-	protected int currentFrame = 0;
+	private int currentFrame = 0;
 	
-	protected int currentSet = 0;
+	private int currentSet = 0;
 	
 	private final int singleWidth;
 	
 	private final int singleHeight;
 	
-	protected boolean animating = false;
+	private boolean animating = false;
 	
-	public boolean playOnce = false;
+	private boolean playOnce = false;
 	
 	public Sprite(Bitmap bmp, int rows, int cols) {
 		this.bmp = bmp;
@@ -56,7 +56,7 @@ public class Sprite {
         }
 	}
 	
-	public void gotoAndStop(int fr){
+	public void goToFrame(int fr){
 		if(fr >= BMP_COLS) return;
 		currentFrame=fr;
 	}
@@ -76,10 +76,27 @@ public class Sprite {
 		return currentFrame;
 	}
 	
-	public boolean changeSet(int i ) {
+	public int getSet() {
+		return currentSet;
+	}
+	
+	public boolean changeSet(int i) {
 		if(i < 0 || i >= BMP_ROWS) return false;
 		currentFrame = 0;
 		currentSet = i;
 		return true;
+	}
+	
+	public void playOnce(boolean playOnce) {
+		this.animating = playOnce;
+		this.playOnce = playOnce;
+	}
+	
+	protected void setPlayOnce(boolean playOnce) {
+		this.playOnce = playOnce;
+	}
+	
+	public boolean isAnimating() {
+		return animating;
 	}
 }

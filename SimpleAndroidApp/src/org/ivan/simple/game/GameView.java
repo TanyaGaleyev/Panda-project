@@ -254,7 +254,7 @@ public class GameView extends SurfaceView {
 		level.model.updateGame();
 		// switch hero animation
 		MotionType curMotion = level.model.getMotionType();
-		hero.changeMotion(curMotion, prevCell);
+		hero.changeMotion(curMotion, prevMotion, prevCell);
 		// play cell reaction to new motion
 		if(!hero.isFinishing()) {
 			prevCell.updateCell(curMotion, prevMotion);
@@ -268,8 +268,8 @@ public class GameView extends SurfaceView {
 	private boolean continueModel() {
 		if(hero.isFinishing()) {
 			// when motion at last switches we need to play cell animation
-			if(hero.tryToEndFinishMotion()) {
-				prevCell.updateCell(level.model.getMotionType(), prevMotion);
+			if(hero.tryToEndFinishMotion(level.model.getPrevMotion())) {
+				prevCell.updateCell(level.model.getMotionType(), level.model.getPrevMotion());
 			}
 			return true;
 		}
