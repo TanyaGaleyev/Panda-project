@@ -87,35 +87,8 @@ public class Hero {
 		if(currentMotion == MotionType.FALL_BLANSH) {
 			return activeSprite.getFrame() % 8 == 0;
 		}
-		if(currentMotion == MotionType.JUMP_LEFT_WALL) {
-			return activeSprite.getFrame() % 8 == 0;
-		}
-		if(currentMotion == MotionType.JUMP_RIGHT_WALL) {
-			return activeSprite.getFrame() % 8 == 0;
-		}
-		if(currentMotion == MotionType.FLY_LEFT && currentMotion.getStage() == 0) {
-			return activeSprite.getFrame() % 8 == 0;
-		}
-		if(currentMotion == MotionType.FLY_RIGHT && currentMotion.getStage() == 0) {
-			return activeSprite.getFrame() % 8 == 0;
-		}
-//		if(!finishingMotion.isFinishing()) {
-//			switch(currentMotion) {
-//			case NONE:
-//			case STAY:
-//			case FALL_BLANSH:
-//			case STEP_LEFT_WALL:
-//			case STEP_RIGHT_WALL:
-				return activeSprite.getFrame() == 0;
-//			default:
-//				return activeSprite.currentFrame % 8 == 0;
-//			}
-//		} else if(activeSprite.currentFrame == 0) {
-//			finishingMotion = MotionType.NONE;
-//			switchToCurrentMotion();
-//			return false;
-//		}
-//		return false;
+
+		return activeSprite.getFrame() == 0;
 	}
 	
 	/**
