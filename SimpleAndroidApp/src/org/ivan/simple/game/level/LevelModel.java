@@ -309,6 +309,9 @@ public class LevelModel {
 				if(motionType == MotionType.TP_LEFT) {
 					prevMotion.finishMotion();
 					prevMotion = MotionType.THROW_LEFT;
+				} else if(prevMotion == MotionType.FLY_LEFT) {
+					prevMotion.finishMotion();
+					prevMotion = MotionType.THROW_LEFT;
 				}
 			}	
 			break;
@@ -318,6 +321,9 @@ public class LevelModel {
 			} else {
 				moveRight();
 				if(motionType == MotionType.TP_RIGHT) {
+					prevMotion.finishMotion();
+					prevMotion = MotionType.THROW_RIGHT;
+				} else if(prevMotion == MotionType.FLY_RIGHT) {
 					prevMotion.finishMotion();
 					prevMotion = MotionType.THROW_RIGHT;
 				}
@@ -691,7 +697,9 @@ public class LevelModel {
 			if(!(prevMotion == MotionType.FLY_LEFT && motionType == MotionType.TP_LEFT) &&
 					!(prevMotion == MotionType.FLY_RIGHT && motionType == MotionType.TP_RIGHT) &&
 					!(prevMotion == MotionType.THROW_LEFT && motionType == MotionType.TP_LEFT) &&
-					!(prevMotion == MotionType.THROW_RIGHT && motionType == MotionType.TP_RIGHT)) {
+					!(prevMotion == MotionType.THROW_RIGHT && motionType == MotionType.TP_RIGHT) &&
+					!(prevMotion == MotionType.FLY_LEFT && motionType == MotionType.FLY_RIGHT) &&
+					!(prevMotion == MotionType.FLY_RIGHT && motionType == MotionType.FLY_LEFT)) {
 				prevMotion.finishMotion();
 			}
 			if(

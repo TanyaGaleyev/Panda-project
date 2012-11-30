@@ -117,7 +117,7 @@ public class Hero {
 			case FLY_LEFT:
 				// skip finishing fall down after FLY if finish because wall
 				if(newMotion == MotionType.JUMP_LEFT_WALL|| 
-				newMotion == MotionType.FLY_RIGHT ||
+//				newMotion == MotionType.FLY_RIGHT ||
 				newMotion == MotionType.STICK_LEFT) {
 					finishingMotion.startMotion();
 					switchToCurrentMotion();
@@ -128,7 +128,7 @@ public class Hero {
 			case FLY_RIGHT:
 				// skip finishing fall down after FLY if finish because wall
 				if(newMotion == MotionType.JUMP_RIGHT_WALL || 
-				newMotion == MotionType.FLY_LEFT ||
+//				newMotion == MotionType.FLY_LEFT ||
 				newMotion == MotionType.STICK_RIGHT) {
 					finishingMotion.startMotion();
 					switchToCurrentMotion();
@@ -262,8 +262,12 @@ public class Hero {
 				activeSprite.changeSet(12);
 				break;
 			default:
-				activeSprite = sprite16;
-				activeSprite.changeSet(5);
+				if(prevCell.getFloor().getType() == PlatformType.THROW_OUT_LEFT) {
+					activeSprite.changeSet(12);
+				} else {
+					activeSprite = sprite16;
+					activeSprite.changeSet(5);
+				}
 				break;
 			}
 			break;
@@ -277,8 +281,12 @@ public class Hero {
 				activeSprite.changeSet(11);
 				break;
 			default:
-				activeSprite = sprite16;
-				activeSprite.changeSet(4);
+				if(prevCell.getFloor().getType() == PlatformType.THROW_OUT_RIGHT) {
+					activeSprite.changeSet(11);
+				} else {
+					activeSprite = sprite16;
+					activeSprite.changeSet(4);
+				}
 				break;
 			}
 			break;	
@@ -299,24 +307,24 @@ public class Hero {
 			if(finishingMotion == currentMotion || finishingMotion == MotionType.TP_LEFT) {
 				activeSprite.changeSet(22);
 			} else if(finishingMotion == MotionType.JUMP || finishingMotion == MotionType.FLY_RIGHT ||
-					finishingMotion == MotionType.TP) {
+					finishingMotion == MotionType.TP || finishingMotion == MotionType.THROW_LEFT || 
+					prevCell.getFloor().getType() == PlatformType.THROW_OUT_RIGHT) {
 				activeSprite.changeSet(11);
 			} else {
 				activeSprite = sprite16;
 				activeSprite.changeSet(7);
-//				activeSprite.changeSet(11);
 			}
 			break;
 		case FLY_RIGHT:
 			if(finishingMotion == currentMotion || finishingMotion == MotionType.TP_RIGHT) {
 				activeSprite.changeSet(23);
 			} else if(finishingMotion == MotionType.JUMP || finishingMotion == MotionType.FLY_LEFT ||
-					finishingMotion == MotionType.TP) {
+					finishingMotion == MotionType.TP || finishingMotion == MotionType.THROW_LEFT ||
+					prevCell.getFloor().getType() == PlatformType.THROW_OUT_LEFT) {
 				activeSprite.changeSet(12);
 			} else {
 				activeSprite = sprite16;
 				activeSprite.changeSet(6);
-//				activeSprite.changeSet(12);
 			}
 			break;
 		case TP_LEFT:

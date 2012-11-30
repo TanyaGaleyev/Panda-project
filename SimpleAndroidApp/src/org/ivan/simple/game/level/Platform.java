@@ -140,7 +140,11 @@ public class Platform {
 				mt == MotionType.FLY_LEFT && mt.getStage() != 0 ||
 				mt == MotionType.FLY_RIGHT && mt.getStage() != 0 ||
 				mt == MotionType.TP_LEFT && prevMt == MotionType.FLY_LEFT ||
-				mt == MotionType.TP_RIGHT && prevMt == MotionType.FLY_RIGHT) return;
+				mt == MotionType.TP_RIGHT && prevMt == MotionType.FLY_RIGHT ||
+				mt == MotionType.JUMP_LEFT_WALL && prevMt == MotionType.FLY_LEFT ||
+				mt == MotionType.JUMP_RIGHT_WALL && prevMt == MotionType.FLY_RIGHT ||
+				mt == MotionType.FLY_RIGHT && prevMt == MotionType.FLY_LEFT ||
+				mt == MotionType.FLY_LEFT && prevMt == MotionType.FLY_RIGHT) return;
 		if(type == PlatformType.REDUCE) {
 			if(currentStatus<3) {
 				currentStatus++;
@@ -259,15 +263,16 @@ public class Platform {
 	public void highlightSpring(MotionType prevMt) {
 		if(type == PlatformType.SPRING) {
 			switch(prevMt) {
-//			case JUMP:
-//			case FLY_LEFT:
-//			case FLY_RIGHT:
-//			case TP:
-//				sprite.changeSet(0);
-//				break;
-			default:
-//				sprite.changeSet(1);
+			case JUMP:
+			case FLY_LEFT:
+			case FLY_RIGHT:
+			case THROW_LEFT:
+			case THROW_RIGHT:
+			case TP:
 				sprite.changeSet(0);
+				break;
+			default:
+				sprite.changeSet(1);
 				break;
 			}
 			sprite.playOnce(true);
