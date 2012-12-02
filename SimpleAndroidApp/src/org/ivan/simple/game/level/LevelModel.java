@@ -339,6 +339,14 @@ public class LevelModel {
 				stayCheck();
 			}
 			break;
+		case WAY_UP_DOWN:
+			if(controlType == UserControlType.DOWN && motionType != MotionType.JUMP) {
+				if(heroY + 1 > row - 1) lose = true;
+				motionType = MotionType.FALL;
+			} else {
+				stayCheck();
+			}
+			break;
 		case BRICK:
 			if(controlType == UserControlType.UP) {
 				controlType = UserControlType.IDLE;
@@ -612,7 +620,8 @@ public class LevelModel {
 		case JUMP:
 			if(mt.getYSpeed() != 0 && getHeroCell().getRoof().getType() == PlatformType.SPIKE) lose = true;
 			if(heroY + mt.getYSpeed() < 0) return false;
-			if(mt.getYSpeed() != 0 && getHeroCell().getRoof().getType() == PlatformType.ONE_WAY_UP) return true;
+			if(getHeroCell().getRoof().getType() == PlatformType.ONE_WAY_UP) return true;
+			if(getHeroCell().getRoof().getType() == PlatformType.WAY_UP_DOWN) return true;
 			if(mt.getYSpeed() != 0 && getHeroCell().getRoof().getType() != PlatformType.NONE) return false;
 			return true;
 		case FLY_LEFT:

@@ -309,7 +309,7 @@ public class Hero {
 			if(finishingMotion == currentMotion || finishingMotion == MotionType.TP_LEFT) {
 				activeSprite.changeSet(22);
 			} else if(finishingMotion == MotionType.JUMP || finishingMotion == MotionType.FLY_RIGHT ||
-					finishingMotion == MotionType.TP || finishingMotion == MotionType.THROW_LEFT || 
+					finishingMotion == MotionType.TP || finishingMotion == MotionType.THROW_RIGHT || 
 					prevCell.getFloor().getType() == PlatformType.THROW_OUT_RIGHT) {
 				activeSprite.changeSet(11);
 			} else {

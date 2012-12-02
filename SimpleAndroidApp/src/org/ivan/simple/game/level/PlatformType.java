@@ -35,6 +35,7 @@ public enum PlatformType {
 	TELEPORT,
 	INVISIBLE,
 	TRANSPARENT,
+	WAY_UP_DOWN,
 	
 	NONE;
 	
@@ -81,6 +82,7 @@ public enum PlatformType {
 		case 22: return horizontal ? GLUE : GLUE_V;
 		case 23: return TELEPORT;
 		case 24: return horizontal ? INVISIBLE : TRANSPARENT;
+		case 25: return WAY_UP_DOWN;
 		default:
 			return NONE;
 		}

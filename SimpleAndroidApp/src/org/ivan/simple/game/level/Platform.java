@@ -121,6 +121,9 @@ public class Platform {
 		case TRANSPARENT:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.transparent_platform), 1, 8);
 			break;
+		case WAY_UP_DOWN:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.way_up_down), 2, 16);
+			break;
 		case NONE:
 			break;
 		}
@@ -143,8 +146,8 @@ public class Platform {
 				mt == MotionType.TP_RIGHT && prevMt == MotionType.FLY_RIGHT ||
 				mt == MotionType.JUMP_LEFT_WALL && prevMt == MotionType.FLY_LEFT ||
 				mt == MotionType.JUMP_RIGHT_WALL && prevMt == MotionType.FLY_RIGHT ||
-				mt == MotionType.FLY_RIGHT && prevMt == MotionType.FLY_LEFT ||
-				mt == MotionType.FLY_LEFT && prevMt == MotionType.FLY_RIGHT) return;
+				mt == MotionType.FLY_RIGHT && prevMt == MotionType.FLY_LEFT && prevMt.getStage() != 0 ||
+				mt == MotionType.FLY_LEFT && prevMt == MotionType.FLY_RIGHT && prevMt.getStage() != 0) return;
 		if(type == PlatformType.REDUCE) {
 			if(currentStatus<3) {
 				currentStatus++;
@@ -223,6 +226,11 @@ public class Platform {
 			sprite.playOnce(true);
 			return;
 		}
+		if(type == PlatformType.WAY_UP_DOWN && mt == MotionType.FALL) {
+			sprite.changeSet(1);
+			sprite.playOnce(true);
+			return;
+		}
 		if(type == PlatformType.STRING && mt == MotionType.STAY) {
 			sprite.playOnce(true);
 			type = PlatformType.NONE;
@@ -256,6 +264,10 @@ public class Platform {
 			}
 		}
 		if(mt == MotionType.JUMP && mt.getStage() != 0 && type == PlatformType.ONE_WAY_UP) {
+			sprite.playOnce(true);
+		}
+		if(mt == MotionType.JUMP && mt.getStage() != 0 && type == PlatformType.WAY_UP_DOWN) {
+			sprite.changeSet(0);
 			sprite.playOnce(true);
 		}
 	}
