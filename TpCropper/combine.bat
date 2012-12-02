@@ -1,0 +1,1 @@
+java -cp bin2 org.ivan.combiner.SpritesCombiner
