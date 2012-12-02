@@ -266,8 +266,6 @@ public class LevelModel {
 			motionType=MotionType.JUMP_LEFT;
 		} else if(getHeroCell().getLeft().getType() == PlatformType.SPRING) {
 			motionType=MotionType.FLY_RIGHT;
-		} else if(getHeroCell().getLeft().getType() == PlatformType.TELEPORT_L_V) {
-			motionType=MotionType.TP_LEFT;
 		} else if(getHeroCell().getLeft().getType() == PlatformType.GLUE_V) {
 			motionType=MotionType.STICK_LEFT;
 		} else {
@@ -280,8 +278,6 @@ public class LevelModel {
 			motionType=MotionType.JUMP_RIGHT;
 		} else if(getHeroCell().getRight().getType() == PlatformType.SPRING) {
 			motionType=MotionType.FLY_LEFT;
-		} else if(getHeroCell().getRight().getType() == PlatformType.TELEPORT_R_V) {
-			motionType=MotionType.TP_RIGHT;
 		} else if(getHeroCell().getRight().getType() == PlatformType.GLUE_V) {
 			motionType=MotionType.STICK_RIGHT;
 		} else {
@@ -306,13 +302,6 @@ public class LevelModel {
 				motionType=MotionType.THROW_LEFT;
 			} else {
 				moveLeft();
-				if(motionType == MotionType.TP_LEFT) {
-					prevMotion.finishMotion();
-					prevMotion = MotionType.THROW_LEFT;
-				} else if(prevMotion == MotionType.FLY_LEFT) {
-					prevMotion.finishMotion();
-					prevMotion = MotionType.THROW_LEFT;
-				}
 			}	
 			break;
 		case  THROW_OUT_RIGHT:
@@ -320,13 +309,6 @@ public class LevelModel {
 				motionType=MotionType.THROW_RIGHT;
 			} else {
 				moveRight();
-				if(motionType == MotionType.TP_RIGHT) {
-					prevMotion.finishMotion();
-					prevMotion = MotionType.THROW_RIGHT;
-				} else if(prevMotion == MotionType.FLY_RIGHT) {
-					prevMotion.finishMotion();
-					prevMotion = MotionType.THROW_RIGHT;
-				}
 			}	
 			break;
 		case SLICK:
@@ -381,6 +363,29 @@ public class LevelModel {
 			break;	
 		}
 	}
+	
+	private void checkTeleport() {
+		switch(motionType) {
+		case JUMP_LEFT:
+		case THROW_LEFT:
+		case FLY_LEFT:
+			if(!(motionType == MotionType.FLY_LEFT && prevMotion != MotionType.FLY_LEFT) && getHeroCell().getLeft().getType() == PlatformType.TELEPORT_L_V) {
+				prevMotion = motionType;
+				motionType = MotionType.TP_LEFT;
+			}
+			break;
+		case JUMP_RIGHT:
+		case THROW_RIGHT:
+		case FLY_RIGHT:
+			if(!(motionType == MotionType.FLY_RIGHT && prevMotion != MotionType.FLY_RIGHT) && getHeroCell().getRight().getType() == PlatformType.TELEPORT_R_V) {
+				prevMotion = motionType;
+				motionType = MotionType.TP_RIGHT;
+			}
+			break;
+		default:
+			break;
+		}
+	}
 
 	
 	public void updateGame() {
@@ -413,18 +418,18 @@ public class LevelModel {
 			controlType = UserControlType.IDLE;
 		}
 		if(motionType == MotionType.TP_LEFT || motionType == MotionType.TP_RIGHT) {
-			switch(prevMotion) {
-			case JUMP_LEFT:
-			case THROW_LEFT:
-			case FLY_LEFT:
-			case JUMP_RIGHT:
-			case THROW_RIGHT:
-			case FLY_RIGHT:
+//			switch(prevMotion) {
+//			case JUMP_LEFT:
+//			case THROW_LEFT:
+//			case FLY_LEFT:
+//			case JUMP_RIGHT:
+//			case THROW_RIGHT:
+//			case FLY_RIGHT:
 				motionType = prevMotion;
-				break;
-			default: 
-				break;
-			}
+//				break;
+//			default: 
+//				break;
+//			}
 		}
 		prevMotion = motionType;
 		motionType.continueMotion();		
@@ -514,6 +519,7 @@ public class LevelModel {
 			case UP:
 			case DOWN:
 			case RIGHT:
+				motionType.finishMotion();
 				platformsCheck();
 				break;
 			default:
@@ -540,6 +546,7 @@ public class LevelModel {
 			case UP:
 			case DOWN:
 			case LEFT:
+				motionType.finishMotion();
 				platformsCheck();
 				break;
 			default:
@@ -573,6 +580,7 @@ public class LevelModel {
 			platformsCheck();
 			break;
 		}
+		checkTeleport();
 		startFinishMotions();
 		updatePosition();
 	}
@@ -611,6 +619,7 @@ public class LevelModel {
 		case JUMP_LEFT:
 		case THROW_LEFT:
 			if(getHeroCell().getLeft().getType() == PlatformType.SPIKE_V) lose = true;
+			if(getHeroCell().getLeft().getType() == PlatformType.TELEPORT_L_V) return true;
 			if(heroX + mt.getXSpeed() < 0) return false;
 			if(getHeroCell().getLeft().getType() == PlatformType.ONE_WAY_LEFT) return true;
 			if(getHeroCell().getLeft().getType() == PlatformType.LIMIT &&
@@ -622,6 +631,7 @@ public class LevelModel {
 		case JUMP_RIGHT:
 		case THROW_RIGHT:	
 			if(getHeroCell().getRight().getType() == PlatformType.SPIKE_V) lose = true;
+			if(getHeroCell().getRight().getType() == PlatformType.TELEPORT_R_V) return true;
 			if(heroX + mt.getXSpeed() > col - 1) return false;
 			if(getHeroCell().getRight().getType() == PlatformType.ONE_WAY_RIGHT) return true;
 			if(getHeroCell().getRight().getType() == PlatformType.LIMIT &&

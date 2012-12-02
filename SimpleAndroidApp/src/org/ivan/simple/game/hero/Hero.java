@@ -122,6 +122,7 @@ public class Hero {
 					finishingMotion.startMotion();
 					switchToCurrentMotion();
 				} else {
+					activeSprite = sprite8;
 					activeSprite.changeSet(26);
 				}
 				break;
@@ -133,6 +134,7 @@ public class Hero {
 					finishingMotion.startMotion();
 					switchToCurrentMotion();
 				} else {
+					activeSprite = sprite8;
 					activeSprite.changeSet(26);
 				}
 				break;

@@ -248,6 +248,9 @@ public class GameView extends SurfaceView {
 			level.model.setControlType(control.pressedControl);
 		}
 		prevMotion = level.model.getMotionType();
+		if(prevMotion == MotionType.TP_LEFT || prevMotion == MotionType.TP_RIGHT) {
+			prevMotion = level.model.getPrevMotion();
+		}
 		// Store cell before update in purpose to play cell animation (like floor movement while jump) 
 		prevCell = level.model.getHeroCell();
 		// calculate new motion depending on current motion, hero cell and user control
