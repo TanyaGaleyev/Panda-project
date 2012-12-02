@@ -17,7 +17,17 @@ public class SpritesCombiner {
 	 */
 	public static void main(String[] args) {
 		SpritesCombiner combiner = new SpritesCombiner();
-		combiner.combineSprite("sprite1");
+		File[] sprites = (new File(IMAGES_PATH)).listFiles(new FileFilter() {
+			
+			@Override
+			public boolean accept(File file) {
+				if(file.isDirectory()) return true;
+				return false;
+			}
+		});
+		for(File spriteDir : sprites) {
+			combiner.combineSprite(spriteDir.getName());
+		}
 	}
 	
 	public void combineSprite(String spriteDirPath) {
