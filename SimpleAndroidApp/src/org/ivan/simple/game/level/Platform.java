@@ -121,6 +121,9 @@ public class Platform {
 		case TRANSPARENT:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.transparent_platform), 1, 8);
 			break;
+		case TRANSPARENT_V:
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.transparent_platform_v), 1, 8);
+			break;
 		case WAY_UP_DOWN:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.way_up_down), 2, 16);
 			break;
@@ -160,23 +163,23 @@ public class Platform {
 			return;
 		}
 		if(type == PlatformType.ANGLE_LEFT) {
-			sprite.playOnce(true);
+			sprite.playOnce();
 			return;
 		}
 		if(type == PlatformType.ANGLE_RIGHT) {
-			sprite.playOnce(true);
+			sprite.playOnce();
 			return;
 		}
 		if(type == PlatformType.THROW_OUT_LEFT) {
-			sprite.playOnce(true);
+			sprite.playOnce();
 			return;
 		}
 		if(type == PlatformType.THROW_OUT_RIGHT) {
-			sprite.playOnce(true);
+			sprite.playOnce();
 			return;
 		}
 		if(type == PlatformType.TRAMPOLINE) {
-			sprite.playOnce(true);
+			sprite.playOnce();
 			return;
 		}
 		if(type == PlatformType.SLOPE) {
@@ -208,37 +211,42 @@ public class Platform {
 	//			break;
 			case JUMP_LEFT:
 				sprite.changeSet(1);
-				sprite.playOnce(true);
+				sprite.playOnce();
 				break;
 			case JUMP_RIGHT:
 				sprite.changeSet(2);
-				sprite.playOnce(true);
+				sprite.playOnce();
 				break;
 			case JUMP:
 			default:
 				sprite.changeSet(0);
-				sprite.playOnce(true);
+				sprite.playOnce();
 				break;
 			}
 			return;
 		}
 		if(type == PlatformType.ONE_WAY_DOWN && mt == MotionType.FALL) {
-			sprite.playOnce(true);
+			sprite.playOnce();
 			return;
 		}
 		if(type == PlatformType.WAY_UP_DOWN && mt == MotionType.FALL) {
 			sprite.changeSet(1);
-			sprite.playOnce(true);
+			sprite.playOnce();
 			return;
 		}
 		if(type == PlatformType.STRING && mt == MotionType.STAY) {
-			sprite.playOnce(true);
+			sprite.playOnce();
 			type = PlatformType.NONE;
 			return;
 		}
 		if(type == PlatformType.INVISIBLE) {
 			sprite.changeSet(1);
-			sprite.playOnce(true);
+			sprite.playOnce();
+			return;
+		}
+		if(type == PlatformType.TRANSPARENT) {
+			sprite.playOnce();
+			type = PlatformType.NONE;
 			return;
 		}
 	}
@@ -247,7 +255,7 @@ public class Platform {
 		if(mt == MotionType.BEAT_ROOF) {
 			if(type == PlatformType.SIMPLE) {
 				sprite.changeSet(3);
-				sprite.playOnce(true);
+				sprite.playOnce();
 			}
 			if(type == PlatformType.BRICK) {
 				if(currentStatus < 3) {
@@ -260,15 +268,20 @@ public class Platform {
 			}
 			if(type == PlatformType.INVISIBLE) {
 				sprite.changeSet(1);
-				sprite.playOnce(true);
+				sprite.playOnce();
 			}
 		}
 		if(mt == MotionType.JUMP && mt.getStage() != 0 && type == PlatformType.ONE_WAY_UP) {
-			sprite.playOnce(true);
+			sprite.playOnce();
 		}
 		if(mt == MotionType.JUMP && mt.getStage() != 0 && type == PlatformType.WAY_UP_DOWN) {
 			sprite.changeSet(0);
-			sprite.playOnce(true);
+			sprite.playOnce();
+		}
+		
+		if(mt == MotionType.JUMP && mt.getStage() != 0 && type == PlatformType.TRANSPARENT) {
+			sprite.playOnce();
+			type = PlatformType.NONE;
 		}
 	}
 	
@@ -281,13 +294,12 @@ public class Platform {
 			case THROW_LEFT:
 			case THROW_RIGHT:
 			case TP:
-				sprite.changeSet(0);
+				sprite.playOnce(0);
 				break;
 			default:
-				sprite.changeSet(1);
+				sprite.playOnce(10);
 				break;
 			}
-			sprite.playOnce(true);
 		}
 	}
 	
@@ -297,23 +309,35 @@ public class Platform {
 				mt == MotionType.THROW_LEFT ||
 				mt == MotionType.JUMP_LEFT_WALL) {
 			if(type == PlatformType.ONE_WAY_LEFT) {
-				sprite.playOnce(true);
+				sprite.playOnce();
 			}
 			if(type == PlatformType.LIMIT && currentStatus < 3) {
 				currentStatus = currentStatus + 1;
 				sprite.changeSet(currentStatus);
 				sprite.goToFrame(1);
-				sprite.playOnce(true);
+				sprite.playOnce();
 			}
-			if(type == PlatformType.TRANSPARENT) {
-				sprite.playOnce(true);
+			if(type == PlatformType.TRANSPARENT_V) {
+				sprite.playOnce();
 				type = PlatformType.NONE;
 			}
 			if(type == PlatformType.SWITCH) {
 				currentStatus = (currentStatus + 1) % 4;
 				sprite.changeSet(currentStatus);
 				sprite.goToFrame(1);
-				sprite.playOnce(true);
+				switch(prevMt) {
+				case JUMP:
+				case FLY_LEFT:
+				case FLY_RIGHT:
+				case THROW_LEFT:
+				case THROW_RIGHT:
+				case TP:
+					sprite.playOnce(0);
+					break;
+				default:
+					sprite.playOnce(10);
+					break;
+				}
 			}
 			if(type == PlatformType.BRICK_V) {
 				if(currentStatus < 3) {
@@ -333,23 +357,23 @@ public class Platform {
 				mt == MotionType.THROW_RIGHT ||
 				mt == MotionType.JUMP_RIGHT_WALL) {
 			if(type == PlatformType.ONE_WAY_RIGHT) {
-				sprite.playOnce(true);
+				sprite.playOnce();
 			}
 			if(type == PlatformType.LIMIT && currentStatus < 3) {
 				currentStatus = currentStatus + 1;
 				sprite.changeSet(currentStatus);
 				sprite.goToFrame(1);
-				sprite.playOnce(true);
+				sprite.playOnce();
 			}
-			if(type == PlatformType.TRANSPARENT) {
-				sprite.playOnce(true);
+			if(type == PlatformType.TRANSPARENT_V) {
+				sprite.playOnce();
 				type = PlatformType.NONE;
 			}
 			if(type == PlatformType.SWITCH) {
 				currentStatus = (currentStatus + 1) % 4;
 				sprite.changeSet(currentStatus);
 				sprite.goToFrame(1);
-				sprite.playOnce(true);
+				sprite.playOnce();
 			}
 			if(type == PlatformType.BRICK_V) {
 				if(currentStatus < 3) {

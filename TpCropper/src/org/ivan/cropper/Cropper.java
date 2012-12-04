@@ -11,7 +11,7 @@ public class Cropper {
 	public static void main(String[] args) {
 		Cropper cropper = new Cropper();
 		try {
-			cropper.cropImage("images/tocrop/cropper");
+			cropper.cropImage("images/cropper/tocrop");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -24,7 +24,7 @@ public class Cropper {
 		BufferedImage source = ImageIO.read(new File(path + ".png"));
 		BufferedImage target = new BufferedImage(source.getWidth(null), source.getHeight(null) * 2, BufferedImage.TYPE_INT_ARGB);
 		int cols = 8;
-		int rows = 6;
+		int rows = 14;
 		for(int j = 0; j < rows; j++) {
 			for(int i = 0; i < cols; i++) {
 				if(j % 2 == 0) {

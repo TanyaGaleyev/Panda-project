@@ -23,6 +23,8 @@ public class Sprite {
 	
 	private boolean playOnce = false;
 	
+	private int delay = 0;
+	
 	public Sprite(Bitmap bmp, int rows, int cols) {
 		this.bmp = bmp;
 		BMP_ROWS = rows;
@@ -48,10 +50,14 @@ public class Sprite {
 	}
 	
 	public void update(Canvas canvas, int x, int y) {
+		if(delay > 0) {
+			delay--;
+			animating = delay == 0 ? true : animating;
+		}
         if(animating) {
         	currentFrame = (currentFrame + 1) % BMP_COLS;
         }
-        if(currentFrame == 0 && playOnce) {
+        if(animating && currentFrame == 0 && playOnce) {
         	animating = false;
         }
 	}
@@ -87,9 +93,15 @@ public class Sprite {
 		return true;
 	}
 	
-	public void playOnce(boolean playOnce) {
-		this.animating = playOnce;
-		this.playOnce = playOnce;
+	public void playOnce() {
+		playOnce(0);
+	}
+	
+	public void playOnce(int delay) {
+		if(delay < 0) delay = 0;
+		this.animating = delay > 0 ? false : true; 
+		this.playOnce = true;
+		this.delay = delay;
 	}
 	
 	protected void setPlayOnce(boolean playOnce) {

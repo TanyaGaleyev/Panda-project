@@ -19,9 +19,9 @@ public class Hero {
 	private LevelCell prevCell;
 	private Sprite sprite8 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite8), 38, 8);
 	private Sprite sprite16 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite16), 9, 16);
-	private Sprite tpSprite = new Sprite(ImageProvider.getBitmap(R.drawable.panda_tp), 12, 8);
+	private Sprite tpSprite = new Sprite(ImageProvider.getBitmap(R.drawable.panda_tp), 28, 8);
 	private Sprite activeSprite;
-	private Sprite shadeSprite = new Sprite(ImageProvider.getBitmap(R.drawable.panda_tp), 12, 8);
+	private Sprite shadeSprite = new Sprite(ImageProvider.getBitmap(R.drawable.panda_tp), 28, 8);
 	public int heroX;
 	public int heroY;
 	private int prevX;
@@ -87,7 +87,9 @@ public class Hero {
 		if(currentMotion == MotionType.FALL_BLANSH) {
 			return activeSprite.getFrame() % 8 == 0;
 		}
-
+		if(prevCell != null && prevCell.getFloor().getType() == PlatformType.GLUE) {
+			return activeSprite.getFrame() % 8 == 0;
+		}
 		return activeSprite.getFrame() == 0;
 	}
 	
@@ -331,36 +333,44 @@ public class Hero {
 			break;
 		case TP_LEFT:
 			if(finishingMotion == MotionType.JUMP) {
-				shadeSprite.changeSet(6);
-				tpSprite.changeSet(7);
-			} else if(finishingMotion == currentMotion || 
-					finishingMotion == MotionType.THROW_LEFT ||
-					finishingMotion == MotionType.TP_LEFT) {
-				shadeSprite.changeSet(2);
-				tpSprite.changeSet(3);
-			} else if(finishingMotion == MotionType.FLY_LEFT) {
 				shadeSprite.changeSet(10);
 				tpSprite.changeSet(11);
-			} else {
+			} else if(finishingMotion == MotionType.THROW_LEFT && finishingMotion.getStage() == 0) {
+				shadeSprite.changeSet(22);
+				tpSprite.changeSet(23);
+			} else if(finishingMotion == MotionType.THROW_LEFT) {
+				shadeSprite.changeSet(26);
+				tpSprite.changeSet(27);
+			} else if(finishingMotion == MotionType.FLY_LEFT) {
+				shadeSprite.changeSet(14);
+				tpSprite.changeSet(15);
+			} else if(finishingMotion == MotionType.JUMP_LEFT) {
 				shadeSprite.changeSet(2);
 				tpSprite.changeSet(3);
+			} else {
+				shadeSprite.changeSet(6);
+				tpSprite.changeSet(7);
 			}
 			break;
 		case TP_RIGHT:
 			if(finishingMotion == MotionType.JUMP) {
-				shadeSprite.changeSet(4);
-				tpSprite.changeSet(5);
-			} else if(finishingMotion == currentMotion || 
-					finishingMotion == MotionType.THROW_RIGHT ||
-					finishingMotion == MotionType.TP_RIGHT) {
-				shadeSprite.changeSet(0);
-				tpSprite.changeSet(1);
-			} else if(finishingMotion == MotionType.FLY_RIGHT) {
 				shadeSprite.changeSet(8);
 				tpSprite.changeSet(9);
-			} else {
+			} else if(finishingMotion == MotionType.THROW_RIGHT && finishingMotion.getStage() == 0) {
+				shadeSprite.changeSet(20);
+				tpSprite.changeSet(21);
+			} else if(finishingMotion == MotionType.THROW_RIGHT) {
+				shadeSprite.changeSet(24);
+				tpSprite.changeSet(25);
+			} else if(finishingMotion == MotionType.FLY_RIGHT) {
+				shadeSprite.changeSet(12);
+				tpSprite.changeSet(13);
+			} else if(finishingMotion == MotionType.JUMP_RIGHT) {
 				shadeSprite.changeSet(0);
 				tpSprite.changeSet(1);
+			} else {
+				shadeSprite.changeSet(4);
+				tpSprite.changeSet(5);
 			}
 			break;
 		case STICK_LEFT:

@@ -622,6 +622,7 @@ public class LevelModel {
 			if(heroY + mt.getYSpeed() < 0) return false;
 			if(getHeroCell().getRoof().getType() == PlatformType.ONE_WAY_UP) return true;
 			if(getHeroCell().getRoof().getType() == PlatformType.WAY_UP_DOWN) return true;
+			if(getHeroCell().getRoof().getType() == PlatformType.TRANSPARENT) return true;
 			if(mt.getYSpeed() != 0 && getHeroCell().getRoof().getType() != PlatformType.NONE) return false;
 			return true;
 		case FLY_LEFT:
@@ -633,7 +634,7 @@ public class LevelModel {
 			if(getHeroCell().getLeft().getType() == PlatformType.ONE_WAY_LEFT) return true;
 			if(getHeroCell().getLeft().getType() == PlatformType.LIMIT &&
 					getHeroCell().getLeft().getStatus() < 3) return true;
-			if(getHeroCell().getLeft().getType() == PlatformType.TRANSPARENT) return true;
+			if(getHeroCell().getLeft().getType() == PlatformType.TRANSPARENT_V) return true;
 			if(getHeroCell().getLeft().getType() != PlatformType.NONE) return false;
 			return true;
 		case FLY_RIGHT:
@@ -645,17 +646,20 @@ public class LevelModel {
 			if(getHeroCell().getRight().getType() == PlatformType.ONE_WAY_RIGHT) return true;
 			if(getHeroCell().getRight().getType() == PlatformType.LIMIT &&
 					getHeroCell().getRight().getStatus() < 3) return true;
-			if(getHeroCell().getRight().getType() == PlatformType.TRANSPARENT) return true;
+			if(getHeroCell().getRight().getType() == PlatformType.TRANSPARENT_V) return true;
 			if(getHeroCell().getRight().getType() != PlatformType.NONE) return false;
 			return true;
 		case FALL:
-			if(getHeroCell().getFloor().getType() != PlatformType.NONE) return false;
+			if(getHeroCell().getFloor().getType() != PlatformType.NONE &&
+				getHeroCell().getFloor().getType() != PlatformType.TRANSPARENT) return false;
 			if(heroY + 1 > row - 1) lose = true;
 			return true;
 		case FALL_BLANSH:
-			if(getHeroCell().getFloor().getType() != PlatformType.NONE) return false;
+			if(getHeroCell().getFloor().getType() != PlatformType.NONE &&
+					getHeroCell().getFloor().getType() != PlatformType.TRANSPARENT) return false;
 			if(heroY + 2 > row - 1) return false;
-			if(getCell(heroY + 1, heroX).getFloor().getType() != PlatformType.NONE) return false;
+			if(getCell(heroY + 1, heroX).getFloor().getType() != PlatformType.NONE &&
+					getCell(heroY + 1, heroX).getFloor().getType() != PlatformType.TRANSPARENT) return false;
 			return true;
 //		case STEP_LEFT_WALL:
 //			return true;
