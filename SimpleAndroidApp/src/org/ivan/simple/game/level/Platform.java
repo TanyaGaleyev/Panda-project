@@ -2,6 +2,7 @@ package org.ivan.simple.game.level;
 
 import org.ivan.simple.ImageProvider;
 import org.ivan.simple.R;
+import org.ivan.simple.game.Motion;
 import org.ivan.simple.game.MotionType;
 import org.ivan.simple.game.hero.Sprite;
 
@@ -40,7 +41,7 @@ public class Platform {
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.throw_out_platform_left), 1, 8);
 			break;	
 		case TRAMPOLINE:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.trampoline_platform),1,12);
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.trampoline_platform),1,6);
 			break;
 		case ELECTRO:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.electro_platform),1,4);
@@ -136,21 +137,23 @@ public class Platform {
 		return type;
 	}
 	
-	public void changeSet(MotionType mt, MotionType prevMt) {
+	public void changeSet(Motion motion, Motion prevMotion) {
+		MotionType mt = motion.getType();
+		MotionType prevMt = prevMotion.getType();
 		if(sprite == null || 
 				mt == MotionType.MAGNET || 
 				mt == MotionType.BEAT_ROOF || 
-				mt == MotionType.THROW_LEFT && mt.getStage() != 0 || 
-				mt == MotionType.THROW_RIGHT && mt.getStage() != 0 || 
-				mt == MotionType.JUMP && mt.getStage() != 0 ||
-				mt == MotionType.FLY_LEFT && mt.getStage() != 0 ||
-				mt == MotionType.FLY_RIGHT && mt.getStage() != 0 ||
+				mt == MotionType.THROW_LEFT && motion.getStage() != 0 || 
+				mt == MotionType.THROW_RIGHT && motion.getStage() != 0 || 
+				mt == MotionType.JUMP && motion.getStage() != 0 && type != PlatformType.TRAMPOLINE ||
+				mt == MotionType.FLY_LEFT && motion.getStage() != 0 ||
+				mt == MotionType.FLY_RIGHT && motion.getStage() != 0 ||
 				mt == MotionType.TP_LEFT && prevMt == MotionType.FLY_LEFT ||
 				mt == MotionType.TP_RIGHT && prevMt == MotionType.FLY_RIGHT ||
 				mt == MotionType.JUMP_LEFT_WALL && prevMt == MotionType.FLY_LEFT ||
 				mt == MotionType.JUMP_RIGHT_WALL && prevMt == MotionType.FLY_RIGHT ||
-				mt == MotionType.FLY_RIGHT && prevMt == MotionType.FLY_LEFT && prevMt.getStage() != 0 ||
-				mt == MotionType.FLY_LEFT && prevMt == MotionType.FLY_RIGHT && prevMt.getStage() != 0) return;
+				mt == MotionType.FLY_RIGHT && prevMt == MotionType.FLY_LEFT && prevMotion.getStage() != 0 ||
+				mt == MotionType.FLY_LEFT && prevMt == MotionType.FLY_RIGHT && prevMotion.getStage() != 0) return;
 		if(type == PlatformType.REDUCE) {
 			if(currentStatus<3) {
 				currentStatus++;
@@ -251,7 +254,9 @@ public class Platform {
 		}
 	}
 	
-	public void updateRoof(MotionType mt) {
+	public void updateRoof(Motion motion) {
+		MotionType mt = motion.getType();
+		int stage = motion.getStage();
 		if(mt == MotionType.BEAT_ROOF) {
 			if(type == PlatformType.SIMPLE) {
 				sprite.changeSet(3);
@@ -271,21 +276,22 @@ public class Platform {
 				sprite.playOnce();
 			}
 		}
-		if(mt == MotionType.JUMP && mt.getStage() != 0 && type == PlatformType.ONE_WAY_UP) {
+		if(mt == MotionType.JUMP && stage != 0 && type == PlatformType.ONE_WAY_UP) {
 			sprite.playOnce();
 		}
-		if(mt == MotionType.JUMP && mt.getStage() != 0 && type == PlatformType.WAY_UP_DOWN) {
+		if(mt == MotionType.JUMP && stage != 0 && type == PlatformType.WAY_UP_DOWN) {
 			sprite.changeSet(0);
 			sprite.playOnce();
 		}
 		
-		if(mt == MotionType.JUMP && mt.getStage() != 0 && type == PlatformType.TRANSPARENT) {
+		if(mt == MotionType.JUMP && stage != 0 && type == PlatformType.TRANSPARENT) {
 			sprite.playOnce();
 			type = PlatformType.NONE;
 		}
 	}
 	
-	public void highlightSpring(MotionType prevMt) {
+	public void highlightSpring(Motion prevMotion) {
+		MotionType prevMt = prevMotion.getType();
 		if(type == PlatformType.SPRING) {
 			switch(prevMt) {
 			case JUMP:
@@ -303,9 +309,12 @@ public class Platform {
 		}
 	}
 	
-	public void updateLeftWall(MotionType mt, MotionType prevMt) {
+	public void updateLeftWall(Motion motion, Motion prevMotion) {
+		MotionType mt = motion.getType();
+		int stage = motion.getStage();
+		MotionType prevMt = prevMotion.getType();
 		if(mt == MotionType.JUMP_LEFT ||
-				mt == MotionType.FLY_LEFT && mt.getStage() != 0 ||
+				mt == MotionType.FLY_LEFT && stage != 0 ||
 				mt == MotionType.THROW_LEFT ||
 				mt == MotionType.JUMP_LEFT_WALL) {
 			if(type == PlatformType.ONE_WAY_LEFT) {
@@ -328,9 +337,7 @@ public class Platform {
 				switch(prevMt) {
 				case JUMP:
 				case FLY_LEFT:
-				case FLY_RIGHT:
 				case THROW_LEFT:
-				case THROW_RIGHT:
 				case TP:
 					sprite.playOnce(0);
 					break;
@@ -351,9 +358,12 @@ public class Platform {
 		}
 	}
 	
-	public void updateRightWall(MotionType mt, MotionType prevMt) {
+	public void updateRightWall(Motion motion, Motion prevMotion) {
+		MotionType mt = motion.getType();
+		int stage = motion.getStage();
+		MotionType prevMt = prevMotion.getType();
 		if(mt == MotionType.JUMP_RIGHT ||
-				mt == MotionType.FLY_RIGHT && mt.getStage() != 0 ||
+				mt == MotionType.FLY_RIGHT && stage != 0 ||
 				mt == MotionType.THROW_RIGHT ||
 				mt == MotionType.JUMP_RIGHT_WALL) {
 			if(type == PlatformType.ONE_WAY_RIGHT) {
@@ -373,7 +383,17 @@ public class Platform {
 				currentStatus = (currentStatus + 1) % 4;
 				sprite.changeSet(currentStatus);
 				sprite.goToFrame(1);
-				sprite.playOnce();
+				switch(prevMt) {
+				case JUMP:
+				case FLY_RIGHT:
+				case THROW_RIGHT:
+				case TP:
+					sprite.playOnce(0);
+					break;
+				default:
+					sprite.playOnce(10);
+					break;
+				}
 			}
 			if(type == PlatformType.BRICK_V) {
 				if(currentStatus < 3) {

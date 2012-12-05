@@ -1,5 +1,6 @@
 package org.ivan.simple.game.level;
 
+import org.ivan.simple.game.Motion;
 import org.ivan.simple.game.MotionType;
 
 public class LevelCell {
@@ -71,16 +72,16 @@ public class LevelCell {
 		return right_wall;
 	}
 	
-	public void updateCell(MotionType mt, MotionType prevMt) {
-		roof.updateRoof(mt);
-		if(mt == MotionType.FLY_LEFT && mt.isUncontrolable()) {
-			right_wall.highlightSpring(prevMt);
+	public void updateCell(Motion motion, Motion prevMotion) {
+		roof.updateRoof(motion);
+		if(motion.getType() == MotionType.FLY_LEFT && motion.isUncontrolable()) {
+			right_wall.highlightSpring(prevMotion);
 		}
-		if(mt == MotionType.FLY_RIGHT && mt.isUncontrolable()) {
-			left_wall.highlightSpring(prevMt);
+		if(motion.getType() == MotionType.FLY_RIGHT && motion.isUncontrolable()) {
+			left_wall.highlightSpring(prevMotion);
 		}
-		right_wall.updateRightWall(mt, prevMt);
-		left_wall.updateLeftWall(mt, prevMt);
-		floor.changeSet(mt, prevMt);
+		right_wall.updateRightWall(motion, prevMotion);
+		left_wall.updateLeftWall(motion, prevMotion);
+		floor.changeSet(motion, prevMotion);
 	}
 }

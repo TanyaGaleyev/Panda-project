@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.ivan.simple.UserControlType;
+import org.ivan.simple.game.ContainerMotion;
+import org.ivan.simple.game.Motion;
 import org.ivan.simple.game.MotionType;
 
 public class LevelModel {
@@ -16,8 +18,10 @@ public class LevelModel {
 	public int heroY;
 	private UserControlType controlType = UserControlType.IDLE;
 	private UserControlType bufferedControlType = UserControlType.IDLE;
-	private MotionType prevMotion = MotionType.STAY;
-	private MotionType motionType = MotionType.STAY;
+//	private MotionType prevMotion = MotionType.STAY;
+//	private MotionType motionType = MotionType.STAY;
+	private Motion prevMotion = new Motion(MotionType.STAY);
+	private Motion motion = new Motion(MotionType.STAY); 
 	private int prizesLeft = 0;
 	private boolean lose = false;
 	private boolean complete = false;
@@ -225,7 +229,8 @@ public class LevelModel {
 		return levelGrid[heroY][heroX];
 	}
 
-	private void stayCheck() {
+	private MotionType stayCheck() {
+		MotionType motionType;
 		if(controlType == UserControlType.DOWN && motionAvaible(MotionType.FALL_BLANSH)) {
 			motionType=MotionType.FALL_BLANSH;
 		} else if(motionAvaible(MotionType.FALL)) {
@@ -233,13 +238,13 @@ public class LevelModel {
 		} else {
 			switch(controlType){
 			case UP:
-				jump();
+				motionType = jump(0);
 				break;
 			case LEFT:
-				moveLeft();
+				motionType = moveLeft();
 				break;
 			case RIGHT:
-				moveRight();
+				motionType = moveRight();
 				break;
 			case DOWN:
 			case IDLE:
@@ -249,19 +254,24 @@ public class LevelModel {
 
 			}
 		}
+		return motionType;
 	}
 	
-	private void jump() {    	
-		if(motionAvaible(MotionType.JUMP)) {
+	private MotionType jump(int stage) {
+		MotionType motionType;
+		if(motionAvaible(MotionType.JUMP, stage)) {
 			motionType=MotionType.JUMP;
+			motion = new Motion(motionType, stage);
 		} else if(motionAvaible(MotionType.MAGNET)) {
 			motionType = MotionType.MAGNET;
 		} else {
 			motionType=MotionType.BEAT_ROOF;	
 		}
+		return motionType;
 	}
 	
-	private void moveLeft() {
+	private MotionType moveLeft() {
+		MotionType motionType;
 		if(motionAvaible(MotionType.JUMP_LEFT) ) {
 			motionType=MotionType.JUMP_LEFT;
 		} else if(getHeroCell().getLeft().getType() == PlatformType.SPRING) {
@@ -271,9 +281,11 @@ public class LevelModel {
 		} else {
 			motionType=MotionType.JUMP_LEFT_WALL;
 		}
+		return motionType;
 	}
 	
-	private void moveRight() {
+	private MotionType moveRight() {
+		MotionType motionType;
 		if(motionAvaible(MotionType.JUMP_RIGHT) ) {
 			motionType=MotionType.JUMP_RIGHT;
 		} else if(getHeroCell().getRight().getType() == PlatformType.SPRING) {
@@ -283,52 +295,54 @@ public class LevelModel {
 		} else {
 			motionType=MotionType.JUMP_RIGHT_WALL;
 		}
+		return motionType;
 	}
 	
-	private void platformsCheck() {
+	private MotionType platformsCheck() {
+		MotionType motionType;
 		switch (getHeroCell().getFloor().getType()){
 
 		case ANGLE_RIGHT:
-			moveRight();			
+			motionType = moveRight();			
 			break;	
 		case  ANGLE_LEFT:
-			moveLeft();
+			motionType = moveLeft();
 			break;
 		case  TRAMPOLINE:
-			jump();
+			motionType = jump(1);
 			break;
 		case  THROW_OUT_LEFT:
 			if(motionAvaible(MotionType.JUMP_LEFT)){
 				motionType=MotionType.THROW_LEFT;
 			} else {
-				moveLeft();
+				motionType = moveLeft();
 			}	
 			break;
 		case  THROW_OUT_RIGHT:
 			if(motionAvaible(MotionType.JUMP_RIGHT)){
 				motionType=MotionType.THROW_RIGHT;
 			} else {
-				moveRight();
+				motionType = moveRight();
 			}	
 			break;
 		case SLICK:
 			if(controlType == UserControlType.IDLE &&
-				(motionType == MotionType.JUMP_LEFT || motionType == MotionType.JUMP_RIGHT_WALL)) {
-				moveLeft();
+				(motion.getType() == MotionType.JUMP_LEFT || motion.getType() == MotionType.JUMP_RIGHT_WALL)) {
+				motionType = moveLeft();
 			} else if (controlType == UserControlType.IDLE &&
-					(motionType == MotionType.JUMP_RIGHT || motionType == MotionType.JUMP_LEFT_WALL)) {
-				moveRight();
+					(motion.getType() == MotionType.JUMP_RIGHT || motion.getType() == MotionType.JUMP_LEFT_WALL)) {
+				motionType = moveRight();
 			} else {
-				stayCheck();
+				motionType = stayCheck();
 			}
 			break;
 		case SLOPE:
 			if(getHeroCell().getFloor().getStatus() == 1) {
-				moveLeft();
+				motionType = moveLeft();
 			} else if(getHeroCell().getFloor().getStatus() == 2) {
-				moveRight();
+				motionType = moveRight();
 			} else {
-				stayCheck();
+				motionType = stayCheck();
 			}
 			break;
 		case ONE_WAY_DOWN:
@@ -336,58 +350,59 @@ public class LevelModel {
 				if(heroY + 1 > row - 1) lose = true;
 				motionType = MotionType.FALL;
 			} else {
-				stayCheck();
+				motionType = stayCheck();
 			}
 			break;
 		case WAY_UP_DOWN:
-			if(controlType == UserControlType.DOWN && motionType != MotionType.JUMP) {
+			if(controlType == UserControlType.DOWN && motion.getType() != MotionType.JUMP) {
 				if(heroY + 1 > row - 1) lose = true;
 				motionType = MotionType.FALL;
 			} else {
-				stayCheck();
+				motionType = stayCheck();
 			}
 			break;
 		case BRICK:
 			if(controlType == UserControlType.UP) {
 				controlType = UserControlType.IDLE;
 			}
-			stayCheck();
+			motionType = stayCheck();
 			break;
 		case GLUE:
-			if(prevMotion ==  MotionType.STAY && controlType == UserControlType.UP) {
+			if(prevMotion.getType() == MotionType.STAY && controlType == UserControlType.UP) {
 				controlType = UserControlType.IDLE;
 			}
-			stayCheck();
+			motionType = stayCheck();
 			break;
 		case TELEPORT:
 			if(controlType != UserControlType.LEFT && controlType != UserControlType.RIGHT) {
 				motionType = MotionType.TP;
 			} else {
-				stayCheck();
+				motionType = stayCheck();
 			}
 			break;
 		default:
-			stayCheck();
+			motionType = stayCheck();
 			break;	
 		}
+		return motionType;
 	}
 	
 	private void checkTeleport() {
-		switch(motionType) {
+		MotionType mt = motion.getType();
+		MotionType prevMt = prevMotion.getType();
+		switch(mt) {
 		case JUMP_LEFT:
 		case THROW_LEFT:
 		case FLY_LEFT:
-			if(!(motionType == MotionType.FLY_LEFT && prevMotion != MotionType.FLY_LEFT) && getHeroCell().getLeft().getType() == PlatformType.TELEPORT_L_V) {
-				prevMotion = motionType;
-				motionType = MotionType.TP_LEFT;
+			if(!(mt == MotionType.FLY_LEFT && prevMt != MotionType.FLY_LEFT) && getHeroCell().getLeft().getType() == PlatformType.TELEPORT_L_V) {
+				motion = new ContainerMotion(MotionType.TP_LEFT, motion);
 			}
 			break;
 		case JUMP_RIGHT:
 		case THROW_RIGHT:
 		case FLY_RIGHT:
-			if(!(motionType == MotionType.FLY_RIGHT && prevMotion != MotionType.FLY_RIGHT) && getHeroCell().getRight().getType() == PlatformType.TELEPORT_R_V) {
-				prevMotion = motionType;
-				motionType = MotionType.TP_RIGHT;
+			if(!(mt == MotionType.FLY_RIGHT && prevMt != MotionType.FLY_RIGHT) && getHeroCell().getRight().getType() == PlatformType.TELEPORT_R_V) {
+				motion = new ContainerMotion(MotionType.TP_RIGHT, motion);
 			}
 			break;
 		default:
@@ -422,10 +437,10 @@ public class LevelModel {
 			}
 		}
 		tryToUnlock();
-		if(motionType.isUncontrolable()) {
+		if(motion.isUncontrolable()) {
 			controlType = UserControlType.IDLE;
 		}
-		if(motionType == MotionType.TP_LEFT || motionType == MotionType.TP_RIGHT) {
+		if(motion.getType() == MotionType.TP_LEFT || motion.getType() == MotionType.TP_RIGHT) {
 //			switch(prevMotion) {
 //			case JUMP_LEFT:
 //			case THROW_LEFT:
@@ -433,37 +448,38 @@ public class LevelModel {
 //			case JUMP_RIGHT:
 //			case THROW_RIGHT:
 //			case FLY_RIGHT:
-				motionType = prevMotion;
+				motion = motion.getChildMotion();
 //				break;
 //			default: 
 //				break;
 //			}
 		}
-		prevMotion = motionType;
-		motionType.continueMotion();		
-		switch(motionType){
+		prevMotion = motion;
+		motion.continueMotion();
+		MotionType motionType;
+		switch(motion.getType()){
 		case JUMP:
 			switch(controlType) {
 			case DOWN:
-				platformsCheck();
+				motionType = platformsCheck();
 				break;
 			case LEFT:
-				moveLeft();
+				motionType = moveLeft();
 				break;
 			case RIGHT:
-				moveRight();
+				motionType = moveRight();
 				break;
 			case IDLE:
 			case UP:	
 			default:
-				jump();
+				motionType = jump(motion.getStage());
 				break;
 			}
 			break;
 		case  MAGNET:
 			switch(controlType){
 			case DOWN:
-				platformsCheck();
+				motionType = platformsCheck();
 				break;
 			default:
 				motionType = MotionType.MAGNET;
@@ -474,7 +490,7 @@ public class LevelModel {
 			switch(controlType) {
 			case DOWN:
 			case RIGHT:
-				platformsCheck();
+				motionType = platformsCheck();
 				break;
 			default:
 				motionType = MotionType.STICK_LEFT;
@@ -485,7 +501,7 @@ public class LevelModel {
 			switch(controlType) {
 			case DOWN:
 			case LEFT:
-				platformsCheck();
+				motionType = platformsCheck();
 				break;
 			default:
 				motionType = MotionType.STICK_RIGHT;
@@ -493,144 +509,162 @@ public class LevelModel {
 			}
 			break;
 		case THROW_LEFT:
-			if(motionType.getStage() == 1) {
+			if(motion.getStage() == 1) {
 				if(!motionAvaible(MotionType.JUMP_LEFT) ) {
-					moveLeft();
+					motionType = moveLeft();
+				} else {
+					motionType = MotionType.THROW_LEFT;
 				}
 			} else {				
-				platformsCheck();
+				motionType = platformsCheck();
 			}
 			break;
 		case THROW_RIGHT:
-			if(motionType.getStage() == 1) {
+			if(motion.getStage() == 1) {
 				if(!motionAvaible(MotionType.JUMP_RIGHT) ) {
-					moveRight();
+					motionType = moveRight();
+				} else {
+					motionType = MotionType.THROW_RIGHT;
 				}
 			} else {
-				platformsCheck();
+				motionType = platformsCheck();
 			}
 			break;
 		case JUMP_LEFT_WALL:
-			platformsCheck();
+			motionType = platformsCheck();
 			break;
-		case TP_LEFT:
+//		case TP_LEFT:
 //			if(!MotionType.FLY_LEFT.isUncontrolable() && motionAvaible(MotionType.JUMP_LEFT)) {
 //				motionType = MotionType.FLY_LEFT;
 //			} else if(MotionType.THROW_LEFT.getStage() == 1 && motionAvaible(MotionType.JUMP_LEFT)) {
 //				motionType = MotionType.THROW_LEFT;
 //			} else {
-				platformsCheck();
+//			motionType = platformsCheck();
 //			}
-			break;
+//			break;
 		case FLY_LEFT:
 			switch(controlType) {
 			case UP:
 			case DOWN:
 			case RIGHT:
-				motionType.finishMotion();
-				platformsCheck();
+				motion.finishMotion();
+				motionType = platformsCheck();
 				break;
 			default:
 				if(motionAvaible(MotionType.JUMP_LEFT)) {
 					motionType = MotionType.FLY_LEFT;
 				} else {
-					moveLeft();
+					motionType = moveLeft();
 				}
 				break;
 			}
 			break;
 		case JUMP_RIGHT_WALL:
-			platformsCheck();
+			motionType = platformsCheck();
 			break;
-		case TP_RIGHT:
+//		case TP_RIGHT:
 //			if(!MotionType.FLY_RIGHT.isUncontrolable() && motionAvaible(MotionType.JUMP_RIGHT)) {
 //				motionType = MotionType.FLY_RIGHT;
 //			} else {
-				platformsCheck();
+//			motionType = platformsCheck();
 //			}
-			break;
+//			break;
 		case FLY_RIGHT:
 			switch(controlType) {
 			case UP:
 			case DOWN:
 			case LEFT:
-				motionType.finishMotion();
-				platformsCheck();
+				motion.finishMotion();
+				motionType = platformsCheck();
 				break;
 			default:
 				if(motionAvaible(MotionType.JUMP_RIGHT)) {
 					motionType = MotionType.FLY_RIGHT;
 				} else {
-					moveRight();
+					motionType = moveRight();
 				}
 				break;
 			}
 			break;
 		case TP:
-			if(motionType.getStage() == 0) {
+			if(motion.getStage() == 0) {
 				if(controlType == UserControlType.UP || controlType == UserControlType.IDLE) {
 					// to start without pre jump
-					MotionType.JUMP.continueMotion();
-					jump();
+					motionType = jump(1);
 				} else {
-					platformsCheck();
+					motionType = platformsCheck();
 				}
+			} else {
+				motionType = MotionType.TP;
 			}
 			break;
 		case FALL_BLANSH:
-			if(motionType.getStage() == 1) {
+			if(motion.getStage() == 1) {
 				motionType = MotionType.FALL_BLANSH;
 			} else {
-				platformsCheck();
+				motionType = platformsCheck();
 			}
 			break;
 		default:
-			platformsCheck();
+			motionType = platformsCheck();
 			break;
 		}
-		checkTeleport();
+		if(motionType != motion.getType()) {
+			motion = new Motion(motionType);
+		}
 		startFinishMotions();
+		checkTeleport();
 		updatePosition();
 	}
 	
 	private void updatePosition() {
-		if(motionType == MotionType.TP_LEFT) {
+		if(motion.getType() == MotionType.TP_LEFT) {
 			TpPeer toCoords = tpGroupMap.get(new CellCoords(heroY, heroX));
 			heroX = toCoords.endCol;
 			heroY = toCoords.endRow;
 			return;
 		}
-		if(motionType == MotionType.TP_RIGHT) {
+		if(motion.getType() == MotionType.TP_RIGHT) {
 			TpPeer toCoords = tpGroupMap.get(new CellCoords(heroY, heroX));
 			heroX = toCoords.startCol;
 			heroY = toCoords.startRow;
 			return;
 		}
-		if(motionType == MotionType.TP && motionType.getStage() == 1) {
+		if(motion.getType() == MotionType.TP && motion.getStage() == 1) {
 			CellCoords nextCell = tpSequence.get(new CellCoords(heroY, heroX)); 
 			heroX = nextCell.j;
 			heroY = nextCell.i;
 		}
-		heroX += motionType.getXSpeed();
-		heroY += motionType.getYSpeed();
+		heroX += motion.getXSpeed();
+		heroY += motion.getYSpeed();
 	}
 	
 	private boolean motionAvaible(MotionType mt) {
+		if(mt == motion.getType()) {
+			return motionAvaible(mt, motion.getStage());
+		} else {
+			return motionAvaible(mt, 0);
+		}
+	}
+	
+	private boolean motionAvaible(MotionType mt, int stage) {
+		int xSpeed = Motion.getXSpeedAtStage(mt, stage);
+		int ySpeed = Motion.getYSpeedAtStage(mt, stage);
 		switch (mt) {
 		case JUMP:
-			if(mt.getYSpeed() != 0 && getHeroCell().getRoof().getType() == PlatformType.SPIKE) lose = true;
-			if(heroY + mt.getYSpeed() < 0) return false;
+			if(ySpeed < 0 && getHeroCell().getRoof().getType() == PlatformType.SPIKE) lose = true;
+			if(heroY + ySpeed < 0) return false;
 			if(getHeroCell().getRoof().getType() == PlatformType.ONE_WAY_UP) return true;
 			if(getHeroCell().getRoof().getType() == PlatformType.WAY_UP_DOWN) return true;
 			if(getHeroCell().getRoof().getType() == PlatformType.TRANSPARENT) return true;
-			if(mt.getYSpeed() != 0 && getHeroCell().getRoof().getType() != PlatformType.NONE) return false;
+			if(ySpeed < 0 && getHeroCell().getRoof().getType() != PlatformType.NONE) return false;
 			return true;
 		case FLY_LEFT:
 		case JUMP_LEFT:
 		case THROW_LEFT:
 			if(getHeroCell().getLeft().getType() == PlatformType.SPIKE_V) lose = true;
 			if(getHeroCell().getLeft().getType() == PlatformType.TELEPORT_L_V) return true;
-			if(heroX + mt.getXSpeed() < 0) return false;
+			if(heroX + xSpeed < 0) return false;
 			if(getHeroCell().getLeft().getType() == PlatformType.ONE_WAY_LEFT) return true;
 			if(getHeroCell().getLeft().getType() == PlatformType.LIMIT &&
 					getHeroCell().getLeft().getStatus() < 3) return true;
@@ -642,7 +676,7 @@ public class LevelModel {
 		case THROW_RIGHT:	
 			if(getHeroCell().getRight().getType() == PlatformType.SPIKE_V) lose = true;
 			if(getHeroCell().getRight().getType() == PlatformType.TELEPORT_R_V) return true;
-			if(heroX + mt.getXSpeed() > col - 1) return false;
+			if(heroX + xSpeed > col - 1) return false;
 			if(getHeroCell().getRight().getType() == PlatformType.ONE_WAY_RIGHT) return true;
 			if(getHeroCell().getRight().getType() == PlatformType.LIMIT &&
 					getHeroCell().getRight().getStatus() < 3) return true;
@@ -661,10 +695,6 @@ public class LevelModel {
 			if(getCell(heroY + 1, heroX).getFloor().getType() != PlatformType.NONE &&
 					getCell(heroY + 1, heroX).getFloor().getType() != PlatformType.TRANSPARENT) return false;
 			return true;
-//		case STEP_LEFT_WALL:
-//			return true;
-//		case STEP_RIGHT_WALL:
-//			return true;
 		case BEAT_ROOF:
 			if(getHeroCell().getRoof().getType() != PlatformType.NONE) return true;
 			if(heroY - 1 < 0) return true;
@@ -677,11 +707,11 @@ public class LevelModel {
 		}
 	}
 	
-	public MotionType getMotionType() {
-		return motionType;
+	public Motion getMotion() {
+		return motion;
 	}
 	
-	public MotionType getPrevMotion() {
+	public Motion getPrevMotion() {
 		return prevMotion;
 	}
 
@@ -716,13 +746,15 @@ public class LevelModel {
 	}
 	
 	private void startFinishMotions() {
-		if(prevMotion != motionType) {
-			if(!(prevMotion == MotionType.FLY_LEFT && motionType == MotionType.TP_LEFT) &&
-					!(prevMotion == MotionType.FLY_RIGHT && motionType == MotionType.TP_RIGHT) &&
-					!(prevMotion == MotionType.THROW_LEFT && motionType == MotionType.TP_LEFT) &&
-					!(prevMotion == MotionType.THROW_RIGHT && motionType == MotionType.TP_RIGHT) &&
-					!(prevMotion == MotionType.FLY_LEFT && motionType == MotionType.FLY_RIGHT) &&
-					!(prevMotion == MotionType.FLY_RIGHT && motionType == MotionType.FLY_LEFT)) {
+		MotionType motionType = motion.getType();
+		MotionType prevMotionType = motion.getType();
+		if(prevMotionType != motionType) {
+			if(!(prevMotionType == MotionType.FLY_LEFT && motionType == MotionType.TP_LEFT) &&
+					!(prevMotionType == MotionType.FLY_RIGHT && motionType == MotionType.TP_RIGHT) &&
+					!(prevMotionType == MotionType.THROW_LEFT && motionType == MotionType.TP_LEFT) &&
+					!(prevMotionType == MotionType.THROW_RIGHT && motionType == MotionType.TP_RIGHT) &&
+					!(prevMotionType == MotionType.FLY_LEFT && motionType == MotionType.FLY_RIGHT) &&
+					!(prevMotionType == MotionType.FLY_RIGHT && motionType == MotionType.FLY_LEFT)) {
 				prevMotion.finishMotion();
 			}
 			if(
@@ -730,9 +762,9 @@ public class LevelModel {
 //					!(prevMotion == MotionType.TP_RIGHT && motionType == MotionType.FLY_RIGHT) &&
 //					!(prevMotion == MotionType.TP_LEFT && motionType == MotionType.THROW_LEFT) &&
 //					!(prevMotion == MotionType.TP_RIGHT && motionType == MotionType.THROW_RIGHT) &&
-					!(prevMotion == MotionType.TP && motionType == MotionType.JUMP)
+					!(prevMotionType == MotionType.TP && motionType == MotionType.JUMP)
 					) {
-				motionType.startMotion();
+				motion.startMotion();
 			}
 		}
 	}

@@ -43,7 +43,7 @@ public class GameView extends SurfaceView {
 	private Bitmap back;
 	
 	private LevelCell prevCell;
-	private MotionType prevMotion;
+	private Motion prevMotion;
 	
 	private int levId = 0;
 	
@@ -70,7 +70,7 @@ public class GameView extends SurfaceView {
 			
 			public void surfaceDestroyed(SurfaceHolder holder) {
 				// turn motion to initial stage (stage == 0)
-				level.model.getMotionType().startMotion();
+				level.model.getMotion().startMotion();
                 stopManager();
 			}
 			
@@ -247,16 +247,16 @@ public class GameView extends SurfaceView {
 		if(level.model.getControlType() == UserControlType.IDLE) {
 			level.model.setControlType(control.pressedControl);
 		}
-		prevMotion = level.model.getMotionType();
-		if(prevMotion == MotionType.TP_LEFT || prevMotion == MotionType.TP_RIGHT) {
-			prevMotion = level.model.getPrevMotion();
-		}
+		prevMotion = level.model.getMotion();
+//		if(prevMotion.getType() == MotionType.TP_LEFT || prevMotion.getType() == MotionType.TP_RIGHT) {
+//			prevMotion = level.model.getPrevMotion();
+//		}
 		// Store cell before update in purpose to play cell animation (like floor movement while jump) 
 		prevCell = level.model.getHeroCell();
 		// calculate new motion depending on current motion, hero cell and user control
 		level.model.updateGame();
 		// switch hero animation
-		MotionType curMotion = level.model.getMotionType();
+		Motion curMotion = level.model.getMotion();
 		hero.changeMotion(curMotion, prevMotion, prevCell);
 		// play cell reaction to new motion
 		if(!hero.isFinishing()) {
@@ -272,13 +272,8 @@ public class GameView extends SurfaceView {
 		if(hero.isFinishing()) {
 			// when motion at last switches we need to play cell animation
 			if(hero.tryToEndFinishMotion(level.model.getPrevMotion())) {
-				prevCell.updateCell(level.model.getMotionType(), level.model.getPrevMotion());
+				prevCell.updateCell(level.model.getMotion(), level.model.getPrevMotion());
 			}
-			return true;
-		}
-
-		if(hero.isStarting()) {
-			hero.tryToEndStartMotion();
 			return true;
 		}
 		return false;
@@ -293,9 +288,9 @@ public class GameView extends SurfaceView {
 		} else if(level.model.isComplete()) {
 			finished = !hero.playWinAnimation();
 		} else {
-			if(hero.getRealMotion() == MotionType.TP_LEFT || 
-					hero.getRealMotion() == MotionType.TP_RIGHT ||
-					hero.getRealMotion() == MotionType.TP) {
+			if(hero.getRealMotion().getType() == MotionType.TP_LEFT || 
+					hero.getRealMotion().getType() == MotionType.TP_RIGHT ||
+					hero.getRealMotion().getType() == MotionType.TP) {
 				hero.heroX = LEFT_BOUND + level.model.heroX * GRID_STEP;
 				hero.heroY = TOP_BOUND + level.model.heroY * GRID_STEP;
 			}
@@ -313,7 +308,7 @@ public class GameView extends SurfaceView {
 	 */
 	private boolean moveLose() {
 		if((-GRID_STEP < hero.heroX && hero.heroX < getWidth() + GRID_STEP) && (-GRID_STEP < hero.heroY && hero.heroY < getHeight() + GRID_STEP)) {
-			if(hero.getRealMotion() == MotionType.FALL) {
+			if(hero.getRealMotion().getType() == MotionType.FALL) {
 				hero.heroY += ANIMATION_JUMP_SPEED;
 				return true;
 			}
@@ -345,7 +340,7 @@ public class GameView extends SurfaceView {
 		level = new LevelView(levId);
 		control = new GameControl(this, level.model, hero);
 		prevCell = level.model.getHeroCell();
-		prevMotion = level.model.getMotionType();
+		prevMotion = level.model.getMotion();
 	}
 	
 	protected int getLevId() {
