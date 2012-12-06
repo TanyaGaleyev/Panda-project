@@ -55,11 +55,15 @@ public class LevelView {
 	public void drawGrid(Canvas canvas) {
 		Paint paint = new Paint();
 		paint.setColor(Color.BLUE);
-		for(int x = LEFT_BOUND - GRID_STEP / 2; x <= model.col * GRID_STEP + GRID_STEP / 2; x += GRID_STEP) {
-			canvas.drawLine(x, TOP_BOUND - GRID_STEP / 2, x, model.row * GRID_STEP + GRID_STEP / 2, paint);
+		int xstart = LEFT_BOUND - GRID_STEP / 2;
+		int xend = xstart + model.col * GRID_STEP;
+		int ystart = TOP_BOUND - GRID_STEP / 2;
+		int yend = ystart + model.row * GRID_STEP;
+		for(int x = xstart; x <= xend; x += GRID_STEP) {
+			canvas.drawLine(x, ystart, x, yend, paint);
 		}
-		for(int y = TOP_BOUND - GRID_STEP / 2; y <= model.col * GRID_STEP + GRID_STEP / 2; y += GRID_STEP) {
-			canvas.drawLine(LEFT_BOUND - GRID_STEP / 2, y, model.col * GRID_STEP + GRID_STEP / 2, y, paint);
+		for(int y = ystart; y <= yend; y += GRID_STEP) {
+			canvas.drawLine(xstart, y, xend, y, paint);
 		}
 	}
 
