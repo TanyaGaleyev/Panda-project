@@ -35,7 +35,7 @@ public class GameActivity extends Activity {
         int levId = intent.getIntExtra(LevelChooseActivity.LEVEL_ID, 0);
         setContentView(R.layout.activity_main);
         gView = (GameView) findViewById(R.id.game);
-        gView.initLevel(levId);
+        gView.setLevId(levId);
     }
 
     @Override

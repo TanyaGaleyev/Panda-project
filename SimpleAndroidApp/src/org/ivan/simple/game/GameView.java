@@ -20,7 +20,7 @@ import android.view.SurfaceView;
 
 public class GameView extends SurfaceView {
 	
-	public static int GRID_STEP;
+	private static int GRID_STEP;
 	
 	private static int JUMP_SPEED;
 	private static int ANIMATION_JUMP_SPEED;
@@ -119,15 +119,23 @@ public class GameView extends SurfaceView {
 		restart = ImageProvider.getBitmap(R.drawable.restart);
 		back = ImageProvider.getBitmap(R.drawable.back);
 		
+		hero = new Hero();
+		
 		GRID_STEP = hero.getSprite().getWidth() % 4 == 0 ? hero.getSprite().getWidth() : (hero.getSprite().getWidth() / 4  + 1) * 4;
 		TOP_BOUND = GRID_STEP;
 		BOTTOM_BOUND = getHeight() - GRID_STEP;
 		BOTTOM_BOUND -= BOTTOM_BOUND % GRID_STEP;
-		LEFT_BOUND = GRID_STEP;
+		// TODO check this bound carefully!
+		LEFT_BOUND = GRID_STEP + 16;
 		RIGHT_BOUND = getWidth() - GRID_STEP;
 		RIGHT_BOUND -= RIGHT_BOUND % GRID_STEP;
 		JUMP_SPEED = GRID_STEP;
 		ANIMATION_JUMP_SPEED = JUMP_SPEED / 8;
+		
+		level = new LevelView(levId, GRID_STEP, LEFT_BOUND, TOP_BOUND);
+		control = new GameControl(this, level.model, hero);
+		prevCell = level.model.getHeroCell();
+		prevMotion = level.model.getMotion();
 		
 		hero.heroX = LEFT_BOUND + level.model.heroX * GRID_STEP;
 		hero.heroY = TOP_BOUND + level.model.heroY * GRID_STEP;
@@ -149,7 +157,7 @@ public class GameView extends SurfaceView {
 		canvas.drawBitmap(back, 10, 130, null);
 		level.onDraw(canvas, update);
 		hero.onDraw(canvas, update);
-//		drawGrid(canvas);
+//		level.drawGrid(canvas);
 		drawFPS(canvas);
 		if(level.model.isLost()) {
 			drawLose(canvas);
@@ -190,17 +198,6 @@ public class GameView extends SurfaceView {
 		paint.setColor(Color.BLACK);
 		canvas.drawText(complete, getWidth() / 2 - textRect.exactCenterX(), getHeight() / 2 - textRect.exactCenterY(), paint);
 		canvas.restore();
-	}
-	
-	private void drawGrid(Canvas canvas) {
-		Paint paint = new Paint();
-		paint.setColor(Color.BLUE);
-		for(int x = LEFT_BOUND - GRID_STEP / 2; x <= RIGHT_BOUND + GRID_STEP / 2; x += GRID_STEP) {
-			canvas.drawLine(x, TOP_BOUND - GRID_STEP / 2, x, BOTTOM_BOUND + GRID_STEP / 2, paint);
-		}
-		for(int y = TOP_BOUND - GRID_STEP / 2; y <= BOTTOM_BOUND + GRID_STEP / 2; y += GRID_STEP) {
-			canvas.drawLine(LEFT_BOUND - GRID_STEP / 2, y, RIGHT_BOUND + GRID_STEP / 2, y, paint);
-		}
 	}
 	
 	/**
@@ -334,13 +331,8 @@ public class GameView extends SurfaceView {
 		return level.model.isComplete();
 	}
 	
-	protected void initLevel(int levId) {
-		hero = new Hero();
-		this.levId = levId; 
-		level = new LevelView(levId);
-		control = new GameControl(this, level.model, hero);
-		prevCell = level.model.getHeroCell();
-		prevMotion = level.model.getMotion();
+	protected void setLevId(int levId) {
+		this.levId = levId;
 	}
 	
 	protected int getLevId() {

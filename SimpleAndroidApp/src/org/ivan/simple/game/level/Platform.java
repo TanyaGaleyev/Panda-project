@@ -421,7 +421,7 @@ public class Platform {
 			if(type == PlatformType.NONE && !sprite.isAnimating()) {
 				sprite = null;
 			} else {
-				sprite.onDraw(canvas, x, y, update);
+				sprite.onDraw(canvas, x - sprite.getWidth() / 2, y - sprite.getHeight() / 2, update);
 			}
 		}
 	}

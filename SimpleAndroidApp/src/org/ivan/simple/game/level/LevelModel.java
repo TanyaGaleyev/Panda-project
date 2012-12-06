@@ -441,18 +441,7 @@ public class LevelModel {
 			controlType = UserControlType.IDLE;
 		}
 		if(motion.getType() == MotionType.TP_LEFT || motion.getType() == MotionType.TP_RIGHT) {
-//			switch(prevMotion) {
-//			case JUMP_LEFT:
-//			case THROW_LEFT:
-//			case FLY_LEFT:
-//			case JUMP_RIGHT:
-//			case THROW_RIGHT:
-//			case FLY_RIGHT:
-				motion = motion.getChildMotion();
-//				break;
-//			default: 
-//				break;
-//			}
+			motion = motion.getChildMotion();
 		}
 		prevMotion = motion;
 		motion.continueMotion();
@@ -547,7 +536,7 @@ public class LevelModel {
 			case UP:
 			case DOWN:
 			case RIGHT:
-				motion.finishMotion();
+//				motion.finishMotion();
 				motionType = platformsCheck();
 				break;
 			default:
@@ -574,7 +563,7 @@ public class LevelModel {
 			case UP:
 			case DOWN:
 			case LEFT:
-				motion.finishMotion();
+//				motion.finishMotion();
 				motionType = platformsCheck();
 				break;
 			default:
@@ -612,8 +601,8 @@ public class LevelModel {
 		if(motionType != motion.getType()) {
 			motion = new Motion(motionType);
 		}
-		startFinishMotions();
 		checkTeleport();
+		startFinishMotions();
 		updatePosition();
 	}
 	
@@ -746,24 +735,12 @@ public class LevelModel {
 	}
 	
 	private void startFinishMotions() {
-		MotionType motionType = motion.getType();
-		MotionType prevMotionType = motion.getType();
+		MotionType motionType = motion.getChildMotion().getType();
+		MotionType prevMotionType = prevMotion.getType();
 		if(prevMotionType != motionType) {
-			if(!(prevMotionType == MotionType.FLY_LEFT && motionType == MotionType.TP_LEFT) &&
-					!(prevMotionType == MotionType.FLY_RIGHT && motionType == MotionType.TP_RIGHT) &&
-					!(prevMotionType == MotionType.THROW_LEFT && motionType == MotionType.TP_LEFT) &&
-					!(prevMotionType == MotionType.THROW_RIGHT && motionType == MotionType.TP_RIGHT) &&
-					!(prevMotionType == MotionType.FLY_LEFT && motionType == MotionType.FLY_RIGHT) &&
-					!(prevMotionType == MotionType.FLY_RIGHT && motionType == MotionType.FLY_LEFT)) {
-				prevMotion.finishMotion();
-			}
-			if(
-//					!(prevMotion == MotionType.TP_LEFT && motionType == MotionType.FLY_LEFT) &&
-//					!(prevMotion == MotionType.TP_RIGHT && motionType == MotionType.FLY_RIGHT) &&
-//					!(prevMotion == MotionType.TP_LEFT && motionType == MotionType.THROW_LEFT) &&
-//					!(prevMotion == MotionType.TP_RIGHT && motionType == MotionType.THROW_RIGHT) &&
-					!(prevMotionType == MotionType.TP && motionType == MotionType.JUMP)
-					) {
+			prevMotion.finishMotion();
+			// case to start jump without pre-jump after TP (via horizontal platform)
+			if(!(prevMotionType == MotionType.TP && motionType == MotionType.JUMP)) {
 				motion.startMotion();
 			}
 		}
