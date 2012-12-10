@@ -105,8 +105,9 @@ public class Hero {
 				break;
 			case FLY_LEFT:
 				// skip finishing fall down after FLY if finish because wall
-				if(newMotion.getType() == MotionType.JUMP_LEFT_WALL|| 
-				newMotion.getType() == MotionType.STICK_LEFT) {
+				if(newMotion.getType() == MotionType.JUMP_LEFT_WALL || 
+				newMotion.getType() == MotionType.STICK_LEFT ||
+				newMotion.getType() == MotionType.FLY_RIGHT) {
 					finishingState = false;
 				} else {
 					activeSprite = sprite8;
@@ -116,7 +117,8 @@ public class Hero {
 			case FLY_RIGHT:
 				// skip finishing fall down after FLY if finish because wall
 				if(newMotion.getType() == MotionType.JUMP_RIGHT_WALL || 
-				newMotion.getType() == MotionType.STICK_RIGHT) {
+				newMotion.getType() == MotionType.STICK_RIGHT ||
+				newMotion.getType() == MotionType.FLY_LEFT) {
 					finishingState = false;
 				} else {
 					activeSprite = sprite8;

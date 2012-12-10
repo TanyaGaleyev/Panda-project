@@ -18,8 +18,6 @@ public class LevelModel {
 	public int heroY;
 	private UserControlType controlType = UserControlType.IDLE;
 	private UserControlType bufferedControlType = UserControlType.IDLE;
-//	private MotionType prevMotion = MotionType.STAY;
-//	private MotionType motionType = MotionType.STAY;
 	private Motion prevMotion = new Motion(MotionType.STAY);
 	private Motion motion = new Motion(MotionType.STAY); 
 	private int prizesLeft = 0;
@@ -740,7 +738,8 @@ public class LevelModel {
 		if(prevMotionType != motionType) {
 			prevMotion.finishMotion();
 			// case to start jump without pre-jump after TP (via horizontal platform)
-			if(!(prevMotionType == MotionType.TP && motionType == MotionType.JUMP)) {
+			if(!(prevMotionType == MotionType.TP && motionType == MotionType.JUMP) &&
+					motionType != MotionType.JUMP) {
 				motion.startMotion();
 			}
 		}

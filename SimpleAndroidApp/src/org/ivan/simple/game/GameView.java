@@ -71,8 +71,12 @@ public class GameView extends SurfaceView {
 			
 			public void surfaceDestroyed(SurfaceHolder holder) {
 				// turn motion to initial stage (stage == 0)
-				level.model.getMotion().startMotion();
+				//level.model.getMotion().startMotion();
                 stopManager();
+                background = null;
+        		pause = null;
+        		restart = null;
+        		back = null;
 			}
 			
 			public void surfaceCreated(SurfaceHolder holder) {

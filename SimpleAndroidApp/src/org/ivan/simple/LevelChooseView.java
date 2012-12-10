@@ -101,6 +101,10 @@ public class LevelChooseView extends SurfaceView {
                 	   
                    }
                 }
+				border = null;
+				cross = null;
+				background = null;
+				marker = null;
 			}
 			
 			public void surfaceCreated(SurfaceHolder holder) {
