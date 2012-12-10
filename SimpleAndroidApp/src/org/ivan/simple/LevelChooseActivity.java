@@ -12,6 +12,7 @@ public class LevelChooseActivity extends Activity {
 	public static final String LEVEL_COMPLETE = "complete";
 	public static final int FINISHED_LEVEL_ID = 1;
 	public static final String FINISHED_LEVELS = "finished";
+	private static final String CONFIG = "panda_config";
 	
 	private SharedPreferences preferences;
 	
@@ -26,9 +27,10 @@ public class LevelChooseActivity extends Activity {
         setContentView(R.layout.activity_choose);
         view = (LevelChooseView) findViewById(R.id.choose);
         
-        preferences = getSharedPreferences("panda_config", MODE_PRIVATE);
+        preferences = getSharedPreferences(CONFIG, MODE_PRIVATE);
+        int levelsSetId = getIntent().getIntExtra(StartActivity.SET_ID, 0);
         String finishedArray = preferences.getString(FINISHED_LEVELS, "");
-        view.setFinishedLevels(finishedArray);
+        view.setChooseScreenProperties(levelsSetId, finishedArray);
 	}
 	
 //	@Override

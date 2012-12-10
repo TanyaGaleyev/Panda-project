@@ -17,6 +17,7 @@ public class Hero {
 	 */
 	private Motion currentMotion = new Motion(MotionType.NONE);
 	private Motion finishingMotion = new Motion(MotionType.NONE); 
+	private boolean finishingState = false;
 	private LevelCell prevCell;
 	private Sprite sprite8 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite8), 38, 8);
 	private Sprite sprite16 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite16), 9, 16);
@@ -41,27 +42,15 @@ public class Hero {
 	}
 	
 	public boolean isFinishing() {
-		return finishingMotion.isFinishing();
+		return finishingState;
 	}
 	
-	public boolean tryToEndFinishMotion(Motion prevMotion) {
+	/* properly 'was', 'has been'? */
+	public boolean isFinishingMotionEnded(/*Motion prevMotion*/) {
 		if(activeSprite.getFrame() == 0 ||
 				(finishingMotion.getType() == MotionType.FLY_LEFT && activeSprite.getFrame() == 4) ||
 				(finishingMotion.getType() == MotionType.FLY_RIGHT && activeSprite.getFrame() == 4)) {
-			// turn motion to initial stage (stage == 0)
-			finishingMotion.startMotion();
-			finishingMotion = prevMotion;
-			switchToCurrentMotion();
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	public boolean tryToEndStartMotion() {
-		if(activeSprite.getFrame() == 0) {
-			currentMotion.continueMotion();
-			switchToCurrentMotion();
+			finishingState = false;
 			return true;
 		} else {
 			return false;
@@ -78,7 +67,7 @@ public class Hero {
 	public boolean isInControlState() {
 		if((finishingMotion.getType() == MotionType.FLY_LEFT  ||
 				finishingMotion.getType() == MotionType.FLY_RIGHT) &&
-				finishingMotion.isFinishing()) {
+				finishingState) {
 			return activeSprite.getFrame() == 4;
 		}
 		if(currentMotion.getType() == MotionType.FALL_BLANSH) {
@@ -96,14 +85,15 @@ public class Hero {
 	 * Goal is to play start/end animations of motions.
 	 * @param newMotion
 	 */
-	public void changeMotion(Motion newMotion, Motion prevMotion, LevelCell prevCell) {
+	public void finishPrevMotion(Motion newMotion, Motion prevMotion, LevelCell prevCell) {
 		this.prevCell = prevCell;
 		prevX = heroX;
 		prevY = heroY;
-		finishingMotion = prevMotion.getChildMotion();
+		finishingMotion = prevMotion;
 		currentMotion = newMotion;
-		if (finishingMotion.isFinishing()) {
-			switch(finishingMotion.getType()) {
+		if (finishingMotion.getChildMotion().isFinishing()) {
+			finishingState = true;
+			switch(finishingMotion.getChildMotion().getType()) {
 			case MAGNET:
 				activeSprite.changeSet(17);
 				break;
@@ -116,10 +106,8 @@ public class Hero {
 			case FLY_LEFT:
 				// skip finishing fall down after FLY if finish because wall
 				if(newMotion.getType() == MotionType.JUMP_LEFT_WALL|| 
-//				newMotion == MotionType.FLY_RIGHT ||
 				newMotion.getType() == MotionType.STICK_LEFT) {
-					finishingMotion.startMotion();
-					switchToCurrentMotion();
+					finishingState = false;
 				} else {
 					activeSprite = sprite8;
 					activeSprite.changeSet(26);
@@ -128,37 +116,37 @@ public class Hero {
 			case FLY_RIGHT:
 				// skip finishing fall down after FLY if finish because wall
 				if(newMotion.getType() == MotionType.JUMP_RIGHT_WALL || 
-//				newMotion == MotionType.FLY_LEFT ||
 				newMotion.getType() == MotionType.STICK_RIGHT) {
-					finishingMotion.startMotion();
-					switchToCurrentMotion();
+					finishingState = false;
 				} else {
 					activeSprite = sprite8;
 					activeSprite.changeSet(26);
 				}
 				break;
+			default:
+				break;
 			}
 		} else {
-			switchToCurrentMotion();
+			finishingState = false;
 		}
 	}
 	
 	/**
 	 * Begins main animation, after finish/start animations became complete
 	 */
-	private void switchToCurrentMotion() {
+	public void switchToCurrentMotion() {
 		pickActiveSprite(currentMotion.getType());
 		MotionType mt = currentMotion.getType();
-		MotionType prevMt = finishingMotion.getType();
-		int prevStage = finishingMotion.getStage();
-		if(prevMt == MotionType.TP_LEFT || prevMt == MotionType.TP_RIGHT) {
-			prevMt = finishingMotion.getChildMotion().getType();
-			prevStage = finishingMotion.getChildMotion().getStage();
-		}
-		if(mt == MotionType.TP_LEFT || mt == MotionType.TP_RIGHT) {
-			prevMt = currentMotion.getChildMotion().getType();
-			prevStage = currentMotion.getChildMotion().getStage();
-		}
+		int curStage = currentMotion.getStage();
+		MotionType prevMt = finishingMotion.getChildMotion().getType();
+//		if(prevMt == MotionType.TP_LEFT || prevMt == MotionType.TP_RIGHT) {
+//			prevMt = finishingMotion.getChildMotion().getType();
+//			prevStage = finishingMotion.getChildMotion().getStage();
+//		}
+//		if(mt == MotionType.TP_LEFT || mt == MotionType.TP_RIGHT) {
+//			prevMt = currentMotion.getChildMotion().getType();
+//			prevStage = currentMotion.getChildMotion().getStage();
+//		}
 		switch (mt) {
 		case STAY:
 			if(prevCell.getFloor().getType() == PlatformType.GLUE){
@@ -183,7 +171,7 @@ public class Hero {
 			}
 			break;
 		case FALL_BLANSH:
-			if(currentMotion.getStage() == 0) {
+			if(curStage == 0) {
 				activeSprite.changeSet(3);
 			}
 			break;
@@ -210,14 +198,14 @@ public class Hero {
 			}
 			break;
 		case JUMP:
-			if(currentMotion.getStage() != 0) {
+			if(curStage != 0) {
 				activeSprite.changeSet(4);
 			} else {
 				activeSprite.changeSet(9);
 			}
 			break;
 		case THROW_LEFT:
-			if(currentMotion.getStage() == 1) {
+			if(curStage == 1) {
 				activeSprite.changeSet(24);
 			} else if(prevMt == MotionType.JUMP_LEFT || prevMt == MotionType.THROW_LEFT) {
 				activeSprite.changeSet(21);
@@ -226,7 +214,7 @@ public class Hero {
 			}
 			break;
 		case THROW_RIGHT:
-			if(currentMotion.getStage() == 1) {
+			if(curStage == 1) {
 				activeSprite.changeSet(25);
 			} else if(prevMt == MotionType.JUMP_RIGHT || prevMt == MotionType.THROW_RIGHT) {
 				activeSprite.changeSet(19);
@@ -276,7 +264,7 @@ public class Hero {
 			activeSprite.changeSet(10);
 			break;
 		case MAGNET:
-			if(currentMotion.getStage() == 0) {
+			if(curStage == 0) {
 				activeSprite.changeSet(13);
 			} else {
 				activeSprite.changeSet(14);
@@ -307,29 +295,31 @@ public class Hero {
 			}
 			break;
 		case TP_LEFT:
-			if(prevMt == MotionType.JUMP_LEFT) {
-				if(finishingMotion.getType() == MotionType.JUMP) {
+			MotionType childMt = currentMotion.getChildMotion().getType();
+			int childStage = currentMotion.getChildMotion().getStage();
+			if(childMt == MotionType.JUMP_LEFT) {
+				if(prevMt == MotionType.JUMP) {
 					shadeSprite.changeSet(10);
 					tpSprite.changeSet(11);
-				} else if(finishingMotion.getType() == MotionType.JUMP_LEFT || finishingMotion.getType() == MotionType.THROW_LEFT) {
+				} else if(prevMt == MotionType.JUMP_LEFT || prevMt == MotionType.THROW_LEFT) {
 					shadeSprite.changeSet(2);
 					tpSprite.changeSet(3);
 				} else {
 					shadeSprite.changeSet(6);
 					tpSprite.changeSet(7);
 				}
-			} else if(prevMt == MotionType.THROW_LEFT && prevStage == 0) {
-				if(finishingMotion.getType() == MotionType.THROW_LEFT || finishingMotion.getType() == MotionType.JUMP_LEFT) {
+			} else if(childMt == MotionType.THROW_LEFT && childStage == 0) {
+				if(prevMt == MotionType.THROW_LEFT || prevMt == MotionType.JUMP_LEFT) {
 					shadeSprite.changeSet(22);
 					tpSprite.changeSet(23);
 				} else {
 					shadeSprite.changeSet(18);
 					tpSprite.changeSet(19);
 				}
-			} else if(prevMt == MotionType.THROW_LEFT) {
+			} else if(childMt == MotionType.THROW_LEFT) {
 				shadeSprite.changeSet(26);
 				tpSprite.changeSet(27);
-			} else if(prevMt == MotionType.FLY_LEFT) {
+			} else if(childMt == MotionType.FLY_LEFT) {
 				shadeSprite.changeSet(14);
 				tpSprite.changeSet(15);
 			} else {
@@ -338,29 +328,31 @@ public class Hero {
 			}
 			break;
 		case TP_RIGHT:
-			if(prevMt == MotionType.JUMP_RIGHT) {
-				if(finishingMotion.getType() == MotionType.JUMP) {
+			MotionType childMt1 = currentMotion.getChildMotion().getType();
+			int childStage1 = currentMotion.getChildMotion().getStage();
+			if(childMt1 == MotionType.JUMP_RIGHT) {
+				if(prevMt == MotionType.JUMP) {
 					shadeSprite.changeSet(8);
 					tpSprite.changeSet(9);
-				} else if(finishingMotion.getType() == MotionType.JUMP_RIGHT || finishingMotion.getType() == MotionType.THROW_RIGHT) {
+				} else if(prevMt == MotionType.JUMP_RIGHT || prevMt == MotionType.THROW_RIGHT) {
 					shadeSprite.changeSet(0);
 					tpSprite.changeSet(1);
 				} else {
 					shadeSprite.changeSet(4);
 					tpSprite.changeSet(5);
 				}
-			} else if(prevMt == MotionType.THROW_RIGHT && prevStage == 0) {
-				if(finishingMotion.getType() == MotionType.THROW_RIGHT || finishingMotion.getType() == MotionType.JUMP_RIGHT) {
+			} else if(childMt1 == MotionType.THROW_RIGHT && childStage1 == 0) {
+				if(prevMt == MotionType.THROW_RIGHT || prevMt == MotionType.JUMP_RIGHT) {
 					shadeSprite.changeSet(20);
 					tpSprite.changeSet(21); 
 				} else {
 					shadeSprite.changeSet(16);
 					tpSprite.changeSet(17); 
 				}
-			} else if(prevMt == MotionType.THROW_RIGHT) {
+			} else if(childMt1 == MotionType.THROW_RIGHT) {
 				shadeSprite.changeSet(24);
 				tpSprite.changeSet(25);
-			} else if(prevMt == MotionType.FLY_RIGHT) {
+			} else if(childMt1 == MotionType.FLY_RIGHT) {
 				shadeSprite.changeSet(12);
 				tpSprite.changeSet(13);
 			} else {
@@ -369,21 +361,21 @@ public class Hero {
 			}
 			break;
 		case STICK_LEFT:
-			if(currentMotion.getStage() == 0) {
+			if(curStage == 0) {
 				activeSprite.changeSet(28);
 			} else {
 				activeSprite.changeSet(29);
 			}
 			break;
 		case STICK_RIGHT:
-			if(currentMotion.getStage() == 0) {
+			if(curStage == 0) {
 				activeSprite.changeSet(31);
 			} else {
 				activeSprite.changeSet(32);
 			}
 			break;
 		case TP:
-			if(currentMotion.getStage() == 0) {
+			if(curStage == 0) {
 				activeSprite.changeSet(34);
 			} else {
 				activeSprite.changeSet(35);
@@ -423,7 +415,7 @@ public class Hero {
 	 */
 	public void onDraw(Canvas canvas, boolean update) {
 		activeSprite.onDraw(canvas, heroX - activeSprite.getWidth() / 2, heroY - activeSprite.getHeight() / 2, update);
-		if(!finishingMotion.isFinishing() && (currentMotion.getType() == MotionType.TP_LEFT || currentMotion.getType() == MotionType.TP_RIGHT)) {
+		if(!finishingState && (currentMotion.getType() == MotionType.TP_LEFT || currentMotion.getType() == MotionType.TP_RIGHT)) {
 			shadeSprite.onDraw(canvas, prevX - shadeSprite.getWidth() / 2, prevY - shadeSprite.getHeight() / 2, update);
 		}
 	}
@@ -433,7 +425,7 @@ public class Hero {
 	 * @return
 	 */
 	public Motion getRealMotion() {
-		if(finishingMotion.isFinishing()) {
+		if(finishingState) {
 			return new Motion(MotionType.NONE);
 		} else {
 			return currentMotion;

@@ -10,6 +10,8 @@ import android.view.Window;
 import android.widget.Button;
 
 public class StartActivity extends Activity {
+	
+	public static final String SET_ID = "Id of levels set";
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,10 +20,24 @@ public class StartActivity extends Activity {
         setContentView(R.layout.activity_start);
         ImageProvider.resources = getResources();
         
-        final Button playButton = (Button) findViewById(R.id.play);
-        playButton.setOnClickListener(new View.OnClickListener() {
+        final Button play1Button = (Button) findViewById(R.id.play1);
+        play1Button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            	startGame();
+            	startGame(1);
+            }
+        });
+        
+        final Button play2Button = (Button) findViewById(R.id.play2);
+        play2Button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            	startGame(2);
+            }
+        });
+        
+        final Button play3Button = (Button) findViewById(R.id.play3);
+        play3Button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            	startGame(3);
             }
         });
         
@@ -40,8 +56,9 @@ public class StartActivity extends Activity {
         });
     }
 	
-	private void startGame() {
+	private void startGame(int setId) {
 		Intent intent = new Intent(this, LevelChooseActivity.class);
+		intent.putExtra(SET_ID, setId);
 		startActivity(intent);
 	}
 	

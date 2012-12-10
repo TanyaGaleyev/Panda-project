@@ -1,5 +1,14 @@
 package org.ivan.simple.game.level;
 public class LevelStorage {
+	public int[][] getLevels(int setid) {
+		switch(setid) {
+		case 1: return new int[][]{{3,2,1,1},{4,2,3,3}};
+		case 2:	return new int[][]{{1,1,1,1},{2,2}};
+		case 3: return new int[][]{{4,4},{1,2,3,4}};
+		default:return new int[][]{{3,2,1,1},{4,2,3,3}};
+		}
+	}
+	
 	public int[][][] getLevel(int num) {
 		switch (num)
 		{

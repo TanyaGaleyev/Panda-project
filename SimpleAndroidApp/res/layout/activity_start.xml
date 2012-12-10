@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_0" >
+    android:background="@drawable/background_start"
+    tools:context=".StartActivity" >
 
     <TextView
         android:id="@+id/text_view"
@@ -13,30 +14,59 @@
         android:textSize="36dp" />
 
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/text_view"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp"
         android:orientation="vertical" >
+    </LinearLayout>
+    <ScrollView 
+        android:id="@+id/scroll"
+        android:layout_marginTop="8dp"
+	    android:layout_below="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+  		android:layout_height="220dp"
+  		android:fillViewport="true" >
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+        	android:orientation="vertical"
+        	android:gravity="center_horizontal"
+        	android:paddingTop="10dp"
+        	android:paddingBottom="10dp" >
 
-        <Button
-            android:id="@+id/play"
-            android:layout_width="200dp"
-            android:layout_height="60dp"
-            android:text="Play" />
+	        <Button
+	            android:id="@+id/play1"
+	            android:layout_width="200dp"
+	            android:layout_height="60dp"
+	            android:text="ACCESS" />
+	        
+	        <Button
+	            android:id="@+id/play2"
+	            android:layout_width="200dp"
+	            android:layout_height="60dp"
+	            android:text="BUTTON" />	 
+	            
+      	    <Button
+	            android:id="@+id/play3"
+	            android:layout_width="200dp"
+	            android:layout_height="60dp"
+	            android:text="SYSTEM" />
 
-        <Button
-            android:id="@+id/scores"
-            android:layout_width="200dp"
-            android:layout_height="60dp"
-            android:text="High scores" />
+	        <Button
+	            android:id="@+id/scores"
+	            android:layout_width="200dp"
+	            android:layout_height="60dp"
+	            android:text="High scores" />
 
-        <Button
-            android:id="@+id/exit"
-            android:layout_width="200dp"
-            android:layout_height="60dp"
-            android:text="Exit" />
-    </LinearLayout>
+	        <Button
+	            android:id="@+id/exit"
+	            android:layout_width="200dp"
+	            android:layout_height="60dp"
+	            android:text="Exit" />
+	
+	    </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

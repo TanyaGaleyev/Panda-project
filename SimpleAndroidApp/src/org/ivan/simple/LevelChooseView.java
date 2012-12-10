@@ -3,6 +3,7 @@ package org.ivan.simple;
 import java.util.StringTokenizer;
 
 import org.ivan.simple.game.GameActivity;
+import org.ivan.simple.game.level.LevelStorage;
 
 import android.app.Activity;
 import android.content.Context;
@@ -29,7 +30,7 @@ public class LevelChooseView extends SurfaceView {
 	/**
 	 * Matrix with levels IDs
 	 */
-	private int[][] levels = {{3,2,1,1},{4,2,3,3}};
+	private int[][] levels;
 	private byte[][] finishedLevels;
 	
 	
@@ -44,6 +45,7 @@ public class LevelChooseView extends SurfaceView {
 	private Bitmap cross;
 	
 	// Backgroung image of LevelChooseView
+	private int backgroundId;
 	private Bitmap background;
 	
 	private Paint textPaint;
@@ -86,10 +88,6 @@ public class LevelChooseView extends SurfaceView {
 		textPaint.setTextSize(48);
 		Typeface font = Typeface.createFromAsset(getContext().getAssets(), "fonts/PTS75F.ttf");
 		textPaint.setTypeface(font);
-		finishedLevels = new byte[levels.length][];
-		for(int i = 0; i < levels.length; i++) {
-			finishedLevels[i] = new byte[levels[i].length];
-		}
 		getHolder().addCallback(new SurfaceHolder.Callback() {
 			
 			public void surfaceDestroyed(SurfaceHolder holder) {				
@@ -108,7 +106,7 @@ public class LevelChooseView extends SurfaceView {
 			public void surfaceCreated(SurfaceHolder holder) {
 				border = ImageProvider.getBitmap(R.drawable.border);
 				cross = ImageProvider.getBitmap(R.drawable.cross);
-				background = ImageProvider.getBitmap(R.drawable.background_2);
+				background = ImageProvider.getBitmap(backgroundId);
 				marker = ImageProvider.getBitmap(R.drawable.single_panda);
 				redrawer = new Redrawer();
 				redrawer.start();
@@ -267,7 +265,13 @@ public class LevelChooseView extends SurfaceView {
 		return finishedArray;
 	}
 	
-	protected void setFinishedLevels(String finishedArray) {
+	protected void setChooseScreenProperties(int id, String finishedArray) {
+		setLevelsId(id);
+		setFinishedLevels(finishedArray);
+		backgroundId = getBackgroundId(id);
+	}
+	
+	private void setFinishedLevels(String finishedArray) {
 		StringTokenizer st = new StringTokenizer(finishedArray, ",");
 		for(int i = 0; i < levels.length; i++) {
 			for(int j = 0; j < levels[i].length; j++) {
@@ -275,6 +279,25 @@ public class LevelChooseView extends SurfaceView {
 				finishedLevels[i][j] = Byte.parseByte(st.nextToken());
 			}
 		}
+	}
+	
+	private void setLevelsId(int id) {
+		LevelStorage storage = new LevelStorage();
+		levels = storage.getLevels(id);
+		finishedLevels = new byte[levels.length][];
+		for(int i = 0; i < levels.length; i++) {
+			finishedLevels[i] = new byte[levels[i].length];
+		}
+	}
+	
+	private int getBackgroundId(int levelsid) {
+		switch(levelsid) {
+		case 1: return R.drawable.background_c_1;
+		case 2: return R.drawable.background_c_2;
+		case 3: return R.drawable.background_c_3;
+		default:return R.drawable.background_c_1;
+		}
+		
 	}
 	
 	private class Redrawer extends Thread {
