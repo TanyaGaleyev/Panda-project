@@ -18,5 +18,10 @@ public class ImageProvider {
 		}
 		return images.get(id);
 	}
+	
+	public static void removeFromCatch(int id) {
+		images.get(id).recycle();
+		images.remove(id);
+	}
 
 }

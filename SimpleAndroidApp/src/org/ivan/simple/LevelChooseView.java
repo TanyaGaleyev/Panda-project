@@ -103,10 +103,7 @@ public class LevelChooseView extends SurfaceView {
                 	   
                    }
                 }
-				border = null;
-				cross = null;
-				background = null;
-				marker = null;
+				ImageProvider.removeFromCatch(backgroundId);
 			}
 			
 			public void surfaceCreated(SurfaceHolder holder) {
