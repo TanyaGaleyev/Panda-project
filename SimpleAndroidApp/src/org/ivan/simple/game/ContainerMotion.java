@@ -4,8 +4,7 @@ public class ContainerMotion extends Motion {
 	private final Motion childMotion;
 	
 	public ContainerMotion(MotionType type, Motion childMotion) {
-		super(type);
-		this.childMotion = childMotion; 
+		this(type, 0 , childMotion);
 	}
 	
 	public ContainerMotion(MotionType type, int stage, Motion childMotion) {

@@ -325,10 +325,10 @@ public class LevelModel {
 			break;
 		case SLICK:
 			if(controlType == UserControlType.IDLE &&
-				(motion.getType() == MotionType.JUMP_LEFT || motion.getType() == MotionType.JUMP_RIGHT_WALL)) {
+				(prevMotion.getType() == MotionType.JUMP_LEFT || prevMotion.getType() == MotionType.JUMP_RIGHT_WALL)) {
 				motionType = moveLeft();
 			} else if (controlType == UserControlType.IDLE &&
-					(motion.getType() == MotionType.JUMP_RIGHT || motion.getType() == MotionType.JUMP_LEFT_WALL)) {
+					(prevMotion.getType() == MotionType.JUMP_RIGHT || prevMotion.getType() == MotionType.JUMP_LEFT_WALL)) {
 				motionType = moveRight();
 			} else {
 				motionType = stayCheck();
@@ -352,7 +352,7 @@ public class LevelModel {
 			}
 			break;
 		case WAY_UP_DOWN:
-			if(controlType == UserControlType.DOWN && motion.getType() != MotionType.JUMP) {
+			if(controlType == UserControlType.DOWN && prevMotion.getType() != MotionType.JUMP) {
 				if(heroY + 1 > row - 1) lose = true;
 				motionType = MotionType.FALL;
 			} else {
@@ -438,13 +438,11 @@ public class LevelModel {
 		if(motion.isUncontrolable()) {
 			controlType = UserControlType.IDLE;
 		}
-		if(motion.getType() == MotionType.TP_LEFT || motion.getType() == MotionType.TP_RIGHT) {
-			motion = motion.getChildMotion();
-		}
+		motion = motion.getChildMotion();
 		prevMotion = motion;
-		motion.continueMotion();
+		prevMotion.continueMotion();
 		MotionType motionType;
-		switch(motion.getType()){
+		switch(prevMotion.getType()){
 		case JUMP:
 			switch(controlType) {
 			case DOWN:
@@ -459,7 +457,7 @@ public class LevelModel {
 			case IDLE:
 			case UP:	
 			default:
-				motionType = jump(motion.getStage());
+				motionType = jump(prevMotion.getStage());
 				break;
 			}
 			break;
@@ -496,7 +494,7 @@ public class LevelModel {
 			}
 			break;
 		case THROW_LEFT:
-			if(motion.getStage() == 1) {
+			if(prevMotion.getStage() == 1) {
 				if(!motionAvaible(MotionType.JUMP_LEFT) ) {
 					motionType = moveLeft();
 				} else {
@@ -507,7 +505,7 @@ public class LevelModel {
 			}
 			break;
 		case THROW_RIGHT:
-			if(motion.getStage() == 1) {
+			if(prevMotion.getStage() == 1) {
 				if(!motionAvaible(MotionType.JUMP_RIGHT) ) {
 					motionType = moveRight();
 				} else {
@@ -574,7 +572,7 @@ public class LevelModel {
 			}
 			break;
 		case TP:
-			if(motion.getStage() == 0) {
+			if(prevMotion.getStage() == 0) {
 				if(controlType == UserControlType.UP || controlType == UserControlType.IDLE) {
 					// to start without pre jump
 					motionType = jump(1);
@@ -586,7 +584,7 @@ public class LevelModel {
 			}
 			break;
 		case FALL_BLANSH:
-			if(motion.getStage() == 1) {
+			if(prevMotion.getStage() == 1) {
 				motionType = MotionType.FALL_BLANSH;
 			} else {
 				motionType = platformsCheck();
@@ -596,11 +594,19 @@ public class LevelModel {
 			motionType = platformsCheck();
 			break;
 		}
-		if(motionType != motion.getType()) {
-			motion = new Motion(motionType);
+		// finish prev motion if motion of another type obtained
+		if(motionType != prevMotion.getType()) {
+			prevMotion.finishMotion();
+			/* 
+			 * If new Motion has not created yet (e.g. stage 1 jump on trampoline)
+			 * we create it
+			 */
+			if(motion == prevMotion) {
+				motion = new Motion(motionType);
+			}
 		}
+		// check if we gonna teleport
 		checkTeleport();
-		startFinishMotions();
 		updatePosition();
 	}
 	
@@ -627,8 +633,8 @@ public class LevelModel {
 	}
 	
 	private boolean motionAvaible(MotionType mt) {
-		if(mt == motion.getType()) {
-			return motionAvaible(mt, motion.getStage());
+		if(mt == prevMotion.getType()) {
+			return motionAvaible(mt, prevMotion.getStage());
 		} else {
 			return motionAvaible(mt, 0);
 		}
@@ -730,19 +736,6 @@ public class LevelModel {
 	
 	public UserControlType getControlType() {
 		return bufferedControlType;
-	}
-	
-	private void startFinishMotions() {
-		MotionType motionType = motion.getChildMotion().getType();
-		MotionType prevMotionType = prevMotion.getType();
-		if(prevMotionType != motionType) {
-			prevMotion.finishMotion();
-			// case to start jump without pre-jump after TP (via horizontal platform)
-			if(!(prevMotionType == MotionType.TP && motionType == MotionType.JUMP) &&
-					motionType != MotionType.JUMP) {
-				motion.startMotion();
-			}
-		}
 	}
 	
 }
