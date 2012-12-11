@@ -17,6 +17,7 @@ public class LevelChooseActivity extends Activity {
 	private SharedPreferences preferences;
 	
 	private LevelChooseView view;
+	private int levelsSetId;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,8 +29,8 @@ public class LevelChooseActivity extends Activity {
         view = (LevelChooseView) findViewById(R.id.choose);
         
         preferences = getSharedPreferences(CONFIG, MODE_PRIVATE);
-        int levelsSetId = getIntent().getIntExtra(StartActivity.SET_ID, 0);
-        String finishedArray = preferences.getString(FINISHED_LEVELS, "");
+        levelsSetId = getIntent().getIntExtra(StartActivity.SET_ID, 0);
+        String finishedArray = preferences.getString(FINISHED_LEVELS + levelsSetId, "");
         view.setChooseScreenProperties(levelsSetId, finishedArray);
 	}
 	
@@ -50,7 +51,7 @@ public class LevelChooseActivity extends Activity {
 		super.onPause();
 		
 		SharedPreferences.Editor prEditor = preferences.edit();
-		prEditor.putString(FINISHED_LEVELS, view.getFinishedLevels());
+		prEditor.putString(FINISHED_LEVELS + levelsSetId, view.getFinishedLevels());
 		prEditor.commit();
 	}
 	
@@ -61,5 +62,11 @@ public class LevelChooseActivity extends Activity {
 			boolean complete = data.getBooleanExtra(LEVEL_COMPLETE, false);
 			if(complete) view.completeCurrentLevel();
 		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		view = null;
 	}
 }

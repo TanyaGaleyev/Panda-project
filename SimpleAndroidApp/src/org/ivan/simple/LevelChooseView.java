@@ -21,7 +21,7 @@ import android.view.SurfaceView;
 public class LevelChooseView extends SurfaceView {
 	
 	private static final int GRID_STEP = 128;
-	private static final int LEFT_BOUND = GRID_STEP / 2;
+	private static final int LEFT_BOUND = GRID_STEP;
 	private static final int TOP_BOUND = GRID_STEP / 2;
 	private static final int MARKER_SPEED = GRID_STEP / 8;
 	// selected level coordinates in array
@@ -47,6 +47,8 @@ public class LevelChooseView extends SurfaceView {
 	// Backgroung image of LevelChooseView
 	private int backgroundId;
 	private Bitmap background;
+	private Bitmap back;
+	private Bitmap sound;
 	
 	private Paint textPaint;
 	
@@ -112,6 +114,9 @@ public class LevelChooseView extends SurfaceView {
 				cross = ImageProvider.getBitmap(R.drawable.cross);
 				background = ImageProvider.getBitmap(backgroundId);
 				marker = ImageProvider.getBitmap(R.drawable.single_panda);
+				back = ImageProvider.getBitmap(R.drawable.back_choose);
+				sound = ImageProvider.getBitmap(R.drawable.sound_choose);
+				
 				redrawer = new Redrawer();
 				redrawer.start();
 			}
@@ -155,6 +160,8 @@ public class LevelChooseView extends SurfaceView {
 			}
 		}
 		drawOnCenterCoordinates(marker, markerX, markerY, canvas);
+		drawOnCenterCoordinates(back, 0 + GRID_STEP / 2, getHeight() - GRID_STEP / 2, canvas);
+		drawOnCenterCoordinates(sound, getWidth() - GRID_STEP / 2, getHeight() - GRID_STEP / 2, canvas);
 	}
 	
 	private void drawOnCenterCoordinates(Bitmap bitmap, int x, int y, Canvas canvas) {
@@ -171,6 +178,13 @@ public class LevelChooseView extends SurfaceView {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+		// back button pressed
+		if(event.getAction() == MotionEvent.ACTION_DOWN &&
+				0 < event.getX() && event.getX() < GRID_STEP &&
+				getHeight() - GRID_STEP < event.getY() && event.getY() < getHeight()) {
+			((Activity) getContext()).finish();
+			return true;
+		}
 		// get level Id depending on by click on screen selection
 		int levId = getLevelId(event);
 		// if level selected (levId != 0) start next GameActivity with specified level
@@ -198,23 +212,23 @@ public class LevelChooseView extends SurfaceView {
 				event.getY() < markerY + GRID_STEP / 2) {
 			return levels[levelY][levelX];
 		}
-		// Get choise direction
+		// Get choice direction
 		UserControlType tempAction = getMoveType(event);
 		switch(tempAction) {
 		case UP:
-			if(levelY == 0) tempAction = UserControlType.IDLE;
+			if(levelY <= 0 || levelX >= levels[levelY - 1].length) tempAction = UserControlType.IDLE;
 			else levelY -= 1;
 			break;
 		case DOWN:
-			if(levelY == levels.length - 1) tempAction = UserControlType.IDLE; 
+			if(levelY >= levels.length - 1 || levelX >= levels[levelY + 1].length) tempAction = UserControlType.IDLE; 
 			else levelY += 1;
 			break;
 		case LEFT:
-			if(levelX == 0) tempAction = UserControlType.IDLE;
+			if(levelX <= 0) tempAction = UserControlType.IDLE;
 			else levelX -= 1;
 			break;
 		case RIGHT:
-			if(levelX == levels[0].length - 1) tempAction = UserControlType.IDLE;
+			if(levelX >= levels[levelY].length - 1) tempAction = UserControlType.IDLE;
 			else levelX += 1;
 			break;
 		default:

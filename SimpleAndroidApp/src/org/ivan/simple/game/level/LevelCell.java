@@ -3,8 +3,6 @@ package org.ivan.simple.game.level;
 import org.ivan.simple.game.Motion;
 import org.ivan.simple.game.MotionType;
 
-import android.graphics.Canvas;
-
 public class LevelCell {
 	protected Platform floor = new Platform(PlatformType.NONE);
 	protected Platform left_wall = new Platform(PlatformType.NONE);

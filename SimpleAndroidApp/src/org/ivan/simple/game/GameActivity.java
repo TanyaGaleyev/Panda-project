@@ -97,6 +97,12 @@ public class GameActivity extends Activity {
     public void onConfigurationChanged(Configuration newConfig) {
     	super.onConfigurationChanged(newConfig);
     }
+    
+    @Override
+    protected void onDestroy() {
+    	super.onDestroy();
+    	gView = null;
+    }
 
     
 	/** Show an event in the LogCat view, for debugging */
