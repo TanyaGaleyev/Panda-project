@@ -6,6 +6,8 @@ import org.ivan.simple.UserControlType;
 import org.ivan.simple.game.hero.Hero;
 import org.ivan.simple.game.level.LevelCell;
 import org.ivan.simple.game.level.LevelView;
+import org.ivan.simple.game.monster.Monster;
+import org.ivan.simple.game.monster.MonsterDirection;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -33,6 +35,7 @@ public class GameView extends SurfaceView {
 	private GameManager gameLoopThread;
 	
 	private Hero hero;
+	private Monster monster;
 	private LevelView level;
 	
 	private GameControl control;
@@ -122,6 +125,7 @@ public class GameView extends SurfaceView {
 		back = ImageProvider.getBitmap(R.drawable.back);
 		
 		hero = new Hero();
+		monster = new Monster();
 		
 		GRID_STEP = hero.getSprite().getWidth() % 4 == 0 ? hero.getSprite().getWidth() : (hero.getSprite().getWidth() / 4  + 1) * 4;
 		TOP_BOUND = GRID_STEP;
@@ -141,6 +145,9 @@ public class GameView extends SurfaceView {
 		
 		hero.heroX = LEFT_BOUND + level.model.heroX * GRID_STEP;
 		hero.heroY = TOP_BOUND + level.model.heroY * GRID_STEP;
+		
+		monster.xCoordinate = LEFT_BOUND;
+		monster.yCoordinate = TOP_BOUND;
 	}
 	
 	/**
@@ -159,6 +166,7 @@ public class GameView extends SurfaceView {
 		canvas.drawBitmap(back, 10, 130, null);
 		level.onDraw(canvas, update);
 		hero.onDraw(canvas, update);
+		monster.onDraw(canvas, update);
 //		level.drawGrid(canvas);
 		drawFPS(canvas);
 		if(level.model.isLost()) {
