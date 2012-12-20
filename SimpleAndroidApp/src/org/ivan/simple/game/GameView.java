@@ -125,7 +125,6 @@ public class GameView extends SurfaceView {
 		back = ImageProvider.getBitmap(R.drawable.back);
 		
 		hero = new Hero();
-		monster = new Monster();
 		
 		GRID_STEP = hero.getSprite().getWidth() % 4 == 0 ? hero.getSprite().getWidth() : (hero.getSprite().getWidth() / 4  + 1) * 4;
 		TOP_BOUND = GRID_STEP;
@@ -146,8 +145,10 @@ public class GameView extends SurfaceView {
 		hero.heroX = LEFT_BOUND + level.model.heroX * GRID_STEP;
 		hero.heroY = TOP_BOUND + level.model.heroY * GRID_STEP;
 		
-		monster.xCoordinate = LEFT_BOUND;
-		monster.yCoordinate = TOP_BOUND;
+		monster = new Monster(level.model.getMonsterModel());
+		
+		monster.xCoordinate = LEFT_BOUND + level.model.getMonsterModel().col * GRID_STEP;
+		monster.yCoordinate = TOP_BOUND + level.model.getMonsterModel().row * GRID_STEP;
 	}
 	
 	/**
@@ -229,7 +230,7 @@ public class GameView extends SurfaceView {
 		 */
 		boolean stateReady = inControlState;
 		// change behavior only if hero is in ready for update state AND is on grid point
-		return stateReady;// && (hero.heroX % GRID_STEP == 0) && (hero.heroY % GRID_STEP == 0);
+		return stateReady;
 	}
 	
 	/**
@@ -373,6 +374,18 @@ public class GameView extends SurfaceView {
 			}
 		}
 		return super.onTouchEvent(event);
+	}
+	
+	public void updateMonster() {
+		if(isGridCoordinates(monster.xCoordinate, monster.yCoordinate)) {
+			level.model.nextDirection();
+		}
+		monster.moveInCurrentDirection(ANIMATION_JUMP_SPEED);
+	}
+	
+	private boolean isGridCoordinates(int xCoordinate, int yCoordinate) {
+		return (xCoordinate - LEFT_BOUND) % GRID_STEP == 0 && 
+				(yCoordinate - TOP_BOUND) % GRID_STEP == 0;
 	}
 
 }

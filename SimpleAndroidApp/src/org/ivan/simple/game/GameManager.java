@@ -57,6 +57,7 @@ public class GameManager extends Thread {
 				view.updateGame();
 			}
 			view.updateHeroScreenPosition();
+			view.updateMonster();
 			doDraw(true);
 			if(view.finished) {
 				((GameActivity) view.getContext()).switchBackToChooseActivity(view.isComplete());

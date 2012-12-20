@@ -13,21 +13,11 @@ public class Monster {
 	
 	public int xCoordinate = 0;
 	public int yCoordinate = 0;
-
-	private MonsterStrategy strategy;
 	
-	private MonsterDirection currDirection = MonsterDirection.IDLE;
+	private final MonsterModel model;
 	
-	public Monster() {
-		this(new MonsterStrategy(
-				MonsterDirection.UP,
-				MonsterDirection.LEFT,
-				MonsterDirection.DOWN,
-				MonsterDirection.RIGHT)); 
-	}
-	
-	public Monster(MonsterStrategy strategy) {
-		this.strategy = strategy;
+	public Monster(MonsterModel model) {
+		this.model = model;
 	}
 	
 	public void onDraw(Canvas canvas, boolean update) {
@@ -35,49 +25,22 @@ public class Monster {
 	}
 	
 	public void moveInCurrentDirection(int speed) {
-		switch(currDirection) {
+		switch(model.getDirection()) {
 		case UP:
 			yCoordinate -= speed;
 			break;
 		case LEFT:
-			xCoordinate += speed;
+			xCoordinate -= speed;
 			break;
 		case DOWN:
 			yCoordinate += speed;
 			break;
 		case RIGHT:
-			xCoordinate -= speed;
+			xCoordinate += speed;
 			break;
 		case IDLE:
 		default:
 			break;
-		}
-	}
-	
-	public void getNextDirection(LevelCell prevCell) {
-		for(MonsterDirection direction : strategy.getDirectionsByPriority()) {
-			if(directionAvaible(direction, prevCell)) {
-				currDirection = direction;
-				return;
-			}
-		}
-		currDirection = MonsterDirection.IDLE;
-	}
-	
-	private boolean directionAvaible(MonsterDirection direction, LevelCell prevCell) {
-		switch(direction) {
-		case UP:
-			return prevCell.getRoof().getType() == PlatformType.NONE;
-		case LEFT:
-			return prevCell.getLeft().getType() == PlatformType.NONE;
-		case DOWN:
-			return prevCell.getFloor().getType() == PlatformType.NONE;
-		case RIGHT:
-			return prevCell.getRight().getType() == PlatformType.NONE;
-		case IDLE:
-			return true;
-		default:
-			return false;
 		}
 	}
 	

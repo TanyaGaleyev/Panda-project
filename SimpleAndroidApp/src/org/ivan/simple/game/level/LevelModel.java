@@ -7,6 +7,8 @@ import org.ivan.simple.UserControlType;
 import org.ivan.simple.game.ContainerMotion;
 import org.ivan.simple.game.Motion;
 import org.ivan.simple.game.MotionType;
+import org.ivan.simple.game.monster.MonsterDirection;
+import org.ivan.simple.game.monster.MonsterModel;
 
 public class LevelModel {
 	private LevelCell[][] levelGrid;
@@ -16,6 +18,7 @@ public class LevelModel {
 	public int ySpeed = 0;
 	public int heroX;
 	public int heroY;
+	private final MonsterModel monsterModel;
 	private UserControlType controlType = UserControlType.IDLE;
 	private UserControlType bufferedControlType = UserControlType.IDLE;
 	private Motion prevMotion = new Motion(MotionType.STAY);
@@ -80,6 +83,7 @@ public class LevelModel {
 		col=10;
 		heroX = 0;
 		heroY = row - 1;
+		monsterModel = new MonsterModel(0, 0);
 		LevelStorage storage = new LevelStorage();
 		int[][][] mylevel = storage.getLevel(lev);
 		int[][] prizes = storage.getPrizesMap(lev);
@@ -736,6 +740,45 @@ public class LevelModel {
 	
 	public UserControlType getControlType() {
 		return bufferedControlType;
+	}
+	
+	public void nextDirection() {
+		LevelCell prevCell = getCell(monsterModel.row, monsterModel.col);
+		if(monsterDirectionAvaible(monsterModel.getDirection(), prevCell)) {
+			monsterModel.setDirection(monsterModel.getDirection());
+			monsterModel.moveInDirection();
+			return;
+		}
+		while(true) {
+			MonsterDirection direction = monsterModel.getStartegy().nextDirection();
+			if(monsterDirectionAvaible(direction, prevCell)) {
+				monsterModel.setDirection(direction);
+				monsterModel.moveInDirection();
+				return;
+			}
+		}
+//		monsterModel.setDirection(MonsterDirection.IDLE);
+	}
+	
+	private boolean monsterDirectionAvaible(MonsterDirection direction, LevelCell prevCell) {
+		switch(direction) {
+		case UP:
+			return monsterModel.row > 0 && prevCell.getRoof().getType() == PlatformType.NONE;
+		case LEFT:
+			return monsterModel.col > 0 && prevCell.getLeft().getType() == PlatformType.NONE;
+		case DOWN:
+			return monsterModel.row < row - 1 && prevCell.getFloor().getType() == PlatformType.NONE;
+		case RIGHT:
+			return monsterModel.col < col - 1 && prevCell.getRight().getType() == PlatformType.NONE;
+		case IDLE:
+			return true;
+		default:
+			return false;
+		}
+	}
+	
+	public MonsterModel getMonsterModel() {
+		return monsterModel;
 	}
 	
 }
