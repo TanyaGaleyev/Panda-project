@@ -58,6 +58,7 @@ public class GameManager extends Thread {
 			}
 			view.updateHeroScreenPosition();
 			view.updateMonster();
+			view.checkMonsterColision();
 			doDraw(true);
 			if(view.finished) {
 				((GameActivity) view.getContext()).switchBackToChooseActivity(view.isComplete());
@@ -82,7 +83,7 @@ public class GameManager extends Thread {
 				view.onDraw(c, update);
 			}
 		} catch(Exception ex) {
-			// TODO process exception!
+			ex.printStackTrace();
 		} finally {
 			if(c != null) {
 				view.getHolder().unlockCanvasAndPost(c);

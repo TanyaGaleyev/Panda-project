@@ -19,7 +19,8 @@ import android.view.Window;
 
 public class GameActivity extends Activity {
 	
-	private GameView gView;
+	private GameControl gControl;
+	private int levid;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,10 +33,10 @@ public class GameActivity extends Activity {
         // hide screen title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         Intent intent = getIntent();
-        int levId = intent.getIntExtra(LevelChooseActivity.LEVEL_ID, 0);
+        levid = intent.getIntExtra(LevelChooseActivity.LEVEL_ID, 0);
         setContentView(R.layout.activity_main);
-        gView = (GameView) findViewById(R.id.game);
-        gView.setLevId(levId);
+        GameView gView = (GameView) findViewById(R.id.game);
+        gControl = new GameControl(gView, levid);
     }
 
     @Override
@@ -65,7 +66,7 @@ public class GameActivity extends Activity {
     public void restart() {
     	finish();
 		Intent intent = new Intent(this, GameActivity.class);
-		intent.putExtra(LevelChooseActivity.LEVEL_ID, gView.getLevId());
+		intent.putExtra(LevelChooseActivity.LEVEL_ID, levid);
 		startActivity(intent);
     }
     
@@ -84,7 +85,7 @@ public class GameActivity extends Activity {
     @Override
     protected void onPause() {
     	super.onPause();
-    	gView.stopManager();
+    	gControl.stopManager();
     	System.out.println("onPause!");
     }
     
@@ -101,7 +102,7 @@ public class GameActivity extends Activity {
     @Override
     protected void onDestroy() {
     	super.onDestroy();
-    	gView = null;
+    	gControl = null;
     }
 
     

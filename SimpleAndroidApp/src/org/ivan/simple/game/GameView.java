@@ -32,13 +32,11 @@ public class GameView extends SurfaceView {
 	private static int TOP_BOUND;
 	private static int BOTTOM_BOUND;
 	
-	private GameManager gameLoopThread;
-	
 	private Hero hero;
 	private Monster monster;
 	private LevelView level;
 	
-	private GameControl control;
+	protected GameControl control;
 	
 	private int backgroundId;
 	private Bitmap background;
@@ -47,12 +45,10 @@ public class GameView extends SurfaceView {
 	private Bitmap back;
 	
 	private LevelCell prevCell;
-//	private Motion prevMotion;
 	
 	private int levId = 0;
 	
 	protected boolean finished = false;
-	private boolean paused = true;
 	
 	public GameView(Context context) {
 		super(context);
@@ -75,47 +71,24 @@ public class GameView extends SurfaceView {
 			public void surfaceDestroyed(SurfaceHolder holder) {
 				// turn motion to initial stage (stage == 0)
 				//level.model.getMotion().startMotion();
-                stopManager();
+                control.stopManager();
                 ImageProvider.removeFromCatch(backgroundId);
 			}
 			
 			public void surfaceCreated(SurfaceHolder holder) {
 				initSurface();
-				if(gameLoopThread == null) {
-					startManager();
+				if(control.getGameLoopThread() == null) {
+					control.startManager();
 				}
-				gameLoopThread.doDraw(false);
+				control.getGameLoopThread().doDraw(false);
 			}
 			
 			public void surfaceChanged(SurfaceHolder holder, int format, int width,
 					int height) {
-				gameLoopThread.doDraw(false);
+				control.getGameLoopThread().doDraw(false);
 			}
 		});
 
-	}
-	
-	protected void startManager() {
-		gameLoopThread = new GameManager(this);
-		gameLoopThread.setRunning(true);
-		gameLoopThread.start();
-		paused = false;
-	}
-	
-	protected void stopManager() {
-		if(gameLoopThread == null) return;
-		System.out.println("Stop game loop");
-		paused = true;
-		boolean retry = true;
-        gameLoopThread.setRunning(false);
-        while (retry) {
-           try {
-                 gameLoopThread.join();
-                 retry = false;
-           } catch (InterruptedException e) {
-        	   
-           }
-        }
 	}
 	
 	private void initSurface() {
@@ -124,9 +97,7 @@ public class GameView extends SurfaceView {
 		restart = ImageProvider.getBitmap(R.drawable.restart);
 		back = ImageProvider.getBitmap(R.drawable.back);
 		
-		hero = new Hero();
-		
-		GRID_STEP = hero.getSprite().getWidth() % 4 == 0 ? hero.getSprite().getWidth() : (hero.getSprite().getWidth() / 4  + 1) * 4;
+		GRID_STEP = 72;//hero.getSprite().getWidth() % 4 == 0 ? hero.getSprite().getWidth() : (hero.getSprite().getWidth() / 4  + 1) * 4;
 		TOP_BOUND = GRID_STEP;
 		BOTTOM_BOUND = getHeight() - GRID_STEP;
 		BOTTOM_BOUND -= BOTTOM_BOUND % GRID_STEP;
@@ -138,17 +109,17 @@ public class GameView extends SurfaceView {
 		ANIMATION_JUMP_SPEED = JUMP_SPEED / 8;
 		
 		level = new LevelView(levId, GRID_STEP, LEFT_BOUND, TOP_BOUND);
-		control = new GameControl(this, level.model, hero);
 		prevCell = level.model.getHeroCell();
 //		prevMotion = level.model.getMotion();
 		
-		hero.heroX = LEFT_BOUND + level.model.heroX * GRID_STEP;
-		hero.heroY = TOP_BOUND + level.model.heroY * GRID_STEP;
+		hero = new Hero(level.model.hero);
+		monster = new Monster(level.model.monster);
 		
-		monster = new Monster(level.model.getMonsterModel());
+		hero.x= LEFT_BOUND + level.model.hero.getX() * GRID_STEP;
+		hero.y = TOP_BOUND + level.model.hero.getY() * GRID_STEP;
 		
-		monster.xCoordinate = LEFT_BOUND + level.model.getMonsterModel().col * GRID_STEP;
-		monster.yCoordinate = TOP_BOUND + level.model.getMonsterModel().row * GRID_STEP;
+		monster.xCoordinate = LEFT_BOUND + level.model.monster.getCol() * GRID_STEP;
+		monster.yCoordinate = TOP_BOUND + level.model.monster.getRow() * GRID_STEP;
 	}
 	
 	/**
@@ -252,20 +223,23 @@ public class GameView extends SurfaceView {
 	 */
 	private void updateModel() {
 		// Used to remember pressed control (action down performed and no other actions after)
-		if(level.model.getControlType() == UserControlType.IDLE) {
-			level.model.setControlType(control.pressedControl);
+		UserControlType controlType;
+		if(control.obtainedControl == UserControlType.IDLE) {
+			controlType = control.pressedControl;
+		} else {
+			controlType = control.obtainedControl;
+			control.obtainedControl = UserControlType.IDLE;
 		}
-//		prevMotion = level.model.getMotion();
 		// Store cell before update in purpose to play cell animation (like floor movement while jump) 
 		prevCell = level.model.getHeroCell();
 		// calculate new motion depending on current motion, hero cell and user control
-		level.model.updateGame();
+		level.model.updateGame(controlType);
 		// switch hero animation
-		hero.finishPrevMotion(level.model.getMotion(), level.model.getPrevMotion(), prevCell);
+		hero.finishPrevMotion(prevCell);
 		// play cell reaction to new motion
 		if(!hero.isFinishing()) {
 			hero.switchToCurrentMotion();
-			prevCell.updateCell(level.model.getMotion(), level.model.getPrevMotion());
+			prevCell.updateCell(hero.model.currentMotion, hero.model.finishingMotion);
 		}
 	}
 	
@@ -278,7 +252,7 @@ public class GameView extends SurfaceView {
 			// when motion at last switches we need to play cell animation
 			if(hero.isFinishingMotionEnded(/*level.model.getPrevMotion()*/)) {
 				hero.switchToCurrentMotion();
-				prevCell.updateCell(level.model.getMotion(), level.model.getPrevMotion());
+				prevCell.updateCell(hero.model.currentMotion, hero.model.finishingMotion);
 			}
 			return true;
 		}
@@ -297,14 +271,14 @@ public class GameView extends SurfaceView {
 			if(hero.getRealMotion().getType() == MotionType.TP_LEFT || 
 					hero.getRealMotion().getType() == MotionType.TP_RIGHT ||
 					hero.getRealMotion().getType() == MotionType.TP) {
-				hero.heroX = LEFT_BOUND + level.model.heroX * GRID_STEP;
-				hero.heroY = TOP_BOUND + level.model.heroY * GRID_STEP;
+				hero.x = LEFT_BOUND + level.model.hero.getX() * GRID_STEP;
+				hero.y = TOP_BOUND + level.model.hero.getY() * GRID_STEP;
 			}
 			int xSpeed = hero.getRealMotion().getXSpeed() * ANIMATION_JUMP_SPEED;
 			int ySpeed = hero.getRealMotion().getYSpeed() * ANIMATION_JUMP_SPEED;
 			
-			hero.heroX += xSpeed;
-			hero.heroY += ySpeed;
+			hero.x += xSpeed;
+			hero.y += ySpeed;
 		}
 	}
 	
@@ -313,23 +287,23 @@ public class GameView extends SurfaceView {
 	 * @return
 	 */
 	private boolean moveLose() {
-		if((-GRID_STEP < hero.heroX && hero.heroX < getWidth() + GRID_STEP) && (-GRID_STEP < hero.heroY && hero.heroY < getHeight() + GRID_STEP)) {
+		if((-GRID_STEP < hero.x && hero.x < getWidth() + GRID_STEP) && (-GRID_STEP < hero.y && hero.y < getHeight() + GRID_STEP)) {
 			if(hero.getRealMotion().getType() == MotionType.FALL) {
-				hero.heroY += ANIMATION_JUMP_SPEED;
+				hero.y += ANIMATION_JUMP_SPEED;
 				return true;
 			}
 			hero.playLoseAnimation();
 			double rand = Math.random();
 			if(rand < 0.33) {
-				hero.heroX += JUMP_SPEED;
+				hero.x += JUMP_SPEED;
 			} else if(rand < 0.66) {
-				hero.heroX -= JUMP_SPEED;
+				hero.x -= JUMP_SPEED;
 			}
 			rand = Math.random();
 			if(rand < 0.33) {
-				hero.heroY += JUMP_SPEED;
+				hero.y += JUMP_SPEED;
 			} else if(rand < 0.66) {
-				hero.heroY -= JUMP_SPEED;
+				hero.y -= JUMP_SPEED;
 			}
 			return true;
 		}
@@ -359,19 +333,13 @@ public class GameView extends SurfaceView {
 		return levId;
 	}
 	
-	protected boolean isRunning() {
-		return gameLoopThread.isRunning();
-	}
-	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if(control.processServiceButton(event)) {
 			return true;
 		}
-		if(!paused) {
-			if(control.oneHandControl(event)) {
-				return true;
-			}
+		if(control.scanControl(event, hero.x, hero.y)) {
+			return true;
 		}
 		return super.onTouchEvent(event);
 	}
@@ -386,6 +354,10 @@ public class GameView extends SurfaceView {
 	private boolean isGridCoordinates(int xCoordinate, int yCoordinate) {
 		return (xCoordinate - LEFT_BOUND) % GRID_STEP == 0 && 
 				(yCoordinate - TOP_BOUND) % GRID_STEP == 0;
+	}
+	
+	public void checkMonsterColision() {
+		level.model.checkMonsterColision();
 	}
 
 }

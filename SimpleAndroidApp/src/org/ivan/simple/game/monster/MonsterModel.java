@@ -5,25 +5,18 @@ public class MonsterModel {
 	
 	private MonsterDirection currDirection = MonsterDirection.IDLE;
 	
-	public int row;
-	public int col;
+	private int row;
+	private int col;
+	private int prevRow;
+	private int prevCol;
 	
 	public MonsterModel(int row, int col, MonsterStrategy strategy) {
 		this.strategy = strategy;
 		this.row = row;
 		this.col = col;
-		currDirection = strategy.nextDirection();
-	}
-	
-	public MonsterModel(int row, int col) {
-		this(
-				row, 
-				col, 
-				new MonsterStrategy(
-					MonsterDirection.UP,
-					MonsterDirection.LEFT,
-					MonsterDirection.DOWN,
-					MonsterDirection.RIGHT));
+		prevRow = row;
+		prevCol = col;
+		currDirection = strategy.nextDirection(false);
 	}
 	
 	public MonsterDirection getDirection() {
@@ -35,6 +28,8 @@ public class MonsterModel {
 	}
 	
 	public void moveInDirection() {
+		prevRow = row;
+		prevCol = col;
 		switch(currDirection) {
 		case UP:
 			row--;
@@ -53,7 +48,25 @@ public class MonsterModel {
 		}
 	}
 	
-	public MonsterStrategy getStartegy() {
+	public MonsterStrategy getStrategy() {
 		return strategy;
 	}
+
+	public int getRow() {
+		return row;
+	}
+
+	public int getCol() {
+		return col;
+	}
+
+	public int getPrevRow() {
+		return prevRow;
+	}
+
+	public int getPrevCol() {
+		return prevCol;
+	}
+	
+	
 }

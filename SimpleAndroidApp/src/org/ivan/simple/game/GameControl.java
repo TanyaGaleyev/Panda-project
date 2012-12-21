@@ -11,23 +11,32 @@ import android.view.MotionEvent;
 
 public class GameControl {
 	private GameView view;
-	private LevelModel model;
-	private Hero hero;
+//	private LevelModel model;
+//	private Hero hero;
+	private UserControlType delayedControl = UserControlType.IDLE;
 	public UserControlType pressedControl = UserControlType.IDLE;
-	public UserControlType delayedControl = UserControlType.IDLE;
+	public UserControlType obtainedControl = UserControlType.IDLE;
 	private TimerTask useDelayedControl;
 	
 	private float[] startPressedY = new float[2];
 	private float[] startPressedX = new float[2];
 	private int slideSenderID;
 	
-	public GameControl(GameView view, LevelModel model, Hero hero) {
+	private GameManager gameLoopThread;
+	private boolean paused;
+	
+	public GameControl(GameView view, int levelId) {
+		view.setLevId(levelId);
 		this.view  = view;
-		this.model = model;
-		this.hero = hero;
+		view.control = this;
 	}
 	
-	protected boolean oneHandControl(MotionEvent event) {
+	protected boolean scanControl(MotionEvent event, int x, int y) {
+		if(paused) return false;
+		return oneHandControl(event, x ,y);
+	}
+	
+	private boolean oneHandControl(MotionEvent event, int x, int y) {
 		int actionMask = event.getActionMasked();
 		int actionIndex = event.getActionIndex();
 		int pointerId = event.getPointerId(actionIndex);
@@ -40,12 +49,12 @@ public class GameControl {
 //			} else {
 //				delayedControl = UserControlType.LEFT;
 //			}
-			delayedControl = getMoveType(event);
+			delayedControl = getMoveType(event, x, y);
 			useDelayedControl = new TimerTask() {				
 				@Override
 				public void run() {
 					pressedControl = delayedControl;
-					model.setControlType(delayedControl);
+					obtainedControl = delayedControl;
 				}
 			};
 			new Timer().schedule(useDelayedControl, 100);
@@ -63,8 +72,8 @@ public class GameControl {
 				model.setControlType(pressedControl);
 			} else */if(useDelayedControl != null &&
 					useDelayedControl.cancel() &&
-					model.getControlType() == UserControlType.IDLE) {
-				model.setControlType(delayedControl);
+					obtainedControl == UserControlType.IDLE) {
+				obtainedControl = delayedControl;
 			}
 			pressedControl = UserControlType.IDLE;
 			return true;
@@ -73,19 +82,19 @@ public class GameControl {
 			for(int ai = 0; ai < event.getPointerCount(); ai++) {
 				pointerId = event.getPointerId(ai);
 				if(pointerId > 1) continue;
-				float x = event.getX(ai);
-				float y = event.getY(ai);
+				float ex = event.getX(ai);
+				float ey = event.getY(ai);
 				if(event.getX(ai) - startPressedX[pointerId] > 20) {
-					receiveSlideControl(UserControlType.RIGHT, pointerId, x, y);
+					receiveSlideControl(UserControlType.RIGHT, pointerId, ex, ey);
 					break;
 				} else if(event.getX(ai) - startPressedX[pointerId] < -20) {
-					receiveSlideControl(UserControlType.LEFT, pointerId, x, y);
+					receiveSlideControl(UserControlType.LEFT, pointerId, ex, ey);
 					break;
 				} else if(event.getY(ai) - startPressedY[pointerId] > 20) {
-					receiveSlideControl(UserControlType.DOWN, pointerId, x, y);
+					receiveSlideControl(UserControlType.DOWN, pointerId, ex, ey);
 					break;
 				} else if(event.getY(ai) - startPressedY[pointerId] < -20) {
-					receiveSlideControl(UserControlType.UP, pointerId, x, y);
+					receiveSlideControl(UserControlType.UP, pointerId, ex, ey);
 					break;
 				}
 			}
@@ -99,17 +108,17 @@ public class GameControl {
 			useDelayedControl.cancel();
 		}
 		pressedControl = control;
-		model.setControlType(control);
+		obtainedControl = control;
 		startPressedY[pointerId] = y;
 		startPressedX[pointerId] = x;
 		slideSenderID = pointerId;
 	}
 	
-	protected boolean simpleControl(MotionEvent event) {
+	protected boolean simpleControl(MotionEvent event, int x, int y) {
 		if(event.getAction() == MotionEvent.ACTION_DOWN ||
 			event.getAction() == MotionEvent.ACTION_MOVE) {
-			pressedControl = getMoveType(event); 
-			model.setControlType(pressedControl);
+			pressedControl = getMoveType(event, x, y); 
+			obtainedControl = pressedControl;
 			return true;
 		}
 		if(event.getAction() == MotionEvent.ACTION_UP) {
@@ -184,9 +193,9 @@ public class GameControl {
 //		return false;
 //	}
 	
-	protected UserControlType getMoveType(MotionEvent event) {
-		float dX = hero.heroX - event.getX(); // positive dx move left
-		float dY = hero.heroY - event.getY(); // positive dy move up
+	protected UserControlType getMoveType(MotionEvent event, int x, int y) {
+		float dX = x - event.getX(); // positive dx move left
+		float dY = y - event.getY(); // positive dy move up
 		// use for get control max by absolute value dx, dy
 		// max(|dx|, |dy|)
 		if(Math.abs(dY) > Math.abs(dX)) {
@@ -210,10 +219,10 @@ public class GameControl {
 		if(event.getX() >= 0 && event.getX() < 40 && event.getAction() == MotionEvent.ACTION_DOWN) {
 			float y = event.getY();
 			if(y >= 50 && y < 80) {
-				if(view.isRunning()) {
-					view.stopManager();
+				if(isRunning()) {
+					stopManager();
 				} else {
-					view.startManager();
+					startManager();
 				}
 				return true;
 			} else if(y >= 90 && y < 120) {
@@ -225,5 +234,37 @@ public class GameControl {
 			}
 		}
 		return false;
+	}
+	
+	protected boolean isRunning() {
+		return gameLoopThread.isRunning();
+	}
+	
+	protected void startManager() {
+		System.out.println("Start game loop");
+		gameLoopThread = new GameManager(view);
+		gameLoopThread.setRunning(true);
+		gameLoopThread.start();
+		paused = false;
+	}
+	
+	protected void stopManager() {
+		if(gameLoopThread == null) return;
+		System.out.println("Stop game loop");
+		paused = true;
+		boolean retry = true;
+        gameLoopThread.setRunning(false);
+        while (retry) {
+           try {
+                 gameLoopThread.join();
+                 retry = false;
+           } catch (InterruptedException e) {
+        	   
+           }
+        }
+	}
+	
+	protected GameManager getGameLoopThread() {
+		return gameLoopThread;
 	}
 }

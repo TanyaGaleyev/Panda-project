@@ -15,8 +15,6 @@ public class Hero {
 	 * For example, if prev motion was STEP_LEFT and next motion will be STAY,
 	 * Panda schould turn 90 degrees right in air while jumping on place.
 	 */
-	private Motion currentMotion = new Motion(MotionType.NONE);
-	private Motion finishingMotion = new Motion(MotionType.NONE); 
 	private boolean finishingState = false;
 	private LevelCell prevCell;
 	private Sprite sprite8 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite8), 38, 8);
@@ -24,12 +22,14 @@ public class Hero {
 	private Sprite tpSprite = new Sprite(ImageProvider.getBitmap(R.drawable.panda_tp), 28, 8);
 	private Sprite activeSprite;
 	private Sprite shadeSprite = new Sprite(ImageProvider.getBitmap(R.drawable.panda_tp), 28, 8);
-	public int heroX;
-	public int heroY;
+	public int x;
+	public int y;
 	private int prevX;
 	private int prevY;
+	public final HeroModel model;
 	
-	public Hero() {
+	public Hero(HeroModel model) {
+		this.model = model;
 		sprite16.setAnimating(true);
 		sprite8.setAnimating(true);
 		tpSprite.setAnimating(true);
@@ -48,8 +48,8 @@ public class Hero {
 	/* properly 'was', 'has been'? */
 	public boolean isFinishingMotionEnded(/*Motion prevMotion*/) {
 		if(activeSprite.getFrame() == 0 ||
-				(finishingMotion.getType() == MotionType.FLY_LEFT && activeSprite.getFrame() == 4) ||
-				(finishingMotion.getType() == MotionType.FLY_RIGHT && activeSprite.getFrame() == 4)) {
+				(model.finishingMotion.getType() == MotionType.FLY_LEFT && activeSprite.getFrame() == 4) ||
+				(model.finishingMotion.getType() == MotionType.FLY_RIGHT && activeSprite.getFrame() == 4)) {
 			finishingState = false;
 			return true;
 		} else {
@@ -65,12 +65,12 @@ public class Hero {
 	 * @return
 	 */
 	public boolean isInControlState() {
-		if((finishingMotion.getType() == MotionType.FLY_LEFT  ||
-				finishingMotion.getType() == MotionType.FLY_RIGHT) &&
+		if((model.finishingMotion.getType() == MotionType.FLY_LEFT  ||
+				model.finishingMotion.getType() == MotionType.FLY_RIGHT) &&
 				finishingState) {
 			return activeSprite.getFrame() == 4;
 		}
-		if(currentMotion.getType() == MotionType.FALL_BLANSH) {
+		if(model.currentMotion.getType() == MotionType.FALL_BLANSH) {
 			return activeSprite.getFrame() % 8 == 0;
 		}
 		if(prevCell != null && prevCell.getFloor().getType() == PlatformType.GLUE) {
@@ -85,15 +85,15 @@ public class Hero {
 	 * Goal is to play start/end animations of motions.
 	 * @param newMotion
 	 */
-	public void finishPrevMotion(Motion newMotion, Motion prevMotion, LevelCell prevCell) {
+	public void finishPrevMotion(LevelCell prevCell) {
 		this.prevCell = prevCell;
-		prevX = heroX;
-		prevY = heroY;
-		finishingMotion = prevMotion;
-		currentMotion = newMotion;
-		if (finishingMotion.getChildMotion().isFinishing()) {
+		prevX = x;
+		prevY = y;
+//		model.finishingMotion = prevMotion;
+//		model.currentMotion = newMotion;
+		if (model.finishingMotion.getChildMotion().isFinishing()) {
 			finishingState = true;
-			switch(finishingMotion.getChildMotion().getType()) {
+			switch(model.finishingMotion.getChildMotion().getType()) {
 			case MAGNET:
 				activeSprite.changeSet(17);
 				break;
@@ -105,9 +105,9 @@ public class Hero {
 				break;
 			case FLY_LEFT:
 				// skip finishing fall down after FLY if finish because wall
-				if(newMotion.getType() == MotionType.JUMP_LEFT_WALL || 
-				newMotion.getType() == MotionType.STICK_LEFT ||
-				newMotion.getType() == MotionType.FLY_RIGHT) {
+				if(model.currentMotion.getType() == MotionType.JUMP_LEFT_WALL || 
+					model.currentMotion.getType() == MotionType.STICK_LEFT ||
+					model.currentMotion.getType() == MotionType.FLY_RIGHT) {
 					finishingState = false;
 				} else {
 					activeSprite = sprite8;
@@ -116,9 +116,9 @@ public class Hero {
 				break;
 			case FLY_RIGHT:
 				// skip finishing fall down after FLY if finish because wall
-				if(newMotion.getType() == MotionType.JUMP_RIGHT_WALL || 
-				newMotion.getType() == MotionType.STICK_RIGHT ||
-				newMotion.getType() == MotionType.FLY_LEFT) {
+				if(model.currentMotion.getType() == MotionType.JUMP_RIGHT_WALL || 
+					model.currentMotion.getType() == MotionType.STICK_RIGHT ||
+					model.currentMotion.getType() == MotionType.FLY_LEFT) {
 					finishingState = false;
 				} else {
 					activeSprite = sprite8;
@@ -137,10 +137,10 @@ public class Hero {
 	 * Begins main animation, after finish/start animations became complete
 	 */
 	public void switchToCurrentMotion() {
-		pickActiveSprite(currentMotion.getType());
-		MotionType mt = currentMotion.getType();
-		int curStage = currentMotion.getStage();
-		MotionType prevMt = finishingMotion.getChildMotion().getType();
+		pickActiveSprite(model.currentMotion.getType());
+		MotionType mt = model.currentMotion.getType();
+		int curStage = model.currentMotion.getStage();
+		MotionType prevMt = model.finishingMotion.getChildMotion().getType();
 //		if(prevMt == MotionType.TP_LEFT || prevMt == MotionType.TP_RIGHT) {
 //			prevMt = finishingMotion.getChildMotion().getType();
 //			prevStage = finishingMotion.getChildMotion().getStage();
@@ -297,8 +297,8 @@ public class Hero {
 			}
 			break;
 		case TP_LEFT:
-			MotionType childMt = currentMotion.getChildMotion().getType();
-			int childStage = currentMotion.getChildMotion().getStage();
+			MotionType childMt = model.currentMotion.getChildMotion().getType();
+			int childStage = model.currentMotion.getChildMotion().getStage();
 			if(childMt == MotionType.JUMP_LEFT) {
 				if(prevMt == MotionType.JUMP) {
 					shadeSprite.changeSet(10);
@@ -330,8 +330,8 @@ public class Hero {
 			}
 			break;
 		case TP_RIGHT:
-			MotionType childMt1 = currentMotion.getChildMotion().getType();
-			int childStage1 = currentMotion.getChildMotion().getStage();
+			MotionType childMt1 = model.currentMotion.getChildMotion().getType();
+			int childStage1 = model.currentMotion.getChildMotion().getStage();
 			if(childMt1 == MotionType.JUMP_RIGHT) {
 				if(prevMt == MotionType.JUMP) {
 					shadeSprite.changeSet(8);
@@ -416,8 +416,8 @@ public class Hero {
 	 * @param canvas
 	 */
 	public void onDraw(Canvas canvas, boolean update) {
-		activeSprite.onDraw(canvas, heroX - activeSprite.getWidth() / 2, heroY - activeSprite.getHeight() / 2, update);
-		if(!finishingState && (currentMotion.getType() == MotionType.TP_LEFT || currentMotion.getType() == MotionType.TP_RIGHT)) {
+		activeSprite.onDraw(canvas, x - activeSprite.getWidth() / 2, y - activeSprite.getHeight() / 2, update);
+		if(!finishingState && (model.currentMotion.getType() == MotionType.TP_LEFT || model.currentMotion.getType() == MotionType.TP_RIGHT)) {
 			shadeSprite.onDraw(canvas, prevX - shadeSprite.getWidth() / 2, prevY - shadeSprite.getHeight() / 2, update);
 		}
 	}
@@ -430,7 +430,7 @@ public class Hero {
 		if(finishingState) {
 			return new Motion(MotionType.NONE);
 		} else {
-			return currentMotion;
+			return model.currentMotion;
 		}
 	}
 	

@@ -20,6 +20,7 @@ public class ImageProvider {
 	}
 	
 	public static void removeFromCatch(int id) {
+		if(images.get(id) == null) return;
 		images.get(id).recycle();
 		images.remove(id);
 	}

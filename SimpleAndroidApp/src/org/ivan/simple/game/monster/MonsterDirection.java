@@ -5,5 +5,9 @@ public enum MonsterDirection {
 	LEFT,
 	DOWN,
 	RIGHT,
-	IDLE
+	IDLE;
+	
+	public static MonsterDirection[] getAllDirections() {
+		return new MonsterDirection[]{UP, LEFT, DOWN, RIGHT};
+	}
 }
