@@ -15,5 +15,5 @@ gen/
 # Local configuration file (sdk path, etc)
 local.properties
 
-#eclipse workspace meta
+# eclipse workspace meta
 .metadata/
