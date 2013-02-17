@@ -280,6 +280,15 @@ public class LevelChooseView extends SurfaceView {
 		return finishedArray;
 	}
 	
+	protected boolean allLevelsFinished() {
+		for(int i = 0; i < levels.length; i++) {
+			for(int j = 0; j < levels[i].length; j++) {
+				if(finishedLevels[i][j] == 0) return false;
+			}
+		}
+		return true;
+	}
+	
 	protected void setChooseScreenProperties(int id, String finishedArray) {
 		setLevelsId(id);
 		setFinishedLevels(finishedArray);

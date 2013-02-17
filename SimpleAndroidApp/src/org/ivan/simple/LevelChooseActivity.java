@@ -10,9 +10,10 @@ import android.view.Window;
 public class LevelChooseActivity extends Activity {
 	public static final String LEVEL_ID = "levId";
 	public static final String LEVEL_COMPLETE = "complete";
+	public static final String SET_COMPLETE = "set complete";
 	public static final int FINISHED_LEVEL_ID = 1;
 	public static final String FINISHED_LEVELS = "finished";
-	private static final String CONFIG = "panda_config";
+	public static final String CONFIG = "panda_config";
 	
 	private SharedPreferences preferences;
 	
@@ -58,10 +59,24 @@ public class LevelChooseActivity extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if(requestCode == FINISHED_LEVEL_ID && resultCode == Activity.RESULT_OK) {
+		if(requestCode == FINISHED_LEVEL_ID && resultCode == RESULT_OK) {
 			boolean complete = data.getBooleanExtra(LEVEL_COMPLETE, false);
 			if(complete) view.completeCurrentLevel();
+			if(view.allLevelsFinished()) {
+				SharedPreferences.Editor prEditor = preferences.edit();
+				prEditor.putInt(StartActivity.LAST_FINISHED_SET, levelsSetId);
+				prEditor.commit();
+				finish();
+			}
 		}
+	}
+	
+	@Override
+	public void finish() {
+		Intent resultIntent = new Intent();
+		resultIntent.putExtra(LevelChooseActivity.SET_COMPLETE, view.allLevelsFinished());
+		setResult(RESULT_OK, resultIntent);
+		super.finish();
 	}
 	
 	@Override

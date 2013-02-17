@@ -73,7 +73,7 @@ public class GameActivity extends Activity {
     public void switchBackToChooseActivity(boolean complete) {
 		Intent resultIntent = new Intent();
 		resultIntent.putExtra(LevelChooseActivity.LEVEL_COMPLETE, complete);
-		setResult(Activity.RESULT_OK, resultIntent);
+		setResult(RESULT_OK, resultIntent);
 		finish();
 	}
     
