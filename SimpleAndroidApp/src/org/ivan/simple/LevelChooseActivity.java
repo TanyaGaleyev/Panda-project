@@ -48,25 +48,26 @@ public class LevelChooseActivity extends Activity {
 //	}
 	
 	@Override
-	protected void onPause() {
-		super.onPause();
-		
-		SharedPreferences.Editor prEditor = preferences.edit();
-		prEditor.putString(FINISHED_LEVELS + levelsSetId, view.getFinishedLevels());
-		prEditor.commit();
-	}
-	
-	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if(requestCode == FINISHED_LEVEL_ID && resultCode == RESULT_OK) {
 			boolean complete = data.getBooleanExtra(LEVEL_COMPLETE, false);
-			if(complete) view.completeCurrentLevel();
+			if(complete) {
+				boolean wasNotCompeteBefore = view.completeCurrentLevel();
+				if(wasNotCompeteBefore) {
+					SharedPreferences.Editor prEditor = preferences.edit();
+					prEditor.putString(FINISHED_LEVELS + levelsSetId, view.getFinishedLevels());
+					prEditor.commit();
+				}
+			}
 			if(view.allLevelsFinished()) {
-				SharedPreferences.Editor prEditor = preferences.edit();
-				prEditor.putInt(StartActivity.LAST_FINISHED_SET, levelsSetId);
-				prEditor.commit();
-				finish();
+				boolean setWasNotCompleteBefore = levelsSetId > preferences.getInt(StartActivity.LAST_FINISHED_SET, 0);
+				if(setWasNotCompleteBefore) {
+					SharedPreferences.Editor prEditor = preferences.edit();
+					prEditor.putInt(StartActivity.LAST_FINISHED_SET, levelsSetId);
+					prEditor.commit();
+					finish();
+				}
 			}
 		}
 	}

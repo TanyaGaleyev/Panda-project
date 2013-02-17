@@ -265,8 +265,11 @@ public class LevelChooseView extends SurfaceView {
 		return false;
 	}
 	
-	public void completeCurrentLevel() {
+	public boolean completeCurrentLevel() {
+		boolean ret = finishedLevels[levelY][levelX] == 0;
 		finishedLevels[levelY][levelX] = 1;
+		return ret;
+		
 	}
 	
 	protected String getFinishedLevels() {
