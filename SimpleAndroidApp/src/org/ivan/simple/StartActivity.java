@@ -6,6 +6,7 @@ import org.ivan.simple.R;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -21,10 +22,22 @@ public class StartActivity extends Activity {
 	private ArrayList<Button> levButtons = new ArrayList<Button>();
 	private int startedSet = 0;
 	
+	public static int DISPLAY_WIDTH;
+	public static int DISPLAY_HEIGHT;
+	
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        int width = getWindowManager().getDefaultDisplay().getWidth();
+        int height= getWindowManager().getDefaultDisplay().getHeight();
+        if(width > height) {
+        	DISPLAY_WIDTH = width;
+        	DISPLAY_HEIGHT = height;
+        } else {
+        	DISPLAY_WIDTH = height;
+        	DISPLAY_HEIGHT = width;
+        }
         // hide screen title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_start);

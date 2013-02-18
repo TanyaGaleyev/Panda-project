@@ -19,8 +19,8 @@ public class LevelView {
 	
 	public void onDraw(Canvas canvas, boolean update) {
 		
-		for(int i = 0; i <model.rows; i++) {
-			for(int j = 0; j <model.cols; j++) {
+		for(int i = 0; i <model.getRows(); i++) {
+			for(int j = 0; j <model.getCols(); j++) {
 				drawCell(canvas, i, j, update);
 			}
 		}
@@ -56,9 +56,9 @@ public class LevelView {
 		Paint paint = new Paint();
 		paint.setColor(Color.BLUE);
 		int xstart = LEFT_BOUND - GRID_STEP / 2;
-		int xend = xstart + model.cols * GRID_STEP;
+		int xend = xstart + model.getCols() * GRID_STEP;
 		int ystart = TOP_BOUND - GRID_STEP / 2;
-		int yend = ystart + model.rows * GRID_STEP;
+		int yend = ystart + model.getRows() * GRID_STEP;
 		for(int x = xstart; x <= xend; x += GRID_STEP) {
 			canvas.drawLine(x, ystart, x, yend, paint);
 		}

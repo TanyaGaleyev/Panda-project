@@ -16,8 +16,8 @@ import org.ivan.simple.game.monster.strategies.RandomContiniousDirection;
 
 public class LevelModel {
 	private LevelCell[][] levelGrid;
-	protected final int rows;
-	protected final int cols;
+	private final int rows;
+	private final int cols;
 	public final MonsterModel monster;
 	public final HeroModel hero;
 	private int prizesLeft = 0;
@@ -755,5 +755,15 @@ public class LevelModel {
 			lose = true;
 		}
 	}
+
+	public int getRows() {
+		return rows;
+	}
+
+	public int getCols() {
+		return cols;
+	}
+	
+	
 	
 }

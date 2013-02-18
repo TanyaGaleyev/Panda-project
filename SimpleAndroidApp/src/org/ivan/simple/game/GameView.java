@@ -2,6 +2,7 @@ package org.ivan.simple.game;
 
 import org.ivan.simple.ImageProvider;
 import org.ivan.simple.R;
+import org.ivan.simple.StartActivity;
 import org.ivan.simple.UserControlType;
 import org.ivan.simple.game.hero.Hero;
 import org.ivan.simple.game.level.LevelCell;
@@ -69,6 +70,7 @@ public class GameView extends SurfaceView {
 		getHolder().addCallback(new SurfaceHolder.Callback() {
 			
 			public void surfaceDestroyed(SurfaceHolder holder) {
+				System.out.println("surfaceDestroyed");
 				// turn motion to initial stage (stage == 0)
 				//level.model.getMotion().startMotion();
                 control.stopManager();
@@ -76,6 +78,7 @@ public class GameView extends SurfaceView {
 			}
 			
 			public void surfaceCreated(SurfaceHolder holder) {
+				System.out.println("surfaceCreated");
 				initSurface();
 				if(control.getGameLoopThread() == null) {
 					control.startManager();
@@ -83,8 +86,8 @@ public class GameView extends SurfaceView {
 				control.getGameLoopThread().doDraw(false);
 			}
 			
-			public void surfaceChanged(SurfaceHolder holder, int format, int width,
-					int height) {
+			public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+				System.out.println("surfaceChanged");
 				control.getGameLoopThread().doDraw(false);
 			}
 		});
@@ -97,18 +100,19 @@ public class GameView extends SurfaceView {
 		restart = ImageProvider.getBitmap(R.drawable.restart);
 		back = ImageProvider.getBitmap(R.drawable.back);
 		
-		GRID_STEP = 72;//hero.getSprite().getWidth() % 4 == 0 ? hero.getSprite().getWidth() : (hero.getSprite().getWidth() / 4  + 1) * 4;
+		//GRID_STEP = 72;
+		//GRID_STEP = hero.getSprite().getWidth() % 4 == 0 ? hero.getSprite().getWidth() : (hero.getSprite().getWidth() / 4  + 1) * 4;
+		GRID_STEP = getGridStep(StartActivity.DISPLAY_WIDTH, StartActivity.DISPLAY_HEIGHT);
 		TOP_BOUND = GRID_STEP;
-		BOTTOM_BOUND = getHeight() - GRID_STEP;
-		BOTTOM_BOUND -= BOTTOM_BOUND % GRID_STEP;
 		// TODO check this bound carefully!
-		LEFT_BOUND = GRID_STEP + 16;
-		RIGHT_BOUND = getWidth() - GRID_STEP;
-		RIGHT_BOUND -= RIGHT_BOUND % GRID_STEP;
+		LEFT_BOUND = GRID_STEP + GRID_STEP / 4;
 		JUMP_SPEED = GRID_STEP;
 		ANIMATION_JUMP_SPEED = JUMP_SPEED / 8;
 		
 		level = new LevelView(levId, GRID_STEP, LEFT_BOUND, TOP_BOUND);
+		BOTTOM_BOUND = TOP_BOUND + level.model.getRows() * GRID_STEP;
+		RIGHT_BOUND = LEFT_BOUND + level.model.getCols() * GRID_STEP;
+		
 		prevCell = level.model.getHeroCell();
 //		prevMotion = level.model.getMotion();
 		
@@ -120,6 +124,16 @@ public class GameView extends SurfaceView {
 		
 		monster.xCoordinate = LEFT_BOUND + level.model.monster.getCol() * GRID_STEP;
 		monster.yCoordinate = TOP_BOUND + level.model.monster.getRow() * GRID_STEP;
+	}
+	
+	private int getGridStep(int width, int height) {
+		if(width < 792 || height < 432) {
+			throw new IllegalArgumentException("Display resolution too small!!");
+		} else if(width < 1584 || height < 864) {
+			return 72;
+		} else {
+			return 144;
+		}
 	}
 	
 	/**
