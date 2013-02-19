@@ -100,10 +100,9 @@ public class GameView extends SurfaceView {
 		restart = ImageProvider.getBitmap(R.drawable.restart);
 		back = ImageProvider.getBitmap(R.drawable.back);
 		Bitmap scalingBitmap = ImageProvider.getBitmap(R.drawable.single_panda);
-		//GRID_STEP = 112;//32dp,56dp,80dp
+		//GRID_STEP = 112;//88dp,48dp
 		GRID_STEP = scalingBitmap.getWidth() % 8 == 0 ? scalingBitmap.getWidth() : (scalingBitmap.getWidth() / 8  + 1) * 8;
 		System.out.println("GRID_STEP = " + GRID_STEP);
-//		GRID_STEP = getGridStep(StartActivity.DISPLAY_WIDTH, StartActivity.DISPLAY_HEIGHT);
 		TOP_BOUND = GRID_STEP;
 		// TODO check this bound carefully!
 		LEFT_BOUND = GRID_STEP + GRID_STEP / 4;
@@ -127,16 +126,6 @@ public class GameView extends SurfaceView {
 		monster.yCoordinate = TOP_BOUND + level.model.monster.getRow() * GRID_STEP;
 	}
 	
-	private int getGridStep(int width, int height) {
-		if(width < 792 || height < 432) {
-			throw new IllegalArgumentException("Display resolution too small!!");
-		} else if(width < 1584 || height < 864) {
-			return 72;
-		} else {
-			return 144;
-		}
-	}
-	
 	/**
 	 * Draw hero, level and etc.
 	 */
@@ -154,7 +143,7 @@ public class GameView extends SurfaceView {
 		level.onDraw(canvas, update);
 		hero.onDraw(canvas, update);
 		monster.onDraw(canvas, update);
-		level.drawGrid(canvas);
+//		level.drawGrid(canvas);
 		drawFPS(canvas);
 		if(level.model.isLost()) {
 			drawLose(canvas);
