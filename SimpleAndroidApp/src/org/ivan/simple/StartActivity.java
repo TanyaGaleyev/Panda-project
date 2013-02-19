@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -42,7 +43,8 @@ public class StartActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_start);
         ImageProvider.resources = getApplicationContext().getResources();
-        final float scale = getApplicationContext().getResources().getDisplayMetrics().density;
+        DisplayMetrics display = getApplicationContext().getResources().getDisplayMetrics();
+        final float scale = display.density;
         
         int lastFinishedSet = 
         		getSharedPreferences(LevelChooseActivity.CONFIG, MODE_PRIVATE)
@@ -62,8 +64,8 @@ public class StartActivity extends Activity {
 	            }
             });
         	buttonsPane.addView(levbtn);
-        	levbtn.getLayoutParams().width = (int) (400 * scale + 0.5f);
-        	levbtn.getLayoutParams().height = (int) (60 * scale + 0.5f);
+        	levbtn.getLayoutParams().width = (int) (DISPLAY_WIDTH * 0.85);
+        	levbtn.getLayoutParams().height = (int) (DISPLAY_HEIGHT * 0.20);
         }
     }
 	

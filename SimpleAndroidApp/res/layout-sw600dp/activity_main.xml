@@ -6,8 +6,8 @@
     
     <org.ivan.simple.game.GameView
         android:id="@+id/game"
-        android:layout_width="792dp"
-        android:layout_height="432dp"
+        android:layout_width="968dp"
+        android:layout_height="528dp"
         android:layout_centerInParent="true"/>
 
 </RelativeLayout>
