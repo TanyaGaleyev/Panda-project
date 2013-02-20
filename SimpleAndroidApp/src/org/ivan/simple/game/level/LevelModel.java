@@ -2,6 +2,8 @@ package org.ivan.simple.game.level;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.TreeMap;
 
 import org.ivan.simple.UserControlType;
 import org.ivan.simple.game.ContainerMotion;
@@ -27,7 +29,7 @@ public class LevelModel {
 	private HashMap<CellCoords, TpPeer> tpGroupMap = new HashMap<CellCoords, TpPeer>();
 	private ArrayList<Platform> switchList = new ArrayList<Platform>();
 	private ArrayList<Platform> unlockList = new ArrayList<Platform>();
-	private HashMap<CellCoords, CellCoords> tpSequence = new HashMap<CellCoords, CellCoords>();
+	private HashMap<CellCoords, CellCoords> floorTPMap = new HashMap<CellCoords, CellCoords>();
 	
 	private class CellCoords {
 		int i;
@@ -79,55 +81,55 @@ public class LevelModel {
 		rows=5;
 		cols=10;
 		MonsterStrategy dangerousKillerMonsterStrategy = new RandomContiniousDirection(MonsterDirection.getAllDirections());
-		monster = new MonsterModel(0, 0, dangerousKillerMonsterStrategy);
+		if(lev > 2) {
+			monster = new MonsterModel(0, 0, dangerousKillerMonsterStrategy);
+		} else {
+			monster = null;
+		}
 		hero = new HeroModel(rows - 1, 0);
 		LevelStorage storage = new LevelStorage();
-		int[][][] mylevel = storage.getLevel(lev);
+		int[][][][] mylevel = storage.getLevel(lev);
 		int[][] prizes = storage.getPrizesMap(lev);
 		int[] winCellCoord = storage.getWinCell(lev);
 		levelGrid = new LevelCell[rows][cols];
-		ArrayList<TpPeer> groups = new ArrayList<TpPeer>();
-		CellCoords prevTpCell = null;
-		CellCoords firstTpCell = null;
-		int tpStartGroupId = 0;
-		int tpEndGroupId = 0;
+		HashMap<Integer, TpPeer> groups = new HashMap<Integer, TpPeer>();
+		TreeMap<Integer, CellCoords> tpSequence = new TreeMap<Integer, CellCoords>();
 		for(int i=0;i<rows;i++){
 			for(int j=0;j<cols;j++){
 				levelGrid[i][j] = new LevelCell();
 				levelGrid[i][j].setPrize(prizes[i][j]);
 				prizesLeft += prizes[i][j];
-				int leftWallType = mylevel[i][j][0];
+				int leftWallType = mylevel[i][j][0][0];
 				// create left wall only for first column's cells
 				if(j == 0) {
 					levelGrid[i][j].createLeft(leftWallType);
 					if(leftWallType==11) {
+						int key = mylevel[i][j][0][1];
 						CellCoords coords = new CellCoords(i, j);
-						if(tpStartGroupId >=
-								tpEndGroupId) {
+						if(!groups.containsKey(key)) {
 							TpPeer newPeer = new TpPeer();
 							newPeer.setStartCoords(coords);
-							groups.add(newPeer);
+							groups.put(key, newPeer);
 							tpGroupMap.put(coords, newPeer);
 						} else {
-							TpPeer existedPeer = groups.get(tpStartGroupId);
+							TpPeer existedPeer = groups.get(key);
 							existedPeer.setStartCoords(coords);
 							tpGroupMap.put(coords, existedPeer);
 						}
-						tpStartGroupId++;
 					}
-					if(leftWallType==12) {
+					if(leftWallType==12 && j != 0) {
+						int key = mylevel[i][j][0][1];
 						CellCoords coords = new CellCoords(i, j - 1);
-						if(tpEndGroupId >= tpStartGroupId) {
+						if(!groups.containsKey(key)) {
 							TpPeer newPeer = new TpPeer();
 							newPeer.setEndCoords(coords);
-							groups.add(newPeer);
+							groups.put(key, newPeer);
 							tpGroupMap.put(coords, newPeer);
 						} else {
-							TpPeer existedPeer = groups.get(tpEndGroupId);
+							TpPeer existedPeer = groups.get(key);
 							existedPeer.setEndCoords(coords);
 							tpGroupMap.put(coords, existedPeer);
 						}
-						tpEndGroupId++;
 					}
 					if(leftWallType==17) {
 						switchList.add(levelGrid[i][j].getLeft());
@@ -140,54 +142,50 @@ public class LevelModel {
 					levelGrid[i][j].left_wall = levelGrid[i][j - 1].right_wall;
 				}
 				
-				int roofType = mylevel[i][j][1];
+				int roofType = mylevel[i][j][1][0];
 				// create roof only for first row's cells
 				if(i == 0) {
 					levelGrid[i][j].createRoof(roofType);
-					if(roofType == 23) {
+					// keep i!=0 do nothing check if level building model will change
+					if(roofType == 23 && i != 0) {
+						int key = mylevel[i][j][1][1];
 						CellCoords cell = new CellCoords(i, j);
-						if(prevTpCell != null) {
-							tpSequence.put(prevTpCell, cell);
-						} else {
-							firstTpCell = cell;
-						}
-						prevTpCell = cell;
+						tpSequence.put(key, cell);
 					}
 					// else set roof as floor of nearest upper cell
 				} else {
 					levelGrid[i][j].roof = levelGrid[i - 1][j].floor;
 				}
 
-				int rightWallType = mylevel[i][j][2];
+				int rightWallType = mylevel[i][j][2][0];
 				levelGrid[i][j] .createRight(rightWallType);
-				if(rightWallType==11) {
+				if(rightWallType==11 && j != cols - 1) {
+					int key = mylevel[i][j][2][1];
 					CellCoords coords = new CellCoords(i, j + 1);
-					if(tpStartGroupId >= tpEndGroupId) {
+					if(!groups.containsKey(key)) {
 						TpPeer newPeer = new TpPeer();
 						newPeer.setStartCoords(coords);
-						groups.add(newPeer);
+						groups.put(key, newPeer);
 						tpGroupMap.put(coords, newPeer);
 					} else {
-						TpPeer existedPeer = groups.get(tpStartGroupId);
+						TpPeer existedPeer = groups.get(key);
 						existedPeer.setStartCoords(coords);
 						tpGroupMap.put(coords, existedPeer);
 					}
-					tpStartGroupId++;
 				}
 				if(rightWallType==12) {
+					int key = mylevel[i][j][2][1];
 					CellCoords coords = new CellCoords(i, j);
-					if(tpEndGroupId >= tpStartGroupId) {
+					if(!groups.containsKey(key)) {
 						TpPeer newPeer = new TpPeer();
 						newPeer.setEndCoords(coords);
-						groups.add(newPeer);
+						groups.put(key, newPeer);
 						tpGroupMap.put(coords, newPeer);
 					} else {
-						TpPeer existedPeer = groups.get(tpEndGroupId);
-						existedPeer.endRow = i;
-						existedPeer.endCol = j;
+						TpPeer existedPeer = groups.get(key);
+						existedPeer.setEndCoords(coords);
 						tpGroupMap.put(coords, existedPeer);
 					}
-					tpEndGroupId++;
 				}
 				if(rightWallType==17) {
 					switchList.add(levelGrid[i][j].getRight());
@@ -197,24 +195,29 @@ public class LevelModel {
 				}
 				
 				
-				int floorType = mylevel[i][j][3];
+				int floorType = mylevel[i][j][3][0];
 				levelGrid[i][j].createFloor(floorType);
 				if(floorType == 23) {
+					int key = mylevel[i][j][3][1];
 					CellCoords cell = new CellCoords(i, j);
-					if(prevTpCell != null) {
-						tpSequence.put(prevTpCell, cell);
-					} else {
-						firstTpCell = cell;
-					}
-					prevTpCell = cell;
+					tpSequence.put(key, cell);
 				}
 				
 				if(i == winCellCoord[0] && j == winCellCoord[1]) {
 					winCell = levelGrid[i][j];
 				}
 				
-				if(prevTpCell != null && firstTpCell != null) {
-					tpSequence.put(prevTpCell, firstTpCell);
+				
+				if(!tpSequence.isEmpty()) {
+					Iterator<CellCoords> it = tpSequence.values().iterator();
+					CellCoords firstTpCell = it.next();
+					CellCoords prevTpCell = firstTpCell;
+					while(it.hasNext()) {
+						CellCoords cell = it.next();
+						floorTPMap.put(prevTpCell, cell);
+						prevTpCell = cell;
+					}
+					floorTPMap.put(prevTpCell, firstTpCell);
 				}
 			}
 		}
@@ -412,21 +415,6 @@ public class LevelModel {
 	
 	public void updateGame(UserControlType controlType) {
 		
-		// collect prize 
-		prizesLeft -= getHeroCell().removePrize();
-		/*
-		 * if all prizes are collected show win platform
-		 * level will be complete after hero reaches win cell (with win floor platform now)
-		 */
-		if(prizesLeft == 0) {
-			if(winCell.getFloor().getType() != PlatformType.WIN) {
-				// TODO careful with roof (of underlying cell)
-				winCell.createFloor(PlatformType.WIN);
-			}
-			if(getHeroCell() == winCell) {
-				complete = true;
-			}
-		}
 		tryToUnlock();
 		if(hero.currentMotion.isUncontrolable()) {
 			controlType = UserControlType.IDLE;
@@ -600,6 +588,21 @@ public class LevelModel {
 		}
 		// check if we gonna teleport
 		checkTeleport();
+		// collect prize 
+		prizesLeft -= getHeroCell().removePrize();
+		/*
+		 * if all prizes are collected show win platform
+		 * level will be complete after hero reaches win cell (with win floor platform now)
+		 */
+		if(prizesLeft == 0) {
+			if(winCell.getFloor().getType() != PlatformType.WIN) {
+				// TODO careful with roof (of underlying cell)
+				winCell.createFloor(PlatformType.WIN);
+			}
+			if(getHeroCell() == winCell && !skipWinPlatform(hero.finishingMotion)) {
+				complete = true;
+			}
+		}
 		updatePosition();
 	}
 	
@@ -617,7 +620,7 @@ public class LevelModel {
 			return;
 		}
 		if(hero.currentMotion.getType() == MotionType.TP && hero.currentMotion.getStage() == 1) {
-			CellCoords nextCell = tpSequence.get(new CellCoords(hero.getY(), hero.getX())); 
+			CellCoords nextCell = floorTPMap.get(new CellCoords(hero.getY(), hero.getX())); 
 			hero.setX(nextCell.j);
 			hero.setY(nextCell.i);
 		}
@@ -715,6 +718,7 @@ public class LevelModel {
 
 	
 	public void nextDirection() {
+		if(monster == null) return;
 		LevelCell prevCell = getCell(monster.getRow(), monster.getCol());
 		boolean decline = false;
 		for(int i = 0; i < 10; i++) {
@@ -747,6 +751,7 @@ public class LevelModel {
 	}
 	
 	public void checkMonsterColision() {
+		if(monster == null) return;
 		if(monster.getRow() == hero.getY() && monster.getCol() == hero.getX()) {
 			lose = true;
 		}
@@ -762,6 +767,19 @@ public class LevelModel {
 
 	public int getCols() {
 		return cols;
+	}
+	
+	public boolean skipWinPlatform(Motion motion) {
+		switch(motion.getType()) {
+		case FLY_LEFT:
+		case FLY_RIGHT:
+			return !motion.isFinishing();
+		case THROW_LEFT:
+		case THROW_RIGHT:
+			return motion.getStage() == 1;
+		default:
+			return false;
+		}
 	}
 	
 	

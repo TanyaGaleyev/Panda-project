@@ -51,7 +51,7 @@ public class Motion {
 			stage = 2;
 			break;
 		default:
-			stage = 0;
+//			stage = 0;
 			break;
 		}
 	}

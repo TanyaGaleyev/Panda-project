@@ -122,8 +122,10 @@ public class GameView extends SurfaceView {
 		hero.x= LEFT_BOUND + level.model.hero.getX() * GRID_STEP;
 		hero.y = TOP_BOUND + level.model.hero.getY() * GRID_STEP;
 		
-		monster.xCoordinate = LEFT_BOUND + level.model.monster.getCol() * GRID_STEP;
-		monster.yCoordinate = TOP_BOUND + level.model.monster.getRow() * GRID_STEP;
+		if(level.model.monster != null) {
+			monster.xCoordinate = LEFT_BOUND + level.model.monster.getCol() * GRID_STEP;
+			monster.yCoordinate = TOP_BOUND + level.model.monster.getRow() * GRID_STEP;
+		}
 	}
 	
 	/**
@@ -155,7 +157,7 @@ public class GameView extends SurfaceView {
 	private void drawFPS(Canvas canvas) {
 		Paint paint = new Paint(); 
 		paint.setStyle(Paint.Style.FILL); 
-		paint.setTextSize(25); 
+		paint.setTextSize(25);
 		paint.setColor(Color.BLUE);
 		canvas.drawText("FPS: " + GameManager.getFPS(), 5, 25, paint);
 	}

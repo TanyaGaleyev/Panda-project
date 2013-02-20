@@ -21,10 +21,12 @@ public class Monster {
 	}
 	
 	public void onDraw(Canvas canvas, boolean update) {
+		if(model == null) return;
 		sprite.onDraw(canvas, xCoordinate - sprite.getWidth() / 2, yCoordinate - sprite.getHeight() / 2, update);
 	}
 	
 	public void moveInCurrentDirection(int speed) {
+		if(model == null) return;
 		switch(model.getDirection()) {
 		case UP:
 			yCoordinate -= speed;
