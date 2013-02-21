@@ -14,6 +14,7 @@ public class LevelChooseActivity extends Activity {
 	public static final String SET_COMPLETE = "set complete";
 	public static final int FINISHED_LEVEL_ID = 1;
 	public static final String FINISHED_LEVELS = "finished";
+	public static final String HIGH_SCORES = "high scores";
 	public static final String CONFIG = "panda_config";
 	
 	private SharedPreferences preferences;
@@ -33,7 +34,13 @@ public class LevelChooseActivity extends Activity {
         preferences = getSharedPreferences(CONFIG, MODE_PRIVATE);
         levelsSetId = getIntent().getIntExtra(StartActivity.SET_ID, 0);
         String finishedArray = preferences.getString(FINISHED_LEVELS + levelsSetId, "");
-        view.setChooseScreenProperties(levelsSetId, finishedArray);
+//        String highScoresStr = preferences.getString(HIGH_SCORES + levelsSetId, "");
+        String[] highScoresArr = getResources().getStringArray(R.array.high_scores); 
+        String highScoresStr = "";
+        if((levelsSetId - 1) < highScoresArr.length) {
+        	highScoresStr = highScoresArr[levelsSetId - 1];
+        }
+        view.setChooseScreenProperties(levelsSetId, finishedArray, highScoresStr);
 	}
 	
 //	@Override

@@ -32,6 +32,12 @@ public class LevelChooseView extends SurfaceView {
 	 */
 	private int[][] levels;
 	private byte[][] finishedLevels;
+	private HighScore[][] highScores;
+	
+	private static class HighScore {
+		public byte high;
+		public byte medium;
+	}
 	
 	
 	/**
@@ -317,9 +323,10 @@ public class LevelChooseView extends SurfaceView {
 		return true;
 	}
 	
-	protected void setChooseScreenProperties(int id, String finishedArray) {
+	protected void setChooseScreenProperties(int id, String finishedArray, String highScoresStr) {
 		setLevelsId(id);
 		setFinishedLevels(finishedArray);
+		setHighScores(highScoresStr);
 		backgroundId = getBackgroundId(id);
 	}
 	
@@ -335,12 +342,40 @@ public class LevelChooseView extends SurfaceView {
 		}
 	}
 	
+	private void setHighScores(String highScoresStr) {
+		StringTokenizer st = new StringTokenizer(highScoresStr, ";");
+		for(int i = 0; i < levels.length; i++) {
+			for(int j = 0; j < levels[i].length; j++) {
+				HighScore highScore = new HighScore();
+				if(!st.hasMoreTokens()) {
+					highScore.medium = 25;
+					highScore.high = 50;
+					highScores[i][j] = highScore;
+					continue;
+				}
+				String strScore = st.nextToken();
+				String[] mediumhigh = strScore.split(",");
+				if(mediumhigh.length != 2) {
+					highScore.medium = 25;
+					highScore.high = 50;
+					highScores[i][j] = highScore;
+					continue;
+				}
+				highScore.medium = Byte.parseByte(mediumhigh[0]);
+				highScore.high = Byte.parseByte(mediumhigh[1]);
+				highScores[i][j] = highScore;
+			}
+		}
+	}
+	
 	private void setLevelsId(int id) {
 		LevelStorage storage = new LevelStorage();
 		levels = storage.getLevels(id);
 		finishedLevels = new byte[levels.length][];
+		highScores = new HighScore[levels.length][];
 		for(int i = 0; i < levels.length; i++) {
 			finishedLevels[i] = new byte[levels[i].length];
+			highScores[i] = new HighScore[levels[i].length];
 		}
 	}
 	
