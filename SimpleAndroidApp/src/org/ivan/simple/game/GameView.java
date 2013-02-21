@@ -320,6 +320,10 @@ public class GameView extends SurfaceView {
 		return level.model.isComplete();
 	}
 	
+	public byte getScore() {
+		return level.model.getScore();
+	}
+	
 	protected void setLevId(int levId) {
 		this.levId = levId;
 		this.backgroundId = getBackgroundId(levId);

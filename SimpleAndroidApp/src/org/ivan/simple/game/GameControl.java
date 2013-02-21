@@ -229,7 +229,7 @@ public class GameControl {
 				((GameActivity) view.getContext()).restart();
 				return true;
 			} else if(y >= 130 && y < 160) {
-				((GameActivity) view.getContext()).switchBackToChooseActivity(view.isComplete());
+				((GameActivity) view.getContext()).switchBackToChooseActivity(view.isComplete(), view.getScore());
 				return true;
 			}
 		}

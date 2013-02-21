@@ -45,5 +45,8 @@ public class HeroModel {
 		return prevY;
 	}
 	
+	public boolean hasMoved() {
+		return prevX != x || prevY != y;
+	}
 	
 }

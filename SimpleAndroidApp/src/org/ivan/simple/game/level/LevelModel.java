@@ -30,6 +30,7 @@ public class LevelModel {
 	private ArrayList<Platform> switchList = new ArrayList<Platform>();
 	private ArrayList<Platform> unlockList = new ArrayList<Platform>();
 	private HashMap<CellCoords, CellCoords> floorTPMap = new HashMap<CellCoords, CellCoords>();
+	private int steps = 1;
 	
 	private class CellCoords {
 		int i;
@@ -611,21 +612,19 @@ public class LevelModel {
 			TpPeer toCoords = tpGroupMap.get(new CellCoords(hero.getY(), hero.getX()));
 			hero.setX(toCoords.endCol);
 			hero.setY(toCoords.endRow);
-			return;
-		}
-		if(hero.currentMotion.getType() == MotionType.TP_RIGHT) {
+		} else if(hero.currentMotion.getType() == MotionType.TP_RIGHT) {
 			TpPeer toCoords = tpGroupMap.get(new CellCoords(hero.getY(), hero.getX()));
 			hero.setX(toCoords.startCol);
 			hero.setY(toCoords.startRow);
-			return;
-		}
-		if(hero.currentMotion.getType() == MotionType.TP && hero.currentMotion.getStage() == 1) {
+		} else if(hero.currentMotion.getType() == MotionType.TP && hero.currentMotion.getStage() == 1) {
 			CellCoords nextCell = floorTPMap.get(new CellCoords(hero.getY(), hero.getX())); 
 			hero.setX(nextCell.j);
 			hero.setY(nextCell.i);
+		} else {
+			hero.setX(hero.getX() + hero.currentMotion.getXSpeed());
+			hero.setY(hero.getY() + hero.currentMotion.getYSpeed());
 		}
-		hero.setX(hero.getX() + hero.currentMotion.getXSpeed());
-		hero.setY(hero.getY() + hero.currentMotion.getYSpeed());
+		if(hero.hasMoved()) steps++;
 	}
 	
 	private boolean motionAvaible(MotionType mt) {
@@ -698,6 +697,10 @@ public class LevelModel {
 
 	public boolean isComplete() {
 		return complete;
+	}
+	
+	public byte getScore() {
+		return (byte) (1000 / steps + 1);
 	}
 	
 	public boolean isLost() {

@@ -50,6 +50,11 @@ public class LevelChooseView extends SurfaceView {
 	private Bitmap back;
 	private Bitmap sound;
 	
+	// Scores bitmaps
+	private Bitmap highscore;
+	private Bitmap mediumscore;
+	private Bitmap lowscore;
+	
 	private Paint textPaint;
 	
 	/**
@@ -113,6 +118,9 @@ public class LevelChooseView extends SurfaceView {
 				marker = ImageProvider.getBitmap(R.drawable.single_panda);
 				back = ImageProvider.getBitmap(R.drawable.back_choose);
 				sound = ImageProvider.getBitmap(R.drawable.sound_choose);
+				highscore = ImageProvider.getBitmap(R.drawable.high_score);
+				mediumscore = ImageProvider.getBitmap(R.drawable.medium_score);
+				lowscore = ImageProvider.getBitmap(R.drawable.low_score);
 				
 				redrawer = new Redrawer();
 				redrawer.start();
@@ -153,6 +161,8 @@ public class LevelChooseView extends SurfaceView {
 				canvas.drawText("" + levels[i][j], x - 16, y + 16, textPaint);
 				if(finishedLevels[i][j] != 0) {
 					drawOnCenterCoordinates(cross, x + border.getWidth() / 4, y + border.getHeight() / 4, canvas);
+					Bitmap scoresImg = getScoreAward(i, j);
+					drawOnCenterCoordinates(scoresImg, x + border.getWidth() / 2 - 10, y + border.getHeight() / 2, canvas);
 				}
 			}
 		}
@@ -163,6 +173,22 @@ public class LevelChooseView extends SurfaceView {
 	
 	private void drawOnCenterCoordinates(Bitmap bitmap, int x, int y, Canvas canvas) {
 		canvas.drawBitmap(bitmap, x - bitmap.getWidth() / 2, y - bitmap.getHeight() / 2, null);
+	}
+	
+	private Bitmap getScoreAward(int i, int j) {
+		byte score = finishedLevels[i][j];
+//		byte high = highScores[i][j].high;
+//		byte medium =  highScores[i][j].medium;
+		byte high = (byte) 50;
+		byte medium = (byte) 25;
+		// TODO add uniq score gradations for each level
+		if(score < medium) {
+			return lowscore;
+		} else if (score < high){
+			return mediumscore;
+		} else {
+			return highscore;
+		}
 	}
 	
 	private int getScreenX(int col) {
@@ -265,11 +291,10 @@ public class LevelChooseView extends SurfaceView {
 		return false;
 	}
 	
-	public boolean completeCurrentLevel() {
-		boolean ret = finishedLevels[levelY][levelX] == 0;
-		finishedLevels[levelY][levelX] = 1;
+	public byte completeCurrentLevel(byte score) {
+		byte ret = finishedLevels[levelY][levelX];
+		finishedLevels[levelY][levelX] = score;
 		return ret;
-		
 	}
 	
 	protected String getFinishedLevels() {
@@ -303,7 +328,9 @@ public class LevelChooseView extends SurfaceView {
 		for(int i = 0; i < levels.length; i++) {
 			for(int j = 0; j < levels[i].length; j++) {
 				if(!st.hasMoreTokens()) break;
-				finishedLevels[i][j] = Byte.parseByte(st.nextToken());
+				String strScore = st.nextToken();
+				if(strScore.length() == 0) continue;
+				finishedLevels[i][j] = Byte.parseByte(strScore);
 			}
 		}
 	}

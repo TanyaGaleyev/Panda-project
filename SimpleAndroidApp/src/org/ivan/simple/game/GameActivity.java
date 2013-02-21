@@ -70,9 +70,10 @@ public class GameActivity extends Activity {
 		startActivity(intent);
     }
     
-    public void switchBackToChooseActivity(boolean complete) {
+    public void switchBackToChooseActivity(boolean complete, byte score) {
 		Intent resultIntent = new Intent();
 		resultIntent.putExtra(LevelChooseActivity.LEVEL_COMPLETE, complete);
+		resultIntent.putExtra(LevelChooseActivity.COMPLETE_SCORE, score);
 		setResult(RESULT_OK, resultIntent);
 		finish();
 	}

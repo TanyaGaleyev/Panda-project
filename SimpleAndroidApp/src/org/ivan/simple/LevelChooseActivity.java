@@ -10,6 +10,7 @@ import android.view.Window;
 public class LevelChooseActivity extends Activity {
 	public static final String LEVEL_ID = "levId";
 	public static final String LEVEL_COMPLETE = "complete";
+	public static final String COMPLETE_SCORE = "score";
 	public static final String SET_COMPLETE = "set complete";
 	public static final int FINISHED_LEVEL_ID = 1;
 	public static final String FINISHED_LEVELS = "finished";
@@ -53,8 +54,9 @@ public class LevelChooseActivity extends Activity {
 		if(requestCode == FINISHED_LEVEL_ID && resultCode == RESULT_OK) {
 			boolean complete = data.getBooleanExtra(LEVEL_COMPLETE, false);
 			if(complete) {
-				boolean wasNotCompeteBefore = view.completeCurrentLevel();
-				if(wasNotCompeteBefore) {
+				byte score = data.getByteExtra(COMPLETE_SCORE, (byte) 0);
+				byte oldScore = view.completeCurrentLevel(score);
+				if(score > oldScore) {
 					SharedPreferences.Editor prEditor = preferences.edit();
 					prEditor.putString(FINISHED_LEVELS + levelsSetId, view.getFinishedLevels());
 					prEditor.commit();
