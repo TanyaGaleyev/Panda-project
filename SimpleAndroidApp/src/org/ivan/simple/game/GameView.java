@@ -147,6 +147,7 @@ public class GameView extends SurfaceView {
 		monster.onDraw(canvas, update);
 //		level.drawGrid(canvas);
 		drawFPS(canvas);
+		drawScore(canvas);
 		if(level.model.isLost()) {
 			drawLose(canvas);
 		} else if(level.model.isComplete()) {
@@ -160,6 +161,14 @@ public class GameView extends SurfaceView {
 		paint.setTextSize(25);
 		paint.setColor(Color.BLUE);
 		canvas.drawText("FPS: " + GameManager.getFPS(), 5, 25, paint);
+	}
+	
+	private void drawScore(Canvas canvas) {
+		Paint paint = new Paint(); 
+		paint.setStyle(Paint.Style.FILL); 
+		paint.setTextSize(25);
+		paint.setColor(Color.MAGENTA);
+		canvas.drawText("Score: " + getScore(), 100, 25, paint);
 	}
 	
 	private void drawWin(Canvas canvas) {
@@ -320,7 +329,7 @@ public class GameView extends SurfaceView {
 		return level.model.isComplete();
 	}
 	
-	public byte getScore() {
+	public int getScore() {
 		return level.model.getScore();
 	}
 	

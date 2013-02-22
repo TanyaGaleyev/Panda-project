@@ -30,14 +30,8 @@ public class LevelChooseView extends SurfaceView {
 	/**
 	 * Matrix with levels IDs
 	 */
-	private int[][] levels;
-	private byte[][] finishedLevels;
-	private HighScore[][] highScores;
-	
-	private static class HighScore {
-		public byte high;
-		public byte medium;
-	}
+	private int[][][] levels;
+	private int[][] finishedLevels;
 	
 	
 	/**
@@ -164,7 +158,7 @@ public class LevelChooseView extends SurfaceView {
 				int x = getScreenX(j);
 				int y = getScreenY(i);
 				drawOnCenterCoordinates(border, x, y, canvas);
-				canvas.drawText("" + levels[i][j], x - 16, y + 16, textPaint);
+				canvas.drawText("" + levels[i][j][0], x - 16, y + 16, textPaint);
 				if(finishedLevels[i][j] != 0) {
 					drawOnCenterCoordinates(cross, x + border.getWidth() / 4, y + border.getHeight() / 4, canvas);
 					Bitmap scoresImg = getScoreAward(i, j);
@@ -182,11 +176,9 @@ public class LevelChooseView extends SurfaceView {
 	}
 	
 	private Bitmap getScoreAward(int i, int j) {
-		byte score = finishedLevels[i][j];
-//		byte high = highScores[i][j].high;
-//		byte medium =  highScores[i][j].medium;
-		byte high = (byte) 50;
-		byte medium = (byte) 25;
+		int score = finishedLevels[i][j];
+		int high = levels[i][j][2];
+		int medium =  levels[i][j][1];
 		// TODO add uniq score gradations for each level
 		if(score < medium) {
 			return lowscore;
@@ -239,7 +231,7 @@ public class LevelChooseView extends SurfaceView {
 				event.getX() < markerX + GRID_STEP / 2 &&
 				markerY - GRID_STEP / 2 < event.getY() && 
 				event.getY() < markerY + GRID_STEP / 2) {
-			return levels[levelY][levelX];
+			return levels[levelY][levelX][0];
 		}
 		// Get choice direction
 		UserControlType tempAction = getMoveType(event);
@@ -297,8 +289,8 @@ public class LevelChooseView extends SurfaceView {
 		return false;
 	}
 	
-	public byte completeCurrentLevel(byte score) {
-		byte ret = finishedLevels[levelY][levelX];
+	public int completeCurrentLevel(int score) {
+		int ret = finishedLevels[levelY][levelX];
 		finishedLevels[levelY][levelX] = score;
 		return ret;
 	}
@@ -323,10 +315,9 @@ public class LevelChooseView extends SurfaceView {
 		return true;
 	}
 	
-	protected void setChooseScreenProperties(int id, String finishedArray, String highScoresStr) {
+	protected void setChooseScreenProperties(int id, String finishedArray) {
 		setLevelsId(id);
 		setFinishedLevels(finishedArray);
-		setHighScores(highScoresStr);
 		backgroundId = getBackgroundId(id);
 	}
 	
@@ -337,33 +328,7 @@ public class LevelChooseView extends SurfaceView {
 				if(!st.hasMoreTokens()) break;
 				String strScore = st.nextToken();
 				if(strScore.length() == 0) continue;
-				finishedLevels[i][j] = Byte.parseByte(strScore);
-			}
-		}
-	}
-	
-	private void setHighScores(String highScoresStr) {
-		StringTokenizer st = new StringTokenizer(highScoresStr, ";");
-		for(int i = 0; i < levels.length; i++) {
-			for(int j = 0; j < levels[i].length; j++) {
-				HighScore highScore = new HighScore();
-				if(!st.hasMoreTokens()) {
-					highScore.medium = 25;
-					highScore.high = 50;
-					highScores[i][j] = highScore;
-					continue;
-				}
-				String strScore = st.nextToken();
-				String[] mediumhigh = strScore.split(",");
-				if(mediumhigh.length != 2) {
-					highScore.medium = 25;
-					highScore.high = 50;
-					highScores[i][j] = highScore;
-					continue;
-				}
-				highScore.medium = Byte.parseByte(mediumhigh[0]);
-				highScore.high = Byte.parseByte(mediumhigh[1]);
-				highScores[i][j] = highScore;
+				finishedLevels[i][j] = Integer.parseInt(strScore);
 			}
 		}
 	}
@@ -371,11 +336,9 @@ public class LevelChooseView extends SurfaceView {
 	private void setLevelsId(int id) {
 		LevelStorage storage = new LevelStorage();
 		levels = storage.getLevels(id);
-		finishedLevels = new byte[levels.length][];
-		highScores = new HighScore[levels.length][];
+		finishedLevels = new int[levels.length][];
 		for(int i = 0; i < levels.length; i++) {
-			finishedLevels[i] = new byte[levels[i].length];
-			highScores[i] = new HighScore[levels[i].length];
+			finishedLevels[i] = new int[levels[i].length];
 		}
 	}
 	

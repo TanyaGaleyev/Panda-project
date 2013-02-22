@@ -1,11 +1,19 @@
 package org.ivan.simple.game.level;
 public class LevelStorage {
-	public int[][] getLevels(int setid) {
+	public int[][][] getLevels(int setid) {
 		switch(setid) {
-		case 1: return new int[][]{{3,2,1,1},{4,2,3,3}};
-		case 2:	return new int[][]{{1,1,1,1},{2,2}};
-		case 3: return new int[][]{{4,4},{1,2,3,4}};
-		default:return new int[][]{{3,2,1,1},{4,2,3,3}};
+		case 1: return new int[][][]
+				{{ {3, 25, 50} , {2, 10, 20} , {1, 25, 50} , {1, 25, 50} },
+				 { {4, 25, 60} , {2, 25, 50} , {3, 25, 50} , {3, 25, 50} }};
+		case 2:	return new int[][][]
+				{{ {1, 25, 50} , {1, 25, 50} , {1, 25, 50} , {1, 25, 50} },
+				 { {2, 25, 50} , {2, 25, 50} }};
+		case 3: return new int[][][]
+				{{ {4, 25, 50} , {4, 25, 50} },
+				 { {1, 25, 50} , {2, 25, 50} , {3, 25, 50} , {4, 25, 50} }};
+		default:return new int[][][]
+				{{ {3, 25, 50} , {2, 25, 50} , {1, 25, 50} , {1, 25, 50} },
+				 { {4, 25, 50} , {2, 25, 50} , {3, 25, 50} , {3, 25, 50} }};
 		}
 	}
 	

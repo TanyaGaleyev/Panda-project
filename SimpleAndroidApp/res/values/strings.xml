@@ -10,11 +10,4 @@
     <string name="title_activity_choose">Choose level</string>
     <string name="title_activity_pause">Choose level</string>
     <string name="welcome">Welcome to Panda\'s World!</string>
-    <string-array name="high_scores">
-        <item >10,20;30,40;10,20;5,6</item>
-        <item >10,20;30,40;10,20;5,6</item>
-        <item >10,20;30,40;10,20;5,6</item>
-        <item >10,20;30,40;10,20;5,6</item>
-	</string-array>
-
 </resources>

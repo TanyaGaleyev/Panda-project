@@ -699,8 +699,8 @@ public class LevelModel {
 		return complete;
 	}
 	
-	public byte getScore() {
-		return (byte) (1000 / steps + 1);
+	public int getScore() {
+		return 1000 / steps + 1;
 	}
 	
 	public boolean isLost() {
