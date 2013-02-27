@@ -1,13 +1,12 @@
 package org.ivan.simple;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Window;
 
-public class LevelChooseActivity extends Activity {
+public class LevelChooseActivity extends PandaBaseActivity {
 	public static final String LEVEL_ID = "levId";
 	public static final String LEVEL_COMPLETE = "complete";
 	public static final String COMPLETE_SCORE = "score";
@@ -34,26 +33,8 @@ public class LevelChooseActivity extends Activity {
         preferences = getSharedPreferences(CONFIG, MODE_PRIVATE);
         levelsSetId = getIntent().getIntExtra(StartActivity.SET_ID, 0);
         String finishedArray = preferences.getString(FINISHED_LEVELS + levelsSetId, "");
-//        String highScoresStr = preferences.getString(HIGH_SCORES + levelsSetId, "");
-        String[] highScoresArr = getResources().getStringArray(R.array.high_scores); 
-        String highScoresStr = "";
-        if((levelsSetId - 1) < highScoresArr.length) {
-        	highScoresStr = highScoresArr[levelsSetId - 1];
-        }
-        view.setChooseScreenProperties(levelsSetId, finishedArray, highScoresStr);
+        view.setChooseScreenProperties(levelsSetId, finishedArray);
 	}
-	
-//	@Override
-//	protected void onSaveInstanceState(Bundle outState) {
-//		super.onSaveInstanceState(outState);
-//		outState.putByteArray(FINISHED_LEVELS, view.getFinishedLevels());
-//	}
-//	
-//	@Override
-//	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-//		super.onRestoreInstanceState(savedInstanceState);
-//		view.setFinishedLevels(savedInstanceState.getByteArray(FINISHED_LEVELS));
-//	}
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -61,8 +42,8 @@ public class LevelChooseActivity extends Activity {
 		if(requestCode == FINISHED_LEVEL_ID && resultCode == RESULT_OK) {
 			boolean complete = data.getBooleanExtra(LEVEL_COMPLETE, false);
 			if(complete) {
-				byte score = data.getByteExtra(COMPLETE_SCORE, (byte) 0);
-				byte oldScore = view.completeCurrentLevel(score);
+				int score = data.getIntExtra(COMPLETE_SCORE, 0);
+				int oldScore = view.completeCurrentLevel(score);
 				if(score > oldScore) {
 					SharedPreferences.Editor prEditor = preferences.edit();
 					prEditor.putString(FINISHED_LEVELS + levelsSetId, view.getFinishedLevels());
@@ -89,9 +70,9 @@ public class LevelChooseActivity extends Activity {
 		super.finish();
 	}
 	
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		view = null;
-	}
+//	@Override
+//	protected void onDestroy() {
+//		super.onDestroy();
+//		view = null;
+//	}
 }

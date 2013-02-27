@@ -1,14 +1,14 @@
 package org.ivan.simple.game.pause;
 
+import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
-public class PauseActivity extends Activity {
+public class PauseActivity extends PandaBaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
