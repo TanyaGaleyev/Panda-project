@@ -1,15 +1,11 @@
 package org.ivan.simple.game;
 
 import org.ivan.simple.LevelChooseActivity;
+import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
-import org.ivan.simple.game.pause.PauseActivity;
 
 import android.os.Bundle;
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.util.Log;
 import android.view.Menu;
@@ -17,7 +13,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.Window;
 
-public class GameActivity extends Activity {
+public class GameActivity extends PandaBaseActivity {
 	
 	private GameControl gControl;
 	private int levid;
@@ -25,11 +21,6 @@ public class GameActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        IntentFilter filter = new IntentFilter();
-//        filter.addAction(Intent.ACTION_SCREEN_OFF);
-//        filter.addAction(Intent.ACTION_SCREEN_ON);
-//        BroadcastReceiver receiver = new ScreenReceiver();
-//        registerReceiver(receiver, filter);
         // hide screen title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         Intent intent = getIntent();
@@ -134,17 +125,5 @@ public class GameActivity extends Activity {
 		if(actionCode == MotionEvent.ACTION_MOVE) return;
 		Log.d("DumpEvent", sb.toString());
 	}
-	
-//	private class ScreenReceiver extends BroadcastReceiver {
-//
-//	    @Override
-//	    public void onReceive(Context context, Intent intent) {
-//	        if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-//	        	gView.stopManager();
-//	        } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-//	        	gView.startManager();
-//	        }
-//	    }
-//	}
 	
 }

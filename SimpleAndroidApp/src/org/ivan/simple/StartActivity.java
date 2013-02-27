@@ -4,9 +4,7 @@ import java.util.ArrayList;
 
 import org.ivan.simple.R;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -14,7 +12,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-public class StartActivity extends Activity {
+public class StartActivity extends PandaBaseActivity {
 	
 	public static final String SET_ID = "Id of levels set";
 	public static final String LAST_FINISHED_SET = "Last finished set of levels";
@@ -68,13 +66,7 @@ public class StartActivity extends Activity {
         	levbtn.getLayoutParams().height = (int) (DISPLAY_HEIGHT * 0.20);
         }
     }
-	
-	private void startGame(int setId) {
-		Intent intent = new Intent(this, LevelChooseActivity.class);
-		intent.putExtra(SET_ID, setId);
-		startedSet = setId;
-		startActivityForResult(intent, 0);
-	}
+
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -87,14 +79,13 @@ public class StartActivity extends Activity {
 			}
 		}
 	}
+
 	
-	private void showScores() {
-		
+	private void startGame(int setId) {
+		Intent intent = new Intent(this, LevelChooseActivity.class);
+		intent.putExtra(SET_ID, setId);
+		startedSet = setId;
+		startActivityForResult(intent, 0);
 	}
-	
-	private void exit() {
-		finish();
-	}
-	
-	
+
 }

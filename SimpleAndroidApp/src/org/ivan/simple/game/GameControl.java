@@ -3,10 +3,13 @@ package org.ivan.simple.game;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.ivan.simple.R;
 import org.ivan.simple.UserControlType;
-import org.ivan.simple.game.hero.Hero;
 import org.ivan.simple.game.level.LevelModel;
 
+import android.content.Context;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.view.MotionEvent;
 
 public class GameControl {
@@ -25,10 +28,13 @@ public class GameControl {
 	private GameManager gameLoopThread;
 	private boolean paused;
 	
+	private SoundManager soundManager;
+	
 	public GameControl(GameView view, int levelId) {
 		view.setLevId(levelId);
 		this.view  = view;
 		view.control = this;
+		soundManager = new SoundManager(view.getContext());
 	}
 	
 	protected boolean scanControl(MotionEvent event, int x, int y) {
@@ -267,4 +273,10 @@ public class GameControl {
 	protected GameManager getGameLoopThread() {
 		return gameLoopThread;
 	}
+	
+	protected void playSound(LevelModel model) {
+		soundManager.playSound(model.hero.currentMotion, model.hero.finishingMotion);
+	}
+	
+	
 }
