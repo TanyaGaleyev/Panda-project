@@ -780,6 +780,9 @@ public class LevelModel {
 		case THROW_LEFT:
 		case THROW_RIGHT:
 			return motion.getStage() == 1;
+		case STICK_LEFT:
+		case STICK_RIGHT:
+			return true;
 		default:
 			return false;
 		}

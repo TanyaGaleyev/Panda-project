@@ -299,7 +299,9 @@ public class LevelChooseView extends SurfaceView {
 	
 	public byte completeCurrentLevel(byte score) {
 		byte ret = finishedLevels[levelY][levelX];
-		finishedLevels[levelY][levelX] = score;
+		if(score > ret) {
+			finishedLevels[levelY][levelX] = score;
+		}
 		return ret;
 	}
 	
