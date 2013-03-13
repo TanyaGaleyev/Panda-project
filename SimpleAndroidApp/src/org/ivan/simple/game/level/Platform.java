@@ -59,7 +59,8 @@ public class Platform {
 			sprite.setAnimating(true);
 			break;
 		case WIN:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.win_platform), 1, 1);
+			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.win_platform), 1, 8);
+			sprite.setAnimating(true);
 			break;
 		case TELEPORT_L_V:
 			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.teleport_l_v), 1, 16);
