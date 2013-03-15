@@ -6,8 +6,8 @@
     
     <org.ivan.simple.LevelChooseView
         android:id="@+id/choose"
-        android:layout_width="792px"
-        android:layout_height="432px"
+        android:layout_width="528dp"
+        android:layout_height="288dp"
         android:layout_centerInParent="true"/>
 
 </RelativeLayout>

@@ -112,6 +112,8 @@ public class LevelChooseView extends SurfaceView {
 			}
 			
 			public void surfaceCreated(SurfaceHolder holder) {
+				ImageProvider.setGridStep(GRID_STEP);
+				
 				border = ImageProvider.getBitmap(R.drawable.border);
 				cross = ImageProvider.getBitmap(R.drawable.cross);
 				background = ImageProvider.getBitmap(backgroundId);
@@ -152,6 +154,7 @@ public class LevelChooseView extends SurfaceView {
 		default:
 			break;
 		}
+		canvas.drawColor(Color.WHITE);
 		canvas.drawBitmap(background, 0, 0, null);
 		for(int i = 0; i < levels.length; i++) {
 			for(int j = 0; j < levels[i].length; j++) {

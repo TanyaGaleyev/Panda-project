@@ -9,7 +9,7 @@ import android.graphics.Canvas;
 public class Prize {
 	private Sprite sprite; 
 	public Prize() {
-		sprite = new Sprite(ImageProvider.getBitmap(R.drawable.star), 1, 25);
+		sprite = new Sprite(R.drawable.star, 1, 25);
 		sprite.setAnimating(true);
 	}
 	

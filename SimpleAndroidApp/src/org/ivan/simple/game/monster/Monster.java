@@ -9,7 +9,7 @@ import org.ivan.simple.game.level.PlatformType;
 import android.graphics.Canvas;
 
 public class Monster {
-	private Sprite sprite = new Sprite(ImageProvider.getBitmap(R.drawable.monster), 1, 1);
+	private Sprite sprite = new Sprite(R.drawable.monster, 1, 16);
 	
 	public int xCoordinate = 0;
 	public int yCoordinate = 0;
@@ -18,6 +18,7 @@ public class Monster {
 	
 	public Monster(MonsterModel model) {
 		this.model = model;
+		sprite.setAnimating(true);
 	}
 	
 	public void onDraw(Canvas canvas, boolean update) {

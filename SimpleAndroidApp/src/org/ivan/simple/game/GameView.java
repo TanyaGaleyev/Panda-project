@@ -95,13 +95,16 @@ public class GameView extends SurfaceView {
 	}
 	
 	private void initSurface() {
+//		GRID_STEP = ImageProvider.loadBitmapSize(R.drawable.single_panda).outWidth;
+		GRID_STEP = 72;
+		GRID_STEP = GRID_STEP % 8 == 0 ? GRID_STEP : GRID_STEP + 8 - GRID_STEP % 8;
+		ImageProvider.setGridStep(GRID_STEP);
+		
 		background = ImageProvider.getBitmap(backgroundId);
 		pause = ImageProvider.getBitmap(R.drawable.pause);
 		restart = ImageProvider.getBitmap(R.drawable.restart);
 		back = ImageProvider.getBitmap(R.drawable.back);
-		Bitmap scalingBitmap = ImageProvider.getBitmap(R.drawable.single_panda);
 		//GRID_STEP = 112;//88dp,48dp
-		GRID_STEP = scalingBitmap.getWidth() % 8 == 0 ? scalingBitmap.getWidth() : (scalingBitmap.getWidth() / 8  + 1) * 8;
 		System.out.println("GRID_STEP = " + GRID_STEP);
 		TOP_BOUND = GRID_STEP;
 		// TODO check this bound carefully!

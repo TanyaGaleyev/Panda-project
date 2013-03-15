@@ -19,115 +19,115 @@ public class Platform {
 		this.type = type;
 		switch(type) {
 		case SIMPLE:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.simple_platform), 4, 8);
+			sprite = new Sprite(R.drawable.simple_platform, 4, 8);
 			break;
 		case SIMPLE_V:
-			sprite  = new Sprite(ImageProvider.getBitmap(R.drawable.simple_platform_v), 1, 1);
+			sprite  = new Sprite(R.drawable.simple_platform_v, 1, 1);
 			break;
 		case REDUCE:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.reduce_platform), 1, 4);
+			sprite = new Sprite(R.drawable.reduce_platform, 1, 4);
 			break;
 		case ANGLE_RIGHT:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.angle_platform_right), 1, 8);
+			sprite = new Sprite(R.drawable.angle_platform_right, 1, 8);
 			break;
 		case ANGLE_LEFT:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.angle_platform_left), 1, 8);
+			sprite = new Sprite(R.drawable.angle_platform_left, 1, 8);
 			break;
 			
 		case THROW_OUT_RIGHT:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.throw_out_platform_right), 1, 8);
+			sprite = new Sprite(R.drawable.throw_out_platform_right, 1, 8);
 			break;
 		case THROW_OUT_LEFT:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.throw_out_platform_left), 1, 8);
+			sprite = new Sprite(R.drawable.throw_out_platform_left, 1, 8);
 			break;	
 		case TRAMPOLINE:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.trampoline_platform),1,6);
+			sprite = new Sprite(R.drawable.trampoline_platform,1,6);
 			break;
 		case ELECTRO:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.electro_platform),1,4);
+			sprite = new Sprite(R.drawable.electro_platform,1,4);
 			sprite.setAnimating(true);
 			break;
 		case SPRING:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.spring_platform),2,16);
+			sprite = new Sprite(R.drawable.spring_platform,2,16);
 			break;
 		case SPIKE:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.spike),1,8);
+			sprite = new Sprite(R.drawable.spike,1,8);
 			sprite.setAnimating(true);
 			break;
 		case SPIKE_V:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.spike_v), 1, 8);
+			sprite = new Sprite(R.drawable.spike_v, 1, 8);
 			sprite.setAnimating(true);
 			break;
 		case WIN:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.win_platform), 1, 8);
+			sprite = new Sprite(R.drawable.win_platform, 1, 8);
 			sprite.setAnimating(true);
 			break;
 		case TELEPORT_L_V:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.teleport_l_v), 1, 16);
+			sprite = new Sprite(R.drawable.teleport_l_v, 1, 16);
 			sprite.setAnimating(true);
 			break;
 		case TELEPORT_R_V:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.teleport_r_v), 1, 16);
+			sprite = new Sprite(R.drawable.teleport_r_v, 1, 16);
 			sprite.setAnimating(true);
 			break;
 		case SLICK:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.slick), 1, 1);
+			sprite = new Sprite(R.drawable.slick, 1, 1);
 			break;
 		case SLOPE:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.slope), 3, 1);
+			sprite = new Sprite(R.drawable.slope, 3, 1);
 			break;
 		case ONE_WAY_LEFT:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.one_way_right), 1, 16);
+			sprite = new Sprite(R.drawable.one_way_right, 1, 16);
 			break;
 		case ONE_WAY_RIGHT:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.one_way_left), 1, 16);
+			sprite = new Sprite(R.drawable.one_way_left, 1, 16);
 			break;
 		case ONE_WAY_DOWN:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.one_way_down), 1, 16);
+			sprite = new Sprite(R.drawable.one_way_down, 1, 16);
 			break;
 		case ONE_WAY_UP:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.one_way_up), 1, 16);
+			sprite = new Sprite(R.drawable.one_way_up, 1, 16);
 			break;
 		case SWITCH:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.switch_platform), 4, 8, switchHelper);
+			sprite = new Sprite(R.drawable.switch_platform, 4, 8, switchHelper);
 			currentStatus = switchHelper;
 			switchHelper = (switchHelper + 1) % 4;
 			break;
 		case UNLOCK:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.unlock_platform), 1, 1);
+			sprite = new Sprite(R.drawable.unlock_platform, 1, 1);
 			break;
 		case STRING:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.string_platform), 1, 8);
+			sprite = new Sprite(R.drawable.string_platform, 1, 8);
 			break;
 		case LIMIT:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.limit_way), 4, 8);
+			sprite = new Sprite(R.drawable.limit_way, 4, 8);
 			break;
 		case BRICK:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.brick), 4, 1);
+			sprite = new Sprite(R.drawable.brick, 4, 1);
 			break;
 		case BRICK_V:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.brick_v), 4, 1);
+			sprite = new Sprite(R.drawable.brick_v, 4, 1);
 			break;
 		case GLUE:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.glue), 1, 1);
+			sprite = new Sprite(R.drawable.glue, 1, 1);
 			break;
 		case GLUE_V:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.glue_v), 1, 1);
+			sprite = new Sprite(R.drawable.glue_v, 1, 1);
 			break;
 		case TELEPORT:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.teleport), 1, 1);
+			sprite = new Sprite(R.drawable.teleport, 1, 1);
 			break;
 		case INVISIBLE:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.invisible_platform), 2, 8);
+			sprite = new Sprite(R.drawable.invisible_platform, 2, 8);
 			break;
 		case TRANSPARENT:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.transparent_platform), 1, 8);
+			sprite = new Sprite(R.drawable.transparent_platform, 1, 8);
 			break;
 		case TRANSPARENT_V:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.transparent_platform_v), 1, 8);
+			sprite = new Sprite(R.drawable.transparent_platform_v, 1, 8);
 			break;
 		case WAY_UP_DOWN:
-			sprite = new Sprite(ImageProvider.getBitmap(R.drawable.way_up_down), 2, 16);
+			sprite = new Sprite(R.drawable.way_up_down, 2, 16);
 			break;
 		case NONE:
 			break;

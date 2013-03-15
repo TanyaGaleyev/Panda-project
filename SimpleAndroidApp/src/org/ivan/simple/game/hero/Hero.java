@@ -17,11 +17,8 @@ public class Hero {
 	 */
 	private boolean finishingState = false;
 	private LevelCell prevCell;
-	private Sprite sprite8 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite8), 38, 8);
-	private Sprite sprite16 = new Sprite(ImageProvider.getBitmap(R.drawable.panda_sprite16), 9, 16);
-	private Sprite tpSprite = new Sprite(ImageProvider.getBitmap(R.drawable.panda_tp), 28, 8);
 	private Sprite activeSprite;
-	private Sprite shadeSprite = new Sprite(ImageProvider.getBitmap(R.drawable.panda_tp), 28, 8);
+	private SpriteSet sprites = new SpriteSet();
 	public int x;
 	public int y;
 	private int prevX;
@@ -30,15 +27,8 @@ public class Hero {
 	
 	public Hero(HeroModel model) {
 		this.model = model;
-		sprite16.setAnimating(true);
-		sprite8.setAnimating(true);
-		tpSprite.setAnimating(true);
-		activeSprite = sprite16;
-		shadeSprite.setAnimating(true);
-	}
-	
-	public Sprite getSprite() {
-		return activeSprite;
+		sprites = SpriteSet.getPandaSprites();
+		activeSprite = sprites.getSprite("sprite16");
 	}
 	
 	public boolean isFinishing() {
@@ -110,7 +100,7 @@ public class Hero {
 					model.currentMotion.getType() == MotionType.FLY_RIGHT) {
 					finishingState = false;
 				} else {
-					activeSprite = sprite8;
+					activeSprite = sprites.getSprite("sprite8_1");
 					activeSprite.changeSet(26);
 				}
 				break;
@@ -121,7 +111,7 @@ public class Hero {
 					model.currentMotion.getType() == MotionType.FLY_LEFT) {
 					finishingState = false;
 				} else {
-					activeSprite = sprite8;
+					activeSprite = sprites.getSprite("sprite8_1");
 					activeSprite.changeSet(26);
 				}
 				break;
@@ -237,7 +227,7 @@ public class Hero {
 				if(prevCell.getFloor().getType() == PlatformType.THROW_OUT_LEFT) {
 					activeSprite.changeSet(12);
 				} else {
-					activeSprite = sprite16;
+					activeSprite = sprites.getSprite("sprite16");
 					activeSprite.changeSet(5);
 				}
 				break;
@@ -256,7 +246,7 @@ public class Hero {
 				if(prevCell.getFloor().getType() == PlatformType.THROW_OUT_RIGHT) {
 					activeSprite.changeSet(11);
 				} else {
-					activeSprite = sprite16;
+					activeSprite = sprites.getSprite("sprite16");
 					activeSprite.changeSet(4);
 				}
 				break;
@@ -280,7 +270,7 @@ public class Hero {
 					prevCell.getFloor().getType() == PlatformType.THROW_OUT_RIGHT) {
 				activeSprite.changeSet(11);
 			} else {
-				activeSprite = sprite16;
+				activeSprite = sprites.getSprite("sprite16");
 				activeSprite.changeSet(7);
 			}
 			break;
@@ -292,7 +282,7 @@ public class Hero {
 					prevCell.getFloor().getType() == PlatformType.THROW_OUT_LEFT) {
 				activeSprite.changeSet(12);
 			} else {
-				activeSprite = sprite16;
+				activeSprite = sprites.getSprite("sprite16");;
 				activeSprite.changeSet(6);
 			}
 			break;
@@ -301,32 +291,32 @@ public class Hero {
 			int childStage = model.currentMotion.getChildMotion().getStage();
 			if(childMt == MotionType.JUMP_LEFT) {
 				if(prevMt == MotionType.JUMP) {
-					shadeSprite.changeSet(10);
-					tpSprite.changeSet(11);
+//					shadeSprite.changeSet(10);
+//					tpSprite.changeSet(11);
 				} else if(prevMt == MotionType.JUMP_LEFT || prevMt == MotionType.THROW_LEFT) {
-					shadeSprite.changeSet(2);
-					tpSprite.changeSet(3);
+//					shadeSprite.changeSet(2);
+//					tpSprite.changeSet(3);
 				} else {
-					shadeSprite.changeSet(6);
-					tpSprite.changeSet(7);
+//					shadeSprite.changeSet(6);
+//					tpSprite.changeSet(7);
 				}
 			} else if(childMt == MotionType.THROW_LEFT && childStage == 0) {
 				if(prevMt == MotionType.THROW_LEFT || prevMt == MotionType.JUMP_LEFT) {
-					shadeSprite.changeSet(22);
-					tpSprite.changeSet(23);
+//					shadeSprite.changeSet(22);
+//					tpSprite.changeSet(23);
 				} else {
-					shadeSprite.changeSet(18);
-					tpSprite.changeSet(19);
+//					shadeSprite.changeSet(18);
+//					tpSprite.changeSet(19);
 				}
 			} else if(childMt == MotionType.THROW_LEFT) {
-				shadeSprite.changeSet(26);
-				tpSprite.changeSet(27);
+//				shadeSprite.changeSet(26);
+//				tpSprite.changeSet(27);
 			} else if(childMt == MotionType.FLY_LEFT) {
-				shadeSprite.changeSet(14);
-				tpSprite.changeSet(15);
+//				shadeSprite.changeSet(14);
+//				tpSprite.changeSet(15);
 			} else {
-				shadeSprite.changeSet(6);
-				tpSprite.changeSet(7);
+//				shadeSprite.changeSet(6);
+//				tpSprite.changeSet(7);
 			}
 			break;
 		case TP_RIGHT:
@@ -334,32 +324,32 @@ public class Hero {
 			int childStage1 = model.currentMotion.getChildMotion().getStage();
 			if(childMt1 == MotionType.JUMP_RIGHT) {
 				if(prevMt == MotionType.JUMP) {
-					shadeSprite.changeSet(8);
-					tpSprite.changeSet(9);
+//					shadeSprite.changeSet(8);
+//					tpSprite.changeSet(9);
 				} else if(prevMt == MotionType.JUMP_RIGHT || prevMt == MotionType.THROW_RIGHT) {
-					shadeSprite.changeSet(0);
-					tpSprite.changeSet(1);
+//					shadeSprite.changeSet(0);
+//					tpSprite.changeSet(1);
 				} else {
-					shadeSprite.changeSet(4);
-					tpSprite.changeSet(5);
+//					shadeSprite.changeSet(4);
+//					tpSprite.changeSet(5);
 				}
 			} else if(childMt1 == MotionType.THROW_RIGHT && childStage1 == 0) {
 				if(prevMt == MotionType.THROW_RIGHT || prevMt == MotionType.JUMP_RIGHT) {
-					shadeSprite.changeSet(20);
-					tpSprite.changeSet(21); 
+//					shadeSprite.changeSet(20);
+//					tpSprite.changeSet(21); 
 				} else {
-					shadeSprite.changeSet(16);
-					tpSprite.changeSet(17); 
+//					shadeSprite.changeSet(16);
+//					tpSprite.changeSet(17); 
 				}
 			} else if(childMt1 == MotionType.THROW_RIGHT) {
-				shadeSprite.changeSet(24);
-				tpSprite.changeSet(25);
+//				shadeSprite.changeSet(24);
+//				tpSprite.changeSet(25);
 			} else if(childMt1 == MotionType.FLY_RIGHT) {
-				shadeSprite.changeSet(12);
-				tpSprite.changeSet(13);
+//				shadeSprite.changeSet(12);
+//				tpSprite.changeSet(13);
 			} else {
-				shadeSprite.changeSet(4);
-				tpSprite.changeSet(5);
+//				shadeSprite.changeSet(4);
+//				tpSprite.changeSet(5);
 			}
 			break;
 		case STICK_LEFT:
@@ -399,14 +389,14 @@ public class Hero {
 		case NONE:
 		case STAY:
 		case FALL_BLANSH:
-			activeSprite = sprite16;
+			activeSprite = sprites.getSprite("sprite16");;
 			break;
 		case TP_LEFT:
 		case TP_RIGHT:
-			activeSprite = tpSprite;
+//			activeSprite = tpSprite;
 			break;
 		default:
-			activeSprite = sprite8;
+//			activeSprite = sprite8;
 			break;
 		}
 	}
@@ -418,7 +408,7 @@ public class Hero {
 	public void onDraw(Canvas canvas, boolean update) {
 		activeSprite.onDraw(canvas, x - activeSprite.getWidth() / 2, y - activeSprite.getHeight() / 2, update);
 		if(!finishingState && (model.currentMotion.getType() == MotionType.TP_LEFT || model.currentMotion.getType() == MotionType.TP_RIGHT)) {
-			shadeSprite.onDraw(canvas, prevX - shadeSprite.getWidth() / 2, prevY - shadeSprite.getHeight() / 2, update);
+//			shadeSprite.onDraw(canvas, prevX - shadeSprite.getWidth() / 2, prevY - shadeSprite.getHeight() / 2, update);
 		}
 	}
 	
@@ -438,7 +428,7 @@ public class Hero {
 	 * Play loose animation
 	 */
 	public void playLoseAnimation() {
-		activeSprite = sprite8;
+		activeSprite = sprites.getSprite("sprite8_1");;
 		if(activeSprite.getSet() != 5) {
 			activeSprite.changeSet(5);
 		}
@@ -449,7 +439,7 @@ public class Hero {
 	 * @return is sprite animating?
 	 */
 	public boolean playWinAnimation() {
-		activeSprite = sprite8;
+		activeSprite = sprites.getSprite("sprite8_1");;
 		if(activeSprite.getSet() != 16) {
 			activeSprite.changeSet(16);
 		}

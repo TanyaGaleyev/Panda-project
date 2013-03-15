@@ -1,5 +1,7 @@
 package org.ivan.simple.game.hero;
 
+import org.ivan.simple.ImageProvider;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -25,7 +27,7 @@ public class Sprite {
 	
 	private int delay = 0;
 	
-	public Sprite(Bitmap bmp, int rows, int cols) {
+	private Sprite(Bitmap bmp, int rows, int cols) {
 		this.bmp = bmp;
 		BMP_ROWS = rows;
 		BMP_COLS = cols;
@@ -33,8 +35,17 @@ public class Sprite {
         singleHeight = bmp.getHeight() / BMP_ROWS;
 	}
 	
-	public Sprite(Bitmap bmp, int rows, int cols, int set) {
+	private Sprite(Bitmap bmp, int rows, int cols, int set) {
 		this(bmp, rows, cols);
+		changeSet(set);
+	}
+	
+	public Sprite(int bmpid, int rows, int cols) {
+		this(ImageProvider.getBitmap(bmpid, rows, cols), rows, cols);
+	}
+	
+	public Sprite(int bmpid, int rows, int cols, int set) {
+		this(bmpid, rows, cols);
 		changeSet(set);
 	}
 
