@@ -140,7 +140,7 @@ public class GameView extends SurfaceView {
 	}
 	
 	protected void onDraw(Canvas canvas, boolean update) {
-		canvas.drawColor(Color.WHITE);
+		canvas.drawColor(0xffC6E10E);
 		canvas.drawBitmap(background, 0, 0, null);
 		canvas.drawBitmap(pause, 10, 50, null);
 		canvas.drawBitmap(restart, 10, 90, null);

@@ -112,7 +112,7 @@ public class LevelChooseView extends SurfaceView {
 			}
 			
 			public void surfaceCreated(SurfaceHolder holder) {
-				ImageProvider.setGridStep(GRID_STEP);
+				ImageProvider.setGridStep(230);
 				
 				border = ImageProvider.getBitmap(R.drawable.border);
 				cross = ImageProvider.getBitmap(R.drawable.cross);
