@@ -160,11 +160,10 @@ public class Platform {
 		if(type == PlatformType.REDUCE) {
 			if(currentStatus<3) {
 				currentStatus++;
-				sprite.changeSet(currentStatus);
-				sprite.playOnce();
+				sprite.playOnce(true);
 			} else if(currentStatus<4){
 				currentStatus++;
-				sprite = null;
+				sprite.playOnce(true);
 				type = PlatformType.NONE;
 			}
 			return;
@@ -247,8 +246,8 @@ public class Platform {
 			return;
 		}
 		if(type == PlatformType.INVISIBLE) {
-			sprite.changeSet(1);
-			sprite.playOnce();
+			sprite.playOnce(currentStatus == 0);
+			currentStatus = 1;
 			return;
 		}
 		if(type == PlatformType.TRANSPARENT) {
@@ -276,8 +275,8 @@ public class Platform {
 				}
 			}
 			if(type == PlatformType.INVISIBLE) {
-				sprite.changeSet(1);
-				sprite.playOnce();
+				sprite.playOnce(currentStatus == 0);
+				currentStatus = 1;
 			}
 		}
 		if(mt == MotionType.JUMP && stage != 0 && type == PlatformType.ONE_WAY_UP) {
@@ -326,9 +325,7 @@ public class Platform {
 			}
 			if(type == PlatformType.LIMIT && currentStatus < 3) {
 				currentStatus = currentStatus + 1;
-				sprite.changeSet(currentStatus);
-				sprite.goToFrame(1);
-				sprite.playOnce();
+				sprite.playOnce(true);
 			}
 			if(type == PlatformType.TRANSPARENT_V) {
 				sprite.playOnce();
@@ -353,9 +350,9 @@ public class Platform {
 			if(type == PlatformType.BRICK_V) {
 				if(currentStatus < 3) {
 					currentStatus++;
-					sprite.changeSet(currentStatus);
+					sprite.playOnce(10, true);
 				} else {
-					sprite = null;
+					sprite.playOnce(10, true);
 					type = PlatformType.NONE;
 				}
 			}
@@ -375,9 +372,7 @@ public class Platform {
 			}
 			if(type == PlatformType.LIMIT && currentStatus < 3) {
 				currentStatus = currentStatus + 1;
-				sprite.changeSet(currentStatus);
-				sprite.goToFrame(1);
-				sprite.playOnce();
+				sprite.playOnce(true);
 			}
 			if(type == PlatformType.TRANSPARENT_V) {
 				sprite.playOnce();
@@ -402,9 +397,9 @@ public class Platform {
 			if(type == PlatformType.BRICK_V) {
 				if(currentStatus < 3) {
 					currentStatus++;
-					sprite.changeSet(currentStatus);
+					sprite.playOnce(10, true);
 				} else {
-					sprite = null;
+					sprite.playOnce(10, true);
 					type = PlatformType.NONE;
 				}
 			}
@@ -422,7 +417,7 @@ public class Platform {
 	
 	public void onDraw(Canvas canvas, int x, int y, boolean update) {
 		if(sprite != null) {
-			if(type == PlatformType.NONE && !sprite.isAnimating()) {
+			if(type == PlatformType.NONE && !sprite.isAnimatingOrDelayed()) {
 				sprite = null;
 			} else {
 				sprite.onDraw(canvas, x - sprite.getWidth() / 2, y - sprite.getHeight() / 2, update);

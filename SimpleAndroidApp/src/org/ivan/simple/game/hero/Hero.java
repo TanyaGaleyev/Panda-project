@@ -501,7 +501,7 @@ public class Hero {
 	public boolean playWinAnimation() {
 		activeSprite = sprites.getSprite("fallinto");
 		activeSprite.setPlayOnce(true);
-		if(!activeSprite.isAnimating()) {
+		if(!activeSprite.isAnimatingOrDelayed()) {
 			activeSprite.goToFrame(7);
 			return false;
 		}

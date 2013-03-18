@@ -25,6 +25,8 @@ public class Sprite {
 	
 	private boolean playOnce = false;
 	
+	private boolean switchSet = false;
+	
 	private int delay = 0;
 	
 	private Sprite(Bitmap bmp, int rows, int cols) {
@@ -67,9 +69,14 @@ public class Sprite {
 		}
         if(animating) {
         	currentFrame = (currentFrame + 1) % BMP_COLS;
-        }
-        if(animating && currentFrame == 0 && playOnce) {
-        	animating = false;
+        	if(currentFrame == 0) {
+            	if(switchSet) {
+            		currentSet = (currentSet + 1) % BMP_ROWS;
+            	}
+            	if(playOnce) {
+            		animating = false;
+            	}
+            }
         }
 	}
 	
@@ -105,10 +112,19 @@ public class Sprite {
 	}
 	
 	public void playOnce() {
-		playOnce(0);
+		playOnce(0, false);
+	}
+	
+	public void playOnce(boolean switchSet) {
+		playOnce(0, switchSet);
 	}
 	
 	public void playOnce(int delay) {
+		playOnce(delay, false);
+	}
+	
+	public void playOnce(int delay, boolean switchSet) {
+		this.switchSet = switchSet;
 		if(delay < 0) delay = 0;
 		this.animating = delay > 0 ? false : true; 
 		this.playOnce = true;
@@ -119,7 +135,7 @@ public class Sprite {
 		this.playOnce = playOnce;
 	}
 	
-	public boolean isAnimating() {
-		return animating;
+	public boolean isAnimatingOrDelayed() {
+		return animating || delay != 0;
 	}
 }
