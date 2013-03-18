@@ -25,7 +25,7 @@ public class Platform {
 			sprite  = new Sprite(R.drawable.simple_platform_v, 1, 1);
 			break;
 		case REDUCE:
-			sprite = new Sprite(R.drawable.reduce_platform, 1, 4);
+			sprite = new Sprite(R.drawable.reduce_platform, 4, 8);
 			break;
 		case ANGLE_RIGHT:
 			sprite = new Sprite(R.drawable.angle_platform_right, 1, 8);
@@ -154,11 +154,14 @@ public class Platform {
 				mt == MotionType.JUMP_LEFT_WALL && prevMt == MotionType.FLY_LEFT ||
 				mt == MotionType.JUMP_RIGHT_WALL && prevMt == MotionType.FLY_RIGHT ||
 				mt == MotionType.FLY_RIGHT && prevMt == MotionType.FLY_LEFT && prevMotion.getStage() != 0 ||
-				mt == MotionType.FLY_LEFT && prevMt == MotionType.FLY_RIGHT && prevMotion.getStage() != 0) return;
+				mt == MotionType.FLY_LEFT && prevMt == MotionType.FLY_RIGHT && prevMotion.getStage() != 0) {
+			return;
+		}
 		if(type == PlatformType.REDUCE) {
 			if(currentStatus<3) {
 				currentStatus++;
-				sprite.goToFrame(currentStatus);
+				sprite.changeSet(currentStatus);
+				sprite.playOnce();
 			} else if(currentStatus<4){
 				currentStatus++;
 				sprite = null;

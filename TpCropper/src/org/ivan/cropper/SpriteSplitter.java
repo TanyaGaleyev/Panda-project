@@ -10,7 +10,7 @@ public class SpriteSplitter {
 	public static void main(String[] args) {
 		SpriteSplitter splitter = new SpriteSplitter();
 		try {
-			splitter.splitSprite("images/splitter/panda_sprite16", 230);
+			splitter.splitSprite("images/splitter/panda_sprite8_slick", 230);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

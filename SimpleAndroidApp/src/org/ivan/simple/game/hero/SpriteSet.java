@@ -54,6 +54,10 @@ public class SpriteSet {
 		set.putSprite("throwleft2", R.drawable.panda_sprite8_throwleft2, 1, 8);
 		set.putSprite("throwright1", R.drawable.panda_sprite8_throwright1, 1, 8);
 		set.putSprite("throwright2", R.drawable.panda_sprite8_throwright2, 1, 8);
+		set.putSprite("startslickleft", R.drawable.panda_sprite8_startslickleft, 1, 8);
+		set.putSprite("slickleft", R.drawable.panda_sprite8_slickleft, 1, 8);
+		set.putSprite("startslickright", R.drawable.panda_sprite8_startslickright, 1, 8);
+		set.putSprite("slickright", R.drawable.panda_sprite8_slickright, 1, 8);
 		
 		set.putSprite("stay", R.drawable.panda_sprite16_stay, 1, 16);
 		set.putSprite("fallblansh", R.drawable.panda_sprite16_fallblansh, 1, 16);
@@ -62,6 +66,8 @@ public class SpriteSet {
 		set.putSprite("beginflyleft", R.drawable.panda_sprite16_beginflyleft, 1, 16);
 		set.putSprite("beginflyright", R.drawable.panda_sprite16_beginflyright, 1, 16);
 		set.putSprite("glue", R.drawable.panda_sprite16_glue, 1, 16);
+		set.putSprite("slickleftwall", R.drawable.panda_sprite16_slickleftwall, 1, 16);
+		set.putSprite("slickrightwall", R.drawable.panda_sprite16_slickrightwall, 1, 16);
 		
 		for(Sprite sprite : set.sprites.values()) {
 			sprite.setAnimating(true);
