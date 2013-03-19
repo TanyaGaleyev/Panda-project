@@ -97,7 +97,7 @@ public class Platform {
 			sprite = new Sprite("platform_v/unlock_platform.png", 1, 1);
 			break;
 		case STRING:
-			sprite = new Sprite("platform_h/string_platform.png", 1, 8);
+			sprite = new Sprite("platform_h/string_platform.png", 2, 16);
 			break;
 		case LIMIT:
 			sprite = new Sprite("platform_v/limit_way.png", 4, 8);
@@ -115,7 +115,8 @@ public class Platform {
 			sprite = new Sprite("platform_v/glue_v.png", 1, 1);
 			break;
 		case TELEPORT:
-			sprite = new Sprite("platform_h/teleport.png", 1, 1);
+			sprite = new Sprite("platform_h/teleport.png", 1, 16);
+			sprite.setAnimating(true);
 			break;
 		case INVISIBLE:
 			sprite = new Sprite("platform_h/invisible_platform.png", 2, 8);
@@ -240,9 +241,14 @@ public class Platform {
 			sprite.playOnce();
 			return;
 		}
-		if(type == PlatformType.STRING && mt == MotionType.STAY) {
-			sprite.playOnce();
-			type = PlatformType.NONE;
+		if(type == PlatformType.STRING) {
+			if(mt == MotionType.STAY) {
+				sprite.changeSet(1);
+				sprite.playOnce();
+				type = PlatformType.NONE;
+			} else if(mt == MotionType.JUMP) {
+				sprite.playOnce();
+			}
 			return;
 		}
 		if(type == PlatformType.INVISIBLE) {
