@@ -60,6 +60,7 @@ public class ImageProvider {
 				height -= height % rows;
 				// TODO learn aboul filter flag
 				ret = Bitmap.createScaledBitmap(original, width, height, true);
+				original.recycle();
 				images.put(path, ret);
 			} else {
 				ret = images.get(path);
