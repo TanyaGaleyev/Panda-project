@@ -19,115 +19,115 @@ public class Platform {
 		this.type = type;
 		switch(type) {
 		case SIMPLE:
-			sprite = new Sprite(R.drawable.simple_platform, 4, 8);
+			sprite = new Sprite("platform_h/simple_platform.png", 4, 8);
 			break;
 		case SIMPLE_V:
-			sprite  = new Sprite(R.drawable.simple_platform_v, 1, 1);
+			sprite  = new Sprite("platform_v/simple_platform_v.png", 1, 1);
 			break;
 		case REDUCE:
-			sprite = new Sprite(R.drawable.reduce_platform, 4, 8);
+			sprite = new Sprite("platform_h/reduce_platform.png", 4, 8);
 			break;
 		case ANGLE_RIGHT:
-			sprite = new Sprite(R.drawable.angle_platform_right, 1, 8);
+			sprite = new Sprite("platform_h/angle_platform_right.png", 1, 8);
 			break;
 		case ANGLE_LEFT:
-			sprite = new Sprite(R.drawable.angle_platform_left, 1, 8);
+			sprite = new Sprite("platform_h/angle_platform_left.png", 1, 8);
 			break;
 			
 		case THROW_OUT_RIGHT:
-			sprite = new Sprite(R.drawable.throw_out_platform_right, 1, 8);
+			sprite = new Sprite("platform_h/throw_out_platform_right.png", 1, 8);
 			break;
 		case THROW_OUT_LEFT:
-			sprite = new Sprite(R.drawable.throw_out_platform_left, 1, 8);
+			sprite = new Sprite("platform_h/throw_out_platform_left.png", 1, 8);
 			break;	
 		case TRAMPOLINE:
-			sprite = new Sprite(R.drawable.trampoline_platform,1,6);
+			sprite = new Sprite("platform_h/trampoline_platform.png",1,6);
 			break;
 		case ELECTRO:
-			sprite = new Sprite(R.drawable.electro_platform,1,4);
+			sprite = new Sprite("platform_h/electro_platform.png",1,4);
 			sprite.setAnimating(true);
 			break;
 		case SPRING:
-			sprite = new Sprite(R.drawable.spring_platform,2,16);
+			sprite = new Sprite("platform_v/spring_platform.png",2,16);
 			break;
 		case SPIKE:
-			sprite = new Sprite(R.drawable.spike,1,8);
+			sprite = new Sprite("platform_h/spike.png",1,8);
 			sprite.setAnimating(true);
 			break;
 		case SPIKE_V:
-			sprite = new Sprite(R.drawable.spike_v, 1, 8);
+			sprite = new Sprite("platform_v/spike_v.png", 1, 8);
 			sprite.setAnimating(true);
 			break;
 		case WIN:
-			sprite = new Sprite(R.drawable.win_platform, 1, 8);
+			sprite = new Sprite("platform_h/win_platform.png", 1, 8);
 			sprite.setAnimating(true);
 			break;
 		case TELEPORT_L_V:
-			sprite = new Sprite(R.drawable.teleport_l_v, 1, 16);
+			sprite = new Sprite("platform_v/teleport_l_v.png", 1, 16);
 			sprite.setAnimating(true);
 			break;
 		case TELEPORT_R_V:
-			sprite = new Sprite(R.drawable.teleport_r_v, 1, 16);
+			sprite = new Sprite("platform_v/teleport_r_v.png", 1, 16);
 			sprite.setAnimating(true);
 			break;
 		case SLICK:
-			sprite = new Sprite(R.drawable.slick, 1, 1);
+			sprite = new Sprite("platform_h/slick.png", 1, 1);
 			break;
 		case SLOPE:
-			sprite = new Sprite(R.drawable.slope, 3, 1);
+			sprite = new Sprite("platform_h/slope.png", 3, 1);
 			break;
 		case ONE_WAY_LEFT:
-			sprite = new Sprite(R.drawable.one_way_right, 1, 16);
+			sprite = new Sprite("platform_v/one_way_right.png", 1, 16);
 			break;
 		case ONE_WAY_RIGHT:
-			sprite = new Sprite(R.drawable.one_way_left, 1, 16);
+			sprite = new Sprite("platform_v/one_way_left.png", 1, 16);
 			break;
 		case ONE_WAY_DOWN:
-			sprite = new Sprite(R.drawable.one_way_down, 1, 16);
+			sprite = new Sprite("platform_h/one_way_down.png", 1, 16);
 			break;
 		case ONE_WAY_UP:
-			sprite = new Sprite(R.drawable.one_way_up, 1, 16);
+			sprite = new Sprite("platform_h/one_way_up.png", 1, 16);
 			break;
 		case SWITCH:
-			sprite = new Sprite(R.drawable.switch_platform, 4, 8, switchHelper);
+			sprite = new Sprite("platform_v/switch_platform.png", 4, 8, switchHelper);
 			currentStatus = switchHelper;
 			switchHelper = (switchHelper + 1) % 4;
 			break;
 		case UNLOCK:
-			sprite = new Sprite(R.drawable.unlock_platform, 1, 1);
+			sprite = new Sprite("platform_v/unlock_platform.png", 1, 1);
 			break;
 		case STRING:
-			sprite = new Sprite(R.drawable.string_platform, 1, 8);
+			sprite = new Sprite("platform_h/string_platform.png", 1, 8);
 			break;
 		case LIMIT:
-			sprite = new Sprite(R.drawable.limit_way, 4, 8);
+			sprite = new Sprite("platform_v/limit_way.png", 4, 8);
 			break;
 		case BRICK:
-			sprite = new Sprite(R.drawable.brick, 4, 1);
+			sprite = new Sprite("platform_h/brick.png", 4, 1);
 			break;
 		case BRICK_V:
-			sprite = new Sprite(R.drawable.brick_v, 4, 1);
+			sprite = new Sprite("platform_v/brick_v.png", 4, 1);
 			break;
 		case GLUE:
-			sprite = new Sprite(R.drawable.glue, 1, 1);
+			sprite = new Sprite("platform_h/glue.png", 1, 1);
 			break;
 		case GLUE_V:
-			sprite = new Sprite(R.drawable.glue_v, 1, 1);
+			sprite = new Sprite("platform_v/glue_v.png", 1, 1);
 			break;
 		case TELEPORT:
-			sprite = new Sprite(R.drawable.teleport, 1, 1);
+			sprite = new Sprite("platform_h/teleport.png", 1, 1);
 			break;
 		case INVISIBLE:
-			sprite = new Sprite(R.drawable.invisible_platform, 2, 8);
+			sprite = new Sprite("platform_h/invisible_platform.png", 2, 8);
 			break;
 		case TRANSPARENT:
-			sprite = new Sprite(R.drawable.transparent_platform, 1, 8);
+			sprite = new Sprite("platform_h/transparent_platform.png", 1, 8);
 			break;
 		case TRANSPARENT_V:
-			sprite = new Sprite(R.drawable.transparent_platform_v, 1, 8);
+			sprite = new Sprite("platform_v/transparent_platform_v.png", 1, 8);
 			break;
 		case WAY_UP_DOWN:
-			sprite = new Sprite(R.drawable.way_up_down, 2, 16);
+			sprite = new Sprite("platform_h/way_up_down.png", 2, 16);
 			break;
 		case NONE:
 			break;

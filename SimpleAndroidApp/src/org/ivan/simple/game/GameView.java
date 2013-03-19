@@ -39,7 +39,7 @@ public class GameView extends SurfaceView {
 	
 	protected GameControl control;
 	
-	private int backgroundId;
+	private String backgroundId;
 	private Bitmap background;
 	private Bitmap pause;
 	private Bitmap restart;
@@ -97,22 +97,23 @@ public class GameView extends SurfaceView {
 	private void initSurface() {
 //		GRID_STEP = ImageProvider.loadBitmapSize(R.drawable.single_panda).outWidth;
 //		System.out.println(getHeight());
-		if(getHeight() < 432) {
-			GRID_STEP = 48;
-		} else if(getHeight() < 528) {
-			GRID_STEP = 72;
-		} else if(getHeight() < 672) {
-			GRID_STEP = 88;
-		} else {
-			GRID_STEP = 112;
-		}
-		GRID_STEP = GRID_STEP % 8 == 0 ? GRID_STEP : GRID_STEP + 8 - GRID_STEP % 8;
-		ImageProvider.setGridStep(GRID_STEP);
+//		if(getHeight() < 432) {
+//			GRID_STEP = 48;
+//		} else if(getHeight() < 528) {
+//			GRID_STEP = 72;
+//		} else if(getHeight() < 672) {
+//			GRID_STEP = 88;
+//		} else {
+//			GRID_STEP = 112;
+//		}
+//		GRID_STEP = GRID_STEP % 8 == 0 ? GRID_STEP : GRID_STEP + 8 - GRID_STEP % 8;
+//		ImageProvider.setGridStep(GRID_STEP);
+		GRID_STEP = ImageProvider.setScaleParameters(getWidth(), getHeight());
 		
 		background = ImageProvider.getBitmap(backgroundId);
-		pause = ImageProvider.getBitmap(R.drawable.pause);
-		restart = ImageProvider.getBitmap(R.drawable.restart);
-		back = ImageProvider.getBitmap(R.drawable.back);
+		pause = ImageProvider.getBitmap("menu/pause.png");
+		restart = ImageProvider.getBitmap("menu/restart.png");
+		back = ImageProvider.getBitmap("menu/back.png");
 		//GRID_STEP = 112;//88dp,48dp
 		System.out.println("GRID_STEP = " + GRID_STEP);
 		TOP_BOUND = GRID_STEP;
@@ -352,13 +353,13 @@ public class GameView extends SurfaceView {
 		this.backgroundId = getBackgroundId(levId);
 	}
 	
-	private int getBackgroundId(int levId) {
+	private String getBackgroundId(int levId) {
 		switch(levId) {
-		case 1: return R.drawable.background_l_1;
-		case 2: return R.drawable.background_l_2;
-		case 3: return R.drawable.background_l_3;
-		case 4: return R.drawable.background_l_4;
-		default:return R.drawable.background_l_1;
+		case 1: return "background/background_l_1.jpg";
+		case 2: return "background/background_l_2.jpg";
+		case 3: return "background/background_l_3.jpg";
+		case 4: return "background/background_l_4.jpg";
+		default:return "background/background_l_1.jpg";
 		}
 	}
 	

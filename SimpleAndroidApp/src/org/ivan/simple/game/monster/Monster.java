@@ -9,7 +9,7 @@ import org.ivan.simple.game.level.PlatformType;
 import android.graphics.Canvas;
 
 public class Monster {
-	private Sprite sprite = new Sprite(R.drawable.monster, 1, 16);
+	private Sprite sprite = new Sprite("monster/monster.png", 1, 16);
 	
 	public int xCoordinate = 0;
 	public int yCoordinate = 0;

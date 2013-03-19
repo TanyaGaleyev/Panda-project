@@ -1,56 +1,97 @@
 package org.ivan.simple;
 
+import java.io.IOException;
+import java.util.HashMap;
+
+import android.content.Context;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.SparseArray;
 
 public class ImageProvider {
-	public static Resources resources;
-	private static SparseArray<Bitmap> images = new SparseArray<Bitmap>();
+	private static Resources resources;
+	private static AssetManager asssetsMananger;
+	private static HashMap<String, Bitmap> images = new HashMap<String, Bitmap>();
 	private static int gridStep = 128;
+	private static String resSet = "large/";
+	private static final String base = "sprites/";
+	private static double baseStep = 230d;
 
 	private ImageProvider() {
 	}
 	
-	public static Bitmap getBitmap(int id, int rows, int cols) {
-		Bitmap ret;
-		if(images.get(id) == null) {
-			double scale = gridStep / 230d;
-			BitmapFactory.Options opts = new BitmapFactory.Options();
-			Bitmap original = BitmapFactory.decodeResource(resources, id, opts);
-			int width = (int) Math.ceil(opts.outWidth * scale);
-			width -= width % cols;
-			int height = (int) Math.ceil(opts.outHeight * scale);
-			height -= height % rows;
-			// TODO learn aboul filter flag
-			ret = Bitmap.createScaledBitmap(original, width, height, true);
-			images.put(id, ret);
+	public static void init(Context context) {
+		resources = context.getResources();
+		asssetsMananger = context.getAssets();
+	}
+	
+	public static int setScaleParameters(int width, int height) {
+		if(height < 432) {
+			gridStep = 48;
+			baseStep = 144;
+			resSet = "small/";
+		} else if(height < 528) {
+			gridStep = 72;
+			baseStep = 144;
+			resSet = "small/";
+		} else if(height < 672) {
+			gridStep = 88;
+			baseStep = 144;
+			resSet = "small/";
 		} else {
-			ret = images.get(id);
+			gridStep = 112;
+			baseStep = 230;
+			resSet = "large/";
 		}
-		return ret;
+		return gridStep;
 	}
 	
-	public static Bitmap getBitmap(int id) {
-		return getBitmap(id, 1, 1);
+	public static Bitmap getBitmap(String path, int rows, int cols) {
+		try {
+			Bitmap ret;
+			if(images.get(path) == null) {
+				double scale = gridStep / baseStep;
+				BitmapFactory.Options opts = new BitmapFactory.Options();
+				Bitmap original = BitmapFactory.decodeStream(asssetsMananger.open(base + resSet + path), null, opts);
+				int width = (int) Math.ceil(opts.outWidth * scale);
+				width -= width % cols;
+				int height = (int) Math.ceil(opts.outHeight * scale);
+				height -= height % rows;
+				// TODO learn aboul filter flag
+				ret = Bitmap.createScaledBitmap(original, width, height, true);
+				images.put(path, ret);
+			} else {
+				ret = images.get(path);
+			}
+			return ret;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
-	public static BitmapFactory.Options loadBitmapSize(int id) {
+	public static Bitmap getBitmap(String path) {
+		return getBitmap(path, 1, 1);
+	}
+	
+	public static BitmapFactory.Options loadBitmapSize(String path) {
 		BitmapFactory.Options opts = new BitmapFactory.Options();
 		opts.inJustDecodeBounds = true;
-		BitmapFactory.decodeResource(resources, id, opts);
+		try {
+			BitmapFactory.decodeStream(asssetsMananger.open(base + resSet + path), null, opts);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return opts;
 	}
 	
-	public static void removeFromCatch(int id) {
-		if(images.get(id) == null) return;
-		images.get(id).recycle();
-		images.remove(id);
-	}
-	
-	public static void setGridStep(int step) {
-		gridStep = step;
+	public static void removeFromCatch(String path) {
+		if(images.get(path) == null) return;
+		images.get(path).recycle();
+		images.remove(path);
 	}
 
 }

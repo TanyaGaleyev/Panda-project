@@ -1,5 +1,7 @@
 package org.ivan.simple.game.hero;
 
+import java.io.IOException;
+
 import org.ivan.simple.ImageProvider;
 
 import android.graphics.Bitmap;
@@ -42,11 +44,11 @@ public class Sprite {
 		changeSet(set);
 	}
 	
-	public Sprite(int bmpid, int rows, int cols) {
+	public Sprite(String bmpid, int rows, int cols) {
 		this(ImageProvider.getBitmap(bmpid, rows, cols), rows, cols);
 	}
 	
-	public Sprite(int bmpid, int rows, int cols, int set) {
+	public Sprite(String bmpid, int rows, int cols, int set) {
 		this(bmpid, rows, cols);
 		changeSet(set);
 	}

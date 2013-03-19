@@ -45,7 +45,7 @@ public class LevelChooseView extends SurfaceView {
 	private Bitmap cross;
 	
 	// Backgroung image of LevelChooseView
-	private int backgroundId;
+	private String backgroundId;
 	private Bitmap background;
 	private Bitmap back;
 	private Bitmap sound;
@@ -112,17 +112,18 @@ public class LevelChooseView extends SurfaceView {
 			}
 			
 			public void surfaceCreated(SurfaceHolder holder) {
-				ImageProvider.setGridStep(230);
 				
-				border = ImageProvider.getBitmap(R.drawable.border);
-				cross = ImageProvider.getBitmap(R.drawable.cross);
+				ImageProvider.setScaleParameters(getWidth(), getHeight());
+				
+				border = ImageProvider.getBitmap("menu/border.png");
+				cross = ImageProvider.getBitmap("menu/cross.png");
 				background = ImageProvider.getBitmap(backgroundId);
-				marker = ImageProvider.getBitmap(R.drawable.single_panda);
-				back = ImageProvider.getBitmap(R.drawable.back_choose);
-				sound = ImageProvider.getBitmap(R.drawable.sound_choose);
-				highscore = ImageProvider.getBitmap(R.drawable.high_score);
-				mediumscore = ImageProvider.getBitmap(R.drawable.medium_score);
-				lowscore = ImageProvider.getBitmap(R.drawable.low_score);
+				marker = ImageProvider.getBitmap("menu/single_panda.png");
+				back = ImageProvider.getBitmap("menu/back_choose.png");
+				sound = ImageProvider.getBitmap("menu/sound_choose.png");
+				highscore = ImageProvider.getBitmap("menu/high_score.png");
+				mediumscore = ImageProvider.getBitmap("menu/medium_score.png");
+				lowscore = ImageProvider.getBitmap("menu/low_score.png");
 				
 				redrawer = new Redrawer();
 				redrawer.start();
@@ -347,12 +348,12 @@ public class LevelChooseView extends SurfaceView {
 		}
 	}
 	
-	private int getBackgroundId(int levelsid) {
+	private String getBackgroundId(int levelsid) {
 		switch(levelsid) {
-		case 1: return R.drawable.background_c_1;
-		case 2: return R.drawable.background_c_2;
-		case 3: return R.drawable.background_c_3;
-		default:return R.drawable.background_c_1;
+		case 1: return "background/background_c_1.jpg";
+		case 2: return "background/background_c_2.jpg";
+		case 3: return "background/background_c_3.jpg";
+		default:return "background/background_c_1.jpg";
 		}
 		
 	}
