@@ -59,6 +59,36 @@ public class SpriteSet {
 		set.putSprite("startslickright", "panda/panda_sprite8_startslickright.png", 1, 8);
 		set.putSprite("slickright", "panda/panda_sprite8_slickright.png", 1, 8);
 		
+		set.putSprite("flyleft_tp", "panda/panda_sprite8_flyleft_tp.png", 1, 8);
+		set.putSprite("flyright_tp", "panda/panda_sprite8_flyright_tp.png", 1, 8);
+		set.putSprite("stepleft_tp", "panda/panda_sprite8_stepleft_tp.png", 1, 8);
+		set.putSprite("stepright_tp", "panda/panda_sprite8_stepright_tp.png", 1, 8);
+		set.putSprite("jumpleft_tp", "panda/panda_sprite8_jumpleft_tp.png", 1, 8);
+		set.putSprite("jumpright_tp", "panda/panda_sprite8_jumpright_tp.png", 1, 8);
+		set.putSprite("throwleft1_tp", "panda/panda_sprite8_throwleft1_tp.png", 1, 8);
+		set.putSprite("throwleft2_tp", "panda/panda_sprite8_throwleft2_tp.png", 1, 8);
+		set.putSprite("throwright1_tp", "panda/panda_sprite8_throwright1_tp.png", 1, 8);
+		set.putSprite("throwright2_tp", "panda/panda_sprite8_throwright2_tp.png", 1, 8);
+		set.putSprite("startslickleft_tp", "panda/panda_sprite8_startslickleft_tp.png", 1, 8);
+		set.putSprite("slickleft_tp", "panda/panda_sprite8_slickleft_tp.png", 1, 8);
+		set.putSprite("startslickright_tp", "panda/panda_sprite8_startslickright_tp.png", 1, 8);
+		set.putSprite("slickright_tp", "panda/panda_sprite8_slickright_tp.png", 1, 8);
+		
+		set.putSprite("flyleft_tpshade", "panda/panda_sprite8_flyleft_tpshade.png", 1, 8);
+		set.putSprite("flyright_tpshade", "panda/panda_sprite8_flyright_tpshade.png", 1, 8);
+		set.putSprite("stepleft_tpshade", "panda/panda_sprite8_stepleft_tpshade.png", 1, 8);
+		set.putSprite("stepright_tpshade", "panda/panda_sprite8_stepright_tpshade.png", 1, 8);
+		set.putSprite("jumpleft_tpshade", "panda/panda_sprite8_jumpleft_tpshade.png", 1, 8);
+		set.putSprite("jumpright_tpshade", "panda/panda_sprite8_jumpright_tpshade.png", 1, 8);
+		set.putSprite("throwleft1_tpshade", "panda/panda_sprite8_throwleft1_tpshade.png", 1, 8);
+		set.putSprite("throwleft2_tpshade", "panda/panda_sprite8_throwleft2_tpshade.png", 1, 8);
+		set.putSprite("throwright1_tpshade", "panda/panda_sprite8_throwright1_tpshade.png", 1, 8);
+		set.putSprite("throwright2_tpshade", "panda/panda_sprite8_throwright2_tpshade.png", 1, 8);
+		set.putSprite("startslickleft_tpshade", "panda/panda_sprite8_startslickleft_tpshade.png", 1, 8);
+		set.putSprite("slickleft_tpshade", "panda/panda_sprite8_slickleft_tpshade.png", 1, 8);
+		set.putSprite("startslickright_tpshade", "panda/panda_sprite8_startslickright_tpshade.png", 1, 8);
+		set.putSprite("slickright_tpshade", "panda/panda_sprite8_slickright_tpshade.png", 1, 8);
+		
 		set.putSprite("stay", "panda/panda_sprite16_stay.png", 1, 16);
 		set.putSprite("fallblansh", "panda/panda_sprite16_fallblansh.png", 1, 16);
 		set.putSprite("stepleftwall", "panda/panda_sprite16_stepleftwall.png", 1, 16);
