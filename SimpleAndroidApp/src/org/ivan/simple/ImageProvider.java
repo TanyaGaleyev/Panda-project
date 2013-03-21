@@ -8,11 +8,13 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.LruCache;
 
 public class ImageProvider {
 	private static Resources resources;
 	private static AssetManager asssetsMananger;
 	private static HashMap<String, Bitmap> images = new HashMap<String, Bitmap>();
+//	private static LruCache<String, Bitmap> images;
 	private static int gridStep = 128;
 	private static String resSet = "large/";
 	private static final String base = "sprites/";
@@ -22,6 +24,8 @@ public class ImageProvider {
 	}
 	
 	public static void init(Context context) {
+//		int cacheSize = (int) (Runtime.getRuntime().maxMemory() / 8192);
+//		images = new LruCache<String, Bitmap>(cacheSize);
 		resources = context.getResources();
 		asssetsMananger = context.getAssets();
 	}

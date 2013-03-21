@@ -110,7 +110,7 @@ public class GameView extends SurfaceView {
 //		ImageProvider.setGridStep(GRID_STEP);
 		GRID_STEP = ImageProvider.setScaleParameters(getWidth(), getHeight());
 		
-		background = ImageProvider.getBitmap(backgroundId);
+//		background = ImageProvider.getBitmap(backgroundId);
 		pause = ImageProvider.getBitmap("menu/pause.png");
 		restart = ImageProvider.getBitmap("menu/restart.png");
 		back = ImageProvider.getBitmap("menu/back.png");
@@ -151,7 +151,7 @@ public class GameView extends SurfaceView {
 	
 	protected void onDraw(Canvas canvas, boolean update) {
 		canvas.drawColor(0xffC6E10E);
-		canvas.drawBitmap(background, 0, 0, null);
+//		canvas.drawBitmap(background, 0, 0, null);
 		canvas.drawBitmap(pause, 10, 50, null);
 		canvas.drawBitmap(restart, 10, 90, null);
 		canvas.drawBitmap(back, 10, 130, null);
