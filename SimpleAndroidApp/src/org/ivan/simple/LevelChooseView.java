@@ -109,6 +109,7 @@ public class LevelChooseView extends SurfaceView {
                    }
                 }
 				ImageProvider.removeFromCatch(backgroundId);
+				background = null;
 			}
 			
 			public void surfaceCreated(SurfaceHolder holder) {
@@ -117,7 +118,7 @@ public class LevelChooseView extends SurfaceView {
 				
 				border = ImageProvider.getBitmap("menu/border.png");
 				cross = ImageProvider.getBitmap("menu/cross.png");
-//				background = ImageProvider.getBitmap(backgroundId);
+				background = ImageProvider.getBitmap(backgroundId);
 				marker = ImageProvider.getBitmap("menu/single_panda.png");
 				back = ImageProvider.getBitmap("menu/back_choose.png");
 				sound = ImageProvider.getBitmap("menu/sound_choose.png");
@@ -156,7 +157,7 @@ public class LevelChooseView extends SurfaceView {
 			break;
 		}
 		canvas.drawColor(Color.WHITE);
-//		canvas.drawBitmap(background, 0, 0, null);
+		canvas.drawBitmap(background, 0, 0, null);
 		for(int i = 0; i < levels.length; i++) {
 			for(int j = 0; j < levels[i].length; j++) {
 				int x = getScreenX(j);

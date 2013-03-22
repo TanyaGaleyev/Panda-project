@@ -55,16 +55,22 @@ public class ImageProvider {
 		try {
 			Bitmap ret;
 			if(images.get(path) == null) {
-				double scale = gridStep / baseStep;
 				BitmapFactory.Options opts = new BitmapFactory.Options();
-				Bitmap original = BitmapFactory.decodeStream(asssetsMananger.open(base + resSet + path), null, opts);
-				int width = (int) Math.ceil(opts.outWidth * scale);
-				width -= width % cols;
-				int height = (int) Math.ceil(opts.outHeight * scale);
-				height -= height % rows;
-				// TODO learn aboul filter flag
-				ret = Bitmap.createScaledBitmap(original, width, height, true);
-				original.recycle();
+				if(rows == 1 && cols == 1) {
+					opts.inSampleSize = (int) (baseStep / gridStep);
+//					System.out.println("Sample:" + opts.inSampleSize);
+					ret = BitmapFactory.decodeStream(asssetsMananger.open(base + resSet + path), null, opts);
+				} else {
+					double scale = gridStep / baseStep;
+					Bitmap original = BitmapFactory.decodeStream(asssetsMananger.open(base + resSet + path), null, opts);
+					int width = (int) Math.ceil(opts.outWidth * scale);
+					width -= width % cols;
+					int height = (int) Math.ceil(opts.outHeight * scale);
+					height -= height % rows;
+					// TODO learn aboul filter flag
+					ret = Bitmap.createScaledBitmap(original, width, height, true);
+					original.recycle();
+				}
 				images.put(path, ret);
 			} else {
 				ret = images.get(path);
@@ -97,6 +103,7 @@ public class ImageProvider {
 		if(images.get(path) == null) return;
 		images.get(path).recycle();
 		images.remove(path);
+//		System.out.println("Bitmap removed");
 	}
 
 }

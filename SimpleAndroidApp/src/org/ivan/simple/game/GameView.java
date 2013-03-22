@@ -79,6 +79,7 @@ public class GameView extends SurfaceView {
 				//level.model.getMotion().startMotion();
                 control.stopManager();
                 ImageProvider.removeFromCatch(backgroundId);
+                background = null;
 			}
 			
 			public void surfaceCreated(SurfaceHolder holder) {
