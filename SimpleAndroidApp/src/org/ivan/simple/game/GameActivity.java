@@ -27,7 +27,8 @@ public class GameActivity extends PandaBaseActivity {
         levid = intent.getIntExtra(LevelChooseActivity.LEVEL_ID, 0);
         setContentView(R.layout.activity_main);
         GameView gView = (GameView) findViewById(R.id.game);
-        gControl = new GameControl(gView, levid);
+        gView.setLevId(levid);
+        gControl = gView.getControl();
     }
 
     @Override
@@ -48,18 +49,18 @@ public class GameActivity extends PandaBaseActivity {
     		GameManager.changeFPS(-5);
     		return true;
     	case R.id.restart:
-    		restart();
+//    		restart();
     	default:
     		return super.onOptionsItemSelected(item);
     	}
     }
     
-    public void restart() {
-    	finish();
-		Intent intent = new Intent(this, GameActivity.class);
-		intent.putExtra(LevelChooseActivity.LEVEL_ID, levid);
-		startActivity(intent);
-    }
+//    public void restart() {
+//    	finish();
+//		Intent intent = new Intent(this, GameActivity.class);
+//		intent.putExtra(LevelChooseActivity.LEVEL_ID, levid);
+//		startActivity(intent);
+//    }
     
     public void switchBackToChooseActivity(boolean complete, int score) {
 		Intent resultIntent = new Intent();

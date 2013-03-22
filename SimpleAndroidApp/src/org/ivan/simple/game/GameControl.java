@@ -30,10 +30,8 @@ public class GameControl {
 	
 	private SoundManager soundManager;
 	
-	public GameControl(GameView view, int levelId) {
-		view.setLevId(levelId);
+	public GameControl(GameView view) {
 		this.view  = view;
-		view.control = this;
 		soundManager = new SoundManager(view.getContext());
 	}
 	
@@ -232,7 +230,10 @@ public class GameControl {
 				}
 				return true;
 			} else if(y >= 90 && y < 120) {
-				((GameActivity) view.getContext()).restart();
+				stopManager();
+				view.initSurface();
+//				((GameActivity) view.getContext()).restart();
+				startManager();
 				return true;
 			} else if(y >= 130 && y < 160) {
 				((GameActivity) view.getContext()).switchBackToChooseActivity(view.isComplete(), view.getScore());

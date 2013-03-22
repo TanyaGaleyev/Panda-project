@@ -190,7 +190,7 @@ public class LevelChooseView extends SurfaceView {
 			return mediumscore;
 		} else {
 			return highscore;
-		}
+		}// А Танюшка Ванюшка!!!
 	}
 	
 	private int getScreenX(int col) {
