@@ -3,6 +3,7 @@ package org.ivan.simple.game;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.ivan.simple.PandaApplication;
 import org.ivan.simple.R;
 import org.ivan.simple.UserControlType;
 import org.ivan.simple.game.level.LevelModel;
@@ -276,7 +277,9 @@ public class GameControl {
 	}
 	
 	protected void playSound(LevelModel model) {
-		soundManager.playSound(model.hero.currentMotion, model.hero.finishingMotion);
+		if(PandaApplication.getPandaApplication().getSound()) {
+			soundManager.playSound(model.hero.currentMotion, model.hero.finishingMotion);
+		}
 	}
 	
 	

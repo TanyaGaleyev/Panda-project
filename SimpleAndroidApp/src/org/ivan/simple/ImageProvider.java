@@ -105,5 +105,9 @@ public class ImageProvider {
 		images.remove(path);
 //		System.out.println("Bitmap removed");
 	}
+	
+	public static int getGridStep() {
+		return gridStep;
+	}
 
 }

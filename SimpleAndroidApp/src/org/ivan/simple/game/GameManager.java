@@ -13,7 +13,7 @@ public class GameManager extends Thread {
 	
 	static {
 		FPS = 25;
-		ticksPS = 1000 / FPS;;
+		ticksPS = 1000 / FPS;
 	}
 	
 	public static void changeFPS(int dFPS) {

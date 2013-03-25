@@ -18,6 +18,6 @@ public class Prize {
 	}
 	
 	public void onDraw(Canvas canvas, int x, int y, boolean update) {
-		sprite.onDraw(canvas, x - sprite.getWidth() / 2, y - sprite.getHeight() / 2, update);
+		sprite.onDraw(canvas, x, y, update);
 	}
 }

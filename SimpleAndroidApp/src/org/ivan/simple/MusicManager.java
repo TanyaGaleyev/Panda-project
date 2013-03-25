@@ -22,7 +22,9 @@ public class MusicManager {
 	}
 	
 	public void resumeMusic() {
-		player.start();
+		if(PandaApplication.getPandaApplication().getSound()) {
+			player.start();
+		}
 	}
 
 }

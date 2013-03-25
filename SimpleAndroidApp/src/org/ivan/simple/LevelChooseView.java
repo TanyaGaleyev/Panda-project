@@ -211,6 +211,14 @@ public class LevelChooseView extends SurfaceView {
 			((Activity) getContext()).finish();
 			return true;
 		}
+		// sound button pressed
+		if(event.getAction() == MotionEvent.ACTION_DOWN &&
+				getWidth() - GRID_STEP < event.getX() && event.getX() < getWidth() &&
+				getHeight() - GRID_STEP < event.getY() && event.getY() < getHeight()) {
+			boolean sound = PandaApplication.getPandaApplication().getSound();
+			PandaApplication.getPandaApplication().setSound(!sound);
+			return true;
+		}
 		// get level Id depending on by click on screen selection
 		int levId = getLevelId(event);
 		// if level selected (levId != 0) start next GameActivity with specified level

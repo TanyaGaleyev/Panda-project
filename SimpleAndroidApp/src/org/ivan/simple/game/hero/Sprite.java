@@ -9,19 +9,19 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 
 public class Sprite {
-	private final Bitmap bmp;
+	protected final Bitmap bmp;
 	
-	private final int BMP_ROWS;
+	protected final int BMP_ROWS;
 
-	private final int BMP_COLS;
+	protected final int BMP_COLS;
 	
-	private int currentFrame = 0;
+	protected int currentFrame = 0;
 	
-	private int currentSet = 0;
+	protected int currentSet = 0;
 	
-	private final int singleWidth;
+	protected final int singleWidth;
 	
-	private final int singleHeight;
+	protected final int singleHeight;
 	
 	private boolean animating = false;
 	
@@ -53,18 +53,27 @@ public class Sprite {
 		changeSet(set);
 	}
 
+	/**
+	 * Draw current frame by specified center coordinates
+	 * @param canvas
+	 * @param x x coordinate of to draw sprite
+	 * @param y y coordinate of to draw sprite
+	 * @param update should we go to next frame after draw?
+	 */
 	public void onDraw(Canvas canvas, int x, int y, boolean update) {
 		int srcX = currentFrame * singleWidth;
         int srcY = currentSet * singleHeight;
+        int cornerX = x - singleWidth / 2;
+        int cornerY = y - singleHeight / 2;
         Rect src = new Rect(srcX, srcY, srcX + singleWidth, srcY + singleHeight);
-        Rect dst = new Rect(x, y, x + singleWidth, y + singleHeight);
+        Rect dst = new Rect(cornerX, cornerY, cornerX + singleWidth, cornerY + singleHeight);
         canvas.drawBitmap(bmp, src, dst, null);
         if(update) {
-        	update(canvas, srcX, srcY);
+        	update();
         }
 	}
 	
-	public void update(Canvas canvas, int x, int y) {
+	protected void update() {
 		if(delay > 0) {
 			delay--;
 			animating = delay == 0 ? true : animating;
@@ -140,4 +149,5 @@ public class Sprite {
 	public boolean isAnimatingOrDelayed() {
 		return animating || delay != 0;
 	}
+	
 }

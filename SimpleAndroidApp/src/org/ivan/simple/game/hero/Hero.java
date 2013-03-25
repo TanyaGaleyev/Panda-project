@@ -18,7 +18,7 @@ public class Hero {
 	private boolean finishingState = false;
 	private LevelCell prevCell;
 	private Sprite activeSprite;
-	private Sprite shadeSprite;
+	private TPSprite tpSprite;
 	private SpriteSet sprites = new SpriteSet();
 	public int x;
 	public int y;
@@ -30,6 +30,7 @@ public class Hero {
 		this.model = model;
 		sprites = SpriteSet.getPandaSprites();
 		activeSprite = sprites.getSprite("stay");
+		tpSprite = sprites.getTPSprite("stepleft_tp");
 	}
 	
 	public boolean isFinishing() {
@@ -67,7 +68,7 @@ public class Hero {
 		if(prevCell != null && prevCell.getFloor().getType() == PlatformType.GLUE) {
 			return activeSprite.getFrame() % 8 == 0;
 		}
-		return activeSprite.getFrame() == 0;
+		return activeSprite.getFrame() == 0 && tpSprite.getFrame() == 0;
 	}
 	
 	/**
@@ -349,40 +350,40 @@ public class Hero {
 			int childStage = model.currentMotion.getChildMotion().getStage();
 			if(childMt == MotionType.JUMP_LEFT) {
 				if(prevMt == MotionType.JUMP) {
-					shadeSprite = sprites.getSprite("jumpleft_tpshade");
-					activeSprite = sprites.getSprite("jumpleft_tp");
+					tpSprite = sprites.getTPSprite("jumpleft_tp");
+//					activeSprite = sprites.getSprite("jumpleft_tp");
 				} else if(prevCell.getFloor().getType() == PlatformType.SLICK) {
 					if(prevMt != mt && prevMt != MotionType.JUMP_RIGHT_WALL) {
-						shadeSprite = sprites.getSprite("startslickleft_tpshade");
-						activeSprite = sprites.getSprite("startslickleft_tp");
+						tpSprite = sprites.getTPSprite("startslickleft_tp");
+//						activeSprite = sprites.getSprite("startslickleft_tp");
 					} else {
-						shadeSprite = sprites.getSprite("slickleft_tpshade");
-						activeSprite = sprites.getSprite("slickleft_tp");
+						tpSprite = sprites.getTPSprite("slickleft_tp");
+//						activeSprite = sprites.getSprite("slickleft_tp");
 					}
 				} else if(prevMt == MotionType.JUMP_LEFT || prevMt == MotionType.THROW_LEFT) {
-					shadeSprite = sprites.getSprite("stepleft_tpshade");
-					activeSprite = sprites.getSprite("stepleft_tp");
+					tpSprite = sprites.getTPSprite("stepleft_tp");
+//					activeSprite = sprites.getSprite("stepleft_tp");
 				} else {
-					shadeSprite = sprites.getSprite("stepleft_tpshade");
-					activeSprite = sprites.getSprite("stepleft_tp");
+					tpSprite = sprites.getTPSprite("stepleft_tp");
+//					activeSprite = sprites.getSprite("stepleft_tp");
 				}
 			} else if(childMt == MotionType.THROW_LEFT && childStage == 0) {
 				if(prevMt == MotionType.THROW_LEFT || prevMt == MotionType.JUMP_LEFT) {
-					shadeSprite = sprites.getSprite("throwleft1_tpshade");
-					activeSprite = sprites.getSprite("throwleft1_tp");
+					tpSprite = sprites.getTPSprite("throwleft1_tp");
+//					activeSprite = sprites.getSprite("throwleft1_tp");
 				} else {
-					shadeSprite = sprites.getSprite("throwleft1_tpshade");
-					activeSprite = sprites.getSprite("throwleft1_tp");
+					tpSprite = sprites.getTPSprite("throwleft1_tp");
+//					activeSprite = sprites.getSprite("throwleft1_tp");
 				}
 			} else if(childMt == MotionType.THROW_LEFT) {
-				shadeSprite = sprites.getSprite("throwleft2_tpshade");
-				activeSprite = sprites.getSprite("throwleft2_tp");
+				tpSprite = sprites.getTPSprite("throwleft2_tp");
+//				activeSprite = sprites.getSprite("throwleft2_tp");
 			} else if(childMt == MotionType.FLY_LEFT) {
-				shadeSprite = sprites.getSprite("flyleft_tpshade");
-				activeSprite = sprites.getSprite("flyleft_tp");
+				tpSprite = sprites.getTPSprite("flyleft_tp");
+//				activeSprite = sprites.getSprite("flyleft_tp");
 			} else {
-				shadeSprite = sprites.getSprite("stepleft_tpshade");
-				activeSprite = sprites.getSprite("stepleft_tp");
+				tpSprite = sprites.getTPSprite("stepleft_tp");
+//				activeSprite = sprites.getSprite("stepleft_tp");
 			}
 			break;
 		case TP_RIGHT:
@@ -390,40 +391,40 @@ public class Hero {
 			int childStage1 = model.currentMotion.getChildMotion().getStage();
 			if(childMt1 == MotionType.JUMP_RIGHT) {
 				if(prevMt == MotionType.JUMP) {
-					shadeSprite = sprites.getSprite("jumpright_tpshade");
-					activeSprite = sprites.getSprite("jumpright_tp");
+					tpSprite = sprites.getTPSprite("jumpright_tp");
+//					activeSprite = sprites.getSprite("jumpright_tp");
 				} else if(prevCell.getFloor().getType() == PlatformType.SLICK) {
 					if(prevMt != mt && prevMt != MotionType.JUMP_LEFT_WALL) {
-						shadeSprite = sprites.getSprite("startslickright_tpshade");
-						activeSprite = sprites.getSprite("startslickright_tp");
+						tpSprite = sprites.getTPSprite("startslickright_tp");
+//						activeSprite = sprites.getSprite("startslickright_tp");
 					} else {
-						shadeSprite = sprites.getSprite("slickright_tpshade");
-						activeSprite = sprites.getSprite("slickright_tp");
+						tpSprite = sprites.getTPSprite("slickright_tp");
+//						activeSprite = sprites.getSprite("slickright_tp");
 					}
 				} else if(prevMt == MotionType.JUMP_RIGHT || prevMt == MotionType.THROW_RIGHT) {
-					shadeSprite = sprites.getSprite("stepright_tpshade");
-					activeSprite = sprites.getSprite("stepright_tp");
+					tpSprite = sprites.getTPSprite("stepright_tp");
+//					activeSprite = sprites.getSprite("stepright_tp");
 				} else {
-					shadeSprite = sprites.getSprite("stepright_tpshade");
-					activeSprite = sprites.getSprite("stepright_tp");
+					tpSprite = sprites.getTPSprite("stepright_tp");
+//					activeSprite = sprites.getSprite("stepright_tp");
 				}
 			} else if(childMt1 == MotionType.THROW_RIGHT && childStage1 == 0) {
 				if(prevMt == MotionType.THROW_RIGHT || prevMt == MotionType.JUMP_RIGHT) {
-					shadeSprite = sprites.getSprite("throwright1_tpshade");
-					activeSprite = sprites.getSprite("throwright1_tp"); 
+					tpSprite = sprites.getTPSprite("throwright1_tp");
+//					activeSprite = sprites.getSprite("throwright1_tp"); 
 				} else {
-					shadeSprite = sprites.getSprite("throwright1_tpshade");
-					activeSprite = sprites.getSprite("throwright1_tp"); 
+					tpSprite = sprites.getTPSprite("throwright1_tp");
+//					activeSprite = sprites.getSprite("throwright1_tp"); 
 				}
 			} else if(childMt1 == MotionType.THROW_RIGHT) {
-				shadeSprite = sprites.getSprite("throwright2_tpshade");
-				activeSprite = sprites.getSprite("throwright2_tp");
+				tpSprite = sprites.getTPSprite("throwright2_tp");
+//				activeSprite = sprites.getSprite("throwright2_tp");
 			} else if(childMt1 == MotionType.FLY_RIGHT) {
-				shadeSprite = sprites.getSprite("flyright_tpshade");
-				activeSprite = sprites.getSprite("flyright_tp");
+				tpSprite = sprites.getTPSprite("flyright_tp");
+//				activeSprite = sprites.getSprite("flyright_tp");
 			} else {
-				shadeSprite = sprites.getSprite("stepright_tpshade");
-				activeSprite = sprites.getSprite("stepright_tp");
+				tpSprite = sprites.getTPSprite("stepright_tp");
+//				activeSprite = sprites.getSprite("stepright_tp");
 			}
 			break;
 		case STICK_LEFT:
@@ -486,9 +487,10 @@ public class Hero {
 	 * @param canvas
 	 */
 	public void onDraw(Canvas canvas, boolean update) {
-		activeSprite.onDraw(canvas, x - activeSprite.getWidth() / 2, y - activeSprite.getHeight() / 2, update);
 		if(!finishingState && (model.currentMotion.getType() == MotionType.TP_LEFT || model.currentMotion.getType() == MotionType.TP_RIGHT)) {
-			shadeSprite.onDraw(canvas, prevX - shadeSprite.getWidth() / 2, prevY - shadeSprite.getHeight() / 2, update);
+			tpSprite.onDraw(canvas, prevX, prevY, x, y, update);
+		} else {
+			activeSprite.onDraw(canvas, x, y, update);
 		}
 	}
 	
