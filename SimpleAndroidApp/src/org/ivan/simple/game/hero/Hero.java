@@ -350,7 +350,6 @@ public class Hero {
 			int childStage = model.currentMotion.getChildMotion().getStage();
 			if(childMt == MotionType.JUMP_LEFT) {
 				if(prevMt == MotionType.JUMP) {
-<<<<<<< Updated upstream
 					tpSprite = sprites.getTPSprite("jumpleft_tp");
 //					activeSprite = sprites.getSprite("jumpleft_tp");
 				} else if(prevCell.getFloor().getType() == PlatformType.SLICK) {
@@ -366,28 +365,10 @@ public class Hero {
 //					activeSprite = sprites.getSprite("stepleft_tp");
 				} else {
 					tpSprite = sprites.getTPSprite("stepleft_tp");
-=======
-//					shadeSprite = sprites.getSprite("jumpleft_tpshade");
-//					activeSprite = sprites.getSprite("jumpleft_tp");
-				} else if(prevCell.getFloor().getType() == PlatformType.SLICK) {
-					if(prevMt != mt && prevMt != MotionType.JUMP_RIGHT_WALL) {
-//						shadeSprite = sprites.getSprite("startslickleft_tpshade");
-//						activeSprite = sprites.getSprite("startslickleft_tp");
-					} else {
-//						shadeSprite = sprites.getSprite("slickleft_tpshade");
-//						activeSprite = sprites.getSprite("slickleft_tp");
-					}
-				} else if(prevMt == MotionType.JUMP_LEFT || prevMt == MotionType.THROW_LEFT) {
-//					shadeSprite = sprites.getSprite("stepleft_tpshade");
-//					activeSprite = sprites.getSprite("stepleft_tp");
-				} else {
-//					shadeSprite = sprites.getSprite("stepleft_tpshade");
->>>>>>> Stashed changes
 //					activeSprite = sprites.getSprite("stepleft_tp");
 				}
 			} else if(childMt == MotionType.THROW_LEFT && childStage == 0) {
 				if(prevMt == MotionType.THROW_LEFT || prevMt == MotionType.JUMP_LEFT) {
-<<<<<<< Updated upstream
 					tpSprite = sprites.getTPSprite("throwleft1_tp");
 //					activeSprite = sprites.getSprite("throwleft1_tp");
 				} else {
@@ -402,22 +383,6 @@ public class Hero {
 //				activeSprite = sprites.getSprite("flyleft_tp");
 			} else {
 				tpSprite = sprites.getTPSprite("stepleft_tp");
-=======
-//					shadeSprite = sprites.getSprite("throwleft1_tpshade");
-//					activeSprite = sprites.getSprite("throwleft1_tp");
-				} else {
-//					shadeSprite = sprites.getSprite("throwleft1_tpshade");
-//					activeSprite = sprites.getSprite("throwleft1_tp");
-				}
-			} else if(childMt == MotionType.THROW_LEFT) {
-//				shadeSprite = sprites.getSprite("throwleft2_tpshade");
-//				activeSprite = sprites.getSprite("throwleft2_tp");
-			} else if(childMt == MotionType.FLY_LEFT) {
-//				shadeSprite = sprites.getSprite("flyleft_tpshade");
-//				activeSprite = sprites.getSprite("flyleft_tp");
-			} else {
-//				shadeSprite = sprites.getSprite("stepleft_tpshade");
->>>>>>> Stashed changes
 //				activeSprite = sprites.getSprite("stepleft_tp");
 			}
 			break;
@@ -426,7 +391,6 @@ public class Hero {
 			int childStage1 = model.currentMotion.getChildMotion().getStage();
 			if(childMt1 == MotionType.JUMP_RIGHT) {
 				if(prevMt == MotionType.JUMP) {
-<<<<<<< Updated upstream
 					tpSprite = sprites.getTPSprite("jumpright_tp");
 //					activeSprite = sprites.getSprite("jumpright_tp");
 				} else if(prevCell.getFloor().getType() == PlatformType.SLICK) {
@@ -442,28 +406,10 @@ public class Hero {
 //					activeSprite = sprites.getSprite("stepright_tp");
 				} else {
 					tpSprite = sprites.getTPSprite("stepright_tp");
-=======
-//					shadeSprite = sprites.getSprite("jumpright_tpshade");
-//					activeSprite = sprites.getSprite("jumpright_tp");
-				} else if(prevCell.getFloor().getType() == PlatformType.SLICK) {
-					if(prevMt != mt && prevMt != MotionType.JUMP_LEFT_WALL) {
-//						shadeSprite = sprites.getSprite("startslickright_tpshade");
-//						activeSprite = sprites.getSprite("startslickright_tp");
-					} else {
-//						shadeSprite = sprites.getSprite("slickright_tpshade");
-//						activeSprite = sprites.getSprite("slickright_tp");
-					}
-				} else if(prevMt == MotionType.JUMP_RIGHT || prevMt == MotionType.THROW_RIGHT) {
-//					shadeSprite = sprites.getSprite("stepright_tpshade");
-//					activeSprite = sprites.getSprite("stepright_tp");
-				} else {
-//					shadeSprite = sprites.getSprite("stepright_tpshade");
->>>>>>> Stashed changes
 //					activeSprite = sprites.getSprite("stepright_tp");
 				}
 			} else if(childMt1 == MotionType.THROW_RIGHT && childStage1 == 0) {
 				if(prevMt == MotionType.THROW_RIGHT || prevMt == MotionType.JUMP_RIGHT) {
-<<<<<<< Updated upstream
 					tpSprite = sprites.getTPSprite("throwright1_tp");
 //					activeSprite = sprites.getSprite("throwright1_tp"); 
 				} else {
@@ -478,22 +424,6 @@ public class Hero {
 //				activeSprite = sprites.getSprite("flyright_tp");
 			} else {
 				tpSprite = sprites.getTPSprite("stepright_tp");
-=======
-//					shadeSprite = sprites.getSprite("throwright1_tpshade");
-//					activeSprite = sprites.getSprite("throwright1_tp"); 
-				} else {
-//					shadeSprite = sprites.getSprite("throwright1_tpshade");
-//					activeSprite = sprites.getSprite("throwright1_tp"); 
-				}
-			} else if(childMt1 == MotionType.THROW_RIGHT) {
-//				shadeSprite = sprites.getSprite("throwright2_tpshade");
-//				activeSprite = sprites.getSprite("throwright2_tp");
-			} else if(childMt1 == MotionType.FLY_RIGHT) {
-//				shadeSprite = sprites.getSprite("flyright_tpshade");
-//				activeSprite = sprites.getSprite("flyright_tp");
-			} else {
-//				shadeSprite = sprites.getSprite("stepright_tpshade");
->>>>>>> Stashed changes
 //				activeSprite = sprites.getSprite("stepright_tp");
 			}
 			break;

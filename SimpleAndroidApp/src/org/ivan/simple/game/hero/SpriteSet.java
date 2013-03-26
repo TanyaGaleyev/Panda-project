@@ -68,7 +68,6 @@ public class SpriteSet {
 		set.putSprite("startslickright", "panda/panda_sprite8_startslickright.png", 1, 8);
 		set.putSprite("slickright", "panda/panda_sprite8_slickright.png", 1, 8);
 		
-<<<<<<< Updated upstream
 		set.putTPSprite("flyleft_tp", "panda/panda_sprite8_flyleft.png", 1, 8, true);
 		set.putTPSprite("flyright_tp", "panda/panda_sprite8_flyright.png", 1, 8, false);
 		set.putTPSprite("stepleft_tp", "panda/panda_sprite8_stepleft.png", 1, 8, true);
@@ -83,9 +82,7 @@ public class SpriteSet {
 		set.putTPSprite("slickleft_tp", "panda/panda_sprite8_slickleft.png", 1, 8, true);
 		set.putTPSprite("startslickright_tp", "panda/panda_sprite8_startslickright.png", 1, 8, false);
 		set.putTPSprite("slickright_tp", "panda/panda_sprite8_slickright.png", 1, 8, false);
-		
-=======
->>>>>>> Stashed changes
+
 //		set.putSprite("flyleft_tp", "panda/panda_sprite8_flyleft_tp.png", 1, 8);
 //		set.putSprite("flyright_tp", "panda/panda_sprite8_flyright_tp.png", 1, 8);
 //		set.putSprite("stepleft_tp", "panda/panda_sprite8_stepleft_tp.png", 1, 8);
