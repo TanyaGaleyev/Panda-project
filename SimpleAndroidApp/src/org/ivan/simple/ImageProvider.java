@@ -19,6 +19,7 @@ public class ImageProvider {
 	private static String resSet = "large/";
 	private static final String base = "sprites/";
 	private static double baseStep = 230d;
+	private static int cacheSize = 0;
 
 	private ImageProvider() {
 	}
@@ -51,29 +52,25 @@ public class ImageProvider {
 		return gridStep;
 	}
 	
-	public static Bitmap getBitmap(String path, int rows, int cols) {
+	public static Bitmap getBitmapNoCache(String path, int rows, int cols) {
+		System.out.println("Cache size: " + cacheSize);
 		try {
 			Bitmap ret;
-			if(images.get(path) == null) {
-				BitmapFactory.Options opts = new BitmapFactory.Options();
-				if(rows == 1 && cols == 1) {
-					opts.inSampleSize = (int) (baseStep / gridStep);
+			BitmapFactory.Options opts = new BitmapFactory.Options();
+			if(rows == 1 && cols == 1) {
+				opts.inSampleSize = (int) (baseStep / gridStep);
 //					System.out.println("Sample:" + opts.inSampleSize);
-					ret = BitmapFactory.decodeStream(asssetsMananger.open(base + resSet + path), null, opts);
-				} else {
-					double scale = gridStep / baseStep;
-					Bitmap original = BitmapFactory.decodeStream(asssetsMananger.open(base + resSet + path), null, opts);
-					int width = (int) Math.ceil(opts.outWidth * scale);
-					width -= width % cols;
-					int height = (int) Math.ceil(opts.outHeight * scale);
-					height -= height % rows;
-					// TODO learn aboul filter flag
-					ret = Bitmap.createScaledBitmap(original, width, height, true);
-					original.recycle();
-				}
-				images.put(path, ret);
+				ret = BitmapFactory.decodeStream(asssetsMananger.open(base + resSet + path), null, opts);
 			} else {
-				ret = images.get(path);
+				double scale = gridStep / baseStep;
+				Bitmap original = BitmapFactory.decodeStream(asssetsMananger.open(base + resSet + path), null, opts);
+				int width = (int) Math.ceil(opts.outWidth * scale);
+				width -= width % cols;
+				int height = (int) Math.ceil(opts.outHeight * scale);
+				height -= height % rows;
+				// TODO learn aboul filter flag
+				ret = Bitmap.createScaledBitmap(original, width, height, true);
+				original.recycle();
 			}
 			return ret;
 		} catch (IOException e) {
@@ -83,8 +80,23 @@ public class ImageProvider {
 		}
 	}
 	
+	public static Bitmap getBitmap(String path, int rows, int cols) {
+		Bitmap  bmp = images.get(path);
+		if(bmp == null) {
+			bmp = getBitmapNoCache(path, rows, cols);
+			cacheSize += bmp.getWidth() * bmp.getHeight() //* 4 
+					/ 256;//1024;
+			images.put(path, bmp);
+		}
+		return bmp;
+	}
+	
 	public static Bitmap getBitmap(String path) {
 		return getBitmap(path, 1, 1);
+	}
+	
+	public static Bitmap getBitmapNoCache(String path) {
+		return getBitmapNoCache(path, 1, 1);
 	}
 	
 	public static BitmapFactory.Options loadBitmapSize(String path) {
@@ -100,8 +112,11 @@ public class ImageProvider {
 	}
 	
 	public static void removeFromCatch(String path) {
-		if(images.get(path) == null) return;
-		images.get(path).recycle();
+		Bitmap bmp = images.get(path);
+		if(bmp == null) return;
+		cacheSize -= bmp.getWidth() * bmp.getHeight() //* 4 
+				/ 256;//1024;
+		bmp.recycle();
 		images.remove(path);
 //		System.out.println("Bitmap removed");
 	}

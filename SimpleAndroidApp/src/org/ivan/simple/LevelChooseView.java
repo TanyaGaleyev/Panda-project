@@ -108,23 +108,25 @@ public class LevelChooseView extends SurfaceView {
                 	   
                    }
                 }
-				ImageProvider.removeFromCatch(backgroundId);
+//				ImageProvider.removeFromCatch(backgroundId);
+				background.recycle();
 				background = null;
+				System.out.println("Choose view destroyed!");
 			}
 			
 			public void surfaceCreated(SurfaceHolder holder) {
 				
 				ImageProvider.setScaleParameters(getWidth(), getHeight());
 				
-				border = ImageProvider.getBitmap("menu/border.png");
-				cross = ImageProvider.getBitmap("menu/cross.png");
-				background = ImageProvider.getBitmap(backgroundId);
-				marker = ImageProvider.getBitmap("menu/single_panda.png");
-				back = ImageProvider.getBitmap("menu/back_choose.png");
-				sound = ImageProvider.getBitmap("menu/sound_choose.png");
-				highscore = ImageProvider.getBitmap("menu/high_score.png");
-				mediumscore = ImageProvider.getBitmap("menu/medium_score.png");
-				lowscore = ImageProvider.getBitmap("menu/low_score.png");
+				border = ImageProvider.getBitmapNoCache("menu/border.png");
+				cross = ImageProvider.getBitmapNoCache("menu/cross.png");
+				background = ImageProvider.getBitmapNoCache(backgroundId);
+				marker = ImageProvider.getBitmapNoCache("menu/single_panda.png");
+				back = ImageProvider.getBitmapNoCache("menu/back_choose.png");
+				sound = ImageProvider.getBitmapNoCache("menu/sound_choose.png");
+				highscore = ImageProvider.getBitmapNoCache("menu/high_score.png");
+				mediumscore = ImageProvider.getBitmapNoCache("menu/medium_score.png");
+				lowscore = ImageProvider.getBitmapNoCache("menu/low_score.png");
 				
 				redrawer = new Redrawer();
 				redrawer.start();
