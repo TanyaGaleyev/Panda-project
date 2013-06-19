@@ -1,5 +1,7 @@
 package org.ivan.simple.game.monster;
 
+import org.ivan.simple.game.monster.strategies.MonsterStrategy;
+
 public class MonsterModel {
 	private MonsterStrategy strategy;
 	

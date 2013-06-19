@@ -3,7 +3,6 @@ package org.ivan.simple.game.monster.strategies;
 import java.util.ArrayList;
 
 import org.ivan.simple.game.monster.MonsterDirection;
-import org.ivan.simple.game.monster.MonsterStrategy;
 
 public class PriorityDirection implements MonsterStrategy {
 	private ArrayList<MonsterDirection> directionsByPriority = new ArrayList<MonsterDirection>();

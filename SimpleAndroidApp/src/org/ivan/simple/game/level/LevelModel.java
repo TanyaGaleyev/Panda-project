@@ -12,9 +12,10 @@ import org.ivan.simple.game.MotionType;
 import org.ivan.simple.game.hero.HeroModel;
 import org.ivan.simple.game.monster.MonsterDirection;
 import org.ivan.simple.game.monster.MonsterModel;
-import org.ivan.simple.game.monster.MonsterStrategy;
+import org.ivan.simple.game.monster.strategies.MonsterStrategy;
 import org.ivan.simple.game.monster.strategies.RandomDirection;
 import org.ivan.simple.game.monster.strategies.RandomContiniousDirection;
+import org.ivan.simple.game.monster.strategies.RouteStrategy;
 
 public class LevelModel {
 	private LevelCell[][] levelGrid;
@@ -81,9 +82,13 @@ public class LevelModel {
 	public LevelModel(int lev) {
 		rows=5;
 		cols=10;
-		MonsterStrategy dangerousKillerMonsterStrategy = new RandomContiniousDirection(MonsterDirection.getAllDirections());
+		// MonsterStrategy dangerousKillerMonsterStrategy = new RandomContiniousDirection(MonsterDirection.getAllDirections());
+		MonsterStrategy route = new RouteStrategy(
+				new int[][] {
+						{0,0},{5,0},{5,5}
+				});
 		if(lev > 2) {
-			monster = new MonsterModel(0, 0, dangerousKillerMonsterStrategy);
+			monster = new MonsterModel(0, 0, route);
 		} else {
 			monster = null;
 		}
