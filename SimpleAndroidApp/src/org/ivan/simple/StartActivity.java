@@ -20,6 +20,7 @@ public class StartActivity extends PandaBaseActivity {
 	public final int levCount = levelsCaptions.length;
 	private ArrayList<Button> levButtons = new ArrayList<Button>();
 	private int startedSet = 0;
+	private boolean loaded = false;
 	
 	public static int DISPLAY_WIDTH;
 	public static int DISPLAY_HEIGHT;
@@ -47,7 +48,6 @@ public class StartActivity extends PandaBaseActivity {
         int lastFinishedSet = 
         		getSharedPreferences(LevelChooseActivity.CONFIG, MODE_PRIVATE)
         		.getInt(LAST_FINISHED_SET, 0);
-        System.out.println(lastFinishedSet);
         
         LinearLayout buttonsPane = (LinearLayout) findViewById(R.id.buttons_pane);
         for(int i = 0; i < levCount; i++) {
@@ -65,6 +65,7 @@ public class StartActivity extends PandaBaseActivity {
         	levbtn.getLayoutParams().width = (int) (DISPLAY_WIDTH * 0.85);
         	levbtn.getLayoutParams().height = (int) (DISPLAY_HEIGHT * 0.20);
         }
+        loaded = true;
     }
 
 	

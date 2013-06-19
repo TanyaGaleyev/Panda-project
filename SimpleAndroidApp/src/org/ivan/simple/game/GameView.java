@@ -78,7 +78,8 @@ public class GameView extends SurfaceView {
 				// turn motion to initial stage (stage == 0)
 				//level.model.getMotion().startMotion();
                 control.stopManager();
-                ImageProvider.removeFromCatch(backgroundId);
+                //ImageProvider.removeFromCatch(backgroundId);
+                background.recycle();
                 background = null;
 			}
 			
@@ -115,7 +116,7 @@ public class GameView extends SurfaceView {
 //		ImageProvider.setGridStep(GRID_STEP);
 		GRID_STEP = ImageProvider.setScaleParameters(getWidth(), getHeight());
 		
-		background = ImageProvider.getBitmap(backgroundId);
+		background = ImageProvider.getBitmapNoCache(backgroundId);
 		pause = ImageProvider.getBitmap("menu/pause.png");
 		restart = ImageProvider.getBitmap("menu/restart.png");
 		back = ImageProvider.getBitmap("menu/back.png");
