@@ -175,5 +175,22 @@ public class LevelStorage {
 		return new int[]{4,9};
 	}
 	
+	public int[][] getRouteArray(int lev) {
+		switch (lev) {
+		case 1:
+			return new int[][] {
+					{0,3},{0,0},{5,0},{5,5}
+			};
+		case 2:
+			return new int[][] {
+					{0,0},{5,0},{5,5}
+			};
+		default:
+			return new int[][] {
+					{0,3},{0,0},{5,0},{5,5}
+			};
+		}
+	}
+	
 
 }

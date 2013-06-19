@@ -82,18 +82,17 @@ public class LevelModel {
 	public LevelModel(int lev) {
 		rows=5;
 		cols=10;
+		LevelStorage storage = new LevelStorage();
 		// MonsterStrategy dangerousKillerMonsterStrategy = new RandomContiniousDirection(MonsterDirection.getAllDirections());
-		MonsterStrategy route = new RouteStrategy(
-				new int[][] {
-						{0,0},{5,0},{5,5}
-				});
+		int[][] routeArray = storage.getRouteArray(lev);
+		MonsterStrategy route = new RouteStrategy(routeArray);
+				
 		if(lev > 2) {
-			monster = new MonsterModel(0, 0, route);
+			monster = new MonsterModel(routeArray[0][1], routeArray[0][0], route);
 		} else {
 			monster = null;
 		}
 		hero = new HeroModel(rows - 1, 0);
-		LevelStorage storage = new LevelStorage();
 		int[][][][] mylevel = storage.getLevel(lev);
 		int[][] prizes = storage.getPrizesMap(lev);
 		int[] winCellCoord = storage.getWinCell(lev);

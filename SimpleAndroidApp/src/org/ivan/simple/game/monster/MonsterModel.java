@@ -18,7 +18,7 @@ public class MonsterModel {
 		this.col = col;
 		prevRow = row;
 		prevCol = col;
-		currDirection = strategy.nextDirection(false);
+		//currDirection = strategy.nextDirection(false);
 	}
 	
 	public MonsterDirection getDirection() {

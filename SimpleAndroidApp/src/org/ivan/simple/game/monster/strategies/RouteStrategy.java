@@ -45,8 +45,11 @@ public class RouteStrategy implements MonsterStrategy {
 	private int id = 0;
 	
 	public MonsterDirection nextDirection(boolean decline) {
-		if(decline) {
+		if(decline || id < 0 || id >= avaibleDirections.size()) {
 			adder = -adder;
+			id += adder;
+		}
+		if(decline) {
 			id += adder;
 		}
 		MonsterDirection nd = backOrForward();
