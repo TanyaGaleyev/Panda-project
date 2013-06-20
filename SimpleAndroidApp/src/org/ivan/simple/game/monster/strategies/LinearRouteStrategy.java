@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import org.ivan.simple.game.level.LevelCell;
 import org.ivan.simple.game.monster.MonsterDirection;
 
-public class RouteStrategy implements MonsterStrategy {
+public class LinearRouteStrategy implements MonsterStrategy {
 	
 	private ArrayList<MonsterDirection> avaibleDirections = new ArrayList<MonsterDirection>();
 	
-	public RouteStrategy(int[][] route) {
+	public LinearRouteStrategy(int[][] route) {
 		for(int i = 1; i < route.length; i++) {
 			addDirections(route[i - 1], route[i]);
 		}
