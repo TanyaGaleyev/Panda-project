@@ -16,6 +16,7 @@ import org.ivan.simple.game.monster.strategies.MonsterStrategy;
 import org.ivan.simple.game.monster.strategies.RandomDirection;
 import org.ivan.simple.game.monster.strategies.RandomContiniousDirection;
 import org.ivan.simple.game.monster.strategies.LinearRouteStrategy;
+import org.ivan.simple.game.monster.strategies.RouteDirectionStrategyFactory;
 
 public class LevelModel {
 	private LevelCell[][] levelGrid;
@@ -85,7 +86,7 @@ public class LevelModel {
 		LevelStorage storage = new LevelStorage();
 		// MonsterStrategy dangerousKillerMonsterStrategy = new RandomContiniousDirection(MonsterDirection.getAllDirections());
 		int[][] routeArray = storage.getRouteArray(lev);
-		MonsterStrategy route = new LinearRouteStrategy(routeArray);
+		MonsterStrategy route = RouteDirectionStrategyFactory.createRouteDirectionStrategy(routeArray);
 				
 		if(lev > 2) {
 			monster = new MonsterModel(routeArray[0][1], routeArray[0][0], route);
