@@ -2,12 +2,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#C47633">
+    android:background="@drawable/bg1">
     
+        
     <org.ivan.simple.game.GameView
         android:id="@+id/game"
-        android:layout_width="528dp"
-        android:layout_height="288dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_centerInParent="true"/>
+    
+<!--     <org.ivan.simple.game.GameView -->
+<!--         android:id="@+id/game" -->
+<!--         android:layout_width="528dp" -->
+<!--         android:layout_height="288dp" -->
+<!--         android:layout_centerInParent="true"/> -->
 
 </RelativeLayout>

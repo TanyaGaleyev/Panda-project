@@ -116,7 +116,11 @@ public class GameView extends SurfaceView {
 //		ImageProvider.setGridStep(GRID_STEP);
 		GRID_STEP = ImageProvider.setScaleParameters(getWidth(), getHeight());
 		
-		background = ImageProvider.getBitmapNoCache(backgroundId);
+		background = Bitmap.createScaledBitmap(
+				ImageProvider.getBitmapNoCache(backgroundId),
+				getWidth(),
+				getHeight(),
+				false);
 		pause = ImageProvider.getBitmap("menu/pause.png");
 		restart = ImageProvider.getBitmap("menu/restart.png");
 		back = ImageProvider.getBitmap("menu/back.png");

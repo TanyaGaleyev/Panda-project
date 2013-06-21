@@ -120,7 +120,11 @@ public class LevelChooseView extends SurfaceView {
 				
 				border = ImageProvider.getBitmapNoCache("menu/border.png");
 				cross = ImageProvider.getBitmapNoCache("menu/cross.png");
-				background = ImageProvider.getBitmapNoCache(backgroundId);
+				background = Bitmap.createScaledBitmap(
+						ImageProvider.getBitmapNoCache(backgroundId),
+						getWidth(),
+						getHeight(),
+						false);
 				marker = ImageProvider.getBitmapNoCache("menu/single_panda.png");
 				back = ImageProvider.getBitmapNoCache("menu/back_choose.png");
 				sound = ImageProvider.getBitmapNoCache("menu/sound_choose.png");
