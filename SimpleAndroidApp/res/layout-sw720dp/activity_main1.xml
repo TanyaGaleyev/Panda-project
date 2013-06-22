@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/bg1">
+    android:background="#0000ff">
 
     
     <org.ivan.simple.game.GameView
