@@ -9,16 +9,16 @@ import org.ivan.simple.game.level.PlatformType;
 import android.graphics.Canvas;
 
 public class Monster {
-	private Sprite sprite = new Sprite("monster/monster.png", 1, 16);
+	private Sprite sprite;
 	
 	public int xCoordinate = 0;
 	public int yCoordinate = 0;
 	
 	private final MonsterModel model;
 	
-	public Monster(MonsterModel model) {
+	Monster(MonsterModel model, Sprite sprite) {
 		this.model = model;
-		sprite.setAnimating(true);
+		this.sprite = sprite;
 	}
 	
 	public void onDraw(Canvas canvas, boolean update) {

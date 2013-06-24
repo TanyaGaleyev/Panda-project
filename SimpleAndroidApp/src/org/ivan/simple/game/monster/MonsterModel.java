@@ -3,6 +3,7 @@ package org.ivan.simple.game.monster;
 import org.ivan.simple.game.monster.strategies.MonsterStrategy;
 
 public class MonsterModel {
+	
 	private MonsterStrategy strategy;
 	
 	private MonsterDirection currDirection = MonsterDirection.IDLE;
@@ -11,14 +12,17 @@ public class MonsterModel {
 	private int col;
 	private int prevRow;
 	private int prevCol;
+	private int monsterId;
 	
-	public MonsterModel(int row, int col, MonsterStrategy strategy) {
+	public MonsterModel(int row, int col, MonsterStrategy strategy, int monsterId) {
 		this.strategy = strategy;
 		this.row = row;
 		this.col = col;
 		prevRow = row;
 		prevCol = col;
 		//currDirection = strategy.nextDirection(false);
+		
+		this.monsterId = monsterId;
 	}
 	
 	public MonsterDirection getDirection() {
@@ -68,6 +72,10 @@ public class MonsterModel {
 
 	public int getPrevCol() {
 		return prevCol;
+	}
+
+	public int getMonsterId() {
+		return monsterId;
 	}
 	
 	

@@ -9,6 +9,7 @@ import org.ivan.simple.game.level.LevelCell;
 import org.ivan.simple.game.level.LevelView;
 import org.ivan.simple.game.monster.Monster;
 import org.ivan.simple.game.monster.MonsterDirection;
+import org.ivan.simple.game.monster.MonsterFactory;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -140,7 +141,7 @@ public class GameView extends SurfaceView {
 //		prevMotion = level.model.getMotion();
 		
 		hero = new Hero(level.model.hero);
-		monster = new Monster(level.model.monster);
+		monster = MonsterFactory.createMonster(level.model.monster);
 		
 		hero.x= LEFT_BOUND + level.model.hero.getX() * GRID_STEP;
 		hero.y = TOP_BOUND + level.model.hero.getY() * GRID_STEP;
