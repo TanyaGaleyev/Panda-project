@@ -33,6 +33,11 @@ public enum MotionType {
 	STICK_LEFT,
 	STICK_RIGHT,
 	TP,
+	CLOUD_IDLE,
+	CLOUD_LEFT,
+	CLOUD_RIGHT,
+	CLOUD_UP,
+	CLOUD_DOWN,
 	NONE;
 	
 }

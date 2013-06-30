@@ -130,6 +130,9 @@ public class Platform {
 		case WAY_UP_DOWN:
 			sprite = new Sprite("platform_h/way_up_down.png", 2, 16);
 			break;
+		case CLOUD:
+			sprite = new Sprite("platform_h/cloud.png", 1, 1);
+			break;
 		case NONE:
 			break;
 		}
@@ -260,6 +263,21 @@ public class Platform {
 			sprite.playOnce();
 			type = PlatformType.NONE;
 			return;
+		}
+		// CLOUD
+		if(type == PlatformType.NONE) {
+			switch(mt) {
+			case CLOUD_IDLE:
+			case CLOUD_LEFT:
+			case CLOUD_RIGHT:
+			case CLOUD_UP:
+			case CLOUD_DOWN:
+				type = PlatformType.NONE;
+				sprite = null;
+				break;
+			default:
+				break;
+			}
 		}
 	}
 	

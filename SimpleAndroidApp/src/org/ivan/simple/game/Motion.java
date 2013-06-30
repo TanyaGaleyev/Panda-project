@@ -93,11 +93,13 @@ public class Motion {
 		switch(type) {
 		case JUMP_LEFT:
 		case THROW_LEFT:
+		case CLOUD_LEFT:
 			return -1;
 		case FLY_LEFT:
 			return stage != 0 ? -1 : 0;
 		case JUMP_RIGHT:
 		case THROW_RIGHT:
+		case CLOUD_RIGHT:
 			return 1;
 		case FLY_RIGHT:
 			return stage != 0 ? 1 : 0;

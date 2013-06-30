@@ -388,6 +388,9 @@ public class LevelModel {
 				motionType = stayCheck(controlType);
 			}
 			break;
+		case CLOUD:
+			motionType = MotionType.CLOUD_IDLE;
+			break;
 		default:
 			motionType = stayCheck(controlType);
 			break;	
@@ -577,6 +580,47 @@ public class LevelModel {
 				motionType = platformsCheck(controlType);
 			}
 			break;
+		case CLOUD_IDLE:
+			switch(controlType) {
+			case LEFT:
+				if(motionAvaible(MotionType.CLOUD_LEFT)) {
+					motionType = MotionType.CLOUD_LEFT;
+				} else {
+					motionType = moveLeft();
+				}
+				break;
+			case RIGHT:
+				if(motionAvaible(MotionType.CLOUD_RIGHT)) {
+					motionType = MotionType.CLOUD_RIGHT;
+				} else {
+					motionType = moveRight();
+				}
+				break;
+			case UP:
+				if(motionAvaible(MotionType.CLOUD_UP)) {
+					motionType = MotionType.CLOUD_UP;
+				} else {
+					motionType = MotionType.CLOUD_IDLE;
+				}
+				break;
+			case DOWN:
+				if(motionAvaible(MotionType.CLOUD_DOWN)) {
+					motionType = MotionType.CLOUD_DOWN;
+				} else {
+					motionType = MotionType.CLOUD_IDLE;
+				}
+				break;
+			default:
+				motionType = MotionType.CLOUD_IDLE;
+				break;
+			}
+			break;
+		case CLOUD_LEFT:
+		case CLOUD_RIGHT:
+		case CLOUD_UP:
+		case CLOUD_DOWN:
+			motionType = MotionType.CLOUD_IDLE;
+			break;
 		default:
 			motionType = platformsCheck(controlType);
 			break;
@@ -695,6 +739,24 @@ public class LevelModel {
 		case MAGNET:
 			if(getHeroCell().getRoof().getType() == PlatformType.ELECTRO) return true;
 			return false;	
+		case CLOUD_LEFT:
+			if(hero.getX() - 1 < 0) return false;
+			if(getHeroCell().left_wall.getType() != PlatformType.NONE) {
+				return false;
+			}
+			if(getCell(hero.getX() - 1, hero.getY()).floor.getType() != PlatformType.NONE) {
+				return false;
+			}
+			return true;
+		case CLOUD_RIGHT:
+			if(hero.getX() + 1 > cols - 1) return false;
+			if(getHeroCell().right_wall.getType() != PlatformType.NONE) {
+				return false;
+			}
+			if(getCell(hero.getX() + 1, hero.getY()).floor.getType() != PlatformType.NONE) {
+				return false;
+			}
+			return true;
 		default:
 			return false;
 		}

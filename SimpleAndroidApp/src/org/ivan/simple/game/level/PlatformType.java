@@ -37,6 +37,7 @@ public enum PlatformType {
 	TRANSPARENT,
 	TRANSPARENT_V,
 	WAY_UP_DOWN,
+	CLOUD,
 	
 	NONE;
 	
@@ -85,6 +86,7 @@ public enum PlatformType {
 		case 24: return horizontal ? TRANSPARENT : TRANSPARENT_V;
 		case 25: return WAY_UP_DOWN;
 		case 26: return INVISIBLE;
+		case 27: return CLOUD;
 		default:
 			return NONE;
 		}

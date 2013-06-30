@@ -454,8 +454,16 @@ public class Hero {
 //				activeSprite.changeSet(35);
 			}
 			break;
+		case CLOUD_IDLE:
+			activeSprite = sprites.getSprite("glue");
+			break;
+		case CLOUD_LEFT:
+		case CLOUD_RIGHT:
+		case CLOUD_UP:
+		case CLOUD_DOWN:
 		default:
-			activeSprite.changeSet(0);
+			activeSprite = sprites.getSprite("glue");
+//			activeSprite.changeSet(0);
 			break;
 		}
 	}
