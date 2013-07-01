@@ -112,6 +112,8 @@ public class Motion {
 		if(type == MotionType.JUMP && stage != 0) return -1;
 		if(type == MotionType.FALL) return 1;
 		if(type == MotionType.FALL_BLANSH) return 1;
+		if(type == MotionType.CLOUD_UP) return -1;
+		if(type == MotionType.CLOUD_DOWN) return 1;
 		return 0;
 	}
 	

@@ -145,6 +145,14 @@ public class Platform {
 	public void changeSet(Motion motion, Motion prevMotion) {
 		MotionType mt = motion.getType();
 		MotionType prevMt = prevMotion.getType();
+		// CLOUD
+		if(type == PlatformType.NONE) {
+			if(!mt.isCLOUD() && prevMt.isCLOUD()) {
+				type = PlatformType.CLOUD;
+				sprite = new Sprite("platform_h/cloud.png", 1, 1);
+			}
+			return;
+		}
 		if(sprite == null || 
 				mt == MotionType.MAGNET || 
 				mt == MotionType.BEAT_ROOF || 
@@ -265,19 +273,12 @@ public class Platform {
 			return;
 		}
 		// CLOUD
-		if(type == PlatformType.NONE) {
-			switch(mt) {
-			case CLOUD_IDLE:
-			case CLOUD_LEFT:
-			case CLOUD_RIGHT:
-			case CLOUD_UP:
-			case CLOUD_DOWN:
+		if(type == PlatformType.CLOUD) {
+			if(mt.isCLOUD()) {
 				type = PlatformType.NONE;
 				sprite = null;
-				break;
-			default:
-				break;
 			}
+			return;
 		}
 	}
 	

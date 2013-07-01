@@ -40,4 +40,16 @@ public enum MotionType {
 	CLOUD_DOWN,
 	NONE;
 	
+	public boolean isCLOUD() {
+		switch (this) {
+		case CLOUD_IDLE:
+		case CLOUD_LEFT:
+		case CLOUD_RIGHT:
+		case CLOUD_UP:
+		case CLOUD_DOWN:
+			return true;
+		default:
+			return false;
+		}
+	}
 }

@@ -88,7 +88,7 @@ public class LevelModel {
 		int[][] routeArray = storage.getRouteArray(lev);
 		MonsterStrategy route = RouteDirectionStrategyFactory.createRouteDirectionStrategy(routeArray);
 				
-		if(lev > 2) {
+		if(lev > 3) {
 			monster = new MonsterModel(routeArray[0][1], routeArray[0][0], route, 1);
 		} else {
 			monster = null;
@@ -581,6 +581,10 @@ public class LevelModel {
 			}
 			break;
 		case CLOUD_IDLE:
+		case CLOUD_LEFT:
+		case CLOUD_RIGHT:
+		case CLOUD_UP:
+		case CLOUD_DOWN:
 			switch(controlType) {
 			case LEFT:
 				if(motionAvaible(MotionType.CLOUD_LEFT)) {
@@ -614,12 +618,6 @@ public class LevelModel {
 				motionType = MotionType.CLOUD_IDLE;
 				break;
 			}
-			break;
-		case CLOUD_LEFT:
-		case CLOUD_RIGHT:
-		case CLOUD_UP:
-		case CLOUD_DOWN:
-			motionType = MotionType.CLOUD_IDLE;
 			break;
 		default:
 			motionType = platformsCheck(controlType);
@@ -744,7 +742,7 @@ public class LevelModel {
 			if(getHeroCell().left_wall.getType() != PlatformType.NONE) {
 				return false;
 			}
-			if(getCell(hero.getX() - 1, hero.getY()).floor.getType() != PlatformType.NONE) {
+			if(getCell(hero.getY(), hero.getX() - 1).floor.getType() != PlatformType.NONE) {
 				return false;
 			}
 			return true;
@@ -753,7 +751,19 @@ public class LevelModel {
 			if(getHeroCell().right_wall.getType() != PlatformType.NONE) {
 				return false;
 			}
-			if(getCell(hero.getX() + 1, hero.getY()).floor.getType() != PlatformType.NONE) {
+			if(getCell(hero.getY(), hero.getX() + 1).floor.getType() != PlatformType.NONE) {
+				return false;
+			}
+			return true;
+		case CLOUD_UP:
+			if(hero.getY() - 1 < 0) return false;
+			if(getHeroCell().roof.getType() != PlatformType.NONE) {
+				return false;
+			}
+			return true;
+		case CLOUD_DOWN:
+			if(hero.getY() + 1 > rows - 1) return false;
+			if(getCell(hero.getY() + 1, hero.getX()).floor.getType() != PlatformType.NONE) {
 				return false;
 			}
 			return true;

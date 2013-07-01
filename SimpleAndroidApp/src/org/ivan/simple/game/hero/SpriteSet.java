@@ -67,6 +67,7 @@ public class SpriteSet {
 		set.putSprite("slickleft", "panda/panda_sprite8_slickleft.png", 1, 8);
 		set.putSprite("startslickright", "panda/panda_sprite8_startslickright.png", 1, 8);
 		set.putSprite("slickright", "panda/panda_sprite8_slickright.png", 1, 8);
+		set.putSprite("cloud", "panda/panda_sprite8_cloud.png", 1, 8);
 		
 		set.putTPSprite("flyleft_tp", "panda/panda_sprite8_flyleft.png", 1, 8, true);
 		set.putTPSprite("flyright_tp", "panda/panda_sprite8_flyright.png", 1, 8, false);
