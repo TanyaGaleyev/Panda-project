@@ -647,7 +647,7 @@ public class LevelModel {
 				// TODO careful with roof (of underlying cell)
 				winCell.createFloor(PlatformType.WIN);
 			}
-			if(getHeroCell() == winCell && !skipWinPlatform(hero.finishingMotion)) {
+			if(getHeroCell() == winCell && !skipWinPlatform(hero.finishingMotion, hero.currentMotion)) {
 				complete = true;
 			}
 		}
@@ -849,17 +849,22 @@ public class LevelModel {
 		return cols;
 	}
 	
-	public boolean skipWinPlatform(Motion motion) {
-		switch(motion.getType()) {
+	public boolean skipWinPlatform(Motion finishingMotion,
+                                   Motion currentMotion) {
+		switch(finishingMotion.getType()) {
 		case FLY_LEFT:
 		case FLY_RIGHT:
-			return !motion.isFinishing();
+			if(!finishingMotion.isFinishing()) return true;
+            if(currentMotion.getType() == MotionType.STICK_LEFT) return true;
+            if(currentMotion.getType() == MotionType.STICK_RIGHT) return true;
+            return false;
 		case THROW_LEFT:
 		case THROW_RIGHT:
-			return motion.getStage() == 1;
+			return finishingMotion.getStage() == 1;
 		case STICK_LEFT:
 		case STICK_RIGHT:
-			return true;
+            if(finishingMotion.getType() == currentMotion.getType()) return true;
+			return false;
 		default:
 			return false;
 		}

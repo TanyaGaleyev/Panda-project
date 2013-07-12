@@ -22,13 +22,13 @@
                 android:value="org.ivan.simple.LevelChooseActivity" />
         </activity>
         
-        <activity
-            android:name=".SecondActivity"
-            android:label="@string/title_activity_second" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.ivan.simple.StartActivity" />
-        </activity>
+        <!--<activity-->
+            <!--android:name=".SecondActivity"-->
+            <!--android:label="@string/title_activity_second" >-->
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value="org.ivan.simple.StartActivity" />-->
+        <!--</activity>-->
         
         <activity
             android:name=".StartActivity"

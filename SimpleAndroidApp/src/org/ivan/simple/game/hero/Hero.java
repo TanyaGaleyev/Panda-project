@@ -75,7 +75,7 @@ public class Hero {
 	 * Change hero behavior (animation) depending on motion type.
 	 * Used after new motion type is obtained. 
 	 * Goal is to play start/end animations of motions.
-	 * @param newMotion
+	 * @param prevCell
 	 */
 	public void finishPrevMotion(LevelCell prevCell) {
 		this.prevCell = prevCell;

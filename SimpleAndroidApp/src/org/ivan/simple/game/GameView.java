@@ -174,7 +174,7 @@ public class GameView extends SurfaceView {
 		drawScore(canvas);
 		if(level.model.isLost()) {
 			drawLose(canvas);
-		} else if(level.model.isComplete()) {
+		} else if(isReadyToPlayWinAnimation()) {
 			drawWin(canvas);
 		}
 	}
@@ -228,7 +228,7 @@ public class GameView extends SurfaceView {
 	protected boolean readyForUpdate() {
 		// if the level is complete or lost the game should be not updatable on this level 
 		if(level.model.isLost()) return false;
-		if(level.model.isComplete()) return false;
+		if(isReadyToPlayWinAnimation()) return false;
 		
 		boolean inControlState = hero.isInControlState();
 		/*
@@ -306,7 +306,7 @@ public class GameView extends SurfaceView {
 	protected void updateHeroScreenPosition() {
 		if(level.model.isLost()) {
 			finished = !moveLose();
-		} else if(level.model.isComplete()) {
+		} else if(isReadyToPlayWinAnimation()) {
 			finished = !hero.playWinAnimation();
 		} else {
 			if(hero.getRealMotion().getType() == MotionType.TP_LEFT || 
@@ -354,6 +354,10 @@ public class GameView extends SurfaceView {
 	public boolean isComplete() {
 		return level.model.isComplete();
 	}
+
+    private boolean isReadyToPlayWinAnimation() {
+        return isComplete() && !hero.isFinishing();
+    }
 	
 	public int getScore() {
 		return level.model.getScore();
