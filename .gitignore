@@ -19,6 +19,7 @@ local.properties
 
 # eclipse workspace meta
 .metadata/
+.settings/
 
 # idea meta
 .gradle/
