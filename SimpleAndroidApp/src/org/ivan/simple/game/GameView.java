@@ -51,6 +51,7 @@ public class GameView extends SurfaceView {
 	private int levId = 0;
 	
 	protected boolean finished = false;
+    private boolean monsterLose = false;
 	
 	public GameView(Context context) {
 		super(context);
@@ -329,27 +330,31 @@ public class GameView extends SurfaceView {
 	 */
 	private boolean moveLose() {
 		if((-GRID_STEP < hero.x && hero.x < getWidth() + GRID_STEP) && (-GRID_STEP < hero.y && hero.y < getHeight() + GRID_STEP)) {
-			if(hero.getRealMotion().getType() == MotionType.FALL) {
+			if(hero.getRealMotion().getType() == MotionType.FALL && !monsterLose) {
 				hero.y += ANIMATION_JUMP_SPEED;
-				return true;
-			}
-			hero.playLoseAnimation();
-			double rand = Math.random();
-			if(rand < 0.33) {
-				hero.x += JUMP_SPEED;
-			} else if(rand < 0.66) {
-				hero.x -= JUMP_SPEED;
-			}
-			rand = Math.random();
-			if(rand < 0.33) {
-				hero.y += JUMP_SPEED;
-			} else if(rand < 0.66) {
-				hero.y -= JUMP_SPEED;
-			}
-			return true;
+			} else {
+                hero.playLoseAnimation();
+                moveLoseRandom();
+            }
+            return true;
 		}
 		return false;
 	}
+
+    private void moveLoseRandom() {
+        double rand = Math.random();
+        if(rand < 0.33) {
+            hero.x += JUMP_SPEED;
+        } else if(rand < 0.66) {
+            hero.x -= JUMP_SPEED;
+        }
+        rand = Math.random();
+        if(rand < 0.33) {
+            hero.y += JUMP_SPEED;
+        } else if(rand < 0.66) {
+            hero.y -= JUMP_SPEED;
+        }
+    }
 	
 	public boolean isComplete() {
 		return level.model.isComplete();
@@ -406,7 +411,15 @@ public class GameView extends SurfaceView {
 	}
 	
 	public void checkMonsterColision() {
-		level.model.checkMonsterColision();
+        if(monster == null) return;
+        Rect heroRect = new Rect(hero.x, hero.y, hero.x + GRID_STEP, hero.y + GRID_STEP);
+        Rect monsterRect = new Rect(
+                monster.xCoordinate, monster.yCoordinate,
+                monster.xCoordinate + GRID_STEP, monster.yCoordinate + GRID_STEP);
+        if(heroRect.intersect(monsterRect)) {
+            level.model.setLost(true);
+            monsterLose = true;
+        }
 	}
 
 }

@@ -783,6 +783,10 @@ public class LevelModel {
 	public boolean isLost() {
 		return lose;
 	}
+
+    public void setLost(boolean lost) {
+        this.lose = lost;
+    }
 	
 	public boolean tryToUnlock() {
 		if(unlockList.isEmpty()) return true;
@@ -830,7 +834,7 @@ public class LevelModel {
 		}
 	}
 	
-	public void checkMonsterColision() {
+	private void checkMonsterColision() {
 		if(monster == null) return;
 		if(monster.getRow() == hero.getY() && monster.getCol() == hero.getX()) {
 			lose = true;

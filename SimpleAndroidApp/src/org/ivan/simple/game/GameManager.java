@@ -61,7 +61,9 @@ public class GameManager extends Thread {
 			view.checkMonsterColision();
 			doDraw(true);
 			if(view.finished) {
-				((GameActivity) view.getContext()).switchBackToChooseActivity(view.isComplete(), view.getScore());
+				((GameActivity) view.getContext()).switchBackToChooseActivity(
+                        view.isComplete(),
+                        view.getScore());
 			}
 
 			// calculate sleep time to reach needed fps
