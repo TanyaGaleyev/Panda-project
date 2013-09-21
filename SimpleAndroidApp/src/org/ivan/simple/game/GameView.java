@@ -1,15 +1,13 @@
 package org.ivan.simple.game;
 
 import org.ivan.simple.ImageProvider;
-import org.ivan.simple.R;
-import org.ivan.simple.StartActivity;
 import org.ivan.simple.UserControlType;
 import org.ivan.simple.game.hero.Hero;
 import org.ivan.simple.game.level.LevelCell;
 import org.ivan.simple.game.level.LevelView;
 import org.ivan.simple.game.monster.Monster;
-import org.ivan.simple.game.monster.MonsterDirection;
 import org.ivan.simple.game.monster.MonsterFactory;
+import org.ivan.simple.game.motion.MotionType;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -33,7 +31,7 @@ public class GameView extends SurfaceView {
 	private static int RIGHT_BOUND;
 	private static int TOP_BOUND;
 	private static int BOTTOM_BOUND;
-	
+
 	private Hero hero;
 	private Monster monster;
 	private LevelView level;
@@ -42,18 +40,16 @@ public class GameView extends SurfaceView {
 	
 	private String backgroundId;
 	private Bitmap background;
-	private Bitmap pause;
-	private Bitmap restart;
-	private Bitmap back;
-	
+
 	private LevelCell prevCell;
 	
 	private int levId = 0;
 	
 	protected boolean finished = false;
     private boolean monsterLose = false;
-	
-	public GameView(Context context) {
+    ServiceButtons serviceButtons;
+
+    public GameView(Context context) {
 		super(context);
 		init();
 	}
@@ -123,10 +119,8 @@ public class GameView extends SurfaceView {
 				getWidth(),
 				getHeight(),
 				false);
-		pause = ImageProvider.getBitmap("menu/pause.png");
-		restart = ImageProvider.getBitmap("menu/restart.png");
-		back = ImageProvider.getBitmap("menu/back.png");
-		//GRID_STEP = 112;//88dp,48dp
+        serviceButtons = new ServiceButtons(10, 50);
+        //GRID_STEP = 112;//88dp,48dp
 		System.out.println("GRID_STEP = " + GRID_STEP);
 		TOP_BOUND = GRID_STEP;
 		// TODO check this bound carefully!
@@ -164,9 +158,7 @@ public class GameView extends SurfaceView {
 	protected void onDraw(Canvas canvas, boolean update) {
 		canvas.drawColor(0xffC6E10E);
 		canvas.drawBitmap(background, 0, 0, null);
-		canvas.drawBitmap(pause, 10, 50, null);
-		canvas.drawBitmap(restart, 10, 90, null);
-		canvas.drawBitmap(back, 10, 130, null);
+		serviceButtons.draw(canvas);
 		level.onDraw(canvas, update);
 		hero.onDraw(canvas, update);
 		monster.onDraw(canvas, update);
@@ -310,7 +302,7 @@ public class GameView extends SurfaceView {
 		} else if(isReadyToPlayWinAnimation()) {
 			finished = !hero.playWinAnimation();
 		} else {
-			if(hero.getRealMotion().getType() == MotionType.TP_LEFT || 
+			if(hero.getRealMotion().getType() == MotionType.TP_LEFT ||
 					hero.getRealMotion().getType() == MotionType.TP_RIGHT ||
 					hero.getRealMotion().getType() == MotionType.TP) {
 				hero.x = LEFT_BOUND + level.model.hero.getX() * GRID_STEP;
@@ -372,7 +364,7 @@ public class GameView extends SurfaceView {
 		this.levId = levId;
 		this.backgroundId = getBackgroundId(levId);
 	}
-	
+
 	private String getBackgroundId(int levId) {
 		switch(levId) {
 		case 1: return "background/background_l_1.jpg";

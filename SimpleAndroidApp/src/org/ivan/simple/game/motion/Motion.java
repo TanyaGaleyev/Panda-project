@@ -1,4 +1,4 @@
-package org.ivan.simple.game;
+package org.ivan.simple.game.motion;
 
 public class Motion {
 	private final MotionType type;

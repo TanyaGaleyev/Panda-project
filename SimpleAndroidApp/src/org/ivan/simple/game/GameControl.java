@@ -4,13 +4,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.ivan.simple.PandaApplication;
-import org.ivan.simple.R;
 import org.ivan.simple.UserControlType;
 import org.ivan.simple.game.level.LevelModel;
+import org.ivan.simple.game.sound.SoundManager;
 
-import android.content.Context;
-import android.media.AudioManager;
-import android.media.SoundPool;
 import android.view.MotionEvent;
 
 public class GameControl {
@@ -219,28 +216,29 @@ public class GameControl {
 			}
 		}
 	}
-	
+
 	protected boolean processServiceButton(MotionEvent event) {
-		if(event.getX() >= 0 && event.getX() < 40 && event.getAction() == MotionEvent.ACTION_DOWN) {
-			float y = event.getY();
-			if(y >= 50 && y < 80) {
-				if(isRunning()) {
-					stopManager();
-				} else {
-					startManager();
-				}
-				return true;
-			} else if(y >= 90 && y < 120) {
-				stopManager();
-				view.initSurface();
-//				((GameActivity) view.getContext()).restart();
-				startManager();
-				return true;
-			} else if(y >= 130 && y < 160) {
-				((GameActivity) view.getContext()).switchBackToChooseActivity(view.isComplete(), view.getScore());
-				return true;
-			}
-		}
+        ServiceButtons.Controls serviceAction;
+        if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            serviceAction = view.serviceButtons.getServiceAction(event);
+            switch (serviceAction) {
+                case PAUSE_RESUME:
+                    if(isRunning()) {
+                        stopManager();
+                    } else {
+                        startManager();
+                    }
+                    return true;
+                case RESTART:
+                    stopManager();
+                    view.initSurface();
+                    startManager();
+                    return true;
+                case BACK:
+                    ((GameActivity) view.getContext()).switchBackToChooseActivity(view.isComplete(), view.getScore());
+                    return true;
+            }
+        }
 		return false;
 	}
 	
@@ -264,10 +262,10 @@ public class GameControl {
         gameLoopThread.setRunning(false);
         while (retry) {
            try {
-                 gameLoopThread.join();
-                 retry = false;
+               gameLoopThread.join();
+               retry = false;
            } catch (InterruptedException e) {
-        	   
+               System.out.println("Interrupted exception: " + e);
            }
         }
 	}

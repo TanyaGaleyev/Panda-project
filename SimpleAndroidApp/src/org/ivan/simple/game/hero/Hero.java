@@ -1,9 +1,7 @@
 package org.ivan.simple.game.hero;
 
-import org.ivan.simple.ImageProvider;
-import org.ivan.simple.R;
-import org.ivan.simple.game.Motion;
-import org.ivan.simple.game.MotionType;
+import org.ivan.simple.game.motion.Motion;
+import org.ivan.simple.game.motion.MotionType;
 import org.ivan.simple.game.level.LevelCell;
 import org.ivan.simple.game.level.PlatformType;
 
@@ -19,7 +17,7 @@ public class Hero {
 	private LevelCell prevCell;
 	private Sprite activeSprite;
 	private TPSprite tpSprite;
-	private SpriteSet sprites = new SpriteSet();
+	private SpriteSet sprites;
 	public int x;
 	public int y;
 	private int prevX;
@@ -196,6 +194,8 @@ public class Hero {
 					prevMt == MotionType.TP_LEFT) {
 				activeSprite = sprites.getSprite("stepleft");
 //				activeSprite.changeSet(2);
+            } else if(prevMt.isCLOUD()) {
+                activeSprite = sprites.getSprite("cloud_out_left");
 			} else {
 				activeSprite = sprites.getSprite("stepleft");
 //				activeSprite.changeSet(3);
@@ -216,6 +216,8 @@ public class Hero {
 					prevMt == MotionType.TP_RIGHT) {
 				activeSprite = sprites.getSprite("stepright");
 //				activeSprite.changeSet(0);
+            } else if(prevMt.isCLOUD()) {
+                activeSprite = sprites.getSprite("cloud_out_right");
 			} else {
 				activeSprite = sprites.getSprite("stepright");
 //				activeSprite.changeSet(1);
@@ -458,7 +460,11 @@ public class Hero {
 			activeSprite = sprites.getSprite("cloud");
 			break;
 		case CLOUD_LEFT:
+            activeSprite = sprites.getSprite("cloud_left");
+            break;
 		case CLOUD_RIGHT:
+            activeSprite = sprites.getSprite("cloud_right");
+            break;
 		case CLOUD_UP:
 		case CLOUD_DOWN:
 			activeSprite = sprites.getSprite("cloud");

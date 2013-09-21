@@ -1,4 +1,7 @@
-package org.ivan.simple.game;
+package org.ivan.simple.game.motion;
+
+import org.ivan.simple.game.motion.Motion;
+import org.ivan.simple.game.motion.MotionType;
 
 public class ContainerMotion extends Motion {
 	private final Motion childMotion;

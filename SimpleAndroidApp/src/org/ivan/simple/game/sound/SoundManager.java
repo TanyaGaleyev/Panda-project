@@ -1,6 +1,8 @@
-package org.ivan.simple.game;
+package org.ivan.simple.game.sound;
 
 import org.ivan.simple.R;
+import org.ivan.simple.game.motion.Motion;
+import org.ivan.simple.game.motion.MotionType;
 
 import android.content.Context;
 import android.media.AudioManager;
@@ -22,7 +24,7 @@ public class SoundManager {
 		audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 	}
 	
-	protected void playSound(Motion motion, Motion prevMotion) {
+	public void playSound(Motion motion, Motion prevMotion) {
 		MotionType mt = motion.getType();
 		MotionType prevMt = prevMotion.getType();
 		float actualVolume = (float) audioManager

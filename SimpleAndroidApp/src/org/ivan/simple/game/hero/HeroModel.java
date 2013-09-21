@@ -1,7 +1,7 @@
 package org.ivan.simple.game.hero;
 
-import org.ivan.simple.game.Motion;
-import org.ivan.simple.game.MotionType;
+import org.ivan.simple.game.motion.Motion;
+import org.ivan.simple.game.motion.MotionType;
 
 public class HeroModel {
 	private int x;

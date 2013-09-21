@@ -1,9 +1,10 @@
-package org.ivan.simple;
+package org.ivan.simple.game.sound;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.os.AsyncTask;
-import android.widget.Toast;
+
+import org.ivan.simple.PandaApplication;
+import org.ivan.simple.R;
 
 public class MusicManager {
 	

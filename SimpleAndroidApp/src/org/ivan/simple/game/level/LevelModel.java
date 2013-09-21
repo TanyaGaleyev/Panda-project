@@ -6,16 +6,13 @@ import java.util.Iterator;
 import java.util.TreeMap;
 
 import org.ivan.simple.UserControlType;
-import org.ivan.simple.game.ContainerMotion;
-import org.ivan.simple.game.Motion;
-import org.ivan.simple.game.MotionType;
+import org.ivan.simple.game.motion.ContainerMotion;
+import org.ivan.simple.game.motion.Motion;
+import org.ivan.simple.game.motion.MotionType;
 import org.ivan.simple.game.hero.HeroModel;
 import org.ivan.simple.game.monster.MonsterDirection;
 import org.ivan.simple.game.monster.MonsterModel;
 import org.ivan.simple.game.monster.strategies.MonsterStrategy;
-import org.ivan.simple.game.monster.strategies.RandomDirection;
-import org.ivan.simple.game.monster.strategies.RandomContiniousDirection;
-import org.ivan.simple.game.monster.strategies.LinearRouteStrategy;
 import org.ivan.simple.game.monster.strategies.RouteDirectionStrategyFactory;
 
 public class LevelModel {

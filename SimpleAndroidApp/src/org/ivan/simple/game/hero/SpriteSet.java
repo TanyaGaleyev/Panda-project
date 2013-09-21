@@ -7,7 +7,10 @@ import org.ivan.simple.R;
 
 
 public class SpriteSet {
-	public HashMap<String, Sprite> sprites = new HashMap<String, Sprite>();
+    private SpriteSet() {
+    }
+
+    public HashMap<String, Sprite> sprites = new HashMap<String, Sprite>();
 	
 	public void putSprite(String name, Sprite sprite) {
 		sprites.put(name, sprite);
@@ -68,6 +71,13 @@ public class SpriteSet {
 		set.putSprite("startslickright", "panda/panda_sprite8_startslickright.png", 1, 8);
 		set.putSprite("slickright", "panda/panda_sprite8_slickright.png", 1, 8);
 		set.putSprite("cloud", "panda/panda_sprite8_cloud.png", 1, 8);
+        set.putSprite("cloud_left", "panda/panda_sprite8_ufo_left.png", 1, 8);
+        set.putSprite("cloud_right", "panda/panda_sprite8_ufo_right.png", 1, 8);
+        set.putSprite("cloud_in_left", "panda/panda_sprite8_jump_in_ufo_left.png", 1, 8);
+        set.putSprite("cloud_in_right", "panda/panda_sprite8_jump_in_ufo_right.png", 1, 8);
+        set.putSprite("cloud_out_left", "panda/panda_sprite8_jump_out_ufo_left.png", 1, 8);
+        set.putSprite("cloud_out_right", "panda/panda_sprite8_jump_out_ufo_right.png", 1, 8);
+
 		
 		set.putTPSprite("flyleft_tp", "panda/panda_sprite8_flyleft.png", 1, 8, true);
 		set.putTPSprite("flyright_tp", "panda/panda_sprite8_flyright.png", 1, 8, false);

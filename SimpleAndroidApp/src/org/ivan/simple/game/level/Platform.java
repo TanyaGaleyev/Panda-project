@@ -1,9 +1,7 @@
 package org.ivan.simple.game.level;
 
-import org.ivan.simple.ImageProvider;
-import org.ivan.simple.R;
-import org.ivan.simple.game.Motion;
-import org.ivan.simple.game.MotionType;
+import org.ivan.simple.game.motion.Motion;
+import org.ivan.simple.game.motion.MotionType;
 import org.ivan.simple.game.hero.Sprite;
 
 import android.graphics.Canvas;

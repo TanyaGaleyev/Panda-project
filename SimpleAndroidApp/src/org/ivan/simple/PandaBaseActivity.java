@@ -7,12 +7,12 @@ public abstract class PandaBaseActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		((PandaApplication) getApplication()).getMusicManger().resumeMusic();
+		PandaApplication.getPandaApplication().getMusicManger().resumeMusic();
 	}
 	
 	protected void onPause() {
 		super.onPause();
-		((PandaApplication) getApplication()).getMusicManger().pauseMusic();
+        PandaApplication.getPandaApplication().getMusicManger().pauseMusic();
 	}
 	
 }

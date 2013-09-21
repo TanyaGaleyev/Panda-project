@@ -2,8 +2,10 @@ package org.ivan.simple;
 
 import android.app.Application;
 
+import org.ivan.simple.game.sound.MusicManager;
+
 public class PandaApplication extends Application {
-	private MusicManager mm = null;
+	private MusicManager mm;
 	
 	private boolean sound = true;
 	
@@ -17,12 +19,10 @@ public class PandaApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		instance = this;
+        mm = new MusicManager(this);
 	}
 	
 	public MusicManager getMusicManger() {
-		if(mm == null) {
-			mm = new MusicManager(this);
-		}
 		return mm;
 	}
 
