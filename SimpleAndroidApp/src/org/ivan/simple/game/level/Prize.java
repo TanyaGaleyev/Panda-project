@@ -9,7 +9,7 @@ import android.graphics.Canvas;
 public class Prize {
 	private Sprite sprite; 
 	public Prize() {
-		sprite = new Sprite("prize/star.png", 1, 25);
+		sprite = new Sprite("prize/star.png", 1, 14);
 		sprite.setAnimating(true);
 	}
 	

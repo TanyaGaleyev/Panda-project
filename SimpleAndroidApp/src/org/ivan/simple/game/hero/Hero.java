@@ -457,7 +457,11 @@ public class Hero {
 			}
 			break;
 		case CLOUD_IDLE:
-			activeSprite = sprites.getSprite("cloud");
+            if(prevMt.isCLOUD()) {
+			    activeSprite = sprites.getSprite("cloud");
+            } else {
+                activeSprite = sprites.getSprite("cloud_prepare");
+            }
 			break;
 		case CLOUD_LEFT:
             activeSprite = sprites.getSprite("cloud_left");
