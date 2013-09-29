@@ -321,16 +321,17 @@ public class GameView extends SurfaceView {
 	 * @return
 	 */
 	private boolean moveLose() {
-		if((-GRID_STEP < hero.x && hero.x < getWidth() + GRID_STEP) && (-GRID_STEP < hero.y && hero.y < getHeight() + GRID_STEP)) {
-			if(hero.getRealMotion().getType() == MotionType.FALL && !monsterLose) {
-				hero.y += ANIMATION_JUMP_SPEED;
-			} else {
-                hero.playLoseAnimation();
-                moveLoseRandom();
-            }
-            return true;
-		}
-		return false;
+//		if((-GRID_STEP < hero.x && hero.x < getWidth() + GRID_STEP) && (-GRID_STEP < hero.y && hero.y < getHeight() + GRID_STEP)) {
+//			if(hero.getRealMotion().getType() == MotionType.FALL && !monsterLose) {
+//				hero.y += ANIMATION_JUMP_SPEED;
+//			} else {
+//                hero.playLoseAnimation();
+//                moveLoseRandom();
+//            }
+//            return true;
+//		}
+//        return false;
+        return hero.playLoseAnimation();
 	}
 
     private void moveLoseRandom() {

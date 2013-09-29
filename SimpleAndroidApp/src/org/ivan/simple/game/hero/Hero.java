@@ -529,8 +529,14 @@ public class Hero {
 	/**
 	 * Play loose animation
 	 */
-	public void playLoseAnimation() {
-		activeSprite = sprites.getSprite("fall");
+	public boolean playLoseAnimation() {
+//		activeSprite = sprites.getSprite("fall");
+        activeSprite = sprites.getSprite("detonate");
+        activeSprite.setPlayOnce(true);
+        if(!activeSprite.isAnimatingOrDelayed()) {
+            return false;
+        }
+        return true;
 	}
 	
 	/**

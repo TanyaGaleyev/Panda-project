@@ -55,7 +55,6 @@ public class StartActivityNew extends PandaBaseActivity {
             String pandaAnimationFolder = "animations/menu/panda";
             String[] frameNames = getAssets().list(pandaAnimationFolder);
             for(String frameName : frameNames) {
-                System.out.println(frameName);
                 pandaAnimation.addFrame(
                         Drawable.createFromStream(
                                 getAssets().open(pandaAnimationFolder + File.separator +  frameName),
@@ -64,13 +63,13 @@ public class StartActivityNew extends PandaBaseActivity {
             }
             pandaAnimation.setOneShot(false);
             panda.setBackgroundDrawable(pandaAnimation);
-//            panda.setBackgroundDrawable(getResources().getDrawable(R.drawable.achievement));
             panda.post(new Runnable() {
                 @Override
                 public void run() {
                     pandaAnimation.start();
                 }
             });
+//            panda.setBackgroundDrawable(getResources().getDrawable(R.drawable.achievement));
         } catch (IOException e) {
             e.printStackTrace();
         }
