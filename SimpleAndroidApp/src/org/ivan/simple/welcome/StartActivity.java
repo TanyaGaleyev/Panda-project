@@ -1,8 +1,11 @@
-package org.ivan.simple;
+package org.ivan.simple.welcome;
 
 import java.util.ArrayList;
 
+import org.ivan.simple.ImageProvider;
+import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
+import org.ivan.simple.choose.LevelChooseActivity;
 
 import android.content.Intent;
 import android.os.Bundle;

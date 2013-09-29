@@ -1,7 +1,10 @@
-package org.ivan.simple;
+package org.ivan.simple.choose;
 
 import java.util.StringTokenizer;
 
+import org.ivan.simple.ImageProvider;
+import org.ivan.simple.PandaApplication;
+import org.ivan.simple.UserControlType;
 import org.ivan.simple.game.GameActivity;
 import org.ivan.simple.game.level.LevelStorage;
 

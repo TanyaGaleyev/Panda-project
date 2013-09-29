@@ -430,7 +430,10 @@ public class Platform {
 	}
 	
 	public void unlock() {
-		sprite = null;
+//		sprite = null;
+        sprite.changeSet(1);
+        sprite.goToFrame(1);
+        sprite.playOnce();
 		type = PlatformType.NONE;
 	}
 	

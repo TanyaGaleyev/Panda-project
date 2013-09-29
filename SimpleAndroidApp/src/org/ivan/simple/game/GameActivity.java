@@ -1,6 +1,6 @@
 package org.ivan.simple.game;
 
-import org.ivan.simple.LevelChooseActivity;
+import org.ivan.simple.choose.LevelChooseActivity;
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
 

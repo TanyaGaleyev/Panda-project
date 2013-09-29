@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:background="#0000ff">
     
-    <org.ivan.simple.LevelChooseView
+    <org.ivan.simple.choose.LevelChooseView
         android:id="@+id/choose"
         android:layout_width="968dp"
         android:layout_height="528dp"

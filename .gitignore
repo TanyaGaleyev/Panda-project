@@ -24,3 +24,6 @@ local.properties
 # idea meta
 .gradle/
 .idea/
+
+# other
+*.db

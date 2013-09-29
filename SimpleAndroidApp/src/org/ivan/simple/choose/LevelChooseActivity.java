@@ -1,10 +1,14 @@
-package org.ivan.simple;
+package org.ivan.simple.choose;
 
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Window;
+
+import org.ivan.simple.PandaBaseActivity;
+import org.ivan.simple.R;
+import org.ivan.simple.welcome.StartActivity;
 
 public class LevelChooseActivity extends PandaBaseActivity {
 	public static final String LEVEL_ID = "levId";
