@@ -9,7 +9,8 @@ public class PandaApplication extends Application {
 	
 	private boolean sound = true;
 	
-	private static PandaApplication instance;
+	// TODO get rid of singletons
+    private static PandaApplication instance;
 	
 	public static PandaApplication getPandaApplication() {
 		return instance;
@@ -19,6 +20,8 @@ public class PandaApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		instance = this;
+
+        ImageProvider.init(getApplicationContext());
         mm = new MusicManager(this);
 	}
 	

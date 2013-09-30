@@ -44,7 +44,7 @@ public class StartActivity extends PandaBaseActivity {
         // hide screen title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_start);
-        ImageProvider.init(getApplicationContext());
+//        ImageProvider.init(getApplicationContext());
         DisplayMetrics display = getApplicationContext().getResources().getDisplayMetrics();
         final float scale = display.density;
         
