@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import org.ivan.simple.PandaApplication;
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
 
@@ -27,6 +28,7 @@ public class StartActivityNew extends PandaBaseActivity {
     private ImageView startSettings;
     private ImageView panda;
     private RelativeLayout contentPanel;
+    private AnimationDrawable pandaAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +36,9 @@ public class StartActivityNew extends PandaBaseActivity {
         setContentView(R.layout.activity_startnew);
         contentPanel = (RelativeLayout) findViewById(R.id.activity_startnew);
 
-
-        regular = Typeface.createFromAsset(getAssets(), "fonts/segoepr.ttf");
-        bold = Typeface.createFromAsset(getAssets(), "fonts/segoeprb.ttf");
+        achievement = (ImageView) findViewById(R.id.achievement);
+        regular = PandaApplication.getPandaApplication().getFontProvider().regular();
+        bold = PandaApplication.getPandaApplication().getFontProvider().bold();
 
         achievement = (ImageView) findViewById(R.id.achievement);
         startSettings = (ImageView) findViewById(R.id.start_settings);
@@ -50,14 +52,20 @@ public class StartActivityNew extends PandaBaseActivity {
         layoutParams.setMargins(left, top, 0 , 0);
         panda.setLayoutParams(layoutParams);
         contentPanel.addView(panda);
+        getPandaAnimation();
+        initListeners();
+    }
+
+    private AnimationDrawable getPandaAnimation() {
         try {
-            final AnimationDrawable pandaAnimation = new AnimationDrawable();
+            if(pandaAnimation != null) return pandaAnimation;
+            pandaAnimation = new AnimationDrawable();
             String pandaAnimationFolder = "animations/menu/panda";
             String[] frameNames = getAssets().list(pandaAnimationFolder);
             for(String frameName : frameNames) {
                 pandaAnimation.addFrame(
                         Drawable.createFromStream(
-                                getAssets().open(pandaAnimationFolder + File.separator +  frameName),
+                                getAssets().open(pandaAnimationFolder + File.separator + frameName),
                                 null),
                         40);
             }
@@ -69,11 +77,10 @@ public class StartActivityNew extends PandaBaseActivity {
                     pandaAnimation.start();
                 }
             });
-//            panda.setBackgroundDrawable(getResources().getDrawable(R.drawable.achievement));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        initListeners();
+        return pandaAnimation;
     }
 
     private void initListeners() {

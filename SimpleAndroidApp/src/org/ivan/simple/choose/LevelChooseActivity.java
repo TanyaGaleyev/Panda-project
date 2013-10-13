@@ -30,7 +30,6 @@ public class LevelChooseActivity extends PandaBaseActivity {
         super.onCreate(savedInstanceState);
         
         // hide screen title
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_choose);
         view = (LevelChooseView) findViewById(R.id.choose);
         

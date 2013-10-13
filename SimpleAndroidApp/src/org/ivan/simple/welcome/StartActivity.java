@@ -3,10 +3,12 @@ package org.ivan.simple.welcome;
 import java.util.ArrayList;
 
 import org.ivan.simple.ImageProvider;
+import org.ivan.simple.PandaApplication;
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
 import org.ivan.simple.choose.LevelChooseActivity;
 
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class StartActivity extends PandaBaseActivity {
 	
@@ -32,6 +35,7 @@ public class StartActivity extends PandaBaseActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         int width = getWindowManager().getDefaultDisplay().getWidth();
         int height= getWindowManager().getDefaultDisplay().getHeight();
         if(width > height) {
@@ -42,9 +46,11 @@ public class StartActivity extends PandaBaseActivity {
         	DISPLAY_HEIGHT = width;
         }
         // hide screen title
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_start);
-//        ImageProvider.init(getApplicationContext());
+        TextView caption = (TextView) findViewById(R.id.text_view);
+        caption.setTypeface(PandaApplication.getPandaApplication().getFontProvider().bold());
+        caption.setText(String.format("max memory: %d KiB", Runtime.getRuntime().maxMemory() / 1024));
+
         DisplayMetrics display = getApplicationContext().getResources().getDisplayMetrics();
         final float scale = display.density;
         

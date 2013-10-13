@@ -49,7 +49,7 @@ public class LevelChooseView extends SurfaceView {
 	
 	// Backgroung image of LevelChooseView
 	private String backgroundId;
-	private Bitmap background;
+//	private Bitmap background;
 	private Bitmap back;
 	private Bitmap sound;
 	
@@ -96,8 +96,7 @@ public class LevelChooseView extends SurfaceView {
 		textPaint = new Paint();
 		textPaint.setColor(Color.WHITE);
 		textPaint.setTextSize(48);
-		Typeface font = Typeface.createFromAsset(getContext().getAssets(), "fonts/PTS75F.ttf");
-		textPaint.setTypeface(font);
+		textPaint.setTypeface(PandaApplication.getPandaApplication().getFontProvider().ptSans());
 		getHolder().addCallback(new SurfaceHolder.Callback() {
 			
 			public void surfaceDestroyed(SurfaceHolder holder) {				
@@ -111,29 +110,14 @@ public class LevelChooseView extends SurfaceView {
                 	   
                    }
                 }
-//				ImageProvider.removeFromCatch(backgroundId);
-				background.recycle();
-				background = null;
+//				background.recycle();
+//				background = null;
 				System.out.println("Choose view destroyed!");
 			}
 			
 			public void surfaceCreated(SurfaceHolder holder) {
-				
-				ImageProvider.setScaleParameters(getWidth(), getHeight());
-				
-				border = ImageProvider.getBitmapNoCache("menu/border.png");
-				cross = ImageProvider.getBitmapNoCache("menu/cross.png");
-				background = Bitmap.createScaledBitmap(
-						ImageProvider.getBitmapNoCache(backgroundId),
-						getWidth(),
-						getHeight(),
-						false);
-				marker = ImageProvider.getBitmapNoCache("menu/single_panda.png");
-				back = ImageProvider.getBitmapNoCache("menu/back_choose.png");
-				sound = ImageProvider.getBitmapNoCache("menu/sound_choose.png");
-				highscore = ImageProvider.getBitmapNoCache("menu/high_score.png");
-				mediumscore = ImageProvider.getBitmapNoCache("menu/medium_score.png");
-				lowscore = ImageProvider.getBitmapNoCache("menu/low_score.png");
+
+                initSurface();
 				
 				redrawer = new Redrawer();
 				redrawer.start();
@@ -145,8 +129,26 @@ public class LevelChooseView extends SurfaceView {
 		});
 
 	}
-	
-	@Override
+
+    private void initSurface() {
+        ImageProvider.setScaleParameters(getWidth(), getHeight());
+
+        border = ImageProvider.getBitmapNoCache("menu/border.png");
+        cross = ImageProvider.getBitmapNoCache("menu/cross.png");
+//        background = background != null ? background : Bitmap.createScaledBitmap(
+//                ImageProvider.getBitmapNoCache(backgroundId),
+//                getWidth(),
+//                getHeight(),
+//                false);
+        marker = ImageProvider.getBitmapNoCache("menu/single_panda.png");
+        back = ImageProvider.getBitmapNoCache("menu/back_choose.png");
+        sound = ImageProvider.getBitmapNoCache("menu/sound_choose.png");
+        highscore = ImageProvider.getBitmapNoCache("menu/high_score.png");
+        mediumscore = ImageProvider.getBitmapNoCache("menu/medium_score.png");
+        lowscore = ImageProvider.getBitmapNoCache("menu/low_score.png");
+    }
+
+    @Override
 	protected void onDraw(Canvas canvas) {
 		// move marker
 		switch(performingAction) {
@@ -165,8 +167,8 @@ public class LevelChooseView extends SurfaceView {
 		default:
 			break;
 		}
-		canvas.drawColor(Color.WHITE);
-		canvas.drawBitmap(background, 0, 0, null);
+		canvas.drawColor(Color.rgb(218, 228, 115));
+//		canvas.drawBitmap(background, 0, 0, null);
 		for(int i = 0; i < levels.length; i++) {
 			for(int j = 0; j < levels[i].length; j++) {
 				int x = getScreenX(j);

@@ -22,7 +22,6 @@ public class GameActivity extends PandaBaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // hide screen title
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         Intent intent = getIntent();
         levid = intent.getIntExtra(LevelChooseActivity.LEVEL_ID, 0);
         setContentView(R.layout.activity_main);

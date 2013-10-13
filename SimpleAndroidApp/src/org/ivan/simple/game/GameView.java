@@ -39,7 +39,7 @@ public class GameView extends SurfaceView {
 	private GameControl control = new GameControl(this);
 	
 	private String backgroundId;
-	private Bitmap background;
+//	private Bitmap background;
 
 	private LevelCell prevCell;
 	
@@ -77,8 +77,8 @@ public class GameView extends SurfaceView {
 				//level.model.getMotion().startMotion();
                 control.stopManager();
                 //ImageProvider.removeFromCatch(backgroundId);
-                background.recycle();
-                background = null;
+//                background.recycle();
+//                background = null;
 			}
 			
 			public void surfaceCreated(SurfaceHolder holder) {
@@ -114,11 +114,11 @@ public class GameView extends SurfaceView {
 //		ImageProvider.setGridStep(GRID_STEP);
 		GRID_STEP = ImageProvider.setScaleParameters(getWidth(), getHeight());
 		
-		background = Bitmap.createScaledBitmap(
-				ImageProvider.getBitmapNoCache(backgroundId),
-				getWidth(),
-				getHeight(),
-				false);
+//		background = Bitmap.createScaledBitmap(
+//				ImageProvider.getBitmapNoCache(backgroundId),
+//				getWidth(),
+//				getHeight(),
+//				false);
         serviceButtons = new ServiceButtons(10, 50);
         //GRID_STEP = 112;//88dp,48dp
 		System.out.println("GRID_STEP = " + GRID_STEP);
@@ -157,7 +157,7 @@ public class GameView extends SurfaceView {
 	
 	protected void onDraw(Canvas canvas, boolean update) {
 		canvas.drawColor(0xffC6E10E);
-		canvas.drawBitmap(background, 0, 0, null);
+//		canvas.drawBitmap(background, 0, 0, null);
 		serviceButtons.draw(canvas);
 		level.onDraw(canvas, update);
 		hero.onDraw(canvas, update);
@@ -165,6 +165,7 @@ public class GameView extends SurfaceView {
 //		level.drawGrid(canvas);
 		drawFPS(canvas);
 		drawScore(canvas);
+        drawMemoryUsage(canvas);
 		if(level.model.isLost()) {
 			drawLose(canvas);
 		} else if(isReadyToPlayWinAnimation()) {
@@ -187,6 +188,20 @@ public class GameView extends SurfaceView {
 		paint.setColor(Color.MAGENTA);
 		canvas.drawText("Score: " + getScore(), 100, 25, paint);
 	}
+
+    private void drawMemoryUsage(Canvas canvas) {
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+        paint.setTextSize(25);
+        paint.setColor(Color.BLACK);
+        canvas.drawText(
+                String.format(
+                        "used: %d KiB free: %d KiB",
+                        Runtime.getRuntime().totalMemory() / 1024,
+                        Runtime.getRuntime().freeMemory() / 1024
+                ), 300, 25, paint
+        );
+    }
 	
 	private void drawWin(Canvas canvas) {
 		String complete = "COMPLETE";

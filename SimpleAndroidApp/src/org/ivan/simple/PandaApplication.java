@@ -1,11 +1,14 @@
 package org.ivan.simple;
 
 import android.app.Application;
+import android.graphics.Typeface;
 
 import org.ivan.simple.game.sound.MusicManager;
 
 public class PandaApplication extends Application {
 	private MusicManager mm;
+    private FontProvider fontProvider;
+    private ImageProvider imageProvider;
 	
 	private boolean sound = true;
 	
@@ -21,8 +24,9 @@ public class PandaApplication extends Application {
 		super.onCreate();
 		instance = this;
 
+        mm = new MusicManager(getApplicationContext());
+        fontProvider = new FontProvider(getApplicationContext());
         ImageProvider.init(getApplicationContext());
-        mm = new MusicManager(this);
 	}
 	
 	public MusicManager getMusicManger() {
@@ -41,5 +45,8 @@ public class PandaApplication extends Application {
 			mm.pauseMusic();
 		}
 	}
-	
+
+    public FontProvider getFontProvider() {
+        return fontProvider;
+    }
 }

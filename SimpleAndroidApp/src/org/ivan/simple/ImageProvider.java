@@ -13,15 +13,17 @@ import android.util.LruCache;
 public class ImageProvider {
 	private static Resources resources;
 	private static AssetManager asssetsMananger;
-	private static HashMap<String, Bitmap> images = new HashMap<String, Bitmap>();
-//	private static LruCache<String, Bitmap> images;
+    public static final int CACHE_SIZE = 8 * 1024 * 1024;
+    private static HashMap<String, Bitmap> images = new HashMap<String, Bitmap>();
+//	private static LruCache<String, Bitmap> images = new LruCache<String, Bitmap>(CACHE_SIZE);
 	private static int gridStep = 128;
 	private static String resSet = "large/";
 	private static final String base = "sprites/";
 	private static double baseStep = 230d;
 	private static int cacheSize = 0;
 
-	private ImageProvider() {
+	public ImageProvider(Context context) {
+        init(context);
 	}
 	
 	public static void init(Context context) {
@@ -57,13 +59,20 @@ public class ImageProvider {
 		try {
 			Bitmap ret;
 			BitmapFactory.Options opts = new BitmapFactory.Options();
-			if(rows == 1 && cols == 1) {
-				opts.inSampleSize = (int) (baseStep / gridStep);
+            if(rows == 1 && cols == 1) {
+                opts.inPreferredConfig = Bitmap.Config.RGB_565;
+                opts.inSampleSize = (int) (baseStep / gridStep);
 //					System.out.println("Sample:" + opts.inSampleSize);
 				ret = BitmapFactory.decodeStream(asssetsMananger.open(base + resSet + path), null, opts);
 			} else {
 				double scale = gridStep / baseStep;
-				Bitmap original = BitmapFactory.decodeStream(asssetsMananger.open(base + resSet + path), null, opts);
+                Bitmap original;
+                try {
+				    original = BitmapFactory.decodeStream(asssetsMananger.open(base + resSet + path), null, opts);
+                } catch (OutOfMemoryError error) {
+                    System.err.println("Error loading path " + path);
+                    throw error;
+                }
 				int width = (int) Math.ceil(opts.outWidth * scale);
 				width -= width % cols;
 				int height = (int) Math.ceil(opts.outHeight * scale);
@@ -84,8 +93,7 @@ public class ImageProvider {
 		Bitmap  bmp = images.get(path);
 		if(bmp == null) {
 			bmp = getBitmapNoCache(path, rows, cols);
-			cacheSize += bmp.getWidth() * bmp.getHeight() //* 4 
-					/ 256;//1024;
+			cacheSize += bmp.getWidth() * bmp.getHeight() / 256;// * 4 / 1024
 			images.put(path, bmp);
 		}
 		return bmp;
@@ -114,8 +122,7 @@ public class ImageProvider {
 	public static void removeFromCatch(String path) {
 		Bitmap bmp = images.get(path);
 		if(bmp == null) return;
-		cacheSize -= bmp.getWidth() * bmp.getHeight() //* 4 
-				/ 256;//1024;
+		cacheSize -= bmp.getWidth() * bmp.getHeight() / 256;// * 4 / 1024
 		bmp.recycle();
 		images.remove(path);
 //		System.out.println("Bitmap removed");
