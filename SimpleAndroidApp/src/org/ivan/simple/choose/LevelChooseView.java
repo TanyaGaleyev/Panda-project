@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
@@ -24,10 +25,14 @@ import android.view.SurfaceView;
 
 public class LevelChooseView extends SurfaceView {
 
-	private static final int GRID_STEP = 128;
-	private static final int LEFT_BOUND = GRID_STEP;
-	private static final int TOP_BOUND = GRID_STEP / 2;
-	private static final int MARKER_SPEED = GRID_STEP / 8;
+	private static final int LEVELS_ROWS = 3;
+    private static final int LEVELS_COLS = 4;
+    private int GRID_STEP;
+	private int LEFT_BOUND;
+	private int TOP_BOUND;
+	private int markerSpeed() {
+        return GRID_STEP / 8;
+    }
 	// selected level coordinates in array
 	private int levelX = 0;
 	private int levelY = 0;
@@ -66,8 +71,8 @@ public class LevelChooseView extends SurfaceView {
 	 */
 	private Bitmap marker;
 	// coordinates of marker center on screen
-	private int markerX = LEFT_BOUND + GRID_STEP / 2;
-	private int markerY = TOP_BOUND + GRID_STEP / 2;
+	private int markerX;
+	private int markerY;
 
 	// Thread redrawing view
 	private Redrawer redrawer;
@@ -119,6 +124,7 @@ public class LevelChooseView extends SurfaceView {
 			}
 
 			public void surfaceCreated(SurfaceHolder holder) {
+                initGrid();
 
                 initSurface();
 
@@ -132,6 +138,22 @@ public class LevelChooseView extends SurfaceView {
 		});
 
 	}
+
+    private void initGrid() {
+        int xStep = getWidth() / LEVELS_COLS;
+        int yStep = getHeight() / LEVELS_ROWS;
+        if(xStep < yStep) {
+            GRID_STEP = xStep - xStep % 8;
+            LEFT_BOUND = 0;
+            TOP_BOUND = (getHeight() - xStep * LEVELS_ROWS) / 2;
+        } else {
+            GRID_STEP = yStep - yStep % 8;
+            TOP_BOUND = 0;
+            LEFT_BOUND = (getWidth() - yStep * LEVELS_COLS) / 2;
+        }
+        markerX = LEFT_BOUND + GRID_STEP / 2;
+        markerY = TOP_BOUND + GRID_STEP / 2;
+    }
 
     private void initSurface() {
         imageProvider().setScaleParameters(getWidth(), getHeight());
@@ -168,22 +190,56 @@ public class LevelChooseView extends SurfaceView {
         // move marker
         switch(performingAction) {
         case UP:
-            markerY -= MARKER_SPEED;
+            markerY -= markerSpeed();
             break;
         case DOWN:
-            markerY += MARKER_SPEED;
+            markerY += markerSpeed();
             break;
         case LEFT:
-            markerX -= MARKER_SPEED;
+            markerX -= markerSpeed();
             break;
         case RIGHT:
-            markerX += MARKER_SPEED;
+            markerX += markerSpeed();
             break;
         default:
             break;
         }
         canvas.drawColor(Color.rgb(218, 228, 115));
         canvas.drawBitmap(background, 0, 0, null);
+        drawGrid(canvas);
+        drawLevelsIcons(canvas);
+        drawOnCenterCoordinates(marker, markerX, markerY, canvas);
+        drawOnCenterCoordinates(back, 0 + GRID_STEP / 2, getHeight() - GRID_STEP / 2, canvas);
+        drawOnCenterCoordinates(sound, getWidth() - GRID_STEP / 2, getHeight() - GRID_STEP / 2, canvas);
+    }
+
+    private void drawGrid(Canvas canvas) {
+        Paint paint = new Paint();
+        paint.setColor(Color.WHITE);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(2);
+        paint.setPathEffect(new DashPathEffect(new float[] {5,2}, 0));
+        for(int i = 0; i < LEVELS_COLS; i++) {
+            canvas.drawLine(
+                    getScreenX(i),
+                    getScreenY(0),
+                    getScreenX(i),
+                    getScreenY(LEVELS_ROWS - 1),
+                    paint
+            );
+        }
+        for(int j = 0; j < LEVELS_ROWS; j++) {
+            canvas.drawLine(
+                    getScreenX(0),
+                    getScreenY(j),
+                    getScreenX(LEVELS_COLS - 1),
+                    getScreenY(j),
+                    paint
+            );
+        }
+    }
+
+    private void drawLevelsIcons(Canvas canvas) {
         for(int i = 0; i < levels.length; i++) {
             for(int j = 0; j < levels[i].length; j++) {
                 int x = getScreenX(j);
@@ -197,13 +253,10 @@ public class LevelChooseView extends SurfaceView {
                 }
             }
         }
-        drawOnCenterCoordinates(marker, markerX, markerY, canvas);
-        drawOnCenterCoordinates(back, 0 + GRID_STEP / 2, getHeight() - GRID_STEP / 2, canvas);
-        drawOnCenterCoordinates(sound, getWidth() - GRID_STEP / 2, getHeight() - GRID_STEP / 2, canvas);
     }
 
     private void drawLoading(Canvas canvas) {
-        canvas.drawColor(Color.rgb(76, 65, 71));
+        canvas.drawColor(Color.rgb(75, 64, 50));
         PandaApplication.getPandaApplication().getLoading().onDraw(
                 canvas, getWidth() / 2, getHeight() / 2, true);
     }
