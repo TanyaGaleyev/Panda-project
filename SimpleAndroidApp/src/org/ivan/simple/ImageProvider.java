@@ -11,29 +11,28 @@ import android.graphics.BitmapFactory;
 import android.util.LruCache;
 
 public class ImageProvider {
-	private static Resources resources;
-	private static AssetManager asssetsMananger;
     public static final int CACHE_SIZE = 8 * 1024 * 1024;
-    private static HashMap<String, Bitmap> images = new HashMap<String, Bitmap>();
-//	private static LruCache<String, Bitmap> images = new LruCache<String, Bitmap>(CACHE_SIZE);
-	private static int gridStep = 128;
-	private static String resSet = "large/";
-	private static final String base = "sprites/";
-	private static double baseStep = 230d;
-	private static int cacheSize = 0;
+    private static String resSet = "large/";
+    private static final String base = "sprites/";
+
+    private AssetManager asssetsMananger;
+    private HashMap<String, Bitmap> images = new HashMap<String, Bitmap>();
+    //	private static LruCache<String, Bitmap> images = new LruCache<String, Bitmap>(CACHE_SIZE);
+	private int gridStep = 128;
+	private double baseStep = 230d;
+	private int cacheSize = 0;
 
 	public ImageProvider(Context context) {
         init(context);
 	}
 	
-	public static void init(Context context) {
+	public void init(Context context) {
 //		int cacheSize = (int) (Runtime.getRuntime().maxMemory() / 8192);
 //		images = new LruCache<String, Bitmap>(cacheSize);
-		resources = context.getResources();
 		asssetsMananger = context.getAssets();
 	}
 	
-	public static int setScaleParameters(int width, int height) {
+	public int setScaleParameters(int width, int height) {
 		if(height < 432) {
 			gridStep = 48;
 			baseStep = 144;
@@ -54,7 +53,7 @@ public class ImageProvider {
 		return gridStep;
 	}
 	
-	public static Bitmap getBitmapNoCache(String path, int rows, int cols) {
+	public Bitmap getBitmapNoCache(String path, int rows, int cols) {
 		System.out.println("Cache size: " + cacheSize);
 		try {
 			Bitmap ret;
@@ -89,7 +88,7 @@ public class ImageProvider {
 		}
 	}
 	
-	public static Bitmap getBitmap(String path, int rows, int cols) {
+	public Bitmap getBitmap(String path, int rows, int cols) {
 		Bitmap  bmp = images.get(path);
 		if(bmp == null) {
 			bmp = getBitmapNoCache(path, rows, cols);
@@ -99,15 +98,15 @@ public class ImageProvider {
 		return bmp;
 	}
 	
-	public static Bitmap getBitmap(String path) {
+	public Bitmap getBitmap(String path) {
 		return getBitmap(path, 1, 1);
 	}
 	
-	public static Bitmap getBitmapNoCache(String path) {
+	public Bitmap getBitmapNoCache(String path) {
 		return getBitmapNoCache(path, 1, 1);
 	}
 	
-	public static BitmapFactory.Options loadBitmapSize(String path) {
+	public BitmapFactory.Options loadBitmapSize(String path) {
 		BitmapFactory.Options opts = new BitmapFactory.Options();
 		opts.inJustDecodeBounds = true;
 		try {
@@ -119,7 +118,7 @@ public class ImageProvider {
 		return opts;
 	}
 	
-	public static void removeFromCatch(String path) {
+	public void removeFromCatch(String path) {
 		Bitmap bmp = images.get(path);
 		if(bmp == null) return;
 		cacheSize -= bmp.getWidth() * bmp.getHeight() / 256;// * 4 / 1024
@@ -128,7 +127,7 @@ public class ImageProvider {
 //		System.out.println("Bitmap removed");
 	}
 	
-	public static int getGridStep() {
+	public int getGridStep() {
 		return gridStep;
 	}
 

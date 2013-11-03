@@ -9,20 +9,21 @@ import org.ivan.simple.game.GameActivity;
 import org.ivan.simple.game.level.LevelStorage;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 public class LevelChooseView extends SurfaceView {
-	
+
 	private static final int GRID_STEP = 128;
 	private static final int LEFT_BOUND = GRID_STEP;
 	private static final int TOP_BOUND = GRID_STEP / 2;
@@ -35,31 +36,31 @@ public class LevelChooseView extends SurfaceView {
 	 */
 	private int[][][] levels;
 	private int[][] finishedLevels;
-	
-	
+
+
 	/**
 	 * Border of levels to select
 	 */
 	private Bitmap border;
-	
+
 	/**
 	 * Marks complete levels
 	 */
 	private Bitmap cross;
-	
+
 	// Backgroung image of LevelChooseView
 	private String backgroundId;
 //	private Bitmap background;
 	private Bitmap back;
 	private Bitmap sound;
-	
+
 	// Scores bitmaps
 	private Bitmap highscore;
 	private Bitmap mediumscore;
 	private Bitmap lowscore;
-	
+
 	private Paint textPaint;
-	
+
 	/**
 	 * Marker is a panda image moving from one level to another (choosing level)
 	 */
@@ -67,39 +68,41 @@ public class LevelChooseView extends SurfaceView {
 	// coordinates of marker center on screen
 	private int markerX = LEFT_BOUND + GRID_STEP / 2;
 	private int markerY = TOP_BOUND + GRID_STEP / 2;
-	
+
 	// Thread redrawing view
 	private Redrawer redrawer;
-	
+
 	private boolean chooseReady = true;
-	
+
 	// buffer choose level action
 	private UserControlType performingAction = UserControlType.IDLE;
 	private UserControlType chooseAcion = UserControlType.IDLE;
+    private LevelChooseActivity activity;
 
-	public LevelChooseView(Context context) {
+    public LevelChooseView(Context context) {
 		super(context);
-		init();
+		init(context);
 	}
-	
+
 	public LevelChooseView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init();
+		init(context);
 	}
-	
+
 	public LevelChooseView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		init();
+		init(context);
 	}
-	
-	private final void init() {
+
+	private final void init(Context context) {
+        activity = (LevelChooseActivity) context;
 		textPaint = new Paint();
 		textPaint.setColor(Color.WHITE);
 		textPaint.setTextSize(48);
 		textPaint.setTypeface(PandaApplication.getPandaApplication().getFontProvider().ptSans());
 		getHolder().addCallback(new SurfaceHolder.Callback() {
-			
-			public void surfaceDestroyed(SurfaceHolder holder) {				
+
+			public void surfaceDestroyed(SurfaceHolder holder) {
 				boolean retry = true;
 				redrawer.running = false;
 				while (retry) {
@@ -107,22 +110,22 @@ public class LevelChooseView extends SurfaceView {
                          redrawer.join();
                          retry = false;
                    } catch (InterruptedException e) {
-                	   
+
                    }
                 }
 //				background.recycle();
 //				background = null;
 				System.out.println("Choose view destroyed!");
 			}
-			
+
 			public void surfaceCreated(SurfaceHolder holder) {
 
                 initSurface();
-				
+
 				redrawer = new Redrawer();
 				redrawer.start();
 			}
-			
+
 			public void surfaceChanged(SurfaceHolder holder, int format, int width,
 					int height) {
 			}
@@ -131,25 +134,35 @@ public class LevelChooseView extends SurfaceView {
 	}
 
     private void initSurface() {
-        ImageProvider.setScaleParameters(getWidth(), getHeight());
+        imageProvider().setScaleParameters(getWidth(), getHeight());
 
-        border = ImageProvider.getBitmapNoCache("menu/border.png");
-        cross = ImageProvider.getBitmapNoCache("menu/cross.png");
+        border = imageProvider().getBitmapNoCache("menu/border.png");
+        cross = imageProvider().getBitmapNoCache("menu/cross.png");
 //        background = background != null ? background : Bitmap.createScaledBitmap(
-//                ImageProvider.getBitmapNoCache(backgroundId),
+//                imageProvider().getBitmapNoCache(backgroundId),
 //                getWidth(),
 //                getHeight(),
 //                false);
-        marker = ImageProvider.getBitmapNoCache("menu/single_panda.png");
-        back = ImageProvider.getBitmapNoCache("menu/back_choose.png");
-        sound = ImageProvider.getBitmapNoCache("menu/sound_choose.png");
-        highscore = ImageProvider.getBitmapNoCache("menu/high_score.png");
-        mediumscore = ImageProvider.getBitmapNoCache("menu/medium_score.png");
-        lowscore = ImageProvider.getBitmapNoCache("menu/low_score.png");
+        marker = imageProvider().getBitmapNoCache("menu/single_panda.png");
+        back = imageProvider().getBitmapNoCache("menu/back_choose.png");
+        sound = imageProvider().getBitmapNoCache("menu/sound_choose.png");
+        highscore = imageProvider().getBitmapNoCache("menu/high_score.png");
+        mediumscore = imageProvider().getBitmapNoCache("menu/medium_score.png");
+        lowscore = imageProvider().getBitmapNoCache("menu/low_score.png");
+    }
+
+    private ImageProvider imageProvider() {
+        return PandaApplication.getPandaApplication().getImageProvider();
     }
 
     @Override
 	protected void onDraw(Canvas canvas) {
+        if(activity.isLoading()) {
+            canvas.drawColor(Color.rgb(76, 65 ,71));
+            PandaApplication.getPandaApplication().getLoading().onDraw(
+                    canvas, getWidth() / 2, getHeight() / 2, true);
+            return;
+        }
 		// move marker
 		switch(performingAction) {
 		case UP:
@@ -219,7 +232,7 @@ public class LevelChooseView extends SurfaceView {
 		if(event.getAction() == MotionEvent.ACTION_DOWN &&
 				0 < event.getX() && event.getX() < GRID_STEP &&
 				getHeight() - GRID_STEP < event.getY() && event.getY() < getHeight()) {
-			((Activity) getContext()).finish();
+			activity.finish();
 			return true;
 		}
 		// sound button pressed
@@ -231,18 +244,44 @@ public class LevelChooseView extends SurfaceView {
 			return true;
 		}
 		// get level Id depending on by click on screen selection
-		int levId = getLevelId(event);
+		final int levId = getLevelId(event);
 		// if level selected (levId != 0) start next GameActivity with specified level
 		if(levId != 0) {
-			Activity parent = (Activity) getContext();
-			Intent intent = new Intent(parent, GameActivity.class);
-			intent.putExtra(LevelChooseActivity.LEVEL_ID, levId);
-			parent.startActivityForResult(intent, LevelChooseActivity.FINISHED_LEVEL_ID);
+            activity.setLoading(true);
+            new AsyncTask<Void, Void, Void>() {
+//                public ProgressDialog mDialog;
+
+//                @Override
+//                protected void onPreExecute() {
+//                    super.onPreExecute();
+//                    mDialog = new ProgressDialog(activity);
+//                    mDialog.setMessage("Please wait...");
+//                    mDialog.show();
+//                }
+
+//                @Override
+//                protected void onPostExecute(Void aVoid) {
+//                    super.onPostExecute(aVoid);
+//                    mDialog.dismiss();
+//                }
+
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    startLevel(levId);
+                    return null;
+                }
+            }.execute();
 			return true;
 		}
 		return super.onTouchEvent(event);
 	}
-	
+
+    private void startLevel(int levId) {
+        Intent intent = new Intent(activity, GameActivity.class);
+        intent.putExtra(LevelChooseActivity.LEVEL_ID, levId);
+        activity.startActivityForResult(intent, LevelChooseActivity.FINISHED_LEVEL_ID);
+    }
+
 	public synchronized int getLevelId(MotionEvent event) {
 		// ignore other actions
 		if(event.getAction() != MotionEvent.ACTION_DOWN) return 0;

@@ -1,6 +1,7 @@
 package org.ivan.simple.game;
 
 import org.ivan.simple.ImageProvider;
+import org.ivan.simple.PandaApplication;
 import org.ivan.simple.UserControlType;
 import org.ivan.simple.game.hero.Hero;
 import org.ivan.simple.game.level.LevelCell;
@@ -112,7 +113,8 @@ public class GameView extends SurfaceView {
 //		}
 //		GRID_STEP = GRID_STEP % 8 == 0 ? GRID_STEP : GRID_STEP + 8 - GRID_STEP % 8;
 //		ImageProvider.setGridStep(GRID_STEP);
-		GRID_STEP = ImageProvider.setScaleParameters(getWidth(), getHeight());
+		GRID_STEP = PandaApplication.getPandaApplication().getImageProvider()
+                .setScaleParameters(getWidth(), getHeight());
 		
 //		background = Bitmap.createScaledBitmap(
 //				ImageProvider.getBitmapNoCache(backgroundId),

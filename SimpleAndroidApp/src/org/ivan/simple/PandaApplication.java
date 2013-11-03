@@ -1,37 +1,52 @@
 package org.ivan.simple;
 
 import android.app.Application;
-import android.graphics.Typeface;
 
+import org.ivan.simple.game.hero.Sprite;
 import org.ivan.simple.game.sound.MusicManager;
 
 public class PandaApplication extends Application {
-	private MusicManager mm;
+	private MusicManager musicManager;
     private FontProvider fontProvider;
     private ImageProvider imageProvider;
-	
+    private Sprite loading;
+
 	private boolean sound = true;
-	
+
 	// TODO get rid of singletons
-    private static PandaApplication instance;
-	
+    private static PandaApplication INSTANCE;
+
 	public static PandaApplication getPandaApplication() {
-		return instance;
+		return INSTANCE;
 	}
-	
-	@Override
+
+    @Override
 	public void onCreate() {
 		super.onCreate();
-		instance = this;
+		INSTANCE = this;
 
-        mm = new MusicManager(getApplicationContext());
+        musicManager = new MusicManager(getApplicationContext());
         fontProvider = new FontProvider(getApplicationContext());
-        ImageProvider.init(getApplicationContext());
+        imageProvider = new ImageProvider(getApplicationContext());
+        loading = new Sprite("menu/loader.png", 1, 12);
+        loading.setAnimating(true);
 	}
-	
+
 	public MusicManager getMusicManger() {
-		return mm;
+		return musicManager;
 	}
+
+    public ImageProvider getImageProvider() {
+        return imageProvider;
+    }
+
+    public FontProvider getFontProvider() {
+        return fontProvider;
+    }
+
+    public Sprite getLoading() {
+        return loading;
+    }
 
 	public boolean getSound() {
 		return sound;
@@ -40,13 +55,9 @@ public class PandaApplication extends Application {
 	public void setSound(boolean sound) {
 		this.sound = sound;
 		if(sound) {
-			mm.resumeMusic();
+			musicManager.resumeMusic();
 		} else {
-			mm.pauseMusic();
+			musicManager.pauseMusic();
 		}
 	}
-
-    public FontProvider getFontProvider() {
-        return fontProvider;
-    }
 }

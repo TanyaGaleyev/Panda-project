@@ -3,6 +3,7 @@ package org.ivan.simple.game.hero;
 import java.io.IOException;
 
 import org.ivan.simple.ImageProvider;
+import org.ivan.simple.PandaApplication;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -45,10 +46,14 @@ public class Sprite {
 	}
 	
 	public Sprite(String bmpid, int rows, int cols) {
-		this(ImageProvider.getBitmap(bmpid, rows, cols), rows, cols);
+		this(imageProvider().getBitmap(bmpid, rows, cols), rows, cols);
 	}
-	
-	public Sprite(String bmpid, int rows, int cols, int set) {
+
+    private static ImageProvider imageProvider() {
+        return PandaApplication.getPandaApplication().getImageProvider();
+    }
+
+    public Sprite(String bmpid, int rows, int cols, int set) {
 		this(bmpid, rows, cols);
 		changeSet(set);
 	}
