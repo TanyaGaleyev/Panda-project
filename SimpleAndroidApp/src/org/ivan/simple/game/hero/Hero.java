@@ -432,9 +432,9 @@ public class Hero {
 		case STICK_LEFT:
 			if(curStage == 0) {
                 if(prevMt == MotionType.JUMP) {
-				    activeSprite = sprites.getSprite("prestickleft");
+				    activeSprite = sprites.getSprite("prestickleftjump");
                 } else {
-                    activeSprite = sprites.getSprite("prestickleftjump");
+                    activeSprite = sprites.getSprite("prestickleft");
                 }
 //				activeSprite.changeSet(28);
 			} else {
