@@ -50,7 +50,7 @@ public class LevelChooseView extends SurfaceView {
 
 	// Backgroung image of LevelChooseView
 	private String backgroundId;
-//	private Bitmap background;
+	private Bitmap background;
 	private Bitmap back;
 	private Bitmap sound;
 
@@ -138,11 +138,11 @@ public class LevelChooseView extends SurfaceView {
 
         border = imageProvider().getBitmapNoCache("menu/border.png");
         cross = imageProvider().getBitmapNoCache("menu/cross.png");
-//        background = background != null ? background : Bitmap.createScaledBitmap(
-//                imageProvider().getBitmapNoCache(backgroundId),
-//                getWidth(),
-//                getHeight(),
-//                false);
+        background = background != null ? background : Bitmap.createScaledBitmap(
+                imageProvider().getBitmapNoCache(backgroundId),
+                getWidth(),
+                getHeight(),
+                false);
         marker = imageProvider().getBitmapNoCache("menu/single_panda.png");
         back = imageProvider().getBitmapNoCache("menu/back_choose.png");
         sound = imageProvider().getBitmapNoCache("menu/sound_choose.png");
@@ -158,49 +158,57 @@ public class LevelChooseView extends SurfaceView {
     @Override
 	protected void onDraw(Canvas canvas) {
         if(activity.isLoading()) {
-            canvas.drawColor(Color.rgb(76, 65 ,71));
-            PandaApplication.getPandaApplication().getLoading().onDraw(
-                    canvas, getWidth() / 2, getHeight() / 2, true);
-            return;
+            drawLoading(canvas);
+        } else {
+            drawChoose(canvas);
         }
-		// move marker
-		switch(performingAction) {
-		case UP:
-			markerY -= MARKER_SPEED;
-			break;
-		case DOWN:
-			markerY += MARKER_SPEED;
-			break;
-		case LEFT:
-			markerX -= MARKER_SPEED;
-			break;
-		case RIGHT:
-			markerX += MARKER_SPEED;
-			break;
-		default:
-			break;
-		}
-		canvas.drawColor(Color.rgb(218, 228, 115));
-//		canvas.drawBitmap(background, 0, 0, null);
-		for(int i = 0; i < levels.length; i++) {
-			for(int j = 0; j < levels[i].length; j++) {
-				int x = getScreenX(j);
-				int y = getScreenY(i);
-				drawOnCenterCoordinates(border, x, y, canvas);
-				canvas.drawText("" + levels[i][j][0], x - 16, y + 16, textPaint);
-				if(finishedLevels[i][j] != 0) {
-					drawOnCenterCoordinates(cross, x + border.getWidth() / 4, y + border.getHeight() / 4, canvas);
-					Bitmap scoresImg = getScoreAward(i, j);
-					drawOnCenterCoordinates(scoresImg, x + border.getWidth() / 2 - 10, y + border.getHeight() / 2, canvas);
-				}
-			}
-		}
-		drawOnCenterCoordinates(marker, markerX, markerY, canvas);
-		drawOnCenterCoordinates(back, 0 + GRID_STEP / 2, getHeight() - GRID_STEP / 2, canvas);
-		drawOnCenterCoordinates(sound, getWidth() - GRID_STEP / 2, getHeight() - GRID_STEP / 2, canvas);
-	}
-	
-	private void drawOnCenterCoordinates(Bitmap bitmap, int x, int y, Canvas canvas) {
+    }
+
+    private void drawChoose(Canvas canvas) {
+        // move marker
+        switch(performingAction) {
+        case UP:
+            markerY -= MARKER_SPEED;
+            break;
+        case DOWN:
+            markerY += MARKER_SPEED;
+            break;
+        case LEFT:
+            markerX -= MARKER_SPEED;
+            break;
+        case RIGHT:
+            markerX += MARKER_SPEED;
+            break;
+        default:
+            break;
+        }
+        canvas.drawColor(Color.rgb(218, 228, 115));
+        canvas.drawBitmap(background, 0, 0, null);
+        for(int i = 0; i < levels.length; i++) {
+            for(int j = 0; j < levels[i].length; j++) {
+                int x = getScreenX(j);
+                int y = getScreenY(i);
+                drawOnCenterCoordinates(border, x, y, canvas);
+                canvas.drawText("" + levels[i][j][0], x - 16, y + 16, textPaint);
+                if(finishedLevels[i][j] != 0) {
+                    drawOnCenterCoordinates(cross, x + border.getWidth() / 4, y + border.getHeight() / 4, canvas);
+                    Bitmap scoresImg = getScoreAward(i, j);
+                    drawOnCenterCoordinates(scoresImg, x + border.getWidth() / 2 - 10, y + border.getHeight() / 2, canvas);
+                }
+            }
+        }
+        drawOnCenterCoordinates(marker, markerX, markerY, canvas);
+        drawOnCenterCoordinates(back, 0 + GRID_STEP / 2, getHeight() - GRID_STEP / 2, canvas);
+        drawOnCenterCoordinates(sound, getWidth() - GRID_STEP / 2, getHeight() - GRID_STEP / 2, canvas);
+    }
+
+    private void drawLoading(Canvas canvas) {
+        canvas.drawColor(Color.rgb(76, 65, 71));
+        PandaApplication.getPandaApplication().getLoading().onDraw(
+                canvas, getWidth() / 2, getHeight() / 2, true);
+    }
+
+    private void drawOnCenterCoordinates(Bitmap bitmap, int x, int y, Canvas canvas) {
 		canvas.drawBitmap(bitmap, x - bitmap.getWidth() / 2, y - bitmap.getHeight() / 2, null);
 	}
 	

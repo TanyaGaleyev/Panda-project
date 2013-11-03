@@ -431,7 +431,11 @@ public class Hero {
 			break;
 		case STICK_LEFT:
 			if(curStage == 0) {
-				activeSprite = sprites.getSprite("prestickleft");
+                if(prevMt == MotionType.JUMP) {
+				    activeSprite = sprites.getSprite("prestickleft");
+                } else {
+                    activeSprite = sprites.getSprite("prestickleftjump");
+                }
 //				activeSprite.changeSet(28);
 			} else {
 				activeSprite = sprites.getSprite("stickleft");
@@ -440,7 +444,11 @@ public class Hero {
 			break;
 		case STICK_RIGHT:
 			if(curStage == 0) {
-				activeSprite = sprites.getSprite("prestickright");
+                if(prevMt == MotionType.JUMP) {
+                    activeSprite = sprites.getSprite("prestickrightjump");
+                } else {
+				    activeSprite = sprites.getSprite("prestickright");
+                }
 //				activeSprite.changeSet(31);
 			} else {
 				activeSprite = sprites.getSprite("stickright");
@@ -470,8 +478,10 @@ public class Hero {
             activeSprite = sprites.getSprite("cloud_right");
             break;
 		case CLOUD_UP:
+            activeSprite = sprites.getSprite("cloud_up");
+            break;
 		case CLOUD_DOWN:
-			activeSprite = sprites.getSprite("cloud");
+			activeSprite = sprites.getSprite("cloud_down");
 			break;
 		default:
 			activeSprite = sprites.getSprite("glue");

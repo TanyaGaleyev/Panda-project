@@ -40,7 +40,7 @@ public class GameView extends SurfaceView {
 	private GameControl control = new GameControl(this);
 	
 	private String backgroundId;
-//	private Bitmap background;
+	private Bitmap background;
 
 	private LevelCell prevCell;
 	
@@ -64,7 +64,7 @@ public class GameView extends SurfaceView {
 		super(context, attrs, defStyle);
 		init();
 	}
-	
+
 	public GameControl getControl() {
 		return control;
 	}
@@ -113,14 +113,13 @@ public class GameView extends SurfaceView {
 //		}
 //		GRID_STEP = GRID_STEP % 8 == 0 ? GRID_STEP : GRID_STEP + 8 - GRID_STEP % 8;
 //		ImageProvider.setGridStep(GRID_STEP);
-		GRID_STEP = PandaApplication.getPandaApplication().getImageProvider()
-                .setScaleParameters(getWidth(), getHeight());
+		GRID_STEP = imageProvider().setScaleParameters(getWidth(), getHeight());
 		
-//		background = Bitmap.createScaledBitmap(
-//				ImageProvider.getBitmapNoCache(backgroundId),
-//				getWidth(),
-//				getHeight(),
-//				false);
+		background = Bitmap.createScaledBitmap(
+				imageProvider().getBitmapNoCache(backgroundId),
+				getWidth(),
+				getHeight(),
+				false);
         serviceButtons = new ServiceButtons(10, 50);
         //GRID_STEP = 112;//88dp,48dp
 		System.out.println("GRID_STEP = " + GRID_STEP);
@@ -148,8 +147,12 @@ public class GameView extends SurfaceView {
 			monster.yCoordinate = TOP_BOUND + level.model.monster.getRow() * GRID_STEP;
 		}
 	}
-	
-	/**
+
+    private ImageProvider imageProvider() {
+        return PandaApplication.getPandaApplication().getImageProvider();
+    }
+
+    /**
 	 * Draw hero, level and etc.
 	 */
 	@Override
@@ -159,7 +162,7 @@ public class GameView extends SurfaceView {
 	
 	protected void onDraw(Canvas canvas, boolean update) {
 		canvas.drawColor(0xffC6E10E);
-//		canvas.drawBitmap(background, 0, 0, null);
+		canvas.drawBitmap(background, 0, 0, null);
 		serviceButtons.draw(canvas);
 		level.onDraw(canvas, update);
 		hero.onDraw(canvas, update);
