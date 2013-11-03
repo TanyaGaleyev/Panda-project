@@ -12,24 +12,13 @@
         android:layout_centerHorizontal="true"
         android:text="@string/welcome"
         android:textSize="36sp" />
-    
-    <ScrollView 
-        android:id="@+id/scroll"
-        android:layout_marginTop="8dp"
-	    android:layout_below="@id/text_view"
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="fill_parent"
-  		android:layout_height="fill_parent"
-  		android:fillViewport="true" >
-	    <LinearLayout
-	        android:id="@+id/buttons_pane"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-        	android:orientation="vertical"
-        	android:gravity="center_horizontal"
-        	android:paddingTop="10dp"
-        	android:paddingBottom="10dp" >
-	
-	    </LinearLayout>
-    </ScrollView>
+        android:layout_height="fill_parent"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/packs_panel"></LinearLayout>
 
 </RelativeLayout>
