@@ -3,6 +3,7 @@ package org.ivan.simple.game.hero;
 import java.util.HashMap;
 
 import org.ivan.simple.ImageProvider;
+import org.ivan.simple.PandaApplication;
 import org.ivan.simple.R;
 
 
@@ -21,7 +22,8 @@ public class SpriteSet {
 	}
 	
 	public void putTPSprite(String name, String resid, int rows, int cols, boolean left) {
-		putSprite(name, new TPSprite(resid, rows, cols, ImageProvider.getGridStep() / 8, left));
+        int shiftSt = PandaApplication.getPandaApplication().getImageProvider().getGridStep() / 8;
+        putSprite(name, new TPSprite(resid, rows, cols, shiftSt, left));
 	}
 	
 	public Sprite getSprite(String name) {

@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.view.MotionEvent;
 
 import org.ivan.simple.ImageProvider;
+import org.ivan.simple.PandaApplication;
 
 /**
  * Created by Ivan on 21.09.13.
@@ -19,9 +20,13 @@ public class ServiceButtons {
 
     public ServiceButtons(Point topLeftCorner) {
         this.topLeftCorner = topLeftCorner;
-        pause = ImageProvider.getBitmap("menu/pause.png");
-        restart = ImageProvider.getBitmap("menu/restart.png");
-        back = ImageProvider.getBitmap("menu/back.png");
+        pause = imageProvider().getBitmap("menu/pause.png");
+        restart = imageProvider().getBitmap("menu/restart.png");
+        back = imageProvider().getBitmap("menu/back.png");
+    }
+
+    private ImageProvider imageProvider() {
+        return PandaApplication.getPandaApplication().getImageProvider();
     }
 
     public ServiceButtons(int x, int y) {

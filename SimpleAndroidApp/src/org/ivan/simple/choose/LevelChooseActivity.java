@@ -24,6 +24,16 @@ public class LevelChooseActivity extends PandaBaseActivity {
 	
 	private LevelChooseView view;
 	private int levelsSetId;
+
+    public boolean isLoading() {
+        return loading;
+    }
+
+    public void setLoading(boolean loading) {
+        this.loading = loading;
+    }
+
+    private boolean loading = false;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +52,7 @@ public class LevelChooseActivity extends PandaBaseActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+        setLoading(false);
 		if(requestCode == FINISHED_LEVEL_ID && resultCode == RESULT_OK) {
 			boolean complete = data.getBooleanExtra(LEVEL_COMPLETE, false);
 			if(complete) {
