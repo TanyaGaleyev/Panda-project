@@ -4,12 +4,18 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Point;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 
 import org.ivan.simple.game.hero.Sprite;
 import org.ivan.simple.game.sound.MusicManager;
 
+import java.io.File;
+import java.io.IOException;
+
 public class PandaApplication extends Application {
-	private MusicManager musicManager;
+    public static final int ONE_FRAME_DURATION = 40;
+    private MusicManager musicManager;
     private FontProvider fontProvider;
     private ImageProvider imageProvider;
     private Sprite loading;
@@ -74,5 +80,18 @@ public class PandaApplication extends Application {
             height = tmp;
         }
         return new Point(width, height);
+    }
+
+    public AnimationDrawable loadAnimationFromFolder(String pandaAnimationFolder) throws IOException {
+        AnimationDrawable animation = new AnimationDrawable();
+        String[] frameNames = getAssets().list(pandaAnimationFolder);
+        for(String frameName : frameNames) {
+            animation.addFrame(
+                    Drawable.createFromStream(
+                            getAssets().open(pandaAnimationFolder + File.separator + frameName),
+                            null),
+                    ONE_FRAME_DURATION);
+        }
+        return animation;
     }
 }

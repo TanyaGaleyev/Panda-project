@@ -9,5 +9,5 @@
     <string name="title_activity_start">Acro Panda</string>
     <string name="title_activity_choose">Choose level</string>
     <string name="title_activity_pause">Choose level</string>
-    <string name="welcome">Welcome to Panda\'s World!</string>
+    <string name="welcome">Select levels pack</string>
 </resources>
