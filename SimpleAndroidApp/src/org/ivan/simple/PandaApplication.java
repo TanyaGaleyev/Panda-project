@@ -1,6 +1,9 @@
 package org.ivan.simple;
 
+import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
+import android.graphics.Point;
 
 import org.ivan.simple.game.hero.Sprite;
 import org.ivan.simple.game.sound.MusicManager;
@@ -60,4 +63,16 @@ public class PandaApplication extends Application {
 			musicManager.pauseMusic();
 		}
 	}
+
+
+    public static Point windowSize(Activity activity) {
+        int width = activity.getWindowManager().getDefaultDisplay().getWidth();
+        int height = activity.getWindowManager().getDefaultDisplay().getHeight();
+        if(width < height) {
+            int tmp = width;
+            width = height;
+            height = tmp;
+        }
+        return new Point(width, height);
+    }
 }

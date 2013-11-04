@@ -17,8 +17,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -51,7 +53,7 @@ public class LevelChooseView extends SurfaceView {
 	/**
 	 * Marks complete levels
 	 */
-	private Bitmap cross;
+//	private Bitmap cross;
 
 	// Backgroung image of LevelChooseView
 	private String backgroundId;
@@ -101,6 +103,7 @@ public class LevelChooseView extends SurfaceView {
 
 	private final void init(Context context) {
         activity = (LevelChooseActivity) context;
+        initGrid();
 		textPaint = new Paint();
 		textPaint.setColor(Color.WHITE);
 		textPaint.setTextSize(48);
@@ -124,8 +127,6 @@ public class LevelChooseView extends SurfaceView {
 			}
 
 			public void surfaceCreated(SurfaceHolder holder) {
-                initGrid();
-
                 initSurface();
 
 				redrawer = new Redrawer();
@@ -140,16 +141,17 @@ public class LevelChooseView extends SurfaceView {
 	}
 
     private void initGrid() {
-        int xStep = getWidth() / LEVELS_COLS;
-        int yStep = getHeight() / LEVELS_ROWS;
+        Point size = PandaApplication.windowSize(activity);
+        int xStep = size.x / LEVELS_COLS;
+        int yStep = size.y / LEVELS_ROWS;
         if(xStep < yStep) {
             GRID_STEP = xStep - xStep % 8;
             LEFT_BOUND = 0;
-            TOP_BOUND = (getHeight() - xStep * LEVELS_ROWS) / 2;
+            TOP_BOUND = (size.y - GRID_STEP * LEVELS_ROWS) / 2;
         } else {
             GRID_STEP = yStep - yStep % 8;
             TOP_BOUND = 0;
-            LEFT_BOUND = (getWidth() - yStep * LEVELS_COLS) / 2;
+            LEFT_BOUND = (size.x - GRID_STEP * LEVELS_COLS) / 2;
         }
         markerX = LEFT_BOUND + GRID_STEP / 2;
         markerY = TOP_BOUND + GRID_STEP / 2;
@@ -159,7 +161,7 @@ public class LevelChooseView extends SurfaceView {
         imageProvider().setScaleParameters(getWidth(), getHeight());
 
         border = imageProvider().getBitmapNoCache("menu/border.png");
-        cross = imageProvider().getBitmapNoCache("menu/cross.png");
+//        cross = imageProvider().getBitmapNoCache("menu/cross.png");
         background = background != null ? background : Bitmap.createScaledBitmap(
                 imageProvider().getBitmapNoCache(backgroundId),
                 getWidth(),
@@ -247,7 +249,7 @@ public class LevelChooseView extends SurfaceView {
                 drawOnCenterCoordinates(border, x, y, canvas);
                 canvas.drawText("" + levels[i][j][0], x - 16, y + 16, textPaint);
                 if(finishedLevels[i][j] != 0) {
-                    drawOnCenterCoordinates(cross, x + border.getWidth() / 4, y + border.getHeight() / 4, canvas);
+//                    drawOnCenterCoordinates(cross, x + border.getWidth() / 4, y + border.getHeight() / 4, canvas);
                     Bitmap scoresImg = getScoreAward(i, j);
                     drawOnCenterCoordinates(scoresImg, x + border.getWidth() / 2 - 10, y + border.getHeight() / 2, canvas);
                 }

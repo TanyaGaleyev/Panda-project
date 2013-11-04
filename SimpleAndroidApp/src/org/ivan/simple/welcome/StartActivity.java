@@ -9,6 +9,7 @@ import org.ivan.simple.R;
 import org.ivan.simple.choose.LevelChooseActivity;
 
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,15 +38,9 @@ public class StartActivity extends PandaBaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        int width = getWindowManager().getDefaultDisplay().getWidth();
-        int height= getWindowManager().getDefaultDisplay().getHeight();
-        if(width > height) {
-        	DISPLAY_WIDTH = width;
-        	DISPLAY_HEIGHT = height;
-        } else {
-        	DISPLAY_WIDTH = height;
-        	DISPLAY_HEIGHT = width;
-        }
+        Point size = PandaApplication.windowSize(this);
+        DISPLAY_WIDTH = size.x;
+        DISPLAY_HEIGHT = size.y;
         // hide screen title
         setContentView(R.layout.activity_start);
         TextView caption = (TextView) findViewById(R.id.text_view);
