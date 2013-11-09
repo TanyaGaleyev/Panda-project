@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import org.ivan.simple.PandaApplication;
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
+import org.ivan.simple.achievements.AchievementsActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import java.io.IOException;
  */
 public class StartActivityNew extends PandaBaseActivity {
 
+    public static final String ANIMATIONS_DIR = "animations/menu/panda";
     private Typeface regular;
     private Typeface bold;
 
@@ -60,12 +62,11 @@ public class StartActivityNew extends PandaBaseActivity {
         try {
             if(pandaAnimation != null) return pandaAnimation;
             pandaAnimation = new AnimationDrawable();
-            String pandaAnimationFolder = "animations/menu/panda";
-            String[] frameNames = getAssets().list(pandaAnimationFolder);
+            String[] frameNames = getAssets().list(ANIMATIONS_DIR);
             for(String frameName : frameNames) {
                 pandaAnimation.addFrame(
                         Drawable.createFromStream(
-                                getAssets().open(pandaAnimationFolder + File.separator + frameName),
+                                getAssets().open(ANIMATIONS_DIR + File.separator + frameName),
                                 null),
                         40);
             }
@@ -105,7 +106,8 @@ public class StartActivityNew extends PandaBaseActivity {
     }
 
     private void gotoAchievementsScreen() {
-
+        Intent intent = new Intent(this, AchievementsActivity.class);
+        startActivity(intent);
     }
 
     private void gotoSettingsScreen() {

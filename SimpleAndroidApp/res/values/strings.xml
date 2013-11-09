@@ -10,4 +10,5 @@
     <string name="title_activity_choose">Choose level</string>
     <string name="title_activity_pause">Choose level</string>
     <string name="welcome">Welcome to Panda\'s World!</string>
+    <string name="title_activity_achievements">Achievements</string>
 </resources>

@@ -62,6 +62,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.ivan.simple.game.GameActivity" />
         </activity>
+
+        <activity
+            android:name=".achievements.AchievementsActivity"
+            android:label="@string/title_activity_achievements"
+            android:screenOrientation="landscape">
+        </activity>
     </application>
     
 

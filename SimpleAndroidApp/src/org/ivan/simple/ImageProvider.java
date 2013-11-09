@@ -131,4 +131,7 @@ public class ImageProvider {
 		return gridStep;
 	}
 
+    public String[] list(String path) throws IOException {
+        return asssetsMananger.list(base + resSet + path);
+    }
 }
