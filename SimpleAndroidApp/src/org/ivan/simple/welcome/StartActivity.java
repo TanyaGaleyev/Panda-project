@@ -108,7 +108,7 @@ public class StartActivity extends PandaBaseActivity {
 		if(resultCode == RESULT_OK && requestCode == 0) {
 			System.out.println("Choose activity results!");
 			boolean setComplete = data.getBooleanExtra(LevelChooseActivity.SET_COMPLETE, false);
-			if(true || setComplete && startedSet != levCount) {
+			if(setComplete && startedSet != levCount) {
                 final ImageView prevPack = levButtons.get(startedSet);
                 try {
                     final AnimationDrawable chestOpening = PandaApplication.getPandaApplication()
