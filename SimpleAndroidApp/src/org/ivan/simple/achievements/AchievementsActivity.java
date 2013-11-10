@@ -34,12 +34,8 @@ public class AchievementsActivity extends PandaBaseActivity {
         });
 
         LinearLayout achivList = (LinearLayout) findViewById(R.id.achievements_list);
-        try {
-            for(String achivPath: imageProvider().list(ACHIV_DIR)) {
-                achivList.addView(createAchievementBar(achivPath));
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        for(Achievement achiv : Achievement.values()) {
+            achivList.addView(createAchievementBar(achiv));
         }
     }
 
@@ -47,11 +43,12 @@ public class AchievementsActivity extends PandaBaseActivity {
         finish();
     }
 
-    private LinearLayout createAchievementBar(String achivPath) {
+    private LinearLayout createAchievementBar(Achievement achiv) {
+        String achivPath = achiv.name().toLowerCase();
         String iconPath =
                 ACHIV_DIR + File.separator + achivPath + File.separator + achivPath + ".png";
-        String title = "Title";
-        String description = "Description";
+        String title = achiv.title;
+        String description = achiv.description;
         LinearLayout hp = new LinearLayout(this);
         hp.setOrientation(LinearLayout.HORIZONTAL);
         ImageView icon = new ImageView(this);

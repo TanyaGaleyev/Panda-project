@@ -19,7 +19,7 @@ android {
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
+            java.srcDirs = ['src','generated']
             resources.srcDirs = ['src']
             aidl.srcDirs = ['src']
             renderscript.srcDirs = ['src']
@@ -30,3 +30,11 @@ android {
         instrumentTest.setRoot('tests')
     }
 }
+
+
+task generateAchievementsEnum << {
+    scr = new GroovyShell().parse(new File("groovy/achievements/generateEnum.groovy"));
+    scr.run();
+}
+generateAchievementsEnum.enabled = false;
+
