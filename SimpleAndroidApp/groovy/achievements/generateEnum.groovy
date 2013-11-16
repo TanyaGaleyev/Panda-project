@@ -1,8 +1,10 @@
 /**
  * Created by ivan on 10.11.13.
  */
+def base = args[0];
 def codePackage = "org.ivan.simple.achievements";
-def enumFile = new File("generated/" + codePackage.replace(".", "/") + "/Achievement.java");
+def enumFile = new File("$base/generated/" + codePackage.replace(".", "/") + "/Achievement.java");
+print(enumFile);
 enumFile.getParentFile().mkdirs();
 enumFile.write("");
 enumFile << "package " + codePackage + ";\n";
@@ -10,7 +12,7 @@ enumFile << "\n";
 enumFile << "/** Auto generated " + new Date() + " */\n";
 enumFile << "public enum Achievement {\n";
 def strBuilder = new StringBuilder();
-for(File prop : new File("groovy/achievements/info").listFiles()) {
+for(File prop : new File("$base/groovy/achievements/info").listFiles()) {
     strBuilder << prepareSingleValue(prop);
 }
 enumFile << (strBuilder.delete(strBuilder.length() - 2, strBuilder.length()) << ";\n").toString();

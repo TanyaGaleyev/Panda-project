@@ -20,7 +20,7 @@ android {
         main {
             manifest.srcFile 'AndroidManifest.xml'
             java.srcDirs = ['src','generated']
-            resources.srcDirs = ['src']
+            resources.srcDirs = ['src','groovy']
             aidl.srcDirs = ['src']
             renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
@@ -33,8 +33,11 @@ android {
 
 
 task generateAchievementsEnum << {
-    scr = new GroovyShell().parse(new File("groovy/achievements/generateEnum.groovy"));
-    scr.run();
+
+    def scrFile = new File("$rootDir/groovy/achievements/generateEnum.groovy")
+    def scr = new GroovyShell().parse(scrFile);
+    scr.run(scrFile, rootDir.absolutePath);
 }
-generateAchievementsEnum.enabled = false;
+//generateAchievementsEnum.enabled = false;
+preBuild.dependsOn generateAchievementsEnum
 

@@ -18,8 +18,10 @@ build/
 local.properties
 
 # eclipse workspace meta
-.metadata/
-.settings/
+*.metadata/
+*.settings/
+*.classpath
+*.project
 
 # idea meta
 .gradle/
