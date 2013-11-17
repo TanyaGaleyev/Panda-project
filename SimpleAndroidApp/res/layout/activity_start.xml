@@ -89,4 +89,24 @@
         <!--</TableRow>-->
     </TableLayout>
 
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/level_packs_back"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/back" />
+
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/level_packs_settings"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/level_packs_back"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/settings" />
+
 </RelativeLayout>

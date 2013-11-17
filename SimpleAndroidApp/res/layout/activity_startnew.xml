@@ -23,6 +23,7 @@
         android:background="@drawable/settings"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/achievement" />
 
 </RelativeLayout>

@@ -5,6 +5,7 @@ import org.ivan.simple.PandaApplication;
 import org.ivan.simple.UserControlType;
 import org.ivan.simple.game.hero.Hero;
 import org.ivan.simple.game.level.LevelCell;
+import org.ivan.simple.game.level.LevelModel;
 import org.ivan.simple.game.level.LevelView;
 import org.ivan.simple.game.monster.Monster;
 import org.ivan.simple.game.monster.MonsterFactory;
@@ -122,24 +123,27 @@ public class GameView extends SurfaceView {
 				false);
         serviceButtons = new ServiceButtons(10, 50);
         //GRID_STEP = 112;//88dp,48dp
-		System.out.println("GRID_STEP = " + GRID_STEP);
-		TOP_BOUND = GRID_STEP;
+//		System.out.println("GRID_STEP = " + GRID_STEP);
+
+        LevelModel model = new LevelModel(levId);
+		TOP_BOUND = (getHeight() - GRID_STEP * model.getRows()) / 2 + GRID_STEP / 2;
 		// TODO check this bound carefully!
-		LEFT_BOUND = GRID_STEP + GRID_STEP / 4;
+		LEFT_BOUND = (getWidth() - GRID_STEP * model.getCols()) / 2 + GRID_STEP / 2;
 		JUMP_SPEED = GRID_STEP;
 		ANIMATION_JUMP_SPEED = JUMP_SPEED / 8;
-		
-		level = new LevelView(levId, GRID_STEP, LEFT_BOUND, TOP_BOUND);
-		BOTTOM_BOUND = TOP_BOUND + level.model.getRows() * GRID_STEP;
-		RIGHT_BOUND = LEFT_BOUND + level.model.getCols() * GRID_STEP;
-		
+
+        BOTTOM_BOUND = TOP_BOUND + model.getRows() * GRID_STEP;
+        RIGHT_BOUND = LEFT_BOUND + model.getCols() * GRID_STEP;
+
+        level = new LevelView(model, GRID_STEP, LEFT_BOUND, TOP_BOUND);
+
 		prevCell = level.model.getHeroCell();
 //		prevMotion = level.model.getMotion();
 		
 		hero = new Hero(level.model.hero);
 		monster = MonsterFactory.createMonster(level.model.monster);
 		
-		hero.x= LEFT_BOUND + level.model.hero.getX() * GRID_STEP;
+		hero.x = LEFT_BOUND + level.model.hero.getX() * GRID_STEP;
 		hero.y = TOP_BOUND + level.model.hero.getY() * GRID_STEP;
 		
 		if(level.model.monster != null) {

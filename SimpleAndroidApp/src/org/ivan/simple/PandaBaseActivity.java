@@ -21,5 +21,9 @@ public abstract class PandaBaseActivity extends Activity {
 		super.onPause();
         PandaApplication.getPandaApplication().getMusicManger().pauseMusic();
 	}
+
+    protected void gotoSettingsScreen() {
+
+    }
 	
 }

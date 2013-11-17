@@ -103,11 +103,6 @@ public class StartActivityNew extends PandaBaseActivity {
         startActivity(intent);
     }
 
-    private void gotoSettingsScreen() {
-
-    }
-
-
     private void gotoPacksScreen() {
         Intent intent = new Intent(this, StartActivity.class);
 //        intent.putExtra(StartActivity.SET_ID, setId);

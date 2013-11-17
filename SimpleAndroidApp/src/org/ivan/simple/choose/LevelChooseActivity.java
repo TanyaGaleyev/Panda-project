@@ -4,6 +4,7 @@ package org.ivan.simple.choose;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 
 import org.ivan.simple.PandaBaseActivity;
@@ -47,9 +48,21 @@ public class LevelChooseActivity extends PandaBaseActivity {
         levelsSetId = getIntent().getIntExtra(StartActivity.SET_ID, 0);
         String finishedArray = preferences.getString(FINISHED_LEVELS + levelsSetId, "");
         view.setChooseScreenProperties(levelsSetId, finishedArray);
+        findViewById(R.id.choose_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        findViewById(R.id.choose_settings).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gotoSettingsScreen();
+            }
+        });
 	}
-	
-	@Override
+
+    @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
         setLoading(false);

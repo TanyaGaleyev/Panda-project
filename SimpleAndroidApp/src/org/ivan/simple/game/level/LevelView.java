@@ -10,8 +10,8 @@ public class LevelView {
 	private final int LEFT_BOUND;
 	private final int TOP_BOUND;
 	private final int GRID_STEP;
-	public LevelView(int lev, int gridStep, int leftBound, int topBound) {
-		model = new LevelModel(lev);
+	public LevelView(LevelModel model, int gridStep, int leftBound, int topBound) {
+		this.model = model;
 		GRID_STEP = gridStep;
 		LEFT_BOUND = leftBound;
 		TOP_BOUND = topBound;

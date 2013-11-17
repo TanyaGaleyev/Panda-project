@@ -57,6 +57,18 @@ public class StartActivity extends PandaBaseActivity {
                 .getInt(LAST_FINISHED_SET, 0);
 
         initPacksButtons(lastFinishedSet);
+        findViewById(R.id.level_packs_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        findViewById(R.id.level_packs_settings).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gotoSettingsScreen();
+            }
+        });
         loaded = true;
     }
 

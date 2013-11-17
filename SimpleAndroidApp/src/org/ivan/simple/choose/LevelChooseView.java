@@ -58,8 +58,8 @@ public class LevelChooseView extends SurfaceView {
 	// Backgroung image of LevelChooseView
 	private String backgroundId;
 	private Bitmap background;
-	private Bitmap back;
-	private Bitmap sound;
+//	private Bitmap back;
+//	private Bitmap sound;
 
 	// Scores bitmaps
 	private Bitmap highscore;
@@ -168,8 +168,8 @@ public class LevelChooseView extends SurfaceView {
                 getHeight(),
                 false);
         marker = imageProvider().getBitmapNoCache("menu/single_panda.png");
-        back = imageProvider().getBitmapNoCache("menu/back_choose.png");
-        sound = imageProvider().getBitmapNoCache("menu/sound_choose.png");
+//        back = imageProvider().getBitmapNoCache("menu/back_choose.png");
+//        sound = imageProvider().getBitmapNoCache("menu/sound_choose.png");
         highscore = imageProvider().getBitmapNoCache("menu/high_score.png");
         mediumscore = imageProvider().getBitmapNoCache("menu/medium_score.png");
         lowscore = imageProvider().getBitmapNoCache("menu/low_score.png");
@@ -211,8 +211,8 @@ public class LevelChooseView extends SurfaceView {
         drawGrid(canvas);
         drawLevelsIcons(canvas);
         drawOnCenterCoordinates(marker, markerX, markerY, canvas);
-        drawOnCenterCoordinates(back, 0 + GRID_STEP / 2, getHeight() - GRID_STEP / 2, canvas);
-        drawOnCenterCoordinates(sound, getWidth() - GRID_STEP / 2, getHeight() - GRID_STEP / 2, canvas);
+//        drawOnCenterCoordinates(back, 0 + GRID_STEP / 2, getHeight() - GRID_STEP / 2, canvas);
+//        drawOnCenterCoordinates(sound, getWidth() - GRID_STEP / 2, getHeight() - GRID_STEP / 2, canvas);
     }
 
     private void drawGrid(Canvas canvas) {
@@ -291,21 +291,21 @@ public class LevelChooseView extends SurfaceView {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		// back button pressed
-		if(event.getAction() == MotionEvent.ACTION_DOWN &&
-				0 < event.getX() && event.getX() < GRID_STEP &&
-				getHeight() - GRID_STEP < event.getY() && event.getY() < getHeight()) {
-			activity.finish();
-			return true;
-		}
-		// sound button pressed
-		if(event.getAction() == MotionEvent.ACTION_DOWN &&
-				getWidth() - GRID_STEP < event.getX() && event.getX() < getWidth() &&
-				getHeight() - GRID_STEP < event.getY() && event.getY() < getHeight()) {
-			boolean sound = PandaApplication.getPandaApplication().getSound();
-			PandaApplication.getPandaApplication().setSound(!sound);
-			return true;
-		}
+//		// back button pressed
+//		if(event.getAction() == MotionEvent.ACTION_DOWN &&
+//				0 < event.getX() && event.getX() < GRID_STEP &&
+//				getHeight() - GRID_STEP < event.getY() && event.getY() < getHeight()) {
+//			activity.finish();
+//			return true;
+//		}
+//		// sound button pressed
+//		if(event.getAction() == MotionEvent.ACTION_DOWN &&
+//				getWidth() - GRID_STEP < event.getX() && event.getX() < getWidth() &&
+//				getHeight() - GRID_STEP < event.getY() && event.getY() < getHeight()) {
+//			boolean sound = PandaApplication.getPandaApplication().getSound();
+//			PandaApplication.getPandaApplication().setSound(!sound);
+//			return true;
+//		}
 		// get level Id depending on by click on screen selection
 		final int levId = getLevelId(event);
 		// if level selected (levId != 0) start next GameActivity with specified level
