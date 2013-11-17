@@ -33,7 +33,6 @@ android {
 
 
 task generateAchievementsEnum << {
-
     def scrFile = new File("$rootDir/groovy/achievements/generateEnum.groovy")
     def scr = new GroovyShell().parse(scrFile);
     scr.run(scrFile, rootDir.absolutePath);

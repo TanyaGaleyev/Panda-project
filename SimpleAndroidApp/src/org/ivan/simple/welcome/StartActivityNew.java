@@ -61,15 +61,8 @@ public class StartActivityNew extends PandaBaseActivity {
     private AnimationDrawable getPandaAnimation() {
         try {
             if(pandaAnimation != null) return pandaAnimation;
-            pandaAnimation = new AnimationDrawable();
-            String[] frameNames = getAssets().list(ANIMATIONS_DIR);
-            for(String frameName : frameNames) {
-                pandaAnimation.addFrame(
-                        Drawable.createFromStream(
-                                getAssets().open(ANIMATIONS_DIR + File.separator + frameName),
-                                null),
-                        40);
-            }
+            pandaAnimation = PandaApplication.getPandaApplication().
+                    loadAnimationFromFolder("animations/menu/panda");
             pandaAnimation.setOneShot(false);
             panda.setBackgroundDrawable(pandaAnimation);
             panda.post(new Runnable() {

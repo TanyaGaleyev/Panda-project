@@ -1,7 +1,10 @@
 package org.ivan.simple.welcome;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.ivan.simple.PandaApplication;
 import org.ivan.simple.PandaBaseActivity;
@@ -10,10 +13,13 @@ import org.ivan.simple.choose.LevelChooseActivity;
 
 import android.content.Intent;
 import android.graphics.Point;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
@@ -26,7 +32,7 @@ public class StartActivity extends PandaBaseActivity {
 	public static final String LAST_FINISHED_SET = "Last finished set of levels";
 	private final String[] levelsCaptions = {"ACCESS", "BUTTON", "ZOMBIE", "SYSTEM"};
 	public final int levCount = levelsCaptions.length;
-	private List<Button> levButtons = new ArrayList<Button>();
+	private List<ImageView> levButtons = new ArrayList<ImageView>();
 	private int startedSet = 0;
 	private boolean loaded = false;
 	
@@ -55,30 +61,40 @@ public class StartActivity extends PandaBaseActivity {
     }
 
     private void initPacksButtons(int lastFinishedSet) {
-        LinearLayout buttonsPane = (LinearLayout) findViewById(R.id.packs_panel);
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.FILL_PARENT,
-                RelativeLayout.LayoutParams.FILL_PARENT
-        );
-//        lp.addRule(RelativeLayout.CENTER_VERTICAL);
-//        lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        LinearLayout row = null;
+        TableLayout buttonsPane = (TableLayout) findViewById(R.id.packs_panel);
+        TableRow row = null;
+        TableLayout.LayoutParams rowParams = new TableLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        rowParams.weight = 1;
+        TableRow.LayoutParams packButtonParam = new TableRow.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        packButtonParam.weight = 1;
+        packButtonParam.setMargins(5, 5, 5, 5);
+        packButtonParam.gravity = Gravity.CENTER;
+
         for(int i = 0; i < levCount; i++) {
-            if(i % 2 == 0) {
-                row = new LinearLayout(this);
-                row.setOrientation(LinearLayout.HORIZONTAL);
-                buttonsPane.addView(row, lp);
+            if(i % 3 == 0) {
+                row = new TableRow(this);
+                buttonsPane.addView(row, rowParams);
             }
-            Button levbtn = new Button(this);
-            levbtn.setText(levelsCaptions[i]);
+            ImageView levbtn = new ImageView(this);
+//            levbtn.setText(levelsCaptions[i]);
             final int id = i + 1;
-            levbtn.setEnabled(id <= lastFinishedSet + 1);
+            if(id <= lastFinishedSet + 1) {
+                levbtn.setImageResource(R.drawable.chest_open);
+                levbtn.setEnabled(true);
+            } else {
+                levbtn.setImageResource(R.drawable.chest_close);
+                levbtn.setEnabled(false);
+            }
             levbtn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     startPack(id);
                 }
             });
-            row.addView(levbtn, lp);
+            row.addView(levbtn, packButtonParam);
             levButtons.add(levbtn);
 //        	levbtn.getLayoutParams().width = (int) (DISPLAY_WIDTH * 0.85);
 //        	levbtn.getLayoutParams().height = (int) (DISPLAY_HEIGHT * 0.20);
@@ -93,7 +109,35 @@ public class StartActivity extends PandaBaseActivity {
 			System.out.println("Choose activity results!");
 			boolean setComplete = data.getBooleanExtra(LevelChooseActivity.SET_COMPLETE, false);
 			if(setComplete && startedSet != levCount) {
-				levButtons.get(startedSet).setEnabled(true);
+                final ImageView prevPack = levButtons.get(startedSet);
+                try {
+                    final AnimationDrawable chestOpening = PandaApplication.getPandaApplication()
+                            .loadAnimationFromFolder("animations/menu/pack_opening");
+                    chestOpening.setOneShot(true);
+                    prevPack.setImageDrawable(chestOpening);
+                    prevPack.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            chestOpening.start();
+                            new Timer().schedule(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    chestOpening.stop();
+                                    prevPack.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            prevPack.setImageResource(R.drawable.chest_open);
+                                        }
+                                    });
+                                }
+                            }, chestOpening.getNumberOfFrames() * PandaApplication.ONE_FRAME_DURATION);
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    prevPack.setImageResource(R.drawable.chest_open);
+                }
+                prevPack.setEnabled(true);
 			}
 		}
 	}
