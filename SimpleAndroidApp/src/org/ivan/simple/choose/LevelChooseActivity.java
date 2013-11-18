@@ -48,13 +48,13 @@ public class LevelChooseActivity extends PandaBaseActivity {
         levelsSetId = getIntent().getIntExtra(StartActivity.SET_ID, 0);
         String finishedArray = preferences.getString(FINISHED_LEVELS + levelsSetId, "");
         view.setChooseScreenProperties(levelsSetId, finishedArray);
-        findViewById(R.id.choose_back).setOnClickListener(new View.OnClickListener() {
+        prepare(findViewById(R.id.choose_back)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-        findViewById(R.id.choose_settings).setOnClickListener(new View.OnClickListener() {
+        prepare(findViewById(R.id.choose_settings)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 gotoSettingsScreen();

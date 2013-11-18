@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,42 +35,40 @@ public class StartActivity extends PandaBaseActivity {
 	public final int levCount = levelsCaptions.length;
 	private List<ImageView> levButtons = new ArrayList<ImageView>();
 	private int startedSet = 0;
-	private boolean loaded = false;
-	
-	public static int DISPLAY_WIDTH;
-	public static int DISPLAY_HEIGHT;
-	
+
+
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Point size = PandaApplication.windowSize(this);
-        DISPLAY_WIDTH = size.x;
-        DISPLAY_HEIGHT = size.y;
         // hide screen title
         setContentView(R.layout.activity_start);
         TextView caption = (TextView) findViewById(R.id.text_view);
-        caption.setTypeface(PandaApplication.getPandaApplication().getFontProvider().bold());
-        caption.setText(String.format("max memory: %d KiB", Runtime.getRuntime().maxMemory() / 1024));
+        caption.setTypeface(app().getFontProvider().bold());
+        caption.setTextSize(TypedValue.COMPLEX_UNIT_PX, DISPLAY_HEIGHT / 10);
+//        caption.setText(String.format("max memory: %d KiB", Runtime.getRuntime().maxMemory() / 1024));
 
         int lastFinishedSet = getSharedPreferences(LevelChooseActivity.CONFIG, MODE_PRIVATE)
                 .getInt(LAST_FINISHED_SET, 0);
 
         initPacksButtons(lastFinishedSet);
-        findViewById(R.id.level_packs_back).setOnClickListener(new View.OnClickListener() {
+
+        View backBtn = prepare(findViewById(R.id.level_packs_back));
+        View settingsBtn = prepare(findViewById(R.id.level_packs_settings));
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-        findViewById(R.id.level_packs_settings).setOnClickListener(new View.OnClickListener() {
+        settingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 gotoSettingsScreen();
             }
         });
-        loaded = true;
     }
 
     private void initPacksButtons(int lastFinishedSet) {
@@ -123,7 +122,7 @@ public class StartActivity extends PandaBaseActivity {
 			if(setComplete && startedSet != levCount) {
                 final ImageView prevPack = levButtons.get(startedSet);
                 try {
-                    final AnimationDrawable chestOpening = PandaApplication.getPandaApplication()
+                    final AnimationDrawable chestOpening = app()
                             .loadAnimationFromFolder("animations/menu/pack_opening");
                     chestOpening.setOneShot(true);
                     prevPack.setImageDrawable(chestOpening);

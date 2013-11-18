@@ -23,8 +23,6 @@ import java.io.IOException;
 public class StartActivityNew extends PandaBaseActivity {
 
     public static final String ANIMATIONS_DIR = "animations/menu/panda";
-    private Typeface regular;
-    private Typeface bold;
 
     private ImageView achievement;
     private ImageView startSettings;
@@ -39,8 +37,8 @@ public class StartActivityNew extends PandaBaseActivity {
         contentPanel = (RelativeLayout) findViewById(R.id.activity_startnew);
 
         achievement = (ImageView) findViewById(R.id.achievement);
-        regular = PandaApplication.getPandaApplication().getFontProvider().regular();
-        bold = PandaApplication.getPandaApplication().getFontProvider().bold();
+        Typeface regular = app().getFontProvider().regular();
+        Typeface bold = app().getFontProvider().bold();
 
         achievement = (ImageView) findViewById(R.id.achievement);
         startSettings = (ImageView) findViewById(R.id.start_settings);
@@ -61,8 +59,8 @@ public class StartActivityNew extends PandaBaseActivity {
     private AnimationDrawable getPandaAnimation() {
         try {
             if(pandaAnimation != null) return pandaAnimation;
-            pandaAnimation = PandaApplication.getPandaApplication().
-                    loadAnimationFromFolder("animations/menu/panda");
+            pandaAnimation = app().
+                    loadAnimationFromFolder(ANIMATIONS_DIR);
             pandaAnimation.setOneShot(false);
             panda.setBackgroundDrawable(pandaAnimation);
             panda.post(new Runnable() {
@@ -84,13 +82,13 @@ public class StartActivityNew extends PandaBaseActivity {
                 gotoPacksScreen();
             }
         });
-        startSettings.setOnClickListener(new View.OnClickListener() {
+        prepare(startSettings).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 gotoSettingsScreen();
             }
         });
-        achievement.setOnClickListener(new View.OnClickListener() {
+        prepare(achievement).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 gotoAchievementsScreen();
