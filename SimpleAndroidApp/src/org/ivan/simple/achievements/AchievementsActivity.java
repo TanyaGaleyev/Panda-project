@@ -1,5 +1,6 @@
 package org.ivan.simple.achievements;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 
@@ -55,9 +56,16 @@ public class AchievementsActivity extends PandaBaseActivity {
         String description = achiv.description;
         LinearLayout hp = new LinearLayout(this);
         hp.setOrientation(LinearLayout.HORIZONTAL);
-        ImageView icon = new ImageView(this);
-        icon.setImageBitmap(app().getImageProvider().getBitmap(iconPath));
-        hp.addView(icon);
+//        icon.setImageBitmap(app().getImageProvider().getBitmap(iconPath));
+        try {
+            ImageView icon = new ImageView(this);
+            icon.setBackgroundDrawable(
+                    Drawable.createFromStream(getResources().getAssets().open(iconPath), null));
+            icon.setLayoutParams(new ViewGroup.LayoutParams(DISPLAY_HEIGHT / 5, DISPLAY_HEIGHT / 5));
+            hp.addView(icon);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         LinearLayout textPanel = new LinearLayout(this);
         textPanel.setOrientation(LinearLayout.VERTICAL);
