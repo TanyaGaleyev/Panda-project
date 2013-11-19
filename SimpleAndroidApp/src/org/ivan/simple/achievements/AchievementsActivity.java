@@ -12,8 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.ivan.simple.ImageProvider;
-import org.ivan.simple.PandaApplication;
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
 
@@ -57,6 +55,12 @@ public class AchievementsActivity extends PandaBaseActivity {
         LinearLayout hp = new LinearLayout(this);
         hp.setOrientation(LinearLayout.HORIZONTAL);
 //        icon.setImageBitmap(app().getImageProvider().getBitmap(iconPath));
+        ViewGroup.MarginLayoutParams margins = new ViewGroup.MarginLayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        // TODO adjust margins
+        margins.setMargins(20, 20, 20, 20);
+        hp.setLayoutParams(margins);
         try {
             ImageView icon = new ImageView(this);
             icon.setBackgroundDrawable(
@@ -70,9 +74,11 @@ public class AchievementsActivity extends PandaBaseActivity {
         LinearLayout textPanel = new LinearLayout(this);
         textPanel.setOrientation(LinearLayout.VERTICAL);
         TextView achivTitle = new TextView(this);
+        achivTitle.setTypeface(app().getFontProvider().bold());
         achivTitle.setText(title);
         textPanel.addView(achivTitle);
         TextView achivDescription = new TextView(this);
+        achivDescription.setTypeface(app().getFontProvider().regular());
         achivDescription.setText(description);
         textPanel.addView(achivDescription);
         hp.addView(textPanel);
