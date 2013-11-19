@@ -326,37 +326,41 @@ public class GameView extends SurfaceView {
 		} else if(isReadyToPlayWinAnimation()) {
 			finished = !hero.playWinAnimation();
 		} else {
-			if(hero.getRealMotion().getType() == MotionType.TP_LEFT ||
-					hero.getRealMotion().getType() == MotionType.TP_RIGHT ||
-					hero.getRealMotion().getType() == MotionType.TP) {
-				hero.x = LEFT_BOUND + level.model.hero.getX() * GRID_STEP;
-				hero.y = TOP_BOUND + level.model.hero.getY() * GRID_STEP;
-			}
-			int xSpeed = hero.getRealMotion().getXSpeed() * ANIMATION_JUMP_SPEED;
-			int ySpeed = hero.getRealMotion().getYSpeed() * ANIMATION_JUMP_SPEED;
-			
-			hero.x += xSpeed;
-			hero.y += ySpeed;
+            regularMove();
 		}
 	}
-	
-	/**
+
+    private void regularMove() {
+        if(hero.getRealMotion().getType() == MotionType.TP_LEFT ||
+                hero.getRealMotion().getType() == MotionType.TP_RIGHT ||
+                hero.getRealMotion().getType() == MotionType.TP) {
+            hero.x = LEFT_BOUND + level.model.hero.getX() * GRID_STEP;
+            hero.y = TOP_BOUND + level.model.hero.getY() * GRID_STEP;
+        }
+        int xSpeed = hero.getRealMotion().getXSpeed() * ANIMATION_JUMP_SPEED;
+        int ySpeed = hero.getRealMotion().getYSpeed() * ANIMATION_JUMP_SPEED;
+
+        hero.x += xSpeed;
+        hero.y += ySpeed;
+    }
+
+    /**
 	 * Random rotating movement if hero was spiked
 	 * @return
 	 */
 	private boolean moveLose() {
-//		if((-GRID_STEP < hero.x && hero.x < getWidth() + GRID_STEP) && (-GRID_STEP < hero.y && hero.y < getHeight() + GRID_STEP)) {
-//			if(hero.getRealMotion().getType() == MotionType.FALL && !monsterLose) {
-//				hero.y += ANIMATION_JUMP_SPEED;
-//			} else {
-//                hero.playLoseAnimation();
-//                moveLoseRandom();
-//            }
-//            return true;
-//		}
-//        return false;
-        return hero.playLoseAnimation();
+        if(level.model.outOfBounds() && !monsterLose) {
+            regularMove();
+            return !outOfAnimationBounds();
+        } else {
+            return hero.playLoseAnimation();
+        }
 	}
+
+    private boolean outOfAnimationBounds() {
+        return hero.x <= LEFT_BOUND - GRID_STEP || hero.x >= RIGHT_BOUND + GRID_STEP ||
+               hero.y <= TOP_BOUND - GRID_STEP || hero.y >= BOTTOM_BOUND + GRID_STEP;
+    }
 
     private void moveLoseRandom() {
         double rand = Math.random();

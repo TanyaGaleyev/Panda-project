@@ -670,6 +670,10 @@ public class LevelModel {
 		}
 		if(hero.hasMoved()) steps++;
 	}
+
+    public boolean outOfBounds() {
+        return hero.getX() < 0 || hero.getX() >= cols || hero.getY() < 0 || hero.getY() >= rows;
+    }
 	
 	private boolean motionAvaible(MotionType mt) {
 		if(mt == hero.finishingMotion.getType()) {
