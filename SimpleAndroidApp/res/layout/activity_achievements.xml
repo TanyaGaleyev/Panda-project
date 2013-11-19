@@ -12,13 +12,16 @@
         android:gravity="center_vertical|center_horizontal"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="60dp"
-        android:layout_marginRight="60dp">
+        android:layout_marginRight="60dp"
+        android:background="@drawable/achiv_border">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/achiv_big_icon"
-            android:src="@drawable/achievement" />
+            android:src="@drawable/achievement"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -38,15 +41,17 @@
         android:layout_above="@+id/achievements_back"
         android:scrollbarStyle="insideOverlay"
         android:scrollbarAlwaysDrawVerticalTrack="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="60dp"
-        android:layout_marginRight="60dp">
+        android:layout_marginRight="60dp"
+        android:background="@drawable/achiv_border">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:layout_margin="5dp"
             android:id="@+id/achievements_list">
 
         </LinearLayout>
