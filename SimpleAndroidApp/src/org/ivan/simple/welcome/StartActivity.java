@@ -49,10 +49,7 @@ public class StartActivity extends PandaBaseActivity {
         caption.setTextSize(TypedValue.COMPLEX_UNIT_PX, DISPLAY_HEIGHT / 10);
 //        caption.setText(String.format("max memory: %d KiB", Runtime.getRuntime().maxMemory() / 1024));
 
-        int lastFinishedSet = getSharedPreferences(LevelChooseActivity.CONFIG, MODE_PRIVATE)
-                .getInt(LAST_FINISHED_SET, 0);
-
-        initPacksButtons(lastFinishedSet);
+        initPacksButtons();
 
         View backBtn = prepare(findViewById(R.id.level_packs_back));
         View settingsBtn = prepare(findViewById(R.id.level_packs_settings));
@@ -71,7 +68,12 @@ public class StartActivity extends PandaBaseActivity {
         });
     }
 
-    private void initPacksButtons(int lastFinishedSet) {
+    private int lastFinishedSet() {
+        return getSharedPreferences(LevelChooseActivity.CONFIG, MODE_PRIVATE)
+                .getInt(LAST_FINISHED_SET, 0);
+    }
+
+    private void initPacksButtons() {
         TableLayout buttonsPane = (TableLayout) findViewById(R.id.packs_panel);
         TableRow row = null;
         TableLayout.LayoutParams rowParams = new TableLayout.LayoutParams(
@@ -93,7 +95,7 @@ public class StartActivity extends PandaBaseActivity {
             ImageView levbtn = new ImageView(this);
 //            levbtn.setText(levelsCaptions[i]);
             final int id = i + 1;
-            if(id <= lastFinishedSet + 1) {
+            if(id <= lastFinishedSet() + 1) {
                 levbtn.setImageResource(R.drawable.chest_open);
                 levbtn.setEnabled(true);
             } else {
@@ -119,13 +121,15 @@ public class StartActivity extends PandaBaseActivity {
 		if(resultCode == RESULT_OK && requestCode == 0) {
 			System.out.println("Choose activity results!");
 			boolean setComplete = data.getBooleanExtra(LevelChooseActivity.SET_COMPLETE, false);
-			if(setComplete && startedSet != levCount) {
+			if(setComplete && startedSet > lastFinishedSet()) {
                 final ImageView prevPack = levButtons.get(startedSet);
                 try {
                     final AnimationDrawable chestOpening = app()
                             .loadAnimationFromFolder("animations/menu/pack_opening");
                     chestOpening.setOneShot(true);
-                    prevPack.setImageDrawable(chestOpening);
+                    prevPack.setBackgroundDrawable(chestOpening);
+                    // TODO rake here, get rid of alpha channel manipulation, calculate chests sizes insted
+                    prevPack.setImageAlpha(0);
                     prevPack.post(new Runnable() {
                         @Override
                         public void run() {
@@ -137,7 +141,9 @@ public class StartActivity extends PandaBaseActivity {
                                     prevPack.post(new Runnable() {
                                         @Override
                                         public void run() {
+                                            prevPack.setImageAlpha(255);
                                             prevPack.setImageResource(R.drawable.chest_open);
+                                            prevPack.setBackgroundDrawable(null);
                                         }
                                     });
                                 }
@@ -146,6 +152,7 @@ public class StartActivity extends PandaBaseActivity {
                     });
                 } catch (IOException e) {
                     e.printStackTrace();
+                    prevPack.setImageAlpha(255);
                     prevPack.setImageResource(R.drawable.chest_open);
                 }
                 prevPack.setEnabled(true);
