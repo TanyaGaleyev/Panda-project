@@ -35,10 +35,10 @@ public class AchievementsActivity extends PandaBaseActivity {
         });
         TextView achivCaption = (TextView) findViewById(R.id.achiv_caption);
         achivCaption.setTypeface(app().getFontProvider().bold());
-        achivCaption.setTextSize(TypedValue.COMPLEX_UNIT_PX, DISPLAY_HEIGHT / 10);
+        achivCaption.setTextSize(TypedValue.COMPLEX_UNIT_PX, DISPLAY_HEIGHT / 15);
         ViewGroup.LayoutParams lp = findViewById(R.id.achiv_big_icon).getLayoutParams();
-        lp.height = DISPLAY_HEIGHT / 5;
-        lp.width = DISPLAY_HEIGHT / 5;
+        lp.height = DISPLAY_HEIGHT / 8;
+        lp.width = DISPLAY_HEIGHT / 8;
 
         LinearLayout achivList = (LinearLayout) findViewById(R.id.achievements_list);
         for(Achievement achiv : Achievement.values()) {
