@@ -10,6 +10,7 @@ import org.ivan.simple.PandaApplication;
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
 import org.ivan.simple.choose.LevelChooseActivity;
+import org.ivan.simple.utils.PandaButtonsPanel;
 
 import android.content.Intent;
 import android.graphics.Point;
@@ -51,8 +52,12 @@ public class StartActivity extends PandaBaseActivity {
 
         initPacksButtons();
 
-        View backBtn = prepare(findViewById(R.id.level_packs_back));
-        View settingsBtn = prepare(findViewById(R.id.level_packs_settings));
+        View backBtn = prepare(R.drawable.back);
+        View settingsBtn = prepare(R.drawable.settings);
+
+        PandaButtonsPanel bp = (PandaButtonsPanel) findViewById(R.id.level_packs_bp);
+        bp.customAddView(backBtn);
+        bp.customAddView(settingsBtn);
 
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override

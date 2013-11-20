@@ -43,7 +43,8 @@
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="60dp"
         android:layout_marginRight="60dp"
-        android:background="@drawable/achiv_border">
+        android:background="@drawable/achiv_border"
+        android:id="@+id/linearLayout2">
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
