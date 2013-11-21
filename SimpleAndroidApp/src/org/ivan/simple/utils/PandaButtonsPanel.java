@@ -31,13 +31,11 @@ public class PandaButtonsPanel extends LinearLayout {
         btnsContainer = new LinearLayout(getContext());
         btnsContainer.setOrientation(HORIZONTAL);
         btnsContainer.setBackgroundResource(R.drawable.bp_border);
-        btnsContainer.setAlpha(0.53f);
         addView(btnsContainer);
         corner = new ImageView(getContext());
         corner.setLayoutParams(new ViewGroup.LayoutParams(
                 40, ViewGroup.LayoutParams.MATCH_PARENT));
         corner.setBackgroundResource(R.drawable.corner);
-        corner.setAlpha(0.53f);
         addView(corner);
     }
 
