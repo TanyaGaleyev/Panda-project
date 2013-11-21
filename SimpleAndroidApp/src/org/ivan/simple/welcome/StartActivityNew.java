@@ -3,18 +3,16 @@ package org.ivan.simple.welcome;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import org.ivan.simple.PandaApplication;
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
 import org.ivan.simple.achievements.AchievementsActivity;
+import org.ivan.simple.utils.PandaButtonsPanel;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -24,8 +22,8 @@ public class StartActivityNew extends PandaBaseActivity {
 
     public static final String ANIMATIONS_DIR = "animations/menu/panda";
 
-    private ImageView achievement;
-    private ImageView startSettings;
+    private View achivBtn;
+    private View startSettings;
     private ImageView panda;
     private RelativeLayout contentPanel;
     private AnimationDrawable pandaAnimation;
@@ -36,12 +34,15 @@ public class StartActivityNew extends PandaBaseActivity {
         setContentView(R.layout.activity_startnew);
         contentPanel = (RelativeLayout) findViewById(R.id.activity_startnew);
 
-        achievement = (ImageView) findViewById(R.id.achievement);
         Typeface regular = app().getFontProvider().regular();
         Typeface bold = app().getFontProvider().bold();
 
-        achievement = (ImageView) findViewById(R.id.achievement);
-        startSettings = (ImageView) findViewById(R.id.start_settings);
+        achivBtn = prepare(R.drawable.achievement);
+        startSettings = prepare(R.drawable.settings);
+        PandaButtonsPanel bp = (PandaButtonsPanel) findViewById(R.id.welcome_bp);
+        bp.customAddView(achivBtn);
+        bp.customAddView(startSettings);
+
         panda = new ImageView(getApplicationContext());
         int width = (int) (getWindowManager().getDefaultDisplay().getWidth() * .3125f);
         int height = (int) (getWindowManager().getDefaultDisplay().getHeight() * .5f);
@@ -88,7 +89,7 @@ public class StartActivityNew extends PandaBaseActivity {
                 gotoSettingsScreen();
             }
         });
-        prepare(achievement).setOnClickListener(new View.OnClickListener() {
+        prepare(achivBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 gotoAchievementsScreen();

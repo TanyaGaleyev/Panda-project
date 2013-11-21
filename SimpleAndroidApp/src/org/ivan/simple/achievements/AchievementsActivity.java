@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
+import org.ivan.simple.utils.PandaButtonsPanel;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +27,10 @@ public class AchievementsActivity extends PandaBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_achievements);
-        ImageButton backBtn = (ImageButton) prepare(findViewById(R.id.achievements_back));
+        View backBtn = prepare(R.drawable.back);
+        PandaButtonsPanel bp = (PandaButtonsPanel) findViewById(R.id.achiv_bp);
+        bp.customAddView(backBtn);
+
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

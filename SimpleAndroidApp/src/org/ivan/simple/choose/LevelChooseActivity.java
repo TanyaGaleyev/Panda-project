@@ -9,6 +9,7 @@ import android.view.Window;
 
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
+import org.ivan.simple.utils.PandaButtonsPanel;
 import org.ivan.simple.welcome.StartActivity;
 
 public class LevelChooseActivity extends PandaBaseActivity {
@@ -48,13 +49,18 @@ public class LevelChooseActivity extends PandaBaseActivity {
         levelsSetId = getIntent().getIntExtra(StartActivity.SET_ID, 0);
         String finishedArray = preferences.getString(FINISHED_LEVELS + levelsSetId, "");
         view.setChooseScreenProperties(levelsSetId, finishedArray);
-        prepare(findViewById(R.id.choose_back)).setOnClickListener(new View.OnClickListener() {
+        View backBtn = prepare(R.drawable.back);
+        View settingsBtn = prepare(R.drawable.settings);
+        PandaButtonsPanel bp = (PandaButtonsPanel) findViewById(R.id.choose_bp);
+        bp.customAddView(backBtn);
+        bp.customAddView(settingsBtn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-        prepare(findViewById(R.id.choose_settings)).setOnClickListener(new View.OnClickListener() {
+        settingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 gotoSettingsScreen();
