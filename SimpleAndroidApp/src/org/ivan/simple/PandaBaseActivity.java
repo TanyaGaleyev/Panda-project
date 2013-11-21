@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import org.ivan.simple.settings.SettingsPanel;
 
 public abstract class PandaBaseActivity extends Activity {
 
@@ -63,15 +66,9 @@ public abstract class PandaBaseActivity extends Activity {
     private Dialog getSettingsDialog() {
         Dialog ret = new Dialog(this);
         ret.setTitle(SETTINGS);
-////        ListView lv = new ListView(this);
-////        lv.setAdapter(app().getSettingsAdapter());
-////        ret.setContentView(lv);
-        FrameLayout parent = (FrameLayout) app().lv.getParent();
-        if(parent != null) {
-            parent.removeAllViews();
-        }
-        ret.setContentView(app().lv);
+        ((TextView) ret.findViewById(android.R.id.title)).
+                setTypeface(app().getFontProvider().bold());
+        ret.setContentView(new SettingsPanel(this, app().getSettingsModel()));
         return ret;
-//        return app().dialog;
     }
 }

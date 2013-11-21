@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import org.ivan.simple.game.hero.Sprite;
 import org.ivan.simple.game.sound.MusicManager;
+import org.ivan.simple.settings.SettingsModel;
 import org.ivan.simple.utils.PandaCheckBoxAdapter;
 
 import java.io.File;
@@ -28,9 +29,7 @@ public class PandaApplication extends Application {
 
 	// TODO get rid of singletons
     private static PandaApplication INSTANCE;
-    private PandaCheckBoxAdapter settingsAdapter;
-    public ListView lv;
-    public Dialog dialog;
+    private SettingsModel settingsModel = new SettingsModel();
 
     public static PandaApplication getPandaApplication() {
 		return INSTANCE;
@@ -46,11 +45,6 @@ public class PandaApplication extends Application {
         imageProvider = new ImageProvider(getApplicationContext());
         loading = new Sprite("menu/loader.png", 1, 12);
         loading.setAnimating(true);
-        settingsAdapter = new PandaCheckBoxAdapter(getApplicationContext(), 0, "effects", "music");
-        lv = new ListView(this);
-        lv.setAdapter(settingsAdapter);
-//        dialog = new Dialog(getApplicationContext());
-//        dialog.setContentView(lv);
 	}
 
 	public MusicManager getMusicManger() {
@@ -107,7 +101,7 @@ public class PandaApplication extends Application {
         return animation;
     }
 
-    public PandaCheckBoxAdapter getSettingsAdapter() {
-        return settingsAdapter;
+    public SettingsModel getSettingsModel() {
+        return settingsModel;
     }
 }
