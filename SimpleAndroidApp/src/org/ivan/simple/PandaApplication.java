@@ -2,19 +2,23 @@ package org.ivan.simple;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
+import android.widget.ListView;
 
 import org.ivan.simple.game.hero.Sprite;
 import org.ivan.simple.game.sound.MusicManager;
+import org.ivan.simple.utils.PandaCheckBoxAdapter;
 
 import java.io.File;
 import java.io.IOException;
 
 public class PandaApplication extends Application {
     public static final int ONE_FRAME_DURATION = 40;
+
     private MusicManager musicManager;
     private FontProvider fontProvider;
     private ImageProvider imageProvider;
@@ -24,8 +28,11 @@ public class PandaApplication extends Application {
 
 	// TODO get rid of singletons
     private static PandaApplication INSTANCE;
+    private PandaCheckBoxAdapter settingsAdapter;
+    public ListView lv;
+    public Dialog dialog;
 
-	public static PandaApplication getPandaApplication() {
+    public static PandaApplication getPandaApplication() {
 		return INSTANCE;
 	}
 
@@ -39,6 +46,11 @@ public class PandaApplication extends Application {
         imageProvider = new ImageProvider(getApplicationContext());
         loading = new Sprite("menu/loader.png", 1, 12);
         loading.setAnimating(true);
+        settingsAdapter = new PandaCheckBoxAdapter(getApplicationContext(), 0, "effects", "music");
+        lv = new ListView(this);
+        lv.setAdapter(settingsAdapter);
+//        dialog = new Dialog(getApplicationContext());
+//        dialog.setContentView(lv);
 	}
 
 	public MusicManager getMusicManger() {
@@ -93,5 +105,9 @@ public class PandaApplication extends Application {
                     ONE_FRAME_DURATION);
         }
         return animation;
+    }
+
+    public PandaCheckBoxAdapter getSettingsAdapter() {
+        return settingsAdapter;
     }
 }

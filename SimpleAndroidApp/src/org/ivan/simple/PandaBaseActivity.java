@@ -1,15 +1,18 @@
 package org.ivan.simple;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 public abstract class PandaBaseActivity extends Activity {
 
+    public static final String SETTINGS = "Settings";
     public static int DISPLAY_WIDTH;
     public static int DISPLAY_HEIGHT;
 
@@ -35,7 +38,7 @@ public abstract class PandaBaseActivity extends Activity {
 	}
 
     protected void gotoSettingsScreen() {
-
+        getSettingsDialog().show();
     }
 
     protected View prepare(View view) {
@@ -55,5 +58,20 @@ public abstract class PandaBaseActivity extends Activity {
 
     public PandaApplication app() {
         return PandaApplication.getPandaApplication();
+    }
+
+    private Dialog getSettingsDialog() {
+        Dialog ret = new Dialog(this);
+        ret.setTitle(SETTINGS);
+////        ListView lv = new ListView(this);
+////        lv.setAdapter(app().getSettingsAdapter());
+////        ret.setContentView(lv);
+        FrameLayout parent = (FrameLayout) app().lv.getParent();
+        if(parent != null) {
+            parent.removeAllViews();
+        }
+        ret.setContentView(app().lv);
+        return ret;
+//        return app().dialog;
     }
 }

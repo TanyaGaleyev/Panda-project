@@ -30,7 +30,7 @@
             <!--<ImageView-->
                 <!--android:layout_width="wrap_content"-->
                 <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/imageView"-->
+                <!--android:id="@+id/radio"-->
                 <!--android:layout_weight="1"-->
                 <!--android:layout_gravity="center"-->
                 <!--android:src="@drawable/chest_open"-->
@@ -86,6 +86,7 @@
                 <!--android:src="@drawable/chest_close"-->
                 <!--android:layout_margin="5dp" />-->
         <!--</TableRow>-->
+
     </TableLayout>
 
     <view
