@@ -1,23 +1,17 @@
 package org.ivan.simple.welcome;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
 import org.ivan.simple.achievements.AchievementsActivity;
 import org.ivan.simple.utils.PandaButtonsPanel;
-import org.ivan.simple.utils.PandaCheckBoxAdapter;
 
 import java.io.IOException;
 
@@ -52,7 +46,7 @@ public class StartActivityNew extends PandaBaseActivity {
         bp.customAddView(achivBtn);
         bp.customAddView(startSettings);
 
-        panda = new ImageView(getApplicationContext());
+        panda = new ImageView(this);
         int width = (int) (getWindowManager().getDefaultDisplay().getWidth() * .3125f);
         int height = (int) (getWindowManager().getDefaultDisplay().getHeight() * .5f);
         int left = (int) (getWindowManager().getDefaultDisplay().getWidth() * .65f);
@@ -62,27 +56,30 @@ public class StartActivityNew extends PandaBaseActivity {
         layoutParams.setMargins(left, top, 0 , 0);
         panda.setLayoutParams(layoutParams);
         contentPanel.addView(panda);
-        getPandaAnimation();
+        initPandaDrawable(false);
         initListeners();
     }
 
-    private AnimationDrawable getPandaAnimation() {
-        try {
-            if(pandaAnimation != null) return pandaAnimation;
-            pandaAnimation = app().
-                    loadAnimationFromFolder(ANIMATIONS_DIR);
-            pandaAnimation.setOneShot(false);
-            panda.setBackgroundDrawable(pandaAnimation);
-            panda.post(new Runnable() {
-                @Override
-                public void run() {
-                    pandaAnimation.start();
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void initPandaDrawable(boolean animation) {
+        if(animation) {
+            try {
+                if(pandaAnimation != null) return;
+                pandaAnimation = app().
+                        loadAnimationFromFolder(ANIMATIONS_DIR);
+                pandaAnimation.setOneShot(false);
+                panda.setBackgroundDrawable(pandaAnimation);
+                panda.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        pandaAnimation.start();
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            panda.setBackgroundResource(R.drawable.ic_launcher);
         }
-        return pandaAnimation;
     }
 
     private void initListeners() {

@@ -126,13 +126,14 @@ public class GameActivity extends PandaBaseActivity {
             @Override
             public void onClick(View view) {
                 gControl.restartGame();
+                dialog.hide();
             }
         });
         settings.setResumeOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gControl.startManager();
                 dialog.hide();
+                gControl.startManager();
             }
         });
         gControl.stopManager();

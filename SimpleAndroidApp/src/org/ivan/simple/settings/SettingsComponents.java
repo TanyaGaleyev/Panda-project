@@ -1,6 +1,7 @@
 package org.ivan.simple.settings;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -26,10 +27,12 @@ public class SettingsComponents {
         effects = new CheckBox(context);
         effects.setText(EFFECTS);
         effects.setTypeface(regular);
+        effects.setTextColor(Color.BLACK);
         effects.setChecked(model.isEffectsEnabled());
         music = new CheckBox(context);
         music.setText(MUSIC);
         music.setTypeface(regular);
+        music.setTextColor(Color.BLACK);
         music.setChecked(model.isMusicEnabled());
 
         initListeners();

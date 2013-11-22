@@ -2,7 +2,9 @@ package org.ivan.simple;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,8 +70,14 @@ public abstract class PandaBaseActivity extends Activity {
         ret.setTitle(title);
         TextView titleView = (TextView) ret.findViewById(android.R.id.title);
         titleView.setTypeface(app().getFontProvider().bold());
+        titleView.setTextColor(Color.DKGRAY);
         titleView.setBackgroundResource(R.drawable.settings_border);
         ret.setContentView(content);
+        ret.setCanceledOnTouchOutside(true);
+        ret.getWindow().setLayout(
+                (int) (DISPLAY_WIDTH * 0.6),
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        ret.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         return ret;
     }
 }
