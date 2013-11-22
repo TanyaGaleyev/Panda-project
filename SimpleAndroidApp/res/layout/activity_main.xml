@@ -5,13 +5,25 @@
     android:background="#0000ff">
     
         
-    <org.ivan.simple.game.GameView
+    <view
         android:id="@+id/game"
+        class="org.ivan.simple.game.GameView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_centerInParent="true"/>
-    
-<!--     <org.ivan.simple.game.GameView -->
+        android:layout_alignParentTop="true"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="20dp"
+        android:id="@+id/game_settings"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:focusableInTouchMode="false"
+        android:background="@drawable/settings" />
+
+    <!--     <org.ivan.simple.game.GameView -->
 <!--         android:id="@+id/game" -->
 <!--         android:layout_width="528dp" -->
 <!--         android:layout_height="288dp" -->

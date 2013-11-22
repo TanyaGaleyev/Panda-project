@@ -217,36 +217,43 @@ public class GameControl {
 		}
 	}
 
-	protected boolean processServiceButton(MotionEvent event) {
-        ServiceButtons.Controls serviceAction;
-        if(event.getAction() == MotionEvent.ACTION_DOWN) {
-            serviceAction = view.serviceButtons.getServiceAction(event);
-            switch (serviceAction) {
-                case PAUSE_RESUME:
-                    if(isRunning()) {
-                        stopManager();
-                    } else {
-                        startManager();
-                    }
-                    return true;
-                case RESTART:
-                    stopManager();
-                    view.initSurface();
-                    startManager();
-                    return true;
-                case BACK:
-                    ((GameActivity) view.getContext()).switchBackToChooseActivity(view.isComplete(), view.getScore());
-                    return true;
-            }
-        }
-		return false;
-	}
+//	protected boolean processServiceButton(MotionEvent event) {
+//        ServiceButtons.Controls serviceAction;
+//        if(event.getAction() == MotionEvent.ACTION_DOWN) {
+//            serviceAction = view.serviceButtons.getServiceAction(event);
+//            switch (serviceAction) {
+//                case PAUSE_RESUME:
+//                    if(isRunning()) {
+//                        stopManager();
+//                    } else {
+//                        startManager();
+//                    }
+//                    return true;
+//                case RESTART:
+//                    stopManager();
+//                    view.initSurface();
+//                    startManager();
+//                    return true;
+//                case BACK:
+//                    ((GameActivity) view.getContext()).switchBackToChooseActivity(view.isComplete(), view.getScore());
+//                    return true;
+//            }
+//        }
+//		return false;
+//	}
+
+    protected void restartGame() {
+        stopManager();
+        view.initSurface();
+        startManager();
+    }
 	
 	protected boolean isRunning() {
 		return gameLoopThread.isRunning();
 	}
 	
 	protected void startManager() {
+        if(gameLoopThread != null && gameLoopThread.isRunning()) return;
 		System.out.println("Start game loop");
 		gameLoopThread = new GameManager(view);
 		gameLoopThread.setRunning(true);

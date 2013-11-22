@@ -105,9 +105,9 @@ public class LevelChooseView extends SurfaceView {
         activity = (LevelChooseActivity) context;
         initGrid();
 		textPaint = new Paint();
-		textPaint.setColor(Color.WHITE);
-		textPaint.setTextSize(48);
-		textPaint.setTypeface(PandaApplication.getPandaApplication().getFontProvider().ptSans());
+		textPaint.setColor(Color.DKGRAY);
+		textPaint.setTextSize(36);
+		textPaint.setTypeface(PandaApplication.getPandaApplication().getFontProvider().regular());
 		getHolder().addCallback(new SurfaceHolder.Callback() {
 
 			public void surfaceDestroyed(SurfaceHolder holder) {

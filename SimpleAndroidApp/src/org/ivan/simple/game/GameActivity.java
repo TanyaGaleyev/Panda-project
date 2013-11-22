@@ -3,7 +3,10 @@ package org.ivan.simple.game;
 import org.ivan.simple.choose.LevelChooseActivity;
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
+import org.ivan.simple.settings.SettingsInGamePanel;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -11,20 +14,26 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.Window;
+import android.view.View;
 
 public class GameActivity extends PandaBaseActivity {
-	
-	private GameControl gControl;
+
+    public static final String PAUSE_TITLE = "Pause";
+    private GameControl gControl;
 	private int levid;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // hide screen title
         Intent intent = getIntent();
         levid = intent.getIntExtra(LevelChooseActivity.LEVEL_ID, 0);
         setContentView(R.layout.activity_main);
+        prepare(findViewById(R.id.game_settings)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gotoSettingsScreen();
+            }
+        });
         GameView gView = (GameView) findViewById(R.id.game);
         gView.setLevId(levid);
         gControl = gView.getControl();
@@ -97,8 +106,40 @@ public class GameActivity extends PandaBaseActivity {
     	gControl = null;
     }
 
-    
-	/** Show an event in the LogCat view, for debugging */
+    @Override
+    protected void gotoSettingsScreen() {
+        SettingsInGamePanel settings = new SettingsInGamePanel(this, app().getSettingsModel());
+        final Dialog dialog = getSettingsDialog(PAUSE_TITLE, settings);
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                gControl.startManager();
+            }
+        });
+        settings.setExitOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        settings.setReplayOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gControl.restartGame();
+            }
+        });
+        settings.setResumeOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gControl.startManager();
+                dialog.hide();
+            }
+        });
+        gControl.stopManager();
+        dialog.show();
+    }
+
+    /** Show an event in the LogCat view, for debugging */
 	private void dumpEvent(MotionEvent event) {
 		String names[] = { "DOWN" , "UP" , "MOVE" , "CANCEL" , "OUTSIDE" ,
 		"POINTER_DOWN" , "POINTER_UP" , "7?" , "8?" , "9?" };

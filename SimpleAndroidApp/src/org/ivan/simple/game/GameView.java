@@ -49,7 +49,7 @@ public class GameView extends SurfaceView {
 	
 	protected boolean finished = false;
     private boolean monsterLose = false;
-    ServiceButtons serviceButtons;
+//    ServiceButtons serviceButtons;
 
     public GameView(Context context) {
 		super(context);
@@ -114,14 +114,17 @@ public class GameView extends SurfaceView {
 //		}
 //		GRID_STEP = GRID_STEP % 8 == 0 ? GRID_STEP : GRID_STEP + 8 - GRID_STEP % 8;
 //		ImageProvider.setGridStep(GRID_STEP);
-		GRID_STEP = imageProvider().setScaleParameters(getWidth(), getHeight());
-		
-		background = Bitmap.createScaledBitmap(
-				imageProvider().getBitmapNoCache(backgroundId),
-				getWidth(),
-				getHeight(),
-				false);
-        serviceButtons = new ServiceButtons(10, 50);
+        background = Bitmap.createScaledBitmap(
+                imageProvider().getBitmapNoCache(backgroundId),
+                getWidth(),
+                getHeight(),
+                false);
+
+        int gridWidth = getWidth() - 100;
+        int gridHeight = getHeight();
+        GRID_STEP = imageProvider().setScaleParameters(gridWidth, gridHeight);
+
+//        serviceButtons = new ServiceButtons(10, 50);
         //GRID_STEP = 112;//88dp,48dp
 //		System.out.println("GRID_STEP = " + GRID_STEP);
 
@@ -167,7 +170,7 @@ public class GameView extends SurfaceView {
 	protected void onDraw(Canvas canvas, boolean update) {
 		canvas.drawColor(0xffC6E10E);
 		canvas.drawBitmap(background, 0, 0, null);
-		serviceButtons.draw(canvas);
+//		serviceButtons.draw(canvas);
 		level.onDraw(canvas, update);
 		hero.onDraw(canvas, update);
 		monster.onDraw(canvas, update);
@@ -213,31 +216,25 @@ public class GameView extends SurfaceView {
     }
 	
 	private void drawWin(Canvas canvas) {
-		String complete = "COMPLETE";
-		Paint paint = new Paint(); 		
-		paint.setTextSize(80);
-		Rect textRect = new Rect();
-		paint.getTextBounds(complete, 0, complete.length(), textRect);
-		canvas.rotate(-35, getWidth() / 2, getHeight() / 2);
-		paint.setStyle(Paint.Style.FILL);
-		paint.setColor(Color.RED);
-		canvas.drawText(complete, getWidth() / 2 - textRect.exactCenterX(), getHeight() / 2 - textRect.exactCenterY(), paint);
-		canvas.restore();
+        drawStamp(canvas, "COMPLETE", Color.RED);
 	}
-	
-	private void drawLose(Canvas canvas) {
-		String complete = "GAME OVER";
-		Paint paint = new Paint(); 		
-		paint.setTextSize(80);
-		Rect textRect = new Rect();
-		paint.getTextBounds(complete, 0, complete.length(), textRect);
-		canvas.rotate(-35, getWidth() / 2, getHeight() / 2);
-		paint.setStyle(Paint.Style.FILL);
-		paint.setColor(Color.BLACK);
-		canvas.drawText(complete, getWidth() / 2 - textRect.exactCenterX(), getHeight() / 2 - textRect.exactCenterY(), paint);
-		canvas.restore();
+
+    private void drawLose(Canvas canvas) {
+		drawStamp(canvas, "GAME OVER", Color.BLACK);
 	}
-	
+
+    private void drawStamp(Canvas canvas, String complete, int color) {
+        Paint paint = new Paint();
+        paint.setTextSize(80);
+        Rect textRect = new Rect();
+        paint.getTextBounds(complete, 0, complete.length(), textRect);
+        canvas.rotate(-35, getWidth() / 2, getHeight() / 2);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(color);
+        canvas.drawText(complete, getWidth() / 2 - textRect.exactCenterX(), getHeight() / 2 - textRect.exactCenterY(), paint);
+        canvas.restore();
+    }
+
 	/**
 	 * Checks if game is ready to switch hero animation and/or motion
 	 * @return
@@ -410,9 +407,9 @@ public class GameView extends SurfaceView {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if(control.processServiceButton(event)) {
-			return true;
-		}
+//		if(control.processServiceButton(event)) {
+//			return true;
+//		}
 		if(control.scanControl(event, hero.x, hero.y)) {
 			return true;
 		}

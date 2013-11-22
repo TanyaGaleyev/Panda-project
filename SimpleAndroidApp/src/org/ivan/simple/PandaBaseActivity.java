@@ -41,17 +41,17 @@ public abstract class PandaBaseActivity extends Activity {
 	}
 
     protected void gotoSettingsScreen() {
-        getSettingsDialog().show();
+        getSettingsDialog(SETTINGS, new SettingsPanel(this, app().getSettingsModel())).show();
     }
 
-    protected View prepare(View view) {
+    public View prepare(View view) {
         int dim = DISPLAY_HEIGHT / 10;
         view.getLayoutParams().width = dim;
         view.getLayoutParams().height = dim;
         return view;
     }
 
-    protected View prepare(int resid) {
+    public View prepare(int resid) {
         ImageView ret = new ImageView(this);
         ret.setImageResource(resid);
         int dim = DISPLAY_HEIGHT / 10;
@@ -63,12 +63,13 @@ public abstract class PandaBaseActivity extends Activity {
         return PandaApplication.getPandaApplication();
     }
 
-    private Dialog getSettingsDialog() {
+    protected Dialog getSettingsDialog(String title, SettingsPanel content) {
         Dialog ret = new Dialog(this);
-        ret.setTitle(SETTINGS);
-        ((TextView) ret.findViewById(android.R.id.title)).
-                setTypeface(app().getFontProvider().bold());
-        ret.setContentView(new SettingsPanel(this, app().getSettingsModel()));
+        ret.setTitle(title);
+        TextView titleView = (TextView) ret.findViewById(android.R.id.title);
+        titleView.setTypeface(app().getFontProvider().bold());
+        titleView.setBackgroundResource(R.drawable.settings_border);
+        ret.setContentView(content);
         return ret;
     }
 }
