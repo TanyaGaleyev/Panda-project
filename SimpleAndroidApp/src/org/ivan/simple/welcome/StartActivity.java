@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -34,9 +35,7 @@ public class StartActivity extends PandaBaseActivity {
 	public static final String LAST_FINISHED_SET = "Last finished set of levels";
 	private final String[] levelsCaptions = {"ACCESS", "BUTTON", "ZOMBIE", "SYSTEM"};
 	public final int levCount = levelsCaptions.length;
-	private List<ImageView> levButtons = new ArrayList<ImageView>();
-	private int startedSet = 0;
-
+	private SparseArray<ImageView> levButtons = new SparseArray<ImageView>();
 
 	
 	@Override
@@ -113,7 +112,7 @@ public class StartActivity extends PandaBaseActivity {
                 }
             });
             row.addView(levbtn, packButtonParam);
-            levButtons.add(levbtn);
+            levButtons.put(id, levbtn);
 //        	levbtn.getLayoutParams().width = (int) (DISPLAY_WIDTH * 0.85);
 //        	levbtn.getLayoutParams().height = (int) (DISPLAY_HEIGHT * 0.20);
         }
@@ -126,16 +125,18 @@ public class StartActivity extends PandaBaseActivity {
 		if(resultCode == RESULT_OK && requestCode == 0) {
 			System.out.println("Choose activity results!");
 			boolean setComplete = data.getBooleanExtra(LevelChooseActivity.SET_COMPLETE, false);
-			if(setComplete && startedSet > lastFinishedSet()) {
-                final ImageView prevPack = levButtons.get(startedSet);
+            int startedSet = data.getIntExtra(SET_ID, 0);
+            int packToOpenId = startedSet + 1;
+            final ImageView packToOpen;
+            if(setComplete && (packToOpen = levButtons.get(packToOpenId)) != null) {
                 try {
                     final AnimationDrawable chestOpening = app()
                             .loadAnimationFromFolder("animations/menu/pack_opening");
                     chestOpening.setOneShot(true);
-                    prevPack.setBackgroundDrawable(chestOpening);
+                    packToOpen.setBackgroundDrawable(chestOpening);
                     // TODO rake here, get rid of alpha channel manipulation, calculate chests sizes insted
-                    prevPack.setImageAlpha(0);
-                    prevPack.post(new Runnable() {
+                    packToOpen.setImageAlpha(0);
+                    packToOpen.post(new Runnable() {
                         @Override
                         public void run() {
                             chestOpening.start();
@@ -143,12 +144,12 @@ public class StartActivity extends PandaBaseActivity {
                                 @Override
                                 public void run() {
                                     chestOpening.stop();
-                                    prevPack.post(new Runnable() {
+                                    packToOpen.post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            prevPack.setImageAlpha(255);
-                                            prevPack.setImageResource(R.drawable.chest_open);
-                                            prevPack.setBackgroundDrawable(null);
+                                            packToOpen.setImageAlpha(255);
+                                            packToOpen.setImageResource(R.drawable.chest_open);
+                                            packToOpen.setBackgroundDrawable(null);
                                         }
                                     });
                                 }
@@ -157,10 +158,10 @@ public class StartActivity extends PandaBaseActivity {
                     });
                 } catch (IOException e) {
                     e.printStackTrace();
-                    prevPack.setImageAlpha(255);
-                    prevPack.setImageResource(R.drawable.chest_open);
+                    packToOpen.setImageAlpha(255);
+                    packToOpen.setImageResource(R.drawable.chest_open);
                 }
-                prevPack.setEnabled(true);
+                packToOpen.setEnabled(true);
 			}
 		}
 	}
@@ -169,7 +170,6 @@ public class StartActivity extends PandaBaseActivity {
 	private void startPack(int setId) {
 		Intent intent = new Intent(this, LevelChooseActivity.class);
 		intent.putExtra(SET_ID, setId);
-		startedSet = setId;
 		startActivityForResult(intent, 0);
 	}
 

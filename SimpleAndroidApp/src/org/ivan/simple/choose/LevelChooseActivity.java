@@ -21,8 +21,8 @@ public class LevelChooseActivity extends PandaBaseActivity {
 	public static final String FINISHED_LEVELS = "finished";
 	public static final String HIGH_SCORES = "high scores";
 	public static final String CONFIG = "panda_config";
-	
-	private SharedPreferences preferences;
+
+    private SharedPreferences preferences;
 	
 	private LevelChooseView view;
 	private int levelsSetId;
@@ -89,18 +89,18 @@ public class LevelChooseActivity extends PandaBaseActivity {
 					SharedPreferences.Editor prEditor = preferences.edit();
 					prEditor.putInt(StartActivity.LAST_FINISHED_SET, levelsSetId);
 					prEditor.commit();
-					finish();
+					finishComplete();
 				}
 			}
 		}
 	}
 	
-	@Override
-	public void finish() {
+	public void finishComplete() {
 		Intent resultIntent = new Intent();
-		resultIntent.putExtra(LevelChooseActivity.SET_COMPLETE, view.allLevelsFinished());
+		resultIntent.putExtra(LevelChooseActivity.SET_COMPLETE, true);
+        resultIntent.putExtra(StartActivity.SET_ID, levelsSetId);
 		setResult(RESULT_OK, resultIntent);
-		super.finish();
+		finish();
 	}
 	
 //	@Override
