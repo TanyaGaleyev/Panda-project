@@ -108,6 +108,7 @@ public class LevelChooseView extends SurfaceView {
 		textPaint.setColor(Color.DKGRAY);
 		textPaint.setTextSize(36);
 		textPaint.setTypeface(PandaApplication.getPandaApplication().getFontProvider().regular());
+        textPaint.setAntiAlias(true);
 		getHolder().addCallback(new SurfaceHolder.Callback() {
 
 			public void surfaceDestroyed(SurfaceHolder holder) {
