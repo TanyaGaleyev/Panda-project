@@ -78,23 +78,23 @@ public class LevelModel {
 	}
 
 	public LevelModel(int lev) {
-		rows=5;
-		cols=10;
 		LevelStorage storage = new LevelStorage();
-		// MonsterStrategy dangerousKillerMonsterStrategy = new RandomContiniousDirection(MonsterDirection.getAllDirections());
-		int[][] routeArray = storage.getRouteArray(lev);
-		MonsterStrategy route = RouteDirectionStrategyFactory.createRouteDirectionStrategy(routeArray);
-				
-		if(lev == 3 ||lev == 5 || lev==8)  {
-			monster = new MonsterModel(routeArray[0][1], routeArray[0][0], route, 1);
-		} else {
-			monster = null;
-		}
-		hero = new HeroModel(rows - 1, 0);
-		int[][][][] mylevel = storage.getLevel(lev);
-		int[][] prizes = storage.getPrizesMap(lev);
-		int[] winCellCoord = storage.getWinCell(lev);
-		levelGrid = new LevelCell[rows][cols];
+        // MonsterStrategy dangerousKillerMonsterStrategy = new RandomContiniousDirection(MonsterDirection.getAllDirections());
+        int[][] routeArray = storage.getRouteArray(lev);
+        MonsterStrategy route = RouteDirectionStrategyFactory.createRouteDirectionStrategy(routeArray);
+
+        if(lev == 3 ||lev == 5 || lev==8)  {
+            monster = new MonsterModel(routeArray[0][1], routeArray[0][0], route, 1);
+        } else {
+            monster = null;
+        }
+        int[][][][] mylevel = storage.getLevel(lev);
+        rows=mylevel.length;
+        cols=mylevel[0].length;
+        int[][] prizes = storage.getPrizesMap(lev);
+        int[] winCellCoord = storage.getWinCell(lev);
+        hero = new HeroModel(rows - 1, 0);
+        levelGrid = new LevelCell[rows][cols];
 		HashMap<Integer, TpPeer> groups = new HashMap<Integer, TpPeer>();
 		TreeMap<Integer, CellCoords> tpSequence = new TreeMap<Integer, CellCoords>();
 		for(int i=0;i<rows;i++){

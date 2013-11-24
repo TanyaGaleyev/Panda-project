@@ -1,5 +1,6 @@
 package org.ivan.simple.game;
 
+import org.ivan.simple.UserControlType;
 import org.ivan.simple.choose.LevelChooseActivity;
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
@@ -15,6 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+
+import java.util.Arrays;
 
 public class GameActivity extends PandaBaseActivity {
 
@@ -31,7 +35,14 @@ public class GameActivity extends PandaBaseActivity {
         prepare(findViewById(R.id.game_settings)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gotoSettingsScreen();
+//                gotoSettingsScreen();
+                Dialog dialog = new Dialog(GameActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                GameView nestedGame = new GameView(GameActivity.this);
+                nestedGame.setLevId(-1);
+                nestedGame.getControl().setAutoControls(Solutions.getSolution());
+                dialog.setContentView(nestedGame);
+                dialog.show();
             }
         });
         GameView gView = (GameView) findViewById(R.id.game);

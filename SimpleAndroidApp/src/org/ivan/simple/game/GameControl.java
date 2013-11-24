@@ -1,5 +1,8 @@
 package org.ivan.simple.game;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -18,6 +21,9 @@ public class GameControl {
 	public UserControlType pressedControl = UserControlType.IDLE;
 	public UserControlType obtainedControl = UserControlType.IDLE;
 	private TimerTask useDelayedControl;
+
+    private boolean robotMode = false;
+    private Iterator<UserControlType> autoControls = new ArrayList<UserControlType>().iterator();
 	
 	private float[] startPressedY = new float[2];
 	private float[] startPressedX = new float[2];
@@ -32,9 +38,9 @@ public class GameControl {
 		this.view  = view;
 		soundManager = new SoundManager(view.getContext());
 	}
-	
-	protected boolean scanControl(MotionEvent event, int x, int y) {
-		if(paused) return false;
+
+    protected boolean scanControl(MotionEvent event, int x, int y) {
+		if(paused || robotMode) return false;
 		return oneHandControl(event, x ,y);
 	}
 	
@@ -286,6 +292,29 @@ public class GameControl {
 			soundManager.playSound(model.hero.currentMotion, model.hero.finishingMotion);
 		}
 	}
-	
-	
+
+    public void setAutoControls(Iterator<UserControlType> autoControls) {
+        robotMode = true;
+        this.autoControls = autoControls;
+    }
+
+
+    protected UserControlType getUserControl() {
+        UserControlType controlType;
+        if(!robotMode) {
+            if(obtainedControl == UserControlType.IDLE) {
+                controlType = pressedControl;
+            } else {
+                controlType = obtainedControl;
+                obtainedControl = UserControlType.IDLE;
+            }
+        } else {
+            if(autoControls.hasNext()) {
+                controlType = autoControls.next();
+            } else {
+                controlType = UserControlType.IDLE;
+            }
+        }
+        return controlType;
+    }
 }

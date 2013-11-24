@@ -169,7 +169,9 @@ public class GameView extends SurfaceView {
 	
 	protected void onDraw(Canvas canvas, boolean update) {
 		canvas.drawColor(0xffC6E10E);
-		canvas.drawBitmap(background, 0, 0, null);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+		canvas.drawBitmap(background, 0, 0, paint);
 //		serviceButtons.draw(canvas);
 		level.onDraw(canvas, update);
 		hero.onDraw(canvas, update);
@@ -276,14 +278,8 @@ public class GameView extends SurfaceView {
 	 */
 	private void updateModel() {
 		// Used to remember pressed control (action down performed and no other actions after)
-		UserControlType controlType;
-		if(control.obtainedControl == UserControlType.IDLE) {
-			controlType = control.pressedControl;
-		} else {
-			controlType = control.obtainedControl;
-			control.obtainedControl = UserControlType.IDLE;
-		}
-		// Store cell before update in purpose to play cell animation (like floor movement while jump) 
+		UserControlType controlType = control.getUserControl();
+        // Store cell before update in purpose to play cell animation (like floor movement while jump)
 		prevCell = level.model.getHeroCell();
 		// calculate new motion depending on current motion, hero cell and user control
 		level.model.updateGame(controlType);
@@ -297,8 +293,8 @@ public class GameView extends SurfaceView {
 		
 		control.playSound(level.model);
 	}
-	
-	/**
+
+    /**
 	 * Switch to next animation after pre/post- animation finished
 	 * @return true if pre or post animation ended, otherwise - false 
 	 */
@@ -425,7 +421,7 @@ public class GameView extends SurfaceView {
 	
 	private boolean isGridCoordinates(int xCoordinate, int yCoordinate) {
 		return (xCoordinate - LEFT_BOUND) % GRID_STEP == 0 && 
-				(yCoordinate - TOP_BOUND) % GRID_STEP == 0;
+			   (yCoordinate - TOP_BOUND) % GRID_STEP == 0;
 	}
 	
 	public void checkMonsterColision() {
