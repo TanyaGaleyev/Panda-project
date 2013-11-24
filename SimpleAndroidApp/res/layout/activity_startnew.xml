@@ -15,4 +15,28 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Acro"
+        android:id="@+id/acro_caption"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true" />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/panda_caption"
+        android:layout_below="@+id/acro_caption"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/panda" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="press to start"
+        android:id="@+id/start_caption"
+        android:layout_alignBottom="@+id/panda_caption"
+        android:layout_alignParentLeft="true" />
+
 </RelativeLayout>

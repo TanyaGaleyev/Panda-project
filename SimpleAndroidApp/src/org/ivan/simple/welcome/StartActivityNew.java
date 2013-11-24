@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
@@ -37,8 +38,9 @@ public class StartActivityNew extends PandaBaseActivity {
 //        spinner.setAdapter(new PandaImageAdapter(this, 0, R.drawable.settings, R.drawable.back));
 //        spinner.setAdapter(new PandaCheckBoxAdapter(this, 0, "effects", "music"));
 
-        Typeface regular = app().getFontProvider().regular();
         Typeface bold = app().getFontProvider().bold();
+        ((TextView) findViewById(R.id.acro_caption)).setTypeface(bold);
+        ((TextView) findViewById(R.id.start_caption)).setTypeface(bold);
 
         achivBtn = prepare(R.drawable.achievement);
         startSettings = prepare(R.drawable.settings);
@@ -78,7 +80,7 @@ public class StartActivityNew extends PandaBaseActivity {
                 e.printStackTrace();
             }
         } else {
-            panda.setBackgroundResource(R.drawable.ic_launcher);
+            panda.setBackgroundResource(R.drawable.panda_icon);
         }
     }
 
