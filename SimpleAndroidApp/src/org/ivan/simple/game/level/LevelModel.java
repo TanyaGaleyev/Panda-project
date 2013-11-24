@@ -85,7 +85,7 @@ public class LevelModel {
 		int[][] routeArray = storage.getRouteArray(lev);
 		MonsterStrategy route = RouteDirectionStrategyFactory.createRouteDirectionStrategy(routeArray);
 				
-		if(lev == 3 ||lev == 5) {
+		if(lev == 3 ||lev == 5 || lev==8)  {
 			monster = new MonsterModel(routeArray[0][1], routeArray[0][0], route, 1);
 		} else {
 			monster = null;
