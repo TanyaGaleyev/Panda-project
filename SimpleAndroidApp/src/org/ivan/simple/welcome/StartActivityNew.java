@@ -1,8 +1,11 @@
 package org.ivan.simple.welcome;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,6 +31,7 @@ public class StartActivityNew extends PandaBaseActivity {
     private ImageView panda;
     private RelativeLayout contentPanel;
     private AnimationDrawable pandaAnimation;
+    private ImageView mainTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,17 +53,28 @@ public class StartActivityNew extends PandaBaseActivity {
         bp.customAddView(startSettings);
 
         panda = new ImageView(this);
-        int width = (int) (getWindowManager().getDefaultDisplay().getWidth() * .3125f);
-        int height = (int) (getWindowManager().getDefaultDisplay().getHeight() * .5f);
-        int left = (int) (getWindowManager().getDefaultDisplay().getWidth() * .65f);
-        int top = (int) (getWindowManager().getDefaultDisplay().getHeight() * .20f);
+        int width = (int) (DISPLAY_WIDTH * .3125f);
+        int height = (int) (DISPLAY_HEIGHT * .5f);
+        int left = (int) (DISPLAY_WIDTH * .65f);
+        int top = (int) (DISPLAY_HEIGHT * .20f);
 
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(width, height);
         layoutParams.setMargins(left, top, 0 , 0);
         panda.setLayoutParams(layoutParams);
         contentPanel.addView(panda);
         initPandaDrawable(false);
+
+        prepareMainTitle();
         initListeners();
+    }
+
+    private void prepareMainTitle() {
+        mainTitle = new ImageView(this);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        Drawable drawable = new BitmapDrawable(getResources(), BitmapFactory.decodeResource(
+                getResources(), R.drawable.panda_caption, options));
+        mainTitle.setBackground(drawable);
     }
 
     private void initPandaDrawable(boolean animation) {
