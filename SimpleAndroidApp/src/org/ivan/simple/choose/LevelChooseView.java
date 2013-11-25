@@ -8,8 +8,6 @@ import org.ivan.simple.UserControlType;
 import org.ivan.simple.game.GameActivity;
 import org.ivan.simple.game.level.LevelStorage;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,10 +15,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -84,7 +80,7 @@ public class LevelChooseView extends SurfaceView {
 	// buffer choose level action
 	private UserControlType performingAction = UserControlType.IDLE;
 	private UserControlType chooseAcion = UserControlType.IDLE;
-    private LevelChooseActivity activity;
+    private LevelChooseActivity context;
 
     public LevelChooseView(Context context) {
 		super(context);
@@ -102,7 +98,7 @@ public class LevelChooseView extends SurfaceView {
 	}
 
 	private final void init(Context context) {
-        activity = (LevelChooseActivity) context;
+        this.context = (LevelChooseActivity) context;
         initGrid();
 		textPaint = new Paint();
 		textPaint.setColor(Color.DKGRAY);
@@ -142,17 +138,19 @@ public class LevelChooseView extends SurfaceView {
 	}
 
     private void initGrid() {
-        Point size = activity.app().windowSize();
-        int xStep = size.x / LEVELS_COLS;
-        int yStep = size.y / LEVELS_ROWS;
+        int width = context.app().displayWidth;
+        int height = context.app().displayHeight;
+
+        int xStep = width / LEVELS_COLS;
+        int yStep = height / LEVELS_ROWS;
         if(xStep < yStep) {
             GRID_STEP = xStep - xStep % 8;
             LEFT_BOUND = 0;
-            TOP_BOUND = (size.y - GRID_STEP * LEVELS_ROWS) / 2;
+            TOP_BOUND = (height - GRID_STEP * LEVELS_ROWS) / 2;
         } else {
             GRID_STEP = yStep - yStep % 8;
             TOP_BOUND = 0;
-            LEFT_BOUND = (size.x - GRID_STEP * LEVELS_COLS) / 2;
+            LEFT_BOUND = (width - GRID_STEP * LEVELS_COLS) / 2;
         }
         markerX = LEFT_BOUND + GRID_STEP / 2;
         markerY = TOP_BOUND + GRID_STEP / 2;
@@ -175,12 +173,12 @@ public class LevelChooseView extends SurfaceView {
     }
 
     private ImageProvider imageProvider() {
-        return PandaApplication.getPandaApplication().getImageProvider();
+        return context.app().getImageProvider();
     }
 
     @Override
 	protected void onDraw(Canvas canvas) {
-        if(activity.isLoading()) {
+        if(context.isLoading()) {
             drawLoading(canvas);
         } else {
             drawChoose(canvas);
@@ -294,7 +292,7 @@ public class LevelChooseView extends SurfaceView {
 //		if(event.getAction() == MotionEvent.ACTION_DOWN &&
 //				0 < event.getX() && event.getX() < GRID_STEP &&
 //				getHeight() - GRID_STEP < event.getY() && event.getY() < getHeight()) {
-//			activity.finish();
+//			context.finish();
 //			return true;
 //		}
 //		// sound button pressed
@@ -309,14 +307,14 @@ public class LevelChooseView extends SurfaceView {
 		final int levId = getLevelId(event);
 		// if level selected (levId != 0) start next GameActivity with specified level
 		if(levId != 0) {
-            activity.setLoading(true);
+            context.setLoading(true);
             new AsyncTask<Void, Void, Void>() {
 //                public ProgressDialog mDialog;
 
 //                @Override
 //                protected void onPreExecute() {
 //                    super.onPreExecute();
-//                    mDialog = new ProgressDialog(activity);
+//                    mDialog = new ProgressDialog(context);
 //                    mDialog.setMessage("Please wait...");
 //                    mDialog.show();
 //                }
@@ -339,9 +337,9 @@ public class LevelChooseView extends SurfaceView {
 	}
 
     private void startLevel(int levId) {
-        Intent intent = new Intent(activity, GameActivity.class);
+        Intent intent = new Intent(context, GameActivity.class);
         intent.putExtra(LevelChooseActivity.LEVEL_ID, levId);
-        activity.startActivityForResult(intent, LevelChooseActivity.FINISHED_LEVEL_ID);
+        context.startActivityForResult(intent, LevelChooseActivity.FINISHED_LEVEL_ID);
     }
 
 	public synchronized int getLevelId(MotionEvent event) {

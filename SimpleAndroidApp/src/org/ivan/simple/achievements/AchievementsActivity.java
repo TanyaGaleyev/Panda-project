@@ -39,10 +39,10 @@ public class AchievementsActivity extends PandaBaseActivity {
         });
         TextView achivCaption = (TextView) findViewById(R.id.achiv_caption);
         achivCaption.setTypeface(app().getFontProvider().bold());
-        achivCaption.setTextSize(TypedValue.COMPLEX_UNIT_PX, DISPLAY_HEIGHT / 15);
+        achivCaption.setTextSize(TypedValue.COMPLEX_UNIT_PX, app().displayHeight / 15);
         ViewGroup.LayoutParams lp = findViewById(R.id.achiv_big_icon).getLayoutParams();
-        lp.height = DISPLAY_HEIGHT / 8;
-        lp.width = DISPLAY_HEIGHT / 8;
+        lp.height = app().displayHeight / 8;
+        lp.width = app().displayHeight / 8;
 
         LinearLayout achivList = (LinearLayout) findViewById(R.id.achievements_list);
         for(Achievement achiv : Achievement.values()) {
@@ -69,7 +69,7 @@ public class AchievementsActivity extends PandaBaseActivity {
             ImageView icon = new ImageView(this);
             icon.setBackgroundDrawable(
                     Drawable.createFromStream(getResources().getAssets().open(iconPath), null));
-            icon.setLayoutParams(new ViewGroup.LayoutParams(DISPLAY_HEIGHT / 5, DISPLAY_HEIGHT / 5));
+            icon.setLayoutParams(new ViewGroup.LayoutParams(app().displayHeight / 5, app().displayHeight / 5));
             hp.addView(icon);
         } catch (IOException e) {
             e.printStackTrace();

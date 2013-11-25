@@ -1,25 +1,23 @@
 package org.ivan.simple;
 
-import android.app.Activity;
 import android.app.Application;
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.WindowManager;
-import android.widget.ListView;
 
 import org.ivan.simple.game.hero.Sprite;
 import org.ivan.simple.game.sound.MusicManager;
 import org.ivan.simple.settings.SettingsModel;
-import org.ivan.simple.utils.PandaCheckBoxAdapter;
 
 import java.io.File;
 import java.io.IOException;
 
 public class PandaApplication extends Application {
     public static final int ONE_FRAME_DURATION = 40;
+    public int displayWidth;
+    public int displayHeight;
 
     private MusicManager musicManager;
     private FontProvider fontProvider;
@@ -41,11 +39,13 @@ public class PandaApplication extends Application {
 		super.onCreate();
 		INSTANCE = this;
 
+        Point size = windowSize();
+        displayWidth = size.x;
+        displayHeight = size.y;
+
         musicManager = new MusicManager(getApplicationContext());
         fontProvider = new FontProvider(getApplicationContext());
-        imageProvider = new ImageProvider(getApplicationContext());
-        Point size = windowSize();
-        imageProvider.setScaleParameters(size.x, size.y);
+        imageProvider = new ImageProvider(getApplicationContext(), displayWidth, displayHeight);
         loading = new Sprite("menu/loader.png", 1, 12);
         loading.setAnimating(true);
 	}
@@ -80,7 +80,7 @@ public class PandaApplication extends Application {
 	}
 
 
-    public Point windowSize() {
+    private Point windowSize() {
         WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         int width = windowManager.getDefaultDisplay().getWidth();
         int height = windowManager.getDefaultDisplay().getHeight();

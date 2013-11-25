@@ -46,7 +46,7 @@ public class StartActivity extends PandaBaseActivity {
         setContentView(R.layout.activity_start);
         TextView caption = (TextView) findViewById(R.id.text_view);
         caption.setTypeface(app().getFontProvider().bold());
-        caption.setTextSize(TypedValue.COMPLEX_UNIT_PX, DISPLAY_HEIGHT / 10);
+        caption.setTextSize(TypedValue.COMPLEX_UNIT_PX, app().displayHeight / 10);
 //        caption.setText(String.format("max memory: %d KiB", Runtime.getRuntime().maxMemory() / 1024));
 
         initPacksButtons();
@@ -113,8 +113,8 @@ public class StartActivity extends PandaBaseActivity {
             });
             row.addView(levbtn, packButtonParam);
             levButtons.put(id, levbtn);
-//        	levbtn.getLayoutParams().width = (int) (DISPLAY_WIDTH * 0.85);
-//        	levbtn.getLayoutParams().height = (int) (DISPLAY_HEIGHT * 0.20);
+//        	levbtn.getLayoutParams().width = (int) (displayWidth * 0.85);
+//        	levbtn.getLayoutParams().height = (int) (displayHeight * 0.20);
         }
     }
 

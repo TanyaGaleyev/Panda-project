@@ -22,8 +22,9 @@ public class ImageProvider {
 	private double baseStep = 230d;
 	private int cacheSize = 0;
 
-	public ImageProvider(Context context) {
+	public ImageProvider(Context context, int displayWidth, int displayHeight) {
         init(context);
+        setScaleParameters(displayWidth, displayHeight);
 	}
 	
 	public void init(Context context) {
@@ -32,7 +33,7 @@ public class ImageProvider {
 		asssetsMananger = context.getAssets();
 	}
 	
-	public int setScaleParameters(int width, int height) {
+	private int setScaleParameters(int width, int height) {
 		if(height < 432) {
 			gridStep = 48;
 			baseStep = 144;
