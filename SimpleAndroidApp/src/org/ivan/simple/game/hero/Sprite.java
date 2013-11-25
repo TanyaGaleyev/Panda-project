@@ -32,15 +32,23 @@ public class Sprite {
 	
 	private int delay = 0;
 	
-	private Sprite(Bitmap bmp, int rows, int cols) {
+	protected Sprite() {
+        bmp = null;
+        BMP_ROWS = 0;
+        BMP_COLS = 0;
+        singleHeight = 0;
+        singleWidth = 0;
+    }
+
+    protected Sprite(Bitmap bmp, int rows, int cols) {
 		this.bmp = bmp;
 		BMP_ROWS = rows;
 		BMP_COLS = cols;
 		singleWidth = bmp.getWidth() / BMP_COLS;
         singleHeight = bmp.getHeight() / BMP_ROWS;
 	}
-	
-	private Sprite(Bitmap bmp, int rows, int cols, int set) {
+
+    protected Sprite(Bitmap bmp, int rows, int cols, int set) {
 		this(bmp, rows, cols);
 		changeSet(set);
 	}

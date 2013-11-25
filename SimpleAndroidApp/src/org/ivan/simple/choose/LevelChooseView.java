@@ -142,7 +142,7 @@ public class LevelChooseView extends SurfaceView {
 	}
 
     private void initGrid() {
-        Point size = PandaApplication.windowSize(activity);
+        Point size = activity.app().windowSize();
         int xStep = size.x / LEVELS_COLS;
         int yStep = size.y / LEVELS_ROWS;
         if(xStep < yStep) {
@@ -159,8 +159,6 @@ public class LevelChooseView extends SurfaceView {
     }
 
     private void initSurface() {
-        imageProvider().setScaleParameters(getWidth(), getHeight());
-
         border = imageProvider().getBitmapNoCache("menu/border.png");
 //        cross = imageProvider().getBitmapNoCache("menu/cross.png");
         background = background != null ? background : Bitmap.createScaledBitmap(

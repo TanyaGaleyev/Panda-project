@@ -10,6 +10,7 @@ import org.ivan.simple.game.level.LevelView;
 import org.ivan.simple.game.monster.Monster;
 import org.ivan.simple.game.monster.MonsterFactory;
 import org.ivan.simple.game.motion.MotionType;
+import org.ivan.simple.game.tutorial.GuideAnimation;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -18,9 +19,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
 public class GameView extends SurfaceView {
 	
@@ -37,6 +40,7 @@ public class GameView extends SurfaceView {
 	private Hero hero;
 	private Monster monster;
 	private LevelView level;
+    GuideAnimation guideAnimation = new GuideAnimation();
 	
 	private GameControl control = new GameControl(this);
 	
@@ -120,9 +124,10 @@ public class GameView extends SurfaceView {
                 getHeight(),
                 false);
 
-        int gridWidth = getWidth() - 100;
-        int gridHeight = getHeight();
-        GRID_STEP = imageProvider().setScaleParameters(gridWidth, gridHeight);
+//        int gridWidth = getWidth() - 100;
+//        int gridHeight = getHeight();
+//        GRID_STEP = imageProvider().setScaleParameters(gridWidth, gridHeight);
+        GRID_STEP = imageProvider().getGridStep();
 
 //        serviceButtons = new ServiceButtons(10, 50);
         //GRID_STEP = 112;//88dp,48dp
@@ -153,6 +158,8 @@ public class GameView extends SurfaceView {
 			monster.xCoordinate = LEFT_BOUND + level.model.monster.getCol() * GRID_STEP;
 			monster.yCoordinate = TOP_BOUND + level.model.monster.getRow() * GRID_STEP;
 		}
+
+        guideAnimation = new GuideAnimation();
 	}
 
     private ImageProvider imageProvider() {
@@ -176,6 +183,7 @@ public class GameView extends SurfaceView {
 		level.onDraw(canvas, update);
 		hero.onDraw(canvas, update);
 		monster.onDraw(canvas, update);
+        guideAnimation.onDraw(canvas, update);
 //		level.drawGrid(canvas);
 		drawFPS(canvas);
 		drawScore(canvas);
@@ -393,7 +401,7 @@ public class GameView extends SurfaceView {
 		case 2: return "background/background_l_2.jpg";
 		case 3: return "background/background_l_3.jpg";
 		case 4: return "background/background_l_4.jpg";
-		default:return "background/background_l_1.jpg";
+		default:return "background/background_l_4.jpg";
 		}
 	}
 	

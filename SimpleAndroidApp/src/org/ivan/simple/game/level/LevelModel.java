@@ -224,6 +224,7 @@ public class LevelModel {
 				}
 			}
 		}
+        if(winCell == null) winCell = levelGrid[0][0];
 	}
 
 	public LevelCell getCell(int i, int j) {

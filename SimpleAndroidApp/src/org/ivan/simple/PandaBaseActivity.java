@@ -26,7 +26,7 @@ public abstract class PandaBaseActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        Point size = PandaApplication.windowSize(this);
+        Point size = app().windowSize();
         DISPLAY_WIDTH = size.x;
         DISPLAY_HEIGHT = size.y;
     }

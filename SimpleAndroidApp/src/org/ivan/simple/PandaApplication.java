@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
+import android.view.WindowManager;
 import android.widget.ListView;
 
 import org.ivan.simple.game.hero.Sprite;
@@ -43,6 +44,8 @@ public class PandaApplication extends Application {
         musicManager = new MusicManager(getApplicationContext());
         fontProvider = new FontProvider(getApplicationContext());
         imageProvider = new ImageProvider(getApplicationContext());
+        Point size = windowSize();
+        imageProvider.setScaleParameters(size.x, size.y);
         loading = new Sprite("menu/loader.png", 1, 12);
         loading.setAnimating(true);
 	}
@@ -77,9 +80,10 @@ public class PandaApplication extends Application {
 	}
 
 
-    public static Point windowSize(Activity activity) {
-        int width = activity.getWindowManager().getDefaultDisplay().getWidth();
-        int height = activity.getWindowManager().getDefaultDisplay().getHeight();
+    public Point windowSize() {
+        WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        int width = windowManager.getDefaultDisplay().getWidth();
+        int height = windowManager.getDefaultDisplay().getHeight();
         if(width < height) {
             int tmp = width;
             width = height;

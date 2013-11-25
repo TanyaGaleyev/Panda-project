@@ -10,8 +10,12 @@ import org.ivan.simple.PandaApplication;
 import org.ivan.simple.UserControlType;
 import org.ivan.simple.game.level.LevelModel;
 import org.ivan.simple.game.sound.SoundManager;
+import org.ivan.simple.game.tutorial.SolutionStep;
 
+import android.content.Context;
+import android.view.Gravity;
 import android.view.MotionEvent;
+import android.widget.Toast;
 
 public class GameControl {
 	private GameView view;
@@ -23,7 +27,7 @@ public class GameControl {
 	private TimerTask useDelayedControl;
 
     private boolean robotMode = false;
-    private Iterator<UserControlType> autoControls = new ArrayList<UserControlType>().iterator();
+    private Iterator<SolutionStep> autoControls = new ArrayList<SolutionStep>().iterator();
 	
 	private float[] startPressedY = new float[2];
 	private float[] startPressedX = new float[2];
@@ -293,7 +297,7 @@ public class GameControl {
 		}
 	}
 
-    public void setAutoControls(Iterator<UserControlType> autoControls) {
+    public void setAutoControls(Iterator<SolutionStep> autoControls) {
         robotMode = true;
         this.autoControls = autoControls;
     }
@@ -310,11 +314,27 @@ public class GameControl {
             }
         } else {
             if(autoControls.hasNext()) {
-                controlType = autoControls.next();
+                final SolutionStep step = autoControls.next();
+                controlType = step.getControl();
+                view.guideAnimation.init(step);
+                view.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        toastMessage(view.getContext(), step.getMessage());
+                    }
+                });
             } else {
                 controlType = UserControlType.IDLE;
             }
         }
         return controlType;
+    }
+
+    public void toastMessage(Context context, String message) {
+        if(message.length() > 0) {
+            Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+            toast.show();
+        }
     }
 }

@@ -1,9 +1,9 @@
 package org.ivan.simple.game;
 
-import org.ivan.simple.UserControlType;
 import org.ivan.simple.choose.LevelChooseActivity;
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
+import org.ivan.simple.game.tutorial.Solutions;
 import org.ivan.simple.settings.SettingsInGamePanel;
 
 import android.app.Dialog;
@@ -17,8 +17,8 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-
-import java.util.Arrays;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
 
 public class GameActivity extends PandaBaseActivity {
 
@@ -35,14 +35,13 @@ public class GameActivity extends PandaBaseActivity {
         prepare(findViewById(R.id.game_settings)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                gotoSettingsScreen();
-                Dialog dialog = new Dialog(GameActivity.this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                GameView nestedGame = new GameView(GameActivity.this);
-                nestedGame.setLevId(-1);
-                nestedGame.getControl().setAutoControls(Solutions.getSolution());
-                dialog.setContentView(nestedGame);
-                dialog.show();
+                gotoSettingsScreen();
+            }
+        });
+        prepare(findViewById(R.id.game_help)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showTutorial();
             }
         });
         GameView gView = (GameView) findViewById(R.id.game);
@@ -55,14 +54,13 @@ public class GameActivity extends PandaBaseActivity {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
-    
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	// TODO Auto-generated method stub
     	switch (item.getItemId()) {
     	case R.id.increaseFPS:
-    		GameManager.changeFPS(5); 
+    		GameManager.changeFPS(5);
     		return true;
     	case R.id.decreaseFPS:
     		GameManager.changeFPS(-5);
@@ -73,14 +71,10 @@ public class GameActivity extends PandaBaseActivity {
     		return super.onOptionsItemSelected(item);
     	}
     }
-    
+
+
 //    public void restart() {
-//    	finish();
-//		Intent intent = new Intent(this, GameActivity.class);
-//		intent.putExtra(LevelChooseActivity.LEVEL_ID, levid);
-//		startActivity(intent);
-//    }
-    
+
     public void switchBackToChooseActivity(boolean complete, int score) {
 		Intent resultIntent = new Intent();
 		resultIntent.putExtra(LevelChooseActivity.LEVEL_COMPLETE, complete);
@@ -88,33 +82,51 @@ public class GameActivity extends PandaBaseActivity {
 		setResult(RESULT_OK, resultIntent);
 		finish();
 	}
-    
+
     @Override
     public void onBackPressed() {
     	super.onBackPressed();
     }
-    
+
     @Override
     protected void onPause() {
     	super.onPause();
     	gControl.stopManager();
     	System.out.println("onPause!");
     }
-    
+
     @Override
     protected void onResume() {
     	super.onResume();
     }
-    
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
     	super.onConfigurationChanged(newConfig);
     }
-    
+
     @Override
     protected void onDestroy() {
     	super.onDestroy();
     	gControl = null;
+    }
+
+    private void showTutorial() {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        GameView nestedGame = new GameView(this);
+//        nestedGame.setBackgroundResource(R.drawable.settings_border);
+        nestedGame.setLevId(-1);
+        nestedGame.getControl().setAutoControls(Solutions.getDemo());
+        dialog.setContentView(nestedGame);
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                gControl.startManager();
+            }
+        });
+        gControl.stopManager();
+        dialog.show();
     }
 
     @Override
@@ -165,7 +177,7 @@ public class GameActivity extends PandaBaseActivity {
 		action >> MotionEvent.ACTION_POINTER_ID_SHIFT);
 		sb.append(")" );
 		}
-		sb.append("[" );
+		sb.append("[");
 		for (int i = 0; i < event.getPointerCount(); i++) {
 		sb.append("#" ).append(i);
 		sb.append("(pid " ).append(event.getPointerId(i));
@@ -178,5 +190,5 @@ public class GameActivity extends PandaBaseActivity {
 		if(actionCode == MotionEvent.ACTION_MOVE) return;
 		Log.d("DumpEvent", sb.toString());
 	}
-	
+
 }
