@@ -1,6 +1,7 @@
 package org.ivan.simple.welcome;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
@@ -8,9 +9,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
@@ -43,8 +44,8 @@ public class StartActivityNew extends PandaBaseActivity {
 //        spinner.setAdapter(new PandaCheckBoxAdapter(this, 0, "effects", "music"));
 
         Typeface bold = app().getFontProvider().bold();
-        ((TextView) findViewById(R.id.acro_caption)).setTypeface(bold);
-        ((TextView) findViewById(R.id.start_caption)).setTypeface(bold);
+//        ((TextView) findViewById(R.id.acro_caption)).setTypeface(bold);
+//        ((TextView) findViewById(R.id.start_caption)).setTypeface(bold);
 
         achivBtn = prepare(R.drawable.achievement);
         startSettings = prepare(R.drawable.settings);
@@ -64,17 +65,36 @@ public class StartActivityNew extends PandaBaseActivity {
         contentPanel.addView(panda);
         initPandaDrawable(false);
 
-        prepareMainTitle();
+        initMainTitle();
         initListeners();
     }
 
-    private void prepareMainTitle() {
+    private void initMainTitle() {
         mainTitle = new ImageView(this);
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        Drawable drawable = new BitmapDrawable(getResources(), BitmapFactory.decodeResource(
-                getResources(), R.drawable.panda_caption, options));
-        mainTitle.setBackground(drawable);
+//        Bitmap original = BitmapFactory.decodeResource(
+//                getResources(), R.drawable.panda_caption, options);
+        BitmapFactory.decodeResource(getResources(), R.drawable.panda_caption, options);
+        float srcRatio = (float) options.outHeight / options.outWidth;
+        float captionHeight = DISPLAY_HEIGHT * 0.80f;
+        float captionWidth = DISPLAY_WIDTH * 0.60f;
+        float calcRatio = captionHeight / captionWidth;
+        if(calcRatio > srcRatio) {
+            captionHeight = captionWidth * srcRatio;
+        } else {
+            captionWidth = captionHeight / srcRatio;
+        }
+//        Drawable drawable = new BitmapDrawable(
+//                getResources(),
+//                Bitmap.createScaledBitmap(original, (int) captionWidth, (int) captionHeight, true));
+//        mainTitle.setBackgroundDrawable(drawable);
+        mainTitle.setBackgroundResource(R.drawable.panda_caption);
+        RelativeLayout.LayoutParams lp =
+                new RelativeLayout.LayoutParams((int) captionWidth, (int) captionHeight);
+        lp.setMargins((int) (DISPLAY_WIDTH * 0.05f), (int) ((DISPLAY_HEIGHT - captionHeight) * 0.4f), 0, 0);
+        mainTitle.setLayoutParams(lp);
+        contentPanel.addView(mainTitle);
     }
 
     private void initPandaDrawable(boolean animation) {
