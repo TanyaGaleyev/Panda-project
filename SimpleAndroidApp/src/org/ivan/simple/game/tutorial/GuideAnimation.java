@@ -24,6 +24,7 @@ public class GuideAnimation {
     }
 
     public void onDraw(Canvas canvas, boolean update) {
+        // TODO programmatically finger motion here
         if(sprite.isAnimatingOrDelayed()) {
             sprite.onDraw(canvas, 100, 100, update);
         }

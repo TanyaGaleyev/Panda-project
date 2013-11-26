@@ -56,9 +56,7 @@ public class GameManager extends Thread {
 			if(view.readyForUpdate()) {
 				view.updateGame();
 			}
-			view.updateHeroScreenPosition();
-			view.updateMonster();
-			view.checkMonsterColision();
+            view.updatePositions();
 			doDraw(true);
 			if(view.finished) {
 				((GameActivity) view.getContext()).switchBackToChooseActivity(
@@ -76,8 +74,8 @@ public class GameManager extends Thread {
             } catch (Exception e) {}
 		}
 	}
-	
-	protected void doDraw(boolean update) {
+
+    protected void doDraw(boolean update) {
 		Canvas c = null;
 		try {
 			c = view.getHolder().lockCanvas();

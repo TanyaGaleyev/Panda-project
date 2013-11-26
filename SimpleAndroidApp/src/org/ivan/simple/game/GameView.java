@@ -432,7 +432,7 @@ public class GameView extends SurfaceView {
 			   (yCoordinate - TOP_BOUND) % GRID_STEP == 0;
 	}
 	
-	public void checkMonsterColision() {
+	protected void checkMonsterColision() {
         if(monster == null) return;
         Rect heroRect = new Rect(hero.x, hero.y, hero.x + GRID_STEP, hero.y + GRID_STEP);
         Rect monsterRect = new Rect(
@@ -443,5 +443,11 @@ public class GameView extends SurfaceView {
             monsterLose = true;
         }
 	}
+
+    public void updatePositions() {
+        updateHeroScreenPosition();
+        updateMonster();
+        checkMonsterColision();
+    }
 
 }
