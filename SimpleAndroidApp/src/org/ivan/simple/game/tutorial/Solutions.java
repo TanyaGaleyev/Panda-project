@@ -24,12 +24,19 @@ public class Solutions {
 
     public static Iterator<SolutionStep> getDemo() {
         return Arrays.asList(
-                _("Slide up"),_(SLIDE_UP),_(UP),_(IDLE),_(IDLE),_(IDLE),_(IDLE),_(IDLE),_(IDLE),_(IDLE),_(IDLE),
-                _("To control fall slide down"),_(IDLE),_(IDLE),_(SLIDE_UP),_(UP),_(IDLE),_(IDLE,"Now"),_(SLIDE_DOWN),_(DOWN),
+                _("Slide up"),_(SL_UP),_(UP),_(IDLE),_(IDLE),_(IDLE),_(IDLE),_(IDLE),_(IDLE),_(IDLE),_(IDLE),
+                _("To control fall slide down"),_(IDLE),_(IDLE),_(SL_UP),_(UP),_(IDLE),_("Now",SL_DOWN),_(IDLE),_(DOWN),
                 _(IDLE),_(IDLE),_(IDLE),_(IDLE),
-                _("Slide right"),_(SLIDE_RIGHT),_(RIGHT),_(IDLE),_(IDLE),_(IDLE),_(IDLE),_(IDLE),
-                _("Jump and then slide right"),_(SLIDE_UP),_(UP),_(IDLE),_(IDLE),_(SLIDE_RIGHT),_(RIGHT),
-                _("Slide left"),_(SLIDE_LEFT),_(LEFT)
+                _("Slide right"),_(SL_RIGHT),_(RIGHT),_(IDLE),_(IDLE),_(IDLE),_(IDLE),_(IDLE),
+                _("Jump and then slide right"),_(SL_UP),_(UP),_(IDLE),_(IDLE,SL_RIGHT),_(IDLE),_(RIGHT),_(IDLE),_(IDLE),
+                _("Slide left"),_(SL_LEFT),_(LEFT),_(IDLE),_(IDLE),_(IDLE),_(IDLE),
+                _(TOUCH),_(IDLE),_(IDLE),_(IDLE),_(IDLE)
         ).iterator();
     }
+
+    private static GuideAction[] SL_UP = {RELEASED, TAP, SLIDE_UP, RELEASE, RELEASED};
+    private static GuideAction[] SL_DOWN = {RELEASED, TAP, SLIDE_DOWN, RELEASE, RELEASED};
+    private static GuideAction[] SL_LEFT = {RELEASED, TAP, SLIDE_LEFT, RELEASE, RELEASED};
+    private static GuideAction[] SL_RIGHT = {RELEASED, TAP, SLIDE_RIGHT, RELEASE, RELEASED};
+    private static GuideAction[] TOUCH = {RELEASED, TAP, PRESSED, RELEASE, RELEASED};
 }

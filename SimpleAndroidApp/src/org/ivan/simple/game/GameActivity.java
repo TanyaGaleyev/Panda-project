@@ -114,6 +114,7 @@ public class GameActivity extends PandaBaseActivity {
     private void showTutorial() {
         Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         GameView nestedGame = new GameView(this);
 //        nestedGame.setBackgroundResource(R.drawable.settings_border);
         nestedGame.setLevId(-1);

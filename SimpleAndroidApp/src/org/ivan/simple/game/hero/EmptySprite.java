@@ -7,7 +7,9 @@ import android.graphics.Canvas;
  */
 public class EmptySprite extends Sprite {
 
-    public EmptySprite() {
+    public static EmptySprite EMPTY = new EmptySprite();
+
+    private EmptySprite() {
         super();
     }
 
