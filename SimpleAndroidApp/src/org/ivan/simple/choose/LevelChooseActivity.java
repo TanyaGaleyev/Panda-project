@@ -90,7 +90,7 @@ public class LevelChooseActivity extends PandaBaseActivity {
                 ImageView winAchivView = new ImageView(this);
                 final AnimationDrawable winAchivAnimation = app().loadAnimationFromFolder(
                                 AchievementsDirectories.getOpeningDir(achievement));
-                winAchivView.setImageDrawable(winAchivAnimation);
+                winAchivView.setBackgroundDrawable(winAchivAnimation);
                 winAchivView.post(new Runnable() {
                     @Override
                     public void run() {
@@ -105,7 +105,7 @@ public class LevelChooseActivity extends PandaBaseActivity {
                             public void run() {
                                 achivDialog.cancel();
                             }
-                        }, 5000);
+                        }, 2500);
             }
             if(complete) {
 				int score = data.getIntExtra(COMPLETE_SCORE, 0);

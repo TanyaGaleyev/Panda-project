@@ -8,6 +8,7 @@ import java.io.File;
 public class AchievementsDirectories {
 
     public static final String ACHIV_DIR = "achievements";
+    public static final String OPENING_DIR = "opening";
 
     public static String getIconPath(Achievement achievement) {
         String name = achievement.name().toLowerCase();
@@ -16,6 +17,6 @@ public class AchievementsDirectories {
 
     public static String getOpeningDir(Achievement achievement) {
         return ACHIV_DIR + File.separator + achievement.name().toLowerCase() +
-                File.separator + "opening";
+                File.separator + OPENING_DIR;
     }
 }
