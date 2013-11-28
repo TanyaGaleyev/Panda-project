@@ -129,38 +129,32 @@ public class StartActivity extends PandaBaseActivity {
             int packToOpenId = startedSet + 1;
             final ImageView packToOpen;
             if(setComplete && (packToOpen = levButtons.get(packToOpenId)) != null) {
-                try {
-                    final AnimationDrawable chestOpening = app()
-                            .loadAnimationFromFolder("animations/menu/pack_opening");
-                    chestOpening.setOneShot(true);
-                    packToOpen.setBackgroundDrawable(chestOpening);
-                    // TODO rake here, get rid of alpha channel manipulation, calculate chests sizes insted
-                    packToOpen.setImageAlpha(0);
-                    packToOpen.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            chestOpening.start();
-                            new Timer().schedule(new TimerTask() {
-                                @Override
-                                public void run() {
-                                    chestOpening.stop();
-                                    packToOpen.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            packToOpen.setImageAlpha(255);
-                                            packToOpen.setImageResource(R.drawable.chest_open);
-                                            packToOpen.setBackgroundDrawable(null);
-                                        }
-                                    });
-                                }
-                            }, chestOpening.getNumberOfFrames() * PandaApplication.ONE_FRAME_DURATION);
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    packToOpen.setImageAlpha(255);
-                    packToOpen.setImageResource(R.drawable.chest_open);
-                }
+                final AnimationDrawable chestOpening =
+                        app().loadAnimationFromFolder("animations/menu/pack_opening");
+                chestOpening.setOneShot(true);
+                packToOpen.setBackgroundDrawable(chestOpening);
+                // TODO rake here, get rid of alpha channel manipulation, calculate chests sizes insted
+                packToOpen.setImageAlpha(0);
+                packToOpen.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        chestOpening.start();
+                        new Timer().schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                chestOpening.stop();
+                                packToOpen.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        packToOpen.setImageAlpha(255);
+                                        packToOpen.setImageResource(R.drawable.chest_open);
+                                        packToOpen.setBackgroundDrawable(null);
+                                    }
+                                });
+                            }
+                        }, chestOpening.getNumberOfFrames() * PandaApplication.ONE_FRAME_DURATION);
+                    }
+                });
                 packToOpen.setEnabled(true);
 			}
 		}

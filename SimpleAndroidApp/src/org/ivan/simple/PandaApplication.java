@@ -92,15 +92,19 @@ public class PandaApplication extends Application {
         return new Point(width, height);
     }
 
-    public AnimationDrawable loadAnimationFromFolder(String pandaAnimationFolder) throws IOException {
+    public AnimationDrawable loadAnimationFromFolder(String pandaAnimationFolder) {
         AnimationDrawable animation = new AnimationDrawable();
-        String[] frameNames = getAssets().list(pandaAnimationFolder);
-        for(String frameName : frameNames) {
-            animation.addFrame(
-                    Drawable.createFromStream(
-                            getAssets().open(pandaAnimationFolder + File.separator + frameName),
-                            null),
-                    ONE_FRAME_DURATION);
+        try {
+            String[] frameNames = getAssets().list(pandaAnimationFolder);
+            for(String frameName : frameNames) {
+                animation.addFrame(
+                        Drawable.createFromStream(
+                                getAssets().open(pandaAnimationFolder + File.separator + frameName),
+                                null),
+                        ONE_FRAME_DURATION);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return animation;
     }

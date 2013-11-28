@@ -95,20 +95,16 @@ public class StartActivityNew extends PandaBaseActivity {
 
     private void initPandaDrawable(boolean animation) {
         if(animation) {
-            try {
-                if(pandaAnimation != null) return;
-                pandaAnimation = app().loadAnimationFromFolder(ANIMATIONS_DIR);
-                pandaAnimation.setOneShot(false);
-                panda.setBackgroundDrawable(pandaAnimation);
-                panda.post(new Runnable() {
+            if(pandaAnimation != null) return;
+            pandaAnimation = app().loadAnimationFromFolder(ANIMATIONS_DIR);
+            pandaAnimation.setOneShot(false);
+            panda.setBackgroundDrawable(pandaAnimation);
+            panda.post(new Runnable() {
                     @Override
                     public void run() {
                         pandaAnimation.start();
                     }
                 });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         } else {
             panda.setBackgroundResource(R.drawable.panda_icon);
         }

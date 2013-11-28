@@ -21,8 +21,6 @@ import java.io.IOException;
 
 public class AchievementsActivity extends PandaBaseActivity {
 
-    public static final String ACHIV_DIR = "achievements";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,9 +49,7 @@ public class AchievementsActivity extends PandaBaseActivity {
     }
 
     private LinearLayout createAchievementBar(Achievement achiv) {
-        String achivPath = achiv.name().toLowerCase();
-        String iconPath =
-                ACHIV_DIR + File.separator + achivPath + File.separator + achivPath + ".png";
+        String iconPath = AchievementsDirectories.getIconPath(achiv);
         String title = achiv.title;
         String description = achiv.description;
         LinearLayout hp = new LinearLayout(this);
