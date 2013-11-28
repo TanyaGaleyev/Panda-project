@@ -24,9 +24,9 @@ public class Solutions {
 
     public static Iterator<SolutionStep> getDemo() {
         return Arrays.asList(
-                _("Slide up"),_(SL_UP),_(UP),_(IDLE),_(IDLE),_(IDLE),_(IDLE),_(IDLE),_(IDLE),_(IDLE),_(IDLE),
+                _("Slide up"),_(SL_UP),_(UP),_(IDLE),_(IDLE),_(NONE),_(IDLE),_(IDLE),_(IDLE),_(IDLE),_(IDLE),
                 _("To control fall slide down"),_(IDLE),_(IDLE),_(SL_UP),_(UP),_(IDLE),_("Now",SL_DOWN),_(IDLE),_(DOWN),
-                _(IDLE),_(IDLE),_(IDLE),_(IDLE),
+                _(IDLE),_(IDLE),_(NONE),_(IDLE),
                 _("Slide right"),_(SL_RIGHT),_(RIGHT),_(IDLE),_(IDLE),_(IDLE),_(IDLE),_(IDLE),
                 _("Jump and then slide right"),_(SL_UP),_(UP),_(IDLE),_(IDLE,SL_RIGHT),_(IDLE),_(RIGHT),_(IDLE),_(IDLE),
                 _("Slide left"),_(SL_LEFT),_(LEFT),_(IDLE),_(IDLE),_(IDLE),_(IDLE),

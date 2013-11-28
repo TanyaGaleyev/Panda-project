@@ -10,11 +10,13 @@ import java.util.Iterator;
  * Created by Ivan on 25.11.13.
  */
 public class GuideAnimation {
+    private final int x_init = 50;
+    private final int y_init = 400;
     private SolutionStep step;
     private Iterator<GuideAction> actionIt;
     private GuideAction action;
-    private int x;
-    private int y;
+    private int x = x_init;
+    private int y = y_init;
     private int moveSpeed = 10;
 
     public GuideAnimation() {
@@ -23,12 +25,14 @@ public class GuideAnimation {
 
     public void init(SolutionStep step) {
         if(step.getActions().isEmpty()) return;
+        if(step.getActions().get(0) == GuideAction.NONE) {
+            x = x_init;
+            y = y_init;
+        }
         this.step = step;
         actionIt = step.getActions().iterator();
         action = nextAction();
         action.getSprite().playOnce();
-        x = 50;
-        y = 200;
     }
 
     public void onDraw(Canvas canvas, boolean update) {
@@ -37,7 +41,7 @@ public class GuideAnimation {
             action = nextAction();
             action.getSprite().playOnce();
         }
-        if(!(action.getSprite() instanceof EmptySprite)) {
+        if(action != GuideAction.NONE) {
             switch (action) {
                 case SLIDE_UP:      y -= moveSpeed; break;
                 case SLIDE_DOWN:    y += moveSpeed; break;
@@ -51,7 +55,7 @@ public class GuideAnimation {
 
     private GuideAction nextAction() {
         if(actionIt.hasNext())  return actionIt.next();
-        else                    return GuideAction.NONE;
+        else                    return action;
     }
 
 }

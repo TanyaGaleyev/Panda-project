@@ -97,8 +97,7 @@ public class StartActivityNew extends PandaBaseActivity {
         if(animation) {
             try {
                 if(pandaAnimation != null) return;
-                pandaAnimation = app().
-                        loadAnimationFromFolder(ANIMATIONS_DIR);
+                pandaAnimation = app().loadAnimationFromFolder(ANIMATIONS_DIR);
                 pandaAnimation.setOneShot(false);
                 panda.setBackgroundDrawable(pandaAnimation);
                 panda.post(new Runnable() {

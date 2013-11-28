@@ -1,16 +1,22 @@
 package org.ivan.simple.choose;
 
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 
+import org.ivan.simple.PandaApplication;
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
 import org.ivan.simple.utils.PandaButtonsPanel;
 import org.ivan.simple.welcome.StartActivity;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class LevelChooseActivity extends PandaBaseActivity {
 	public static final String LEVEL_ID = "levId";
@@ -73,8 +79,24 @@ public class LevelChooseActivity extends PandaBaseActivity {
 		super.onActivityResult(requestCode, resultCode, data);
         setLoading(false);
 		if(requestCode == FINISHED_LEVEL_ID && resultCode == RESULT_OK) {
+            boolean achievement = true;//data.getBooleanExtra(ACHIV, false);
 			boolean complete = data.getBooleanExtra(LEVEL_COMPLETE, false);
-			if(complete) {
+            if(achievement) {
+                final Dialog achivDialog = new Dialog(LevelChooseActivity.this);
+                achivDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                ImageView test = new ImageView(this);
+                test.setImageResource(R.drawable.achievement);
+                achivDialog.setContentView(test);
+                achivDialog.show();
+                new Timer().schedule(
+                        new TimerTask() {
+                            @Override
+                            public void run() {
+                                achivDialog.cancel();
+                            }
+                        }, 2000);
+            }
+            if(complete) {
 				int score = data.getIntExtra(COMPLETE_SCORE, 0);
 				int oldScore = view.completeCurrentLevel(score);
 				if(score > oldScore) {
