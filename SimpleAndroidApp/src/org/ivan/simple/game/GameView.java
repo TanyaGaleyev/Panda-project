@@ -47,6 +47,8 @@ public class GameView extends SurfaceView {
 	private String backgroundId;
 	private Bitmap background;
 
+    private Paint backgroundPaint;
+
 	private LevelCell prevCell;
 	
 	private int levId = 0;
@@ -75,6 +77,8 @@ public class GameView extends SurfaceView {
 	}
 	
 	private final void init() {
+        backgroundPaint = new Paint();
+        backgroundPaint.setAntiAlias(true);
 		getHolder().addCallback(new SurfaceHolder.Callback() {
 			
 			public void surfaceDestroyed(SurfaceHolder holder) {
@@ -118,11 +122,12 @@ public class GameView extends SurfaceView {
 //		}
 //		GRID_STEP = GRID_STEP % 8 == 0 ? GRID_STEP : GRID_STEP + 8 - GRID_STEP % 8;
 //		ImageProvider.setGridStep(GRID_STEP);
-        background = Bitmap.createScaledBitmap(
-                imageProvider().getBitmapNoCache(backgroundId),
-                getWidth(),
-                getHeight(),
-                false);
+        background = imageProvider().getBitmapNoCache(backgroundId);
+//                Bitmap.createScaledBitmap(
+//                imageProvider().getBitmapNoCache(backgroundId),
+//                getWidth(),
+//                getHeight(),
+//                false);
 
 //        int gridWidth = getWidth() - 100;
 //        int gridHeight = getHeight();
@@ -176,9 +181,7 @@ public class GameView extends SurfaceView {
 	
 	protected void onDraw(Canvas canvas, boolean update) {
 		canvas.drawColor(0xffC6E10E);
-        Paint paint = new Paint();
-        paint.setAntiAlias(true);
-		canvas.drawBitmap(background, 0, 0, paint);
+		canvas.drawBitmap(background, 0, 0, backgroundPaint);
 //		serviceButtons.draw(canvas);
 		level.onDraw(canvas, update);
 		hero.onDraw(canvas, update);

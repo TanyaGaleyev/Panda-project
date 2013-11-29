@@ -60,7 +60,7 @@ public class ImageProvider {
 			Bitmap ret;
 			BitmapFactory.Options opts = new BitmapFactory.Options();
             if(rows == 1 && cols == 1) {
-                opts.inPreferredConfig = Bitmap.Config.RGB_565;
+//                opts.inPreferredConfig = Bitmap.Config.RGB_565;
                 opts.inSampleSize = (int) (baseStep / gridStep);
 //					System.out.println("Sample:" + opts.inSampleSize);
 				ret = BitmapFactory.decodeStream(asssetsMananger.open(base + resSet + path), null, opts);

@@ -63,6 +63,7 @@ public class LevelChooseView extends SurfaceView {
 	private Bitmap lowscore;
 
 	private Paint textPaint;
+    private Paint backgroundPaint;
 
 	/**
 	 * Marker is a panda image moving from one level to another (choosing level)
@@ -105,6 +106,8 @@ public class LevelChooseView extends SurfaceView {
 		textPaint.setTextSize(36);
 		textPaint.setTypeface(PandaApplication.getPandaApplication().getFontProvider().regular());
         textPaint.setAntiAlias(true);
+        backgroundPaint = new Paint();
+        backgroundPaint.setAntiAlias(true);
 		getHolder().addCallback(new SurfaceHolder.Callback() {
 
 			public void surfaceDestroyed(SurfaceHolder holder) {
@@ -159,11 +162,12 @@ public class LevelChooseView extends SurfaceView {
     private void initSurface() {
         border = imageProvider().getBitmapNoCache("menu/border.png");
 //        cross = imageProvider().getBitmapNoCache("menu/cross.png");
-        background = background != null ? background : Bitmap.createScaledBitmap(
-                imageProvider().getBitmapNoCache(backgroundId),
-                getWidth(),
-                getHeight(),
-                false);
+        background = background != null ? background : imageProvider().getBitmapNoCache(backgroundId);
+//                Bitmap.createScaledBitmap(
+//                imageProvider().getBitmapNoCache(backgroundId),
+//                getWidth(),
+//                getHeight(),
+//                false);
         marker = imageProvider().getBitmapNoCache("menu/single_panda.png");
 //        back = imageProvider().getBitmapNoCache("menu/back_choose.png");
 //        sound = imageProvider().getBitmapNoCache("menu/sound_choose.png");
@@ -204,7 +208,7 @@ public class LevelChooseView extends SurfaceView {
             break;
         }
         canvas.drawColor(Color.rgb(218, 228, 115));
-        canvas.drawBitmap(background, 0, 0, null);
+        canvas.drawBitmap(background, 0, 0, backgroundPaint);
         drawGrid(canvas);
         drawLevelsIcons(canvas);
         drawOnCenterCoordinates(marker, markerX, markerY, canvas);
