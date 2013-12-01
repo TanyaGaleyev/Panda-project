@@ -162,7 +162,7 @@ public class LevelChooseView extends SurfaceView {
     private void initSurface() {
         border = imageProvider().getBitmapNoCache("menu/border.png");
 //        cross = imageProvider().getBitmapNoCache("menu/cross.png");
-        background = background != null ? background : imageProvider().getBitmapNoCache(backgroundId);
+        background = background != null ? background : imageProvider().getBackground(backgroundId);
 //                Bitmap.createScaledBitmap(
 //                imageProvider().getBitmapNoCache(backgroundId),
 //                getWidth(),
@@ -208,7 +208,7 @@ public class LevelChooseView extends SurfaceView {
             break;
         }
         canvas.drawColor(Color.rgb(218, 228, 115));
-        canvas.drawBitmap(background, 0, 0, backgroundPaint);
+        drawOnCenterCoordinates(background, getWidth() / 2, getHeight() / 2, canvas);
         drawGrid(canvas);
         drawLevelsIcons(canvas);
         drawOnCenterCoordinates(marker, markerX, markerY, canvas);

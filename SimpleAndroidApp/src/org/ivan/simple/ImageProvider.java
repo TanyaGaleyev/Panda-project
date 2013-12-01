@@ -127,12 +127,24 @@ public class ImageProvider {
 		images.remove(path);
 //		System.out.println("Bitmap removed");
 	}
-	
+
 	public int getGridStep() {
 		return gridStep;
 	}
 
     public String[] list(String path) throws IOException {
         return asssetsMananger.list(base + resSet + path);
+    }
+
+    // FIXME I am rake =)
+    public Bitmap getBackground(String path) {
+        try {
+            BitmapFactory.Options opts = new BitmapFactory.Options();
+            return BitmapFactory.decodeStream(
+                    asssetsMananger.open(base + resSet + path), null, opts);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

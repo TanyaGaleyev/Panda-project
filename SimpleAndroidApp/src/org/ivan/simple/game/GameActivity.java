@@ -143,6 +143,7 @@ public class GameActivity extends PandaBaseActivity {
         settings.setExitOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dialog.cancel();
                 finish();
             }
         });
@@ -150,13 +151,13 @@ public class GameActivity extends PandaBaseActivity {
             @Override
             public void onClick(View view) {
                 gControl.restartGame();
-                dialog.hide();
+                dialog.cancel();
             }
         });
         settings.setResumeOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.hide();
+                dialog.cancel();
                 gControl.startManager();
             }
         });
