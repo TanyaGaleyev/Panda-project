@@ -154,7 +154,7 @@ public class GameView extends SurfaceView {
 //		prevMotion = level.model.getMotion();
 		
 		hero = new Hero(level.model.hero);
-		monster = MonsterFactory.createMonster(level.model.monster);
+		monster = MonsterFactory.createMonster(level.model.monster, GRID_STEP);
 		
 		hero.x = LEFT_BOUND + level.model.hero.getX() * GRID_STEP;
 		hero.y = TOP_BOUND + level.model.hero.getY() * GRID_STEP;
@@ -432,7 +432,7 @@ public class GameView extends SurfaceView {
 		if(isGridCoordinates(monster.xCoordinate, monster.yCoordinate)) {
 			level.model.nextDirection();
 		}
-		monster.moveInCurrentDirection(ANIMATION_JUMP_SPEED);
+		monster.moveInCurrentDirection();
 	}
 	
 	private boolean isGridCoordinates(int xCoordinate, int yCoordinate) {
