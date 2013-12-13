@@ -15,15 +15,21 @@ public enum GuideAction {
     RELEASE("finger/finger.png", Sprite.Flag.INVERT),
     PRESSED("finger/finger.png", Sprite.Flag.LAST),
     RELEASED("finger/finger.png", Sprite.Flag.FIRST),
-    SLIDE_LEFT("finger/finger.png", Sprite.Flag.LAST),
-    SLIDE_RIGHT("finger/finger.png", Sprite.Flag.LAST),
+    SLIDE_LEFT("finger/finger.png", Sprite.Flag.LAST, Trail.LEFT),
+    SLIDE_RIGHT("finger/finger.png", Sprite.Flag.LAST, Trail.RIGHT),
     SLIDE_UP("finger/finger.png", Sprite.Flag.LAST),
-    SLIDE_DOWN("finger/finger.png", Sprite.Flag.LAST),
+    SLIDE_DOWN("finger/finger.png", Sprite.Flag.LAST, Trail.DOWN),
     NONE("");
 
     public static final String GUIDE_BASE_PATH = "tutorial/";
 
     private Sprite sprite;
+    private Trail trail = Trail.NONE;
+
+    private GuideAction(String spritePath, Sprite.Flag flag, Trail trail) {
+        this(spritePath, flag);
+        this.trail = trail;
+    }
 
     private GuideAction(String spritePath, Sprite.Flag flag) {
         this(spritePath);
