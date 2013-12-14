@@ -152,7 +152,7 @@ public class Sprite {
 	public void playOnce(int delay, boolean switchSet) {
 		this.switchSet = switchSet;
 		if(delay < 0) delay = 0;
-		this.animating = delay > 0 ? false : true; 
+		this.animating = !(delay > 0);
 		this.playOnce = true;
 		this.delay = delay;
 	}
