@@ -325,6 +325,7 @@ public class GameControl {
                 });
             } else {
                 controlType = UserControlType.IDLE;
+                ((GameActivity) view.getContext()).stopTutorial();
             }
         }
         return controlType;
