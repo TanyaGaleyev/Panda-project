@@ -262,7 +262,7 @@ public class GameControl {
 		return gameLoopThread.isRunning();
 	}
 	
-	protected void startManager() {
+	public void startManager() {
         if(gameLoopThread != null && gameLoopThread.isRunning()) return;
 		System.out.println("Start game loop");
 		gameLoopThread = new GameManager(view);
@@ -271,12 +271,10 @@ public class GameControl {
 		paused = false;
 	}
 	
-	protected void stopManager() {
+	public void stopManager() {
 		if(gameLoopThread == null) return;
-		System.out.println("Stop game loop");
-		paused = true;
+        postStopManager();
 		boolean retry = true;
-        gameLoopThread.setRunning(false);
         while (retry) {
            try {
                gameLoopThread.join();
@@ -286,6 +284,13 @@ public class GameControl {
            }
         }
 	}
+
+    public void postStopManager() {
+        if(gameLoopThread == null) return;
+        System.out.println("Stop game loop");
+        paused = true;
+        gameLoopThread.setRunning(false);
+    }
 	
 	protected GameManager getGameLoopThread() {
 		return gameLoopThread;
@@ -325,7 +330,7 @@ public class GameControl {
                 });
             } else {
                 controlType = UserControlType.IDLE;
-                ((GameActivity) view.getContext()).stopTutorial();
+                view.getGameContext().stopTutorial();
             }
         }
         return controlType;

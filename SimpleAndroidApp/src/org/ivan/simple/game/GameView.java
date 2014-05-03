@@ -39,7 +39,7 @@ public class GameView extends SurfaceView {
 
 	private Hero hero;
 	private Monster monster;
-	private LevelView level;
+	protected LevelView level;
     GuideAnimation guideAnimation = new GuideAnimation();
 	
 	private GameControl control = new GameControl(this);
@@ -53,20 +53,12 @@ public class GameView extends SurfaceView {
 	
 	protected boolean finished = false;
     private boolean monsterLose = false;
+    private GameActivity gameContext;
 //    ServiceButtons serviceButtons;
 
-    public GameView(Context context) {
+    public GameView(GameActivity context) {
 		super(context);
-		init();
-	}
-	
-	public GameView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		init();
-	}
-	
-	public GameView(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
+        this.gameContext = context;
 		init();
 	}
 
@@ -450,4 +442,7 @@ public class GameView extends SurfaceView {
         checkMonsterColision();
     }
 
+    public GameActivity getGameContext() {
+        return gameContext;
+    }
 }

@@ -4,6 +4,7 @@ import org.ivan.simple.choose.LevelChooseActivity;
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
 import org.ivan.simple.game.tutorial.Solutions;
+import org.ivan.simple.game.tutorial.TutorialGame;
 import org.ivan.simple.settings.SettingsInGamePanel;
 
 import android.app.Dialog;
@@ -18,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 
 public class GameActivity extends PandaBaseActivity {
 
@@ -44,7 +46,10 @@ public class GameActivity extends PandaBaseActivity {
                 startTutorial();
             }
         });
-        GameView gView = (GameView) findViewById(R.id.game);
+//        GameView gView = (GameView) findViewById(R.id.game);
+        RelativeLayout contentPanel = (RelativeLayout) findViewById(R.id.game_content_panel);
+        GameView gView = new TutorialGame(this);
+        contentPanel.addView(gView);
         gView.setLevId(levid);
         gControl = gView.getControl();
     }
