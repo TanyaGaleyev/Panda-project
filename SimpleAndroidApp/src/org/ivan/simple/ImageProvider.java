@@ -1,6 +1,7 @@
 package org.ivan.simple;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 
 import android.content.Context;
@@ -63,12 +64,12 @@ public class ImageProvider {
                 opts.inPreferredConfig = Bitmap.Config.RGB_565;
                 opts.inSampleSize = (int) (baseStep / gridStep);
 //					System.out.println("Sample:" + opts.inSampleSize);
-				ret = BitmapFactory.decodeStream(asssetsMananger.open(base + resSet + path), null, opts);
+				ret = loadBitmap(path, opts);
 			} else {
 				double scale = gridStep / baseStep;
                 Bitmap original;
                 try {
-				    original = BitmapFactory.decodeStream(asssetsMananger.open(base + resSet + path), null, opts);
+				    original = loadBitmap(path, opts);
                 } catch (OutOfMemoryError error) {
                     System.err.println("Error loading path " + path);
                     throw error;
@@ -111,15 +112,25 @@ public class ImageProvider {
 		BitmapFactory.Options opts = new BitmapFactory.Options();
 		opts.inJustDecodeBounds = true;
 		try {
-			BitmapFactory.decodeStream(asssetsMananger.open(base + resSet + path), null, opts);
+			loadBitmap(path, opts);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return opts;
 	}
-	
-	public void removeFromCatch(String path) {
+
+    private Bitmap loadBitmap(String path, BitmapFactory.Options opts) throws IOException {
+        InputStream input = null;
+        try {
+            input = asssetsMananger.open(base + resSet + path);
+            return BitmapFactory.decodeStream(input, null, opts);
+        } finally {
+            if(input != null) input.close();
+        }
+    }
+
+    public void removeFromCatch(String path) {
 		Bitmap bmp = images.get(path);
 		if(bmp == null) return;
 		cacheSize -= bmp.getWidth() * bmp.getHeight() / 256;// * 4 / 1024

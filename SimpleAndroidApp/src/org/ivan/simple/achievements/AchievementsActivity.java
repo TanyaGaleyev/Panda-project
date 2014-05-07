@@ -63,8 +63,7 @@ public class AchievementsActivity extends PandaBaseActivity {
         hp.setLayoutParams(margins);
         try {
             ImageView icon = new ImageView(this);
-            icon.setBackgroundDrawable(
-                    Drawable.createFromStream(getResources().getAssets().open(iconPath), null));
+            icon.setBackgroundDrawable(app().createAssetDrawable(iconPath));
             icon.setLayoutParams(new ViewGroup.LayoutParams(app().displayHeight / 5, app().displayHeight / 5));
             hp.addView(icon);
         } catch (IOException e) {

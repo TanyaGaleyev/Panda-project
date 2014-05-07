@@ -13,6 +13,7 @@ import org.ivan.simple.settings.SettingsModel;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class PandaApplication extends Application {
     public static final int ONE_FRAME_DURATION = 40;
@@ -98,15 +99,23 @@ public class PandaApplication extends Application {
             String[] frameNames = getAssets().list(pandaAnimationFolder);
             for(String frameName : frameNames) {
                 animation.addFrame(
-                        Drawable.createFromStream(
-                                getAssets().open(pandaAnimationFolder + File.separator + frameName),
-                                null),
+                        createAssetDrawable(pandaAnimationFolder + File.separator + frameName),
                         ONE_FRAME_DURATION);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return animation;
+    }
+
+    public Drawable createAssetDrawable(String path) throws IOException {
+        InputStream input = null;
+        try {
+            input = getAssets().open(path);
+            return Drawable.createFromStream(input, null);
+        } finally {
+            if(input != null) input.close();
+        }
     }
 
     public SettingsModel getSettingsModel() {

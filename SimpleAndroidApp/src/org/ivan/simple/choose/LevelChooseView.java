@@ -511,7 +511,7 @@ public class LevelChooseView extends SurfaceView {
 						}
 					}
 				} catch(Exception e) {
-					// TODO process exception
+					e.printStackTrace();
 				} finally {
 					if(c != null) {
 						getHolder().unlockCanvasAndPost(c);
