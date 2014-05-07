@@ -1,12 +1,17 @@
 package org.ivan.simple.choose;
 
+import java.io.IOException;
 import java.util.StringTokenizer;
 
 import org.ivan.simple.ImageProvider;
 import org.ivan.simple.PandaApplication;
 import org.ivan.simple.UserControlType;
+import org.ivan.simple.bitmaputils.ColorBackground;
+import org.ivan.simple.bitmaputils.PandaBackground;
+import org.ivan.simple.bitmaputils.TextureAtlasParser;
 import org.ivan.simple.game.GameActivity;
 import org.ivan.simple.game.level.LevelStorage;
+import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
 import android.content.Intent;
@@ -53,7 +58,8 @@ public class LevelChooseView extends SurfaceView {
 
 	// Backgroung image of LevelChooseView
 	private String backgroundId;
-	private Bitmap background;
+//	private Bitmap background;
+    private PandaBackground bgr;
 //	private Bitmap back;
 //	private Bitmap sound;
 
@@ -159,11 +165,19 @@ public class LevelChooseView extends SurfaceView {
     private void initSurface() {
         border = imageProvider().getBitmapNoCache("menu/border.png");
 //        cross = imageProvider().getBitmapNoCache("menu/cross.png");
-        background = background != null ? background : Bitmap.createScaledBitmap(
-                imageProvider().getBitmapNoCache(backgroundId),
-                getWidth(),
-                getHeight(),
-                false);
+//        background = background != null ? background : Bitmap.createScaledBitmap(
+//                imageProvider().getBitmapNoCache(backgroundId),
+//                getWidth(),
+//                getHeight(),
+//                false);
+        try {
+            bgr = new TextureAtlasParser().createTextureAtlasBackground(context, backgroundId);
+        } catch (IOException e) {
+            e.printStackTrace();
+            bgr = new ColorBackground();
+        } catch (XmlPullParserException e) {
+            bgr = new ColorBackground();
+        }
         marker = imageProvider().getBitmapNoCache("menu/single_panda.png");
 //        back = imageProvider().getBitmapNoCache("menu/back_choose.png");
 //        sound = imageProvider().getBitmapNoCache("menu/sound_choose.png");
@@ -204,7 +218,8 @@ public class LevelChooseView extends SurfaceView {
             break;
         }
         canvas.drawColor(Color.rgb(218, 228, 115));
-        canvas.drawBitmap(background, 0, 0, null);
+//        canvas.drawBitmap(background, 0, 0, null);
+        bgr.draw(canvas);
         drawGrid(canvas);
         drawLevelsIcons(canvas);
         drawOnCenterCoordinates(marker, markerX, markerY, canvas);
