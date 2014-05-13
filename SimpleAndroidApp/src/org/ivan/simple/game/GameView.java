@@ -3,6 +3,9 @@ package org.ivan.simple.game;
 import org.ivan.simple.ImageProvider;
 import org.ivan.simple.PandaApplication;
 import org.ivan.simple.UserControlType;
+import org.ivan.simple.bitmaputils.ColorBackground;
+import org.ivan.simple.bitmaputils.PandaBackground;
+import org.ivan.simple.bitmaputils.TextureAtlasParser;
 import org.ivan.simple.game.hero.Hero;
 import org.ivan.simple.game.level.LevelCell;
 import org.ivan.simple.game.level.LevelModel;
@@ -11,6 +14,7 @@ import org.ivan.simple.game.monster.Monster;
 import org.ivan.simple.game.monster.MonsterFactory;
 import org.ivan.simple.game.motion.MotionType;
 import org.ivan.simple.game.tutorial.GuideAnimation;
+import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -24,6 +28,8 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Toast;
+
+import java.io.IOException;
 
 public class GameView extends SurfaceView {
 	
@@ -45,7 +51,8 @@ public class GameView extends SurfaceView {
 	private GameControl control = new GameControl(this);
 	
 	private String backgroundId;
-	private Bitmap background;
+//	private Bitmap background;
+    private PandaBackground bgr;
 
 	private LevelCell prevCell;
 	
@@ -110,11 +117,18 @@ public class GameView extends SurfaceView {
 //		}
 //		GRID_STEP = GRID_STEP % 8 == 0 ? GRID_STEP : GRID_STEP + 8 - GRID_STEP % 8;
 //		ImageProvider.setGridStep(GRID_STEP);
-        background = Bitmap.createScaledBitmap(
-                imageProvider().getBitmapNoCache(backgroundId),
-                getWidth(),
-                getHeight(),
-                false);
+//        background = Bitmap.createScaledBitmap(
+//                imageProvider().getBitmapNoCache(backgroundId),
+//                getWidth(),
+//                getHeight(),
+//                false);
+        try {
+            bgr = new TextureAtlasParser().createTextureAtlasBackground(gameContext, backgroundId);
+        } catch (IOException e) {
+            bgr = new ColorBackground();
+        } catch (XmlPullParserException e) {
+            bgr = new ColorBackground();
+        }
 
 //        int gridWidth = getWidth() - 100;
 //        int gridHeight = getHeight();
@@ -168,9 +182,10 @@ public class GameView extends SurfaceView {
 	
 	protected void onDraw(Canvas canvas, boolean update) {
 		canvas.drawColor(0xffC6E10E);
-        Paint paint = new Paint();
-        paint.setAntiAlias(true);
-		canvas.drawBitmap(background, 0, 0, paint);
+//        Paint paint = new Paint();
+//        paint.setAntiAlias(true);
+//		canvas.drawBitmap(background, 0, 0, paint);
+        bgr.draw(canvas);
 //		serviceButtons.draw(canvas);
 		level.onDraw(canvas, update);
 		hero.onDraw(canvas, update);
