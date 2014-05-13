@@ -75,7 +75,7 @@ public class GameView extends SurfaceView {
 		return control;
 	}
 	
-	private final void init() {
+	private void init() {
         backgroundPaint = new Paint();
         backgroundPaint.setAntiAlias(true);
 		getHolder().addCallback(new SurfaceHolder.Callback() {
