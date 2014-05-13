@@ -420,12 +420,9 @@ public class LevelChooseView extends SurfaceView {
 	}
 	
 	private boolean isOnGridCenter(int x, int y) {
-		if((x - GRID_STEP / 2 - LEFT_BOUND) % GRID_STEP == 0 &&
-				(y - GRID_STEP / 2 - TOP_BOUND) % GRID_STEP == 0) {
-			return true;
-		}
-		return false;
-	}
+        return (x - GRID_STEP / 2 - LEFT_BOUND) % GRID_STEP == 0 &&
+                (y - GRID_STEP / 2 - TOP_BOUND) % GRID_STEP == 0;
+    }
 	
 	public int completeCurrentLevel(int score) {
 		int ret = finishedLevels[levelY][levelX];
