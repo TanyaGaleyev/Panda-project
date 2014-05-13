@@ -11,7 +11,7 @@ import java.util.Iterator;
  */
 public class GuideAnimation {
     private final int x_init = 50;
-    private final int y_init = 400;
+    private final int y_init = 450;
     private SolutionStep step;
     private Iterator<GuideAction> actionIt;
     private GuideAction action;
@@ -33,6 +33,7 @@ public class GuideAnimation {
         actionIt = step.getActions().iterator();
         action = nextAction();
         action.getSprite().playOnce();
+        action.getTrail().playOnce();
     }
 
     public void onDraw(Canvas canvas, boolean update) {
@@ -40,6 +41,7 @@ public class GuideAnimation {
         if(!action.getSprite().isAnimatingOrDelayed()) {
             action = nextAction();
             action.getSprite().playOnce();
+            action.getTrail().playOnce();
         }
         if(action != GuideAction.NONE) {
             switch (action) {
@@ -49,6 +51,7 @@ public class GuideAnimation {
                 case SLIDE_RIGHT:   x += moveSpeed; break;
                 default: break;
             }
+            action.getTrail().onDraw(canvas, x + 16, y - action.getSprite().getHeight() / 2 - 8, update);
             action.getSprite().onDraw(canvas, x, y, update);
         }
     }

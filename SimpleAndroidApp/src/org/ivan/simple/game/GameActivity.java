@@ -4,6 +4,7 @@ import org.ivan.simple.choose.LevelChooseActivity;
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
 import org.ivan.simple.game.tutorial.Solutions;
+import org.ivan.simple.game.tutorial.TutorialGame;
 import org.ivan.simple.settings.SettingsInGamePanel;
 
 import android.app.Dialog;
@@ -18,14 +19,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 public class GameActivity extends PandaBaseActivity {
 
     public static final String PAUSE_TITLE = "Pause";
     private GameControl gControl;
 	private int levid;
-	
+    private Dialog tutorialDialog;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,10 +43,13 @@ public class GameActivity extends PandaBaseActivity {
         prepare(findViewById(R.id.game_help)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showTutorial();
+                startTutorial();
             }
         });
-        GameView gView = (GameView) findViewById(R.id.game);
+//        GameView gView = (GameView) findViewById(R.id.game);
+        RelativeLayout contentPanel = (RelativeLayout) findViewById(R.id.game_content_panel);
+        GameView gView = levid == 9 ? new TutorialGame(this) : new GameView(this);
+        contentPanel.addView(gView);
         gView.setLevId(levid);
         gControl = gView.getControl();
     }
@@ -111,23 +116,27 @@ public class GameActivity extends PandaBaseActivity {
     	gControl = null;
     }
 
-    private void showTutorial() {
-        Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+    public void startTutorial() {
+        tutorialDialog = new Dialog(this);
+        tutorialDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        tutorialDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         GameView nestedGame = new GameView(this);
 //        nestedGame.setBackgroundResource(R.drawable.settings_border);
         nestedGame.setLevId(-1);
         nestedGame.getControl().setAutoControls(Solutions.getDemo());
-        dialog.setContentView(nestedGame);
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        tutorialDialog.setContentView(nestedGame);
+        tutorialDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
                 gControl.startManager();
             }
         });
         gControl.stopManager();
-        dialog.show();
+        tutorialDialog.show();
+    }
+
+    public void stopTutorial() {
+        tutorialDialog.cancel();
     }
 
     @Override

@@ -7,7 +7,7 @@ import org.ivan.simple.game.hero.Sprite;
 import android.graphics.Canvas;
 
 public class Prize {
-	private Sprite sprite; 
+	private Sprite sprite;
 	public Prize() {
 		sprite = new Sprite("prize/star.png", 1, 14);
 		sprite.setAnimating(true);

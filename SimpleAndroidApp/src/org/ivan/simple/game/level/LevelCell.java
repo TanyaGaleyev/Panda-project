@@ -58,8 +58,12 @@ public class LevelCell {
 		prize = null;
 		return 1;
 	}
-	
-	public Platform getFloor() {
+
+    public Prize getPrize() {
+        return prize;
+    }
+
+    public Platform getFloor() {
 		return floor;
 	}
 	public Platform getRoof() {

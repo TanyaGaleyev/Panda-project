@@ -3,6 +3,9 @@ package org.ivan.simple.game;
 import org.ivan.simple.ImageProvider;
 import org.ivan.simple.PandaApplication;
 import org.ivan.simple.UserControlType;
+import org.ivan.simple.bitmaputils.ColorBackground;
+import org.ivan.simple.bitmaputils.PandaBackground;
+import org.ivan.simple.bitmaputils.TextureAtlasParser;
 import org.ivan.simple.game.hero.Hero;
 import org.ivan.simple.game.level.LevelCell;
 import org.ivan.simple.game.level.LevelModel;
@@ -11,6 +14,7 @@ import org.ivan.simple.game.monster.Monster;
 import org.ivan.simple.game.monster.MonsterFactory;
 import org.ivan.simple.game.motion.MotionType;
 import org.ivan.simple.game.tutorial.GuideAnimation;
+import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -24,6 +28,8 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Toast;
+
+import java.io.IOException;
 
 public class GameView extends SurfaceView {
 	
@@ -39,13 +45,14 @@ public class GameView extends SurfaceView {
 
 	private Hero hero;
 	private Monster monster;
-	private LevelView level;
+	protected LevelView level;
     GuideAnimation guideAnimation = new GuideAnimation();
 	
 	private GameControl control = new GameControl(this);
 	
 	private String backgroundId;
-	private Bitmap background;
+//	private Bitmap background;
+    private PandaBackground bgr;
 
     private Paint backgroundPaint;
 
@@ -55,20 +62,12 @@ public class GameView extends SurfaceView {
 	
 	protected boolean finished = false;
     private boolean monsterLose = false;
+    private GameActivity gameContext;
 //    ServiceButtons serviceButtons;
 
-    public GameView(Context context) {
+    public GameView(GameActivity context) {
 		super(context);
-		init();
-	}
-	
-	public GameView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		init();
-	}
-	
-	public GameView(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
+        this.gameContext = context;
 		init();
 	}
 
@@ -122,12 +121,18 @@ public class GameView extends SurfaceView {
 //		}
 //		GRID_STEP = GRID_STEP % 8 == 0 ? GRID_STEP : GRID_STEP + 8 - GRID_STEP % 8;
 //		ImageProvider.setGridStep(GRID_STEP);
-        background = background != null ? background : imageProvider().getBackground(backgroundId);
-//                Bitmap.createScaledBitmap(
+//        background = Bitmap.createScaledBitmap(
 //                imageProvider().getBitmapNoCache(backgroundId),
 //                getWidth(),
 //                getHeight(),
 //                false);
+        try {
+            bgr = new TextureAtlasParser().createTextureAtlasBackground(gameContext, backgroundId);
+        } catch (IOException e) {
+            bgr = new ColorBackground();
+        } catch (XmlPullParserException e) {
+            bgr = new ColorBackground();
+        }
 
 //        int gridWidth = getWidth() - 100;
 //        int gridHeight = getHeight();
@@ -181,8 +186,9 @@ public class GameView extends SurfaceView {
 	
 	protected void onDraw(Canvas canvas, boolean update) {
 		canvas.drawColor(0xffC6E10E);
-		drawOnCenterCoordinates(
-                background, getWidth() / 2, getHeight() / 2, backgroundPaint, canvas);
+//		drawOnCenterCoordinates(
+//                background, getWidth() / 2, getHeight() / 2, backgroundPaint, canvas);
+        bgr.draw(canvas);
 //		serviceButtons.draw(canvas);
 		level.onDraw(canvas, update);
 		hero.onDraw(canvas, update);
@@ -458,4 +464,7 @@ public class GameView extends SurfaceView {
         checkMonsterColision();
     }
 
+    public GameActivity getGameContext() {
+        return gameContext;
+    }
 }

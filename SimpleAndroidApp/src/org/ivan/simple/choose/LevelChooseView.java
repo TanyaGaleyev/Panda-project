@@ -1,12 +1,17 @@
 package org.ivan.simple.choose;
 
+import java.io.IOException;
 import java.util.StringTokenizer;
 
 import org.ivan.simple.ImageProvider;
 import org.ivan.simple.PandaApplication;
 import org.ivan.simple.UserControlType;
+import org.ivan.simple.bitmaputils.ColorBackground;
+import org.ivan.simple.bitmaputils.PandaBackground;
+import org.ivan.simple.bitmaputils.TextureAtlasParser;
 import org.ivan.simple.game.GameActivity;
 import org.ivan.simple.game.level.LevelStorage;
+import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
 import android.content.Intent;
@@ -53,7 +58,8 @@ public class LevelChooseView extends SurfaceView {
 
 	// Backgroung image of LevelChooseView
 	private String backgroundId;
-	private Bitmap background;
+//	private Bitmap background;
+    private PandaBackground bgr;
 //	private Bitmap back;
 //	private Bitmap sound;
 
@@ -98,7 +104,7 @@ public class LevelChooseView extends SurfaceView {
 		init(context);
 	}
 
-	private final void init(Context context) {
+	private void init(Context context) {
         this.context = (LevelChooseActivity) context;
         initGrid();
 		textPaint = new Paint();
@@ -162,12 +168,19 @@ public class LevelChooseView extends SurfaceView {
     private void initSurface() {
         border = imageProvider().getBitmapNoCache("menu/border.png");
 //        cross = imageProvider().getBitmapNoCache("menu/cross.png");
-        background = background != null ? background : imageProvider().getBackground(backgroundId);
-//                Bitmap.createScaledBitmap(
+//        background = background != null ? background : Bitmap.createScaledBitmap(
 //                imageProvider().getBitmapNoCache(backgroundId),
 //                getWidth(),
 //                getHeight(),
 //                false);
+        try {
+            bgr = new TextureAtlasParser().createTextureAtlasBackground(context, backgroundId);
+        } catch (IOException e) {
+            e.printStackTrace();
+            bgr = new ColorBackground();
+        } catch (XmlPullParserException e) {
+            bgr = new ColorBackground();
+        }
         marker = imageProvider().getBitmapNoCache("menu/single_panda.png");
 //        back = imageProvider().getBitmapNoCache("menu/back_choose.png");
 //        sound = imageProvider().getBitmapNoCache("menu/sound_choose.png");
@@ -208,7 +221,8 @@ public class LevelChooseView extends SurfaceView {
             break;
         }
         canvas.drawColor(Color.rgb(218, 228, 115));
-        drawOnCenterCoordinates(background, getWidth() / 2, getHeight() / 2, canvas);
+//        drawOnCenterCoordinates(background, getWidth() / 2, getHeight() / 2, canvas);
+        bgr.draw(canvas);
         drawGrid(canvas);
         drawLevelsIcons(canvas);
         drawOnCenterCoordinates(marker, markerX, markerY, canvas);
@@ -409,12 +423,9 @@ public class LevelChooseView extends SurfaceView {
 	}
 	
 	private boolean isOnGridCenter(int x, int y) {
-		if((x - GRID_STEP / 2 - LEFT_BOUND) % GRID_STEP == 0 &&
-				(y - GRID_STEP / 2 - TOP_BOUND) % GRID_STEP == 0) {
-			return true;
-		}
-		return false;
-	}
+        return (x - GRID_STEP / 2 - LEFT_BOUND) % GRID_STEP == 0 &&
+                (y - GRID_STEP / 2 - TOP_BOUND) % GRID_STEP == 0;
+    }
 	
 	public int completeCurrentLevel(int score) {
 		int ret = finishedLevels[levelY][levelX];
@@ -500,7 +511,7 @@ public class LevelChooseView extends SurfaceView {
 						}
 					}
 				} catch(Exception e) {
-					// TODO process exception
+					e.printStackTrace();
 				} finally {
 					if(c != null) {
 						getHolder().unlockCanvasAndPost(c);

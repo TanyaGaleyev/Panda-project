@@ -15,15 +15,21 @@ public enum GuideAction {
     RELEASE("finger/finger.png", Sprite.Flag.INVERT),
     PRESSED("finger/finger.png", Sprite.Flag.LAST),
     RELEASED("finger/finger.png", Sprite.Flag.FIRST),
-    SLIDE_LEFT("finger/finger.png", Sprite.Flag.LAST),
-    SLIDE_RIGHT("finger/finger.png", Sprite.Flag.LAST),
+    SLIDE_LEFT("finger/finger.png", Sprite.Flag.LAST, Trail.LEFT),
+    SLIDE_RIGHT("finger/finger.png", Sprite.Flag.LAST, Trail.RIGHT),
     SLIDE_UP("finger/finger.png", Sprite.Flag.LAST),
-    SLIDE_DOWN("finger/finger.png", Sprite.Flag.LAST),
-    NONE("");
+    SLIDE_DOWN("finger/finger.png", Sprite.Flag.LAST, Trail.DOWN),
+    NONE();
 
     public static final String GUIDE_BASE_PATH = "tutorial/";
 
-    private Sprite sprite;
+    private Sprite sprite = EmptySprite.EMPTY;
+    private Trail trail = Trail.NONE;
+
+    private GuideAction(String spritePath, Sprite.Flag flag, Trail trail) {
+        this(spritePath, flag);
+        this.trail = trail;
+    }
 
     private GuideAction(String spritePath, Sprite.Flag flag) {
         this(spritePath);
@@ -36,14 +42,16 @@ public enum GuideAction {
     }
 
     private GuideAction(String spritePath) {
-        if(spritePath.length() > 0) {
-            sprite = new Sprite(GUIDE_BASE_PATH + spritePath, 1, 7);
-        } else {
-            sprite = EmptySprite.EMPTY;
-        }
+        sprite = new Sprite(GUIDE_BASE_PATH + spritePath, 1, 7);
     }
+
+    private GuideAction() {}
 
     public Sprite getSprite() {
         return sprite;
+    }
+
+    public Trail getTrail() {
+        return trail;
     }
 }
