@@ -1,5 +1,14 @@
 package org.ivan.simple.game;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+
 import org.ivan.simple.ImageProvider;
 import org.ivan.simple.PandaApplication;
 import org.ivan.simple.UserControlType;
@@ -15,19 +24,6 @@ import org.ivan.simple.game.monster.MonsterFactory;
 import org.ivan.simple.game.motion.MotionType;
 import org.ivan.simple.game.tutorial.GuideAnimation;
 import org.xmlpull.v1.XmlPullParserException;
-
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.util.AttributeSet;
-import android.view.Gravity;
-import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -143,7 +139,7 @@ public class GameView extends SurfaceView {
         //GRID_STEP = 112;//88dp,48dp
 //		System.out.println("GRID_STEP = " + GRID_STEP);
 
-        LevelModel model = new LevelModel(levId);
+        LevelModel model = new LevelModel(levId, getContext().getAssets());
 		TOP_BOUND = (getHeight() - GRID_STEP * model.getRows()) / 2 + GRID_STEP / 2;
 		// TODO check this bound carefully!
 		LEFT_BOUND = (getWidth() - GRID_STEP * model.getCols()) / 2 + GRID_STEP / 2;
@@ -157,7 +153,7 @@ public class GameView extends SurfaceView {
 
 		prevCell = level.model.getHeroCell();
 //		prevMotion = level.model.getMotion();
-		
+
 		hero = new Hero(level.model.hero);
 		monster = MonsterFactory.createMonster(level.model.monster, GRID_STEP);
 		

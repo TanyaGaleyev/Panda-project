@@ -1,5 +1,10 @@
 package org.ivan.simple.game.level;
 
+import android.content.res.AssetManager;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -77,7 +82,7 @@ public class LevelModel {
 		}
 	}
 
-	public LevelModel(int lev) {
+	public LevelModel(int lev, AssetManager assets) {
 		LevelStorage storage = new LevelStorage();
         // MonsterStrategy dangerousKillerMonsterStrategy = new RandomContiniousDirection(MonsterDirection.getAllDirections());
         int[][] routeArray = storage.getRouteArray(lev);
@@ -88,7 +93,21 @@ public class LevelModel {
         } else {
             monster = null;
         }
-        int[][][][] mylevel = storage.getLevel(lev);
+//        int[][][][] mylevel = storage.getLevel(lev);
+        int[][][][] mylevel = null;
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(assets.open("levels/level1.lvl")));
+            char[] buf = new char[1024];
+            int nread;
+            StringBuilder sb = new StringBuilder();
+            while ((nread = br.read(buf)) != -1) {
+                sb.append(buf, 0, nread);
+            }
+            mylevel = new LevelParser().readLevel(sb.toString());
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         rows=mylevel.length;
         cols=mylevel[0].length;
         int[][] prizes = storage.getPrizesMap(lev);
