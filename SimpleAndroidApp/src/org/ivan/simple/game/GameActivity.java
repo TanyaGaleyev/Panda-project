@@ -34,13 +34,15 @@ public class GameActivity extends PandaBaseActivity {
         Intent intent = getIntent();
         levid = intent.getIntExtra(LevelChooseActivity.LEVEL_ID, 0);
         setContentView(R.layout.activity_main);
-        prepare(findViewById(R.id.game_settings)).setOnClickListener(new View.OnClickListener() {
+        View settingsBtn = prepare(findViewById(R.id.game_settings));
+        settingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 gotoSettingsScreen();
             }
         });
-        prepare(findViewById(R.id.game_help)).setOnClickListener(new View.OnClickListener() {
+        View helpBtn = prepare(findViewById(R.id.game_help));
+        helpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startTutorial();
@@ -52,6 +54,8 @@ public class GameActivity extends PandaBaseActivity {
         contentPanel.addView(gView);
         gView.setLevId(levid);
         gControl = gView.getControl();
+        settingsBtn.bringToFront();
+        helpBtn.bringToFront();
     }
 
     @Override
