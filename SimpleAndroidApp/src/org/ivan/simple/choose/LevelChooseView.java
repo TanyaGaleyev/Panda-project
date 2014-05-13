@@ -103,7 +103,7 @@ public class LevelChooseView extends SurfaceView {
 		init(context);
 	}
 
-	private final void init(Context context) {
+	private void init(Context context) {
         this.context = (LevelChooseActivity) context;
         initGrid();
 		textPaint = new Paint();
