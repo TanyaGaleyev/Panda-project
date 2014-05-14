@@ -28,7 +28,7 @@ public class LevelParser {
     }
 
     public LevelInfo readLevelInfo(int levid) throws IOException, JSONException {
-        String path = levid < 0 ? "levels/demo.lvl" : "levels/" + "level1.lvl";
+        String path = levid < 0 ? "levels/demo.lvl" : "levels/" + "level9.lvl";
         JSONObject levelJson = new JSONObject(readAsset(path));
         return new LevelInfo(
                 parse4dim(levelJson.getJSONArray(LEVEL_GRID_KEY)),
