@@ -139,7 +139,8 @@ public class GameView extends SurfaceView {
         //GRID_STEP = 112;//88dp,48dp
 //		System.out.println("GRID_STEP = " + GRID_STEP);
 
-        LevelModel model = new LevelModel(levId, getContext().getAssets());
+        LevelModel model =
+                new LevelModel(levId, PandaApplication.getPandaApplication().getLevelParser());
 		TOP_BOUND = (getHeight() - GRID_STEP * model.getRows()) / 2 + GRID_STEP / 2;
 		// TODO check this bound carefully!
 		LEFT_BOUND = (getWidth() - GRID_STEP * model.getCols()) / 2 + GRID_STEP / 2;

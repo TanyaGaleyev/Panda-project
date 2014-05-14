@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.view.WindowManager;
 
 import org.ivan.simple.game.hero.Sprite;
+import org.ivan.simple.game.level.LevelParser;
 import org.ivan.simple.game.sound.MusicManager;
 import org.ivan.simple.settings.SettingsModel;
 
@@ -25,12 +26,14 @@ public class PandaApplication extends Application {
     private ImageProvider imageProvider;
     private Sprite loading;
 
+    private LevelParser levelParser;
+
 	private boolean sound = true;
 
 	// TODO get rid of singletons
     private static PandaApplication INSTANCE;
-    private SettingsModel settingsModel = new SettingsModel();
 
+    private SettingsModel settingsModel = new SettingsModel();
     public static PandaApplication getPandaApplication() {
 		return INSTANCE;
 	}
@@ -47,6 +50,7 @@ public class PandaApplication extends Application {
         musicManager = new MusicManager(getApplicationContext());
         fontProvider = new FontProvider(getApplicationContext());
         imageProvider = new ImageProvider(getApplicationContext(), displayWidth, displayHeight);
+        levelParser = new LevelParser(getApplicationContext());
         loading = new Sprite("menu/loader.png", 1, 12);
         loading.setAnimating(true);
 	}
@@ -65,6 +69,10 @@ public class PandaApplication extends Application {
 
     public Sprite getLoading() {
         return loading;
+    }
+
+    public LevelParser getLevelParser() {
+        return levelParser;
     }
 
 	public boolean getSound() {

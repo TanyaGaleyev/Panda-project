@@ -1,10 +1,6 @@
 package org.ivan.simple.game.level;
 
-import android.content.res.AssetManager;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -82,36 +78,27 @@ public class LevelModel {
 		}
 	}
 
-	public LevelModel(int lev, AssetManager assets) {
-		LevelStorage storage = new LevelStorage();
+	public LevelModel(int lev, LevelParser parser) {
         // MonsterStrategy dangerousKillerMonsterStrategy = new RandomContiniousDirection(MonsterDirection.getAllDirections());
-        int[][] routeArray = storage.getRouteArray(lev);
-        MonsterStrategy route = RouteDirectionStrategyFactory.createRouteDirectionStrategy(routeArray);
+        LevelInfo levelInfo;
+        try {
+            levelInfo = parser.readLevelInfo(lev);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        int[][] routeArray = levelInfo.monsterRoute;
 
-        if(lev == 3 ||lev == 5 || lev==8)  {
+        if(routeArray != null && (lev == 3 || lev == 5 || lev==8))  {
+            MonsterStrategy route = RouteDirectionStrategyFactory.createRouteDirectionStrategy(routeArray);
             monster = new MonsterModel(routeArray[0][1], routeArray[0][0], route, 1);
         } else {
             monster = null;
         }
-//        int[][][][] mylevel = storage.getLevel(lev);
-        int[][][][] mylevel = null;
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(assets.open("levels/level1.lvl")));
-            char[] buf = new char[1024];
-            int nread;
-            StringBuilder sb = new StringBuilder();
-            while ((nread = br.read(buf)) != -1) {
-                sb.append(buf, 0, nread);
-            }
-            mylevel = new LevelParser().readLevel(sb.toString());
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        int[][][][] mylevel = levelInfo.levelGrid;
         rows=mylevel.length;
         cols=mylevel[0].length;
-        int[][] prizes = storage.getPrizesMap(lev);
-        int[] winCellCoord = storage.getWinCell(lev);
+        int[][] prizes = levelInfo.prizesMap;
+        int[] winCellCoord = levelInfo.winCell;
         hero = new HeroModel(rows - 1, 0);
         levelGrid = new LevelCell[rows][cols];
 		HashMap<Integer, TpPeer> groups = new HashMap<Integer, TpPeer>();

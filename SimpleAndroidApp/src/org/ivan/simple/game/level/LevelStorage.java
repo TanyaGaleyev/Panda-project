@@ -335,37 +335,35 @@ public class LevelStorage {
     private int[] winCell8() {
         return new int[]{4,9};
     }
-	public int[][] getRouteArray(int lev) {
-		switch (lev) {
-		case 1:
-			return new int[][] {
-					{0,3},{0,0},{5,0},{5,5}
-			};
-		case 2:
-			return new int[][] {
-					{0,0},{5,0},{5,5}
-			};
+
+    public int[][] getRouteArray(int lev) {
+        switch (lev) {
+            case 1:
+                return new int[][]{
+                        {0, 3}, {0, 0}, {5, 0}, {5, 5}
+                };
+            case 2:
+                return new int[][]{
+                        {0, 0}, {5, 0}, {5, 5}
+                };
             case 3:
-                return new int[][] {
-                        {9,4},{0,4}
+                return new int[][]{
+                        {9, 4}, {0, 4}
                 };
             case 5:
-                return new int[][] {
-                        {9,2},{0,2},{0,1},{9,1},{9,2}
+                return new int[][]{
+                        {9, 2}, {0, 2}, {0, 1}, {9, 1}, {9, 2}
                 };
             case 8:
-                return new int[][] {
-                        {8,2},{1,2}
+                return new int[][]{
+                        {8, 2}, {1, 2}
                 };
+            default:
+                return new int[][]{
+                        {0, 2}, {0, 0}, {2, 0}, {2, 2}, {0, 2}
+                };
+        }
+    }
 
-
-
-		default:
-			return new int[][] {
-					{0,2},{0,0},{2,0},{2,2},{0,2}
-			};
-		}
-	}
-	
 
 }
