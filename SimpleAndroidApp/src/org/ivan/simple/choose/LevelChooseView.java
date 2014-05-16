@@ -429,9 +429,9 @@ public class LevelChooseView extends SurfaceView {
 	
 	public int completeCurrentLevel(int score) {
 		int ret = finishedLevels[levelY][levelX];
-                if(score > ret) {
-                    finishedLevels[levelY][levelX] = score;
-                }
+        if(score > ret) {
+            finishedLevels[levelY][levelX] = score;
+        }
 		return ret;
 	}
 	
