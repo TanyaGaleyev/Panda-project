@@ -1,5 +1,6 @@
 package org.ivan.simple.game.level;
 public class LevelStorage {
+//    private LevelStorage() {}
 	public int[][][] getLevels(int setid) {
 		switch(setid) {
             case 1: return new int[][][]
@@ -22,7 +23,7 @@ public class LevelStorage {
 				 { {4, 25, 50} , {2, 25, 50} , {3, 25, 50} , {3, 25, 50} }};
 		}
 	}
-	
+
 	public int[][][][] getLevel(int num) {
 		switch (num)
 		{
@@ -54,7 +55,7 @@ public class LevelStorage {
 		default:return prizeMap1();
 		}
 	}
-	
+
 	public int[] getWinCell(int num) {
 		switch (num)
 		{
@@ -96,7 +97,7 @@ public class LevelStorage {
 		//5- trampoline
 		//6-magnet
 		//7-trowout right
-		//8-trowout left	
+		//8-trowout left
 		//9-spring
 		//10-spike
 		//11-teleport_l_v
@@ -118,9 +119,9 @@ public class LevelStorage {
 		//27-cloud
 		};
 	   return lev;
-		
+
 	}
-	
+
 	private int[][][][] level2() {
 		int[][][][] lev={
                 {  { {1}, {10}, {0}, {0} },  { {0}, {1}, {0}, {2} },  { {0}, {1}, {0}, {2} },  { {0}, {1}, {0}, {2} },  { {0}, {1}, {0}, {2} },  { {0}, {1}, {0}, {0} },  { {0}, {1}, {0}, {0} },  { {0}, {1}, {1}, {0} },  { {0}, {1}, {0}, {0} },  { {0}, {1}, {1}, {0} }  },
@@ -131,7 +132,7 @@ public class LevelStorage {
 				};
 	   return lev;
 	}
-	
+
 	private int[][][][] level3() {
 		int[][][][] lev={
                 {  { {1}, {10}, {0}, {0} },  { {0}, {10}, {0}, {0} },  { {0}, {10}, {0}, {0} },  { {0}, {10}, {0}, {0} },  { {0}, {10}, {0}, {0} },  { {0}, {10}, {0}, {0} },  { {0}, {10}, {0}, {0} },  { {0}, {10}, {0}, {0} },  { {0}, {10}, {0}, {0} },  { {0}, {10}, {1}, {0} }  },
@@ -142,7 +143,7 @@ public class LevelStorage {
         };
 	   return lev;
 	}
-	
+
 	private int[][][][] level4() {
 		int[][][][] lev={
                 {  { {0}, {0}, {0}, {0} },  { {0}, {0}, {0}, {2} },  { {0}, {0}, {10}, {15} },  { {0}, {0}, {0}, {0} },  { {0}, {0}, {0}, {0} },  { {0}, {0}, {0}, {0} },  { {0}, {0}, {0}, {0} },  { {0}, {0}, {0}, {2} },  { {0}, {0}, {0}, {0} },  { {0}, {0}, {0}, {0} }  },
@@ -229,9 +230,9 @@ public class LevelStorage {
                 {1,0,1,1,0,0,1,1,1,0 },
                 {1,0,0,1,1,1,1,1,1,0 }
         };
-		return map;	
+		return map;
 	}
-	
+
 	private int[][] prizeMap2(){
 		int[][] map={
                 {1,1,1,1,1,1,0,0,1,1 },
@@ -240,9 +241,9 @@ public class LevelStorage {
                 {1,0,0,0,0,0,0,0,1,1 },
                 {1,0,0,0,0,0,0,1,1,1 }
 		           };
-		return map;	
+		return map;
 	}
-	
+
 	private int[][] prizeMap3(){
 		int[][] map={
                 {0,0,0,0,0,0,0,0,0,0 },
@@ -251,9 +252,9 @@ public class LevelStorage {
                 {0,0,0,0,0,0,0,0,0,0 },
                 {1,1,1,1,1,1,1,1,1,1 }
         };
-		return map;	
+		return map;
 	}
-	
+
 	private int[][] prizeMap4(){
 		int[][] map={
                 {1,1,1,0,0,1,1,1,1,0 },
@@ -261,7 +262,7 @@ public class LevelStorage {
                 {1,1,0,1,1,1,1,1,0,0 },
                 {1,1,0,0,1,0,1,0,0,0 },
                 {1,1,0,1,1,0,0,0,0,0 }};
-		return map;	
+		return map;
 	}
     private int[][] prizeMap5(){
         int[][] map={
@@ -311,15 +312,15 @@ public class LevelStorage {
 	private int[] winCell1() {
 		return new int[]{4,8};
 	}
-	
+
 	private int[] winCell2() {
 		return new int[]{4,9};
 	}
-	
+
 	private int[] winCell3() {
 		return new int[]{0,9};
 	}
-	
+
 	private int[] winCell4() {
 		return new int[]{4,9};
 	}

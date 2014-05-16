@@ -21,6 +21,7 @@ public class LevelParser {
     public static final String WIN_CELL_KEY = "winCell";
     public static final String PRIZES_KEY = "prizes";
     public static final String LEVEL_GRID_KEY = "level";
+    public static final String LEVELS_BASEDIR = "levels/";
     private final AssetManager assets;
 
     public LevelParser(Context context) {
@@ -28,14 +29,17 @@ public class LevelParser {
     }
 
     public LevelInfo readLevelInfo(int levid) throws IOException, JSONException {
-        String path = levid < 0 ? "levels/demo.lvl" : "levels/" + "level9.lvl";
-        JSONObject levelJson = new JSONObject(readAsset(path));
+        JSONObject levelJson = new JSONObject(readAsset(getLevelPath(levid)));
         return new LevelInfo(
                 parse4dim(levelJson.getJSONArray(LEVEL_GRID_KEY)),
                 parse2dim(levelJson.getJSONArray(PRIZES_KEY)),
                 parseWinCell(levelJson.getJSONObject(WIN_CELL_KEY)),
                 levelJson.has(ROUTE_KEY) ? parse2dim(levelJson.getJSONArray(ROUTE_KEY)) : null
         );
+    }
+
+    private String getLevelPath(int levid) {
+        return LEVELS_BASEDIR + (levid < 0 ? "demo" : "level" + levid) + ".lvl";
     }
 
     private String readAsset(String path) throws IOException {
