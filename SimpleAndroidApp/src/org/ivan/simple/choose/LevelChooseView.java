@@ -10,7 +10,6 @@ import org.ivan.simple.bitmaputils.ColorBackground;
 import org.ivan.simple.bitmaputils.PandaBackground;
 import org.ivan.simple.bitmaputils.TextureAtlasParser;
 import org.ivan.simple.game.GameActivity;
-import org.ivan.simple.game.level.LevelStorage;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
@@ -474,9 +473,12 @@ public class LevelChooseView extends SurfaceView {
 	}
 	
 	private void setLevelsId(int id) {
-		LevelStorage storage = new LevelStorage();
-		levels = storage.getLevels(id);
-		finishedLevels = new int[levels.length][];
+        try {
+            levels = PandaApplication.getPandaApplication().getLevelParser().readLevelsPackInfo(id);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+        finishedLevels = new int[levels.length][];
 		for(int i = 0; i < levels.length; i++) {
 			finishedLevels[i] = new int[levels[i].length];
 		}

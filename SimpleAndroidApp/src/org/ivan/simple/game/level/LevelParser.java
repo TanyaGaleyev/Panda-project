@@ -42,6 +42,10 @@ public class LevelParser {
         return LEVELS_BASEDIR + (levid < 0 ? "demo" : "level" + levid) + ".lvl";
     }
 
+    private String getPackPath(int packid) {
+        return LEVELS_BASEDIR + "pack" + packid + ".pck";
+    }
+
     private String readAsset(String path) throws IOException {
         BufferedReader br = null;
         try {
@@ -63,20 +67,19 @@ public class LevelParser {
         level = new int[levelAr.length()][][][];
         for (int i = 0; i < levelAr.length(); i++) {
             JSONArray rowAr = levelAr.getJSONArray(i);
-            level[i] = new int[rowAr.length()][][];
-            for (int j = 0; j < rowAr.length(); j++) {
-                JSONArray cellAr = rowAr.getJSONArray(j);
-                level[i][j] = new int[cellAr.length()][];
-                for (int k = 0; k < cellAr.length(); k++) {
-                    JSONArray platformAr = cellAr.getJSONArray(k);
-                    level[i][j][k] = new int[platformAr.length()];
-                    for (int l = 0; l < platformAr.length(); l++) {
-                        level[i][j][k][l] = platformAr.getInt(l);
-                    }
-                }
-            }
+            level[i] = parse3dim(rowAr);
         }
         return level;
+    }
+
+    private int[][][] parse3dim(JSONArray cube) throws JSONException {
+        int[][][] _3dim;
+        _3dim = new int[cube.length()][][];
+        for (int i = 0; i < cube.length(); i++) {
+            JSONArray rect = cube.getJSONArray(i);
+            _3dim[i] = parse2dim(rect);
+        }
+        return _3dim;
     }
 
     private int[][] parse2dim(JSONArray rows) throws JSONException {
@@ -96,6 +99,7 @@ public class LevelParser {
         return new int[]{winCell.getInt("row"), winCell.getInt("col")};
     }
 
+    @Deprecated
     public int[][][][] parseLevelRake(String levelStr) {
         int[][][][] level;
         LevelMatcher levelM = new LevelMatcher(levelStr);
@@ -136,5 +140,10 @@ public class LevelParser {
             }
         }
         return level;
+    }
+
+    public int[][][] readLevelsPackInfo(int packid) throws IOException, JSONException {
+        JSONObject levelJson = new JSONObject(readAsset(getPackPath(packid)));
+        return parse3dim(levelJson.getJSONArray("pack"));
     }
 }

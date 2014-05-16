@@ -1,6 +1,6 @@
 package org.ivan.simple.game.level;
 public class LevelStorage {
-//    private LevelStorage() {}
+    private LevelStorage() {}
 	public int[][][] getLevels(int setid) {
 		switch(setid) {
             case 1: return new int[][][]
