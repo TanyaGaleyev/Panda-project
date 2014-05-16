@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 
-import org.ivan.simple.PandaApplication;
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
 import org.ivan.simple.achievements.Achievement;
@@ -82,8 +81,11 @@ public class LevelChooseActivity extends PandaBaseActivity {
 		super.onActivityResult(requestCode, resultCode, data);
         setLoading(false);
 		if(requestCode == FINISHED_LEVEL_ID && resultCode == RESULT_OK) {
-            Achievement achievement = Achievement.NEAT;//data.getBooleanExtra(ACHIV, false);
 			boolean complete = data.getBooleanExtra(LEVEL_COMPLETE, false);
+            if(complete) {
+                submitNewScore(data.getIntExtra(COMPLETE_SCORE, 0));
+            }
+            Achievement achievement = Achievement.NEAT;//data.getBooleanExtra(ACHIV, false);
             if(achievement != null) {
                 final Dialog achivDialog = new Dialog(LevelChooseActivity.this);
                 achivDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -104,31 +106,38 @@ public class LevelChooseActivity extends PandaBaseActivity {
                             @Override
                             public void run() {
                                 achivDialog.cancel();
+                                tryCompletePack();
                             }
                         }, 2500);
+            } else {
+                tryCompletePack();
             }
-            if(complete) {
-				int score = data.getIntExtra(COMPLETE_SCORE, 0);
-				int oldScore = view.completeCurrentLevel(score);
-				if(score > oldScore) {
-					SharedPreferences.Editor prEditor = preferences.edit();
-					prEditor.putString(FINISHED_LEVELS + levelsSetId, view.getFinishedLevels());
-					prEditor.commit();
-				}
-			}
-			if(view.allLevelsFinished()) {
-				boolean setWasNotCompleteBefore = levelsSetId > preferences.getInt(StartActivity.LAST_FINISHED_SET, 0);
-				if(setWasNotCompleteBefore) {
-					SharedPreferences.Editor prEditor = preferences.edit();
-					prEditor.putInt(StartActivity.LAST_FINISHED_SET, levelsSetId);
-					prEditor.commit();
-					finishComplete();
-				}
-			}
-		}
+        }
 	}
-	
-	public void finishComplete() {
+
+    private void tryCompletePack() {
+        if(view.allLevelsFinished()) {
+            boolean setWasNotCompleteBefore =
+                    levelsSetId > preferences.getInt(StartActivity.LAST_FINISHED_SET, 0);
+            if(setWasNotCompleteBefore) {
+                SharedPreferences.Editor prEditor = preferences.edit();
+                prEditor.putInt(StartActivity.LAST_FINISHED_SET, levelsSetId);
+                prEditor.commit();
+                finishComplete();
+            }
+        }
+    }
+
+    private void submitNewScore(int score) {
+        int oldScore = view.completeCurrentLevel(score);
+        if(score > oldScore) {
+            SharedPreferences.Editor prEditor = preferences.edit();
+            prEditor.putString(FINISHED_LEVELS + levelsSetId, view.getFinishedLevels());
+            prEditor.commit();
+        }
+    }
+
+    public void finishComplete() {
 		Intent resultIntent = new Intent();
 		resultIntent.putExtra(LevelChooseActivity.SET_COMPLETE, true);
         resultIntent.putExtra(StartActivity.SET_ID, levelsSetId);
