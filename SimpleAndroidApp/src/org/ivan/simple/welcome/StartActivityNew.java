@@ -1,20 +1,22 @@
 package org.ivan.simple.welcome;
 
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
 import org.ivan.simple.achievements.AchievementsActivity;
 import org.ivan.simple.utils.PandaButtonsPanel;
-
-import java.io.IOException;
 
 /**
  * Created by ivan on 28.09.13.
@@ -144,4 +146,17 @@ public class StartActivityNew extends PandaBaseActivity {
 //        startActivityForResult(intent, 0);
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        Toast toast = Toast.makeText(
+                this,
+                "Memory class: " + ((ActivityManager) getSystemService(ACTIVITY_SERVICE)).getMemoryClass() +
+                        "\nMax memory(K): " + Runtime.getRuntime().maxMemory() / 1024 +
+                        "\nTotal memory(K): " + Runtime.getRuntime().totalMemory() / 1024 +
+                        "\nFree memory(K): " + Runtime.getRuntime().freeMemory() / 1024,
+                Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.show();
+        return super.onTouchEvent(event);
+    }
 }

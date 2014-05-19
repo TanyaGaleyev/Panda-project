@@ -1,19 +1,6 @@
 package org.ivan.simple.welcome;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import org.ivan.simple.PandaApplication;
-import org.ivan.simple.PandaBaseActivity;
-import org.ivan.simple.R;
-import org.ivan.simple.choose.LevelChooseActivity;
-import org.ivan.simple.utils.PandaButtonsPanel;
-
 import android.content.Intent;
-import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.SparseArray;
@@ -21,13 +8,19 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import org.ivan.simple.PandaApplication;
+import org.ivan.simple.PandaBaseActivity;
+import org.ivan.simple.R;
+import org.ivan.simple.choose.LevelChooseActivity;
+import org.ivan.simple.utils.PandaButtonsPanel;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class StartActivity extends PandaBaseActivity {
 	
@@ -133,7 +126,7 @@ public class StartActivity extends PandaBaseActivity {
                         app().loadAnimationFromFolder("animations/menu/pack_opening");
                 chestOpening.setOneShot(true);
                 packToOpen.setBackgroundDrawable(chestOpening);
-                // TODO rake here, get rid of alpha channel manipulation, calculate chests sizes insted
+                // TODO rake here, get rid of alpha channel manipulation, calculate chests sizes instead
                 packToOpen.setImageAlpha(0);
                 packToOpen.post(new Runnable() {
                     @Override

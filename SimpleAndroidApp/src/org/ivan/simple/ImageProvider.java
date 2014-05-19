@@ -1,15 +1,13 @@
 package org.ivan.simple;
 
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
-
-import android.content.Context;
-import android.content.res.AssetManager;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.LruCache;
 
 public class ImageProvider {
     public static final int CACHE_SIZE = 8 * 1024 * 1024;
@@ -72,6 +70,9 @@ public class ImageProvider {
 				    original = loadBitmap(path, opts);
                 } catch (OutOfMemoryError error) {
                     System.err.println("Error loading path " + path);
+                    System.err.println("Max heap: " + Runtime.getRuntime().maxMemory());
+                    System.err.println("Total heap: " + Runtime.getRuntime().totalMemory());
+                    System.err.println("Free heap: " + Runtime.getRuntime().freeMemory());
                     throw error;
                 }
 				int width = (int) Math.ceil(opts.outWidth * scale);
