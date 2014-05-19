@@ -85,7 +85,8 @@ public class LevelChooseActivity extends PandaBaseActivity {
             if(complete) {
                 submitNewScore(data.getIntExtra(COMPLETE_SCORE, 0));
             }
-            Achievement achievement = Achievement.NEAT;//data.getBooleanExtra(ACHIV, false);
+//            Achievement achievement = Achievement.NEAT;//data.getBooleanExtra(ACHIV, false);
+            Achievement achievement = null;
             if(achievement != null) {
                 final Dialog achivDialog = new Dialog(LevelChooseActivity.this);
                 achivDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
