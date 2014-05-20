@@ -22,16 +22,18 @@ public class TextureAtlasBackground implements PandaBackground {
 
     @Override
     public void draw(Canvas canvas) {
+        int cw = canvas.getWidth();
+        int ch = canvas.getHeight();
+        Paint p = new Paint();
         canvas.drawColor(bgColor);
         for(SubTexture sub : subTextures) {
             Bitmap bmp = sub.textureImage.bmp;
             float rPx = sub.textureImage.pivotX / bmp.getWidth();
             float rPy = sub.textureImage.pivotY / bmp.getHeight();
             for (SubTexture.InstanceMutation mutation : sub.settings) {
-                Paint p = new Paint();
                 p.setAlpha((int) (255 * mutation.alpha));
                 p.setAntiAlias(true);
-                Rect dstRect = getDstRect(mutation, canvas);
+                Rect dstRect = getDstRect(mutation, cw, ch);
                 Point dstPivot = getDstPivot(rPx, rPy, dstRect);
                 canvas.save();
                 canvas.rotate(mutation.rotate, dstPivot.x, dstPivot.y);
@@ -41,11 +43,11 @@ public class TextureAtlasBackground implements PandaBackground {
         }
     }
 
-    private Rect getDstRect(SubTexture.InstanceMutation mutation, Canvas canvas) {
-        float left = mutation.left * canvas.getWidth();
-        float top = mutation.top * canvas.getHeight();
-        float right = left + mutation.width * canvas.getWidth();
-        float bottom = top + mutation.height * canvas.getWidth();
+    private Rect getDstRect(SubTexture.InstanceMutation mutation, int cw, int ch) {
+        float left = mutation.left * cw;
+        float top = mutation.top * ch;
+        float right = left + mutation.width * cw;
+        float bottom = top + mutation.height * cw;
         return new Rect((int) left, (int) top, (int) right, (int) bottom);
     }
 

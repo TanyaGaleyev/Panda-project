@@ -67,10 +67,7 @@ public class GameManager extends Thread {
 			// calculate sleep time to reach needed fps
 			sleepTime = ticksPS-(System.currentTimeMillis() - startTime);
             try {
-                if (sleepTime > 10)
-                    sleep(sleepTime);
-                else
-                    sleep(10);
+                if (sleepTime > 0) sleep(sleepTime);
             } catch (Exception e) {
                 e.printStackTrace();
             }
