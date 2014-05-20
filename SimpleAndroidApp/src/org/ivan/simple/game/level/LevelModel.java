@@ -107,7 +107,7 @@ public class LevelModel {
 			for(int j=0;j<cols;j++){
 				levelGrid[i][j] = new LevelCell();
 				levelGrid[i][j].setPrize(prizes[i][j]);
-				prizesLeft += prizes[i][j];
+                if(prizes[i][j] != 0) prizesLeft++;
 				int leftWallType = mylevel[i][j][0][0];
 				// create left wall only for first column's cells
 				if(j == 0) {

@@ -3,6 +3,7 @@ package org.ivan.simple.game;
 import org.ivan.simple.choose.LevelChooseActivity;
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
+import org.ivan.simple.game.tutorial.SolutionStep;
 import org.ivan.simple.game.tutorial.Solutions;
 import org.ivan.simple.game.tutorial.TutorialGame;
 import org.ivan.simple.settings.SettingsInGamePanel;
@@ -20,6 +21,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
+
+import java.util.Iterator;
 
 public class GameActivity extends PandaBaseActivity {
 
@@ -45,7 +48,7 @@ public class GameActivity extends PandaBaseActivity {
         helpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startTutorial();
+                startTutorial(0);
             }
         });
 //        GameView gView = (GameView) findViewById(R.id.game);
@@ -120,14 +123,14 @@ public class GameActivity extends PandaBaseActivity {
     	gControl = null;
     }
 
-    public void startTutorial() {
+    public void startTutorial(int type) {
         tutorialDialog = new Dialog(this);
         tutorialDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         tutorialDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         GameView nestedGame = new GameView(this);
 //        nestedGame.setBackgroundResource(R.drawable.settings_border);
         nestedGame.setLevId(-1);
-        nestedGame.getControl().setAutoControls(Solutions.getDemo());
+        nestedGame.getControl().setAutoControls(Solutions.getDemo(type));
         tutorialDialog.setContentView(nestedGame);
         tutorialDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override

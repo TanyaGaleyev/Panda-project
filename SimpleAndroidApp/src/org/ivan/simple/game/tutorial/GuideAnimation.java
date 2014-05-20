@@ -49,6 +49,7 @@ public class GuideAnimation {
                 case SLIDE_DOWN:    y += moveSpeed; break;
                 case SLIDE_LEFT:    x -= moveSpeed; break;
                 case SLIDE_RIGHT:   x += moveSpeed; break;
+                case HOME:          x = x_init; y = y_init; break;
                 default: break;
             }
             action.getTrail().onDraw(canvas, x + 16, y - action.getSprite().getHeight() / 2 - 8, update);

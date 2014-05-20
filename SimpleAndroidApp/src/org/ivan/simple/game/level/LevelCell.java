@@ -47,7 +47,7 @@ public class LevelCell {
 	
 	public void setPrize(int prizeType) {
 		if(prizeType != 0) {
-			prize = new Prize();
+			prize = new Prize(prizeType);
 		} else {
 			prize = null;
 		}

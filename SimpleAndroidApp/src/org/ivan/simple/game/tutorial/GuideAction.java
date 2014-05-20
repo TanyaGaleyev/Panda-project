@@ -19,6 +19,7 @@ public enum GuideAction {
     SLIDE_RIGHT("finger/finger.png", Sprite.Flag.LAST, Trail.RIGHT),
     SLIDE_UP("finger/finger.png", Sprite.Flag.LAST),
     SLIDE_DOWN("finger/finger.png", Sprite.Flag.LAST, Trail.DOWN),
+    HOME("finger/finger.png", Sprite.Flag.FIRST),
     NONE();
 
     public static final String GUIDE_BASE_PATH = "tutorial/";

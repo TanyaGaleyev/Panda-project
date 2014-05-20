@@ -1,22 +1,30 @@
 package org.ivan.simple.game.level;
 
-import org.ivan.simple.ImageProvider;
-import org.ivan.simple.R;
-import org.ivan.simple.game.hero.Sprite;
-
 import android.graphics.Canvas;
+
+import org.ivan.simple.game.hero.Sprite;
 
 public class Prize {
 	private Sprite sprite;
-	public Prize() {
+
+    private int kind;
+
+    public Prize(int kind) {
 		sprite = new Sprite("prize/star.png", 1, 14);
 		sprite.setAnimating(true);
+        this.kind = kind;
 	}
-	
-	public Sprite getSprite() {
+    public Prize() {
+        this(1);
+    }
+    public Sprite getSprite() {
 		return sprite;
 	}
-	
+
+    public int getKind() {
+        return kind;
+    }
+
 	public void onDraw(Canvas canvas, int x, int y, boolean update) {
 		sprite.onDraw(canvas, x, y, update);
 	}
