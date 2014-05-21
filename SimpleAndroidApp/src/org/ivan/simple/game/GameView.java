@@ -185,7 +185,7 @@ public class GameView extends SurfaceView {
 		canvas.drawColor(0xffC6E10E);
 //		drawOnCenterCoordinates(
 //                background, getWidth() / 2, getHeight() / 2, backgroundPaint, canvas);
-        bgr.draw(canvas);
+//        bgr.draw(canvas);
 //		serviceButtons.draw(canvas);
 		level.onDraw(canvas, update);
 		hero.onDraw(canvas, update);
@@ -445,7 +445,7 @@ public class GameView extends SurfaceView {
 	
 	protected void checkMonsterCollision() {
         if(monster == null) return;
-        int heroShrink = (int) (GRID_STEP * 0.25);
+        int heroShrink = (int) (GRID_STEP * 0.10);
         int monsterShrink = heroShrink;
         Rect heroRect = shrinkRect(hero.x, hero.y, GRID_STEP, GRID_STEP, heroShrink);
         Rect monsterRect = shrinkRect(

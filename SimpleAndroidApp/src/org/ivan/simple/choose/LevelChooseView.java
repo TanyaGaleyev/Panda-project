@@ -221,7 +221,7 @@ public class LevelChooseView extends SurfaceView {
         }
         canvas.drawColor(Color.rgb(218, 228, 115));
 //        drawOnCenterCoordinates(background, getWidth() / 2, getHeight() / 2, canvas);
-        bgr.draw(canvas);
+//        bgr.draw(canvas);
         drawGrid(canvas);
         drawLevelsIcons(canvas);
         drawOnCenterCoordinates(marker, markerX, markerY, canvas);
