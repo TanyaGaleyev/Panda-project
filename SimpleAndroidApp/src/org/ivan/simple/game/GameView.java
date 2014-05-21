@@ -443,7 +443,7 @@ public class GameView extends SurfaceView {
 			   (yCoordinate - TOP_BOUND) % GRID_STEP == 0;
 	}
 	
-	protected void checkMonsterColision() {
+	protected void checkMonsterCollision() {
         if(monster == null) return;
         Rect heroRect = new Rect(hero.x, hero.y, hero.x + GRID_STEP, hero.y + GRID_STEP);
         Rect monsterRect = new Rect(
@@ -458,7 +458,7 @@ public class GameView extends SurfaceView {
     public void updatePositions() {
         updateHeroScreenPosition();
         updateMonster();
-        checkMonsterColision();
+        checkMonsterCollision();
     }
 
     public GameActivity getGameContext() {
