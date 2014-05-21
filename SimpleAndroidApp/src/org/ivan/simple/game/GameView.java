@@ -445,15 +445,24 @@ public class GameView extends SurfaceView {
 	
 	protected void checkMonsterCollision() {
         if(monster == null) return;
-        Rect heroRect = new Rect(hero.x, hero.y, hero.x + GRID_STEP, hero.y + GRID_STEP);
-        Rect monsterRect = new Rect(
-                monster.xCoordinate, monster.yCoordinate,
-                monster.xCoordinate + GRID_STEP, monster.yCoordinate + GRID_STEP);
+        int heroShrink = (int) (GRID_STEP * 0.25);
+        int monsterShrink = heroShrink;
+        Rect heroRect = shrinkRect(hero.x, hero.y, GRID_STEP, GRID_STEP, heroShrink);
+        Rect monsterRect = shrinkRect(
+                monster.xCoordinate, monster.yCoordinate, GRID_STEP, GRID_STEP, monsterShrink);
         if(heroRect.intersect(monsterRect)) {
             level.model.setLost(true);
             monsterLose = true;
         }
 	}
+
+    private Rect shrinkRect(int x, int y, int w, int h, int shrink) {
+        return new Rect(
+                x + shrink,
+                y + shrink,
+                x + w - 2 * shrink,
+                y + h - 2 * shrink);
+    }
 
     public void updatePositions() {
         updateHeroScreenPosition();
