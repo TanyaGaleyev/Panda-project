@@ -2,9 +2,11 @@ package org.ivan.simple.welcome;
 
 import android.app.ActivityManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -36,11 +38,8 @@ public class StartActivityNew extends PandaBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_startnew);
-        contentPanel = (RelativeLayout) findViewById(R.id.activity_startnew);
-//        Spinner spinner = (Spinner) findViewById(R.id.spinner);
-//        spinner.setAdapter(new PandaImageAdapter(this, 0, R.drawable.settings, R.drawable.back));
-//        spinner.setAdapter(new PandaCheckBoxAdapter(this, 0, "effects", "music"));
-
+        contentPanel = (RelativeLayout) findViewById(R.id.activity_content);
+        contentPanel.setBackgroundDrawable(app().getBackground());
         Typeface bold = app().getFontProvider().bold();
 //        ((TextView) findViewById(R.id.acro_caption)).setTypeface(bold);
 //        ((TextView) findViewById(R.id.start_caption)).setTypeface(bold);
@@ -93,6 +92,11 @@ public class StartActivityNew extends PandaBaseActivity {
         lp.setMargins((int) (app().displayWidth * 0.05f), (int) ((app().displayHeight - captionHeight) * 0.4f), 0, 0);
         mainTitle.setLayoutParams(lp);
         contentPanel.addView(mainTitle);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     private void initPandaDrawable(boolean animation) {

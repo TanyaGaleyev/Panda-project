@@ -37,6 +37,7 @@ public class StartActivity extends PandaBaseActivity {
 
         // hide screen title
         setContentView(R.layout.activity_start);
+        findViewById(R.id.activity_content).setBackgroundDrawable(app().getBackground());
         TextView caption = (TextView) findViewById(R.id.text_view);
         caption.setTypeface(app().getFontProvider().bold());
         caption.setTextSize(TypedValue.COMPLEX_UNIT_PX, app().displayHeight / 10);

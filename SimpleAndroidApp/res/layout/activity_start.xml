@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-	android:background="@drawable/background_menu"
-    tools:context=".StartActivity" >
+	android:background="#00f"
+    android:id="@+id/activity_content">
 
     <TextView
         android:id="@+id/text_view"

@@ -16,7 +16,6 @@ import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
 import org.ivan.simple.utils.PandaButtonsPanel;
 
-import java.io.File;
 import java.io.IOException;
 
 public class AchievementsActivity extends PandaBaseActivity {
@@ -25,6 +24,7 @@ public class AchievementsActivity extends PandaBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_achievements);
+        findViewById(R.id.activity_content).setBackgroundDrawable(app().getBackground());
         View backBtn = prepare(R.drawable.back);
         PandaButtonsPanel bp = (PandaButtonsPanel) findViewById(R.id.achiv_bp);
         bp.customAddView(backBtn);
