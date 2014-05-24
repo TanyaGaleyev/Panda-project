@@ -1,13 +1,9 @@
 package org.ivan.simple.achievements;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
-
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
