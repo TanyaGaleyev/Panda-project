@@ -73,8 +73,8 @@ public class LevelChooseView extends SurfaceView {
 	 */
 	private Bitmap marker;
 	// coordinates of marker center on screen
-	private int markerX;
-	private int markerY;
+	private int markerX = -1;
+	private int markerY = -1;
 
 	// Thread redrawing view
 	private Redrawer redrawer;
@@ -154,8 +154,10 @@ public class LevelChooseView extends SurfaceView {
             TOP_BOUND = 0;
             LEFT_BOUND = (width - GRID_STEP * LEVELS_COLS) / 2;
         }
-        markerX = LEFT_BOUND + GRID_STEP / 2;
-        markerY = TOP_BOUND + GRID_STEP / 2;
+        if(markerX < 0) {
+            markerX = getScreenX(0);
+            markerY = getScreenY(0);
+        }
     }
 
     private void initSurface() {
