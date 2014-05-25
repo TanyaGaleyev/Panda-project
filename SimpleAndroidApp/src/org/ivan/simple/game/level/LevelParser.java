@@ -3,6 +3,7 @@ package org.ivan.simple.game.level;
 import android.content.Context;
 import android.content.res.AssetManager;
 
+import org.ivan.simple.game.scores.ScoreStruct;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,6 +21,7 @@ public class LevelParser {
     public static final String ROUTE_KEY = "monsterRoute";
     public static final String WIN_CELL_KEY = "winCell";
     public static final String PRIZES_KEY = "prizes";
+    public static final String SCORES_KEY = "scores";
     public static final String LEVEL_GRID_KEY = "level";
     public static final String LEVELS_BASEDIR = "levels/";
     private final AssetManager assets;
@@ -34,7 +36,8 @@ public class LevelParser {
                 parse4dim(levelJson.getJSONArray(LEVEL_GRID_KEY)),
                 parse2dim(levelJson.getJSONArray(PRIZES_KEY)),
                 parseWinCell(levelJson.getJSONObject(WIN_CELL_KEY)),
-                levelJson.has(ROUTE_KEY) ? parse2dim(levelJson.getJSONArray(ROUTE_KEY)) : null
+                levelJson.has(ROUTE_KEY) ? parse2dim(levelJson.getJSONArray(ROUTE_KEY)) : null,
+                parseScores(levelJson.getJSONObject(SCORES_KEY))
         );
     }
 
@@ -97,6 +100,13 @@ public class LevelParser {
 
     private int[] parseWinCell(JSONObject winCell) throws JSONException {
         return new int[]{winCell.getInt("row"), winCell.getInt("col")};
+    }
+
+    private ScoreStruct parseScores(JSONObject scores) throws JSONException {
+        return new ScoreStruct(
+                scores.getInt("lowScore"),
+                scores.getInt("mediumScore"),
+                scores.getInt("highScore"));
     }
 
     @Deprecated

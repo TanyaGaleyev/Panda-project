@@ -10,6 +10,7 @@ import org.ivan.simple.bitmaputils.ColorBackground;
 import org.ivan.simple.bitmaputils.PandaBackground;
 import org.ivan.simple.bitmaputils.TextureAtlasParser;
 import org.ivan.simple.game.GameActivity;
+import org.ivan.simple.game.scores.Scores;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
@@ -255,12 +256,20 @@ public class LevelChooseView extends SurfaceView {
                 int y = getScreenY(i);
                 drawOnCenterCoordinates(border, x, y, canvas);
                 canvas.drawText("" + levels[i][j][0], x - 16, y + 16, textPaint);
-                if(finishedLevels[i][j] != 0) {
-//                    drawOnCenterCoordinates(cross, x + border.getWidth() / 4, y + border.getHeight() / 4, canvas);
-                    Bitmap scoresImg = getScoreAward(i, j);
-                    drawOnCenterCoordinates(scoresImg, x + border.getWidth() / 2 - 10, y + border.getHeight() / 2, canvas);
-                }
+                drawScore(i, j, canvas);
             }
+        }
+    }
+
+    private void drawScore(int i, int j, Canvas canvas) {
+//        drawOnCenterCoordinates(cross, x + border.getWidth() / 4, y + border.getHeight() / 4, canvas);
+        Bitmap scoresImg = getScoreAward(i, j);
+        if(scoresImg != null) {
+            drawOnCenterCoordinates(
+                    scoresImg,
+                    getScreenX(j) + border.getWidth() / 2 - 10,
+                    getScreenY(i) + border.getHeight() / 2,
+                    canvas);
         }
     }
 
@@ -276,16 +285,17 @@ public class LevelChooseView extends SurfaceView {
 	
 	private Bitmap getScoreAward(int i, int j) {
 		int score = finishedLevels[i][j];
-		int high = levels[i][j][2];
-		int medium =  levels[i][j][1];
 		// TODO add uniq score gradations for each level
-		if(score < medium) {
+        if(score == Scores.LOW_SCORE) {
 			return lowscore;
-		} else if (score < high){
+		} else if (score == Scores.MEDIUM_SCORE) {
 			return mediumscore;
-		} else {
+		} else if (score == Scores.HIGH_SCORE) {
 			return highscore;
-		}// А Танюшка Ванюшка!!!
+		} else {
+		    return null;
+		    // А Танюшка Ванюшка!!!
+        }
 	}
 	
 	private int getScreenX(int col) {
@@ -405,11 +415,11 @@ public class LevelChooseView extends SurfaceView {
     }
 	
 	public int completeCurrentLevel(int score) {
-		int ret = finishedLevels[levelY][levelX];
-        if(score > ret) {
+		int oldScore = finishedLevels[levelY][levelX];
+        if(Scores.better(score, oldScore)) {
             finishedLevels[levelY][levelX] = score;
         }
-		return ret;
+		return oldScore;
 	}
 	
 	protected String getFinishedLevels() {

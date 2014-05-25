@@ -18,5 +18,10 @@
 "winCell" : {
     "row" : 4,
     "col" : 9
+},
+"scores" : {
+    "lowScore" : 3,
+    "mediumScore" : 10,
+    "highScore" : 20
 }
 }
