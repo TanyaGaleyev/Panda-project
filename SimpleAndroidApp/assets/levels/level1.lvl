@@ -27,7 +27,7 @@
     "highScore" : 22
 },
  "startCell" : {
-    "row":4
+    "row":4,
 	"col":0
 }
 

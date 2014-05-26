@@ -34,35 +34,6 @@ public class LevelModel {
 	private HashMap<CellCoords, CellCoords> floorTPMap = new HashMap<CellCoords, CellCoords>();
 	private int steps = 0;
 	
-	private class CellCoords {
-		int i;
-		int j;
-		
-		CellCoords(int i, int j) {
-			this.i = i;
-			this.j = j;
-		}
-		
-		
-		// hash and equals methods are needed to properly get right mapping for
-		// cells with equal coordinates
-		@Override
-		public boolean equals(Object o) {
-			if(o == null) return false;
-			if(o == this) return true;
-			if(!(o instanceof CellCoords)) return false;
-			CellCoords oCell = (CellCoords) o;
-			if(this.i != oCell.i) return false;
-			if(this.j != oCell.j) return false;
-			return true;
-		}
-		
-		@Override
-		public int hashCode() {
-			return i * 100 + j;
-		}
-	}
-	
 	private class TpPeer {
 		int startRow;
 		int startCol;
@@ -102,8 +73,9 @@ public class LevelModel {
         int[][] prizes = levelInfo.prizesMap;
         totalPrizes = 0;
         scoreProvider = new ScoreProvider(levelInfo.scoreStruct);
-        int[] winCellCoord = levelInfo.winCell;
-        hero = new HeroModel(rows - 1, 0);
+        CellCoords startCellCoord = levelInfo.startCell;
+        CellCoords winCellCoord = levelInfo.winCell;
+        hero = new HeroModel(startCellCoord.i, startCellCoord.j);
         levelGrid = new LevelCell[rows][cols];
 		HashMap<Integer, TpPeer> groups = new HashMap<Integer, TpPeer>();
 		TreeMap<Integer, CellCoords> tpSequence = new TreeMap<Integer, CellCoords>();
@@ -216,7 +188,7 @@ public class LevelModel {
 					tpSequence.put(key, cell);
 				}
 				
-				if(i == winCellCoord[0] && j == winCellCoord[1]) {
+				if(i == winCellCoord.i && j == winCellCoord.j) {
 					winCell = levelGrid[i][j];
 				}
 				

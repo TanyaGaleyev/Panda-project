@@ -20,6 +20,7 @@ import java.util.List;
 public class LevelParser {
     public static final String ROUTE_KEY = "monsterRoute";
     public static final String WIN_CELL_KEY = "winCell";
+    public static final String START_CELL_KEY = "startCell";
     public static final String PRIZES_KEY = "prizes";
     public static final String SCORES_KEY = "scores";
     public static final String LEVEL_GRID_KEY = "level";
@@ -35,7 +36,8 @@ public class LevelParser {
         return new LevelInfo(
                 parse4dim(levelJson.getJSONArray(LEVEL_GRID_KEY)),
                 parse2dim(levelJson.getJSONArray(PRIZES_KEY)),
-                parseWinCell(levelJson.getJSONObject(WIN_CELL_KEY)),
+                parseCell(levelJson.getJSONObject(START_CELL_KEY)),
+                parseCell(levelJson.getJSONObject(WIN_CELL_KEY)),
                 levelJson.has(ROUTE_KEY) ? parse2dim(levelJson.getJSONArray(ROUTE_KEY)) : null,
                 parseScores(levelJson.getJSONObject(SCORES_KEY))
         );
@@ -98,8 +100,8 @@ public class LevelParser {
         return _2dim;
     }
 
-    private int[] parseWinCell(JSONObject winCell) throws JSONException {
-        return new int[]{winCell.getInt("row"), winCell.getInt("col")};
+    private CellCoords parseCell(JSONObject winCell) throws JSONException {
+        return new CellCoords(winCell.getInt("row"), winCell.getInt("col"));
     }
 
     private ScoreStruct parseScores(JSONObject scores) throws JSONException {

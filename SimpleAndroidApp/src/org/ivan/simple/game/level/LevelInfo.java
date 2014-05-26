@@ -8,18 +8,21 @@ import org.ivan.simple.game.scores.ScoreStruct;
 public class LevelInfo {
     public final int[][][][] levelGrid;
     public final int[][] prizesMap;
-    public final int[] winCell;
+    public final CellCoords startCell;
+    public final CellCoords winCell;
     public final int[][] monsterRoute;
     public final ScoreStruct scoreStruct;
 
     public LevelInfo(
             int[][][][] levelGrid,
             int[][] prizesMap,
-            int[] winCell,
+            CellCoords startCell,
+            CellCoords winCell,
             int[][] monsterRoute,
             ScoreStruct scoreStruct) {
         this.levelGrid = levelGrid;
         this.prizesMap = prizesMap;
+        this.startCell = startCell;
         this.winCell = winCell;
         this.monsterRoute = monsterRoute;
         this.scoreStruct = scoreStruct;

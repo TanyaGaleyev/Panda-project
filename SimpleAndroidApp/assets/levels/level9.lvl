@@ -23,5 +23,9 @@
     "lowScore" : 8,
     "mediumScore" : 8,
     "highScore" : 8
+},
+ "startCell" : {
+    "row":4,
+	"col":0
 }
 }
