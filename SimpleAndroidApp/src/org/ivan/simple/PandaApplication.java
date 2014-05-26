@@ -2,8 +2,11 @@ package org.ivan.simple;
 
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.WindowManager;
 
@@ -25,6 +28,7 @@ public class PandaApplication extends Application {
     private FontProvider fontProvider;
     private ImageProvider imageProvider;
     private Sprite loading;
+    private Drawable background;
 
     private LevelParser levelParser;
 
@@ -53,9 +57,21 @@ public class PandaApplication extends Application {
         levelParser = new LevelParser(getApplicationContext());
         loading = new Sprite("menu/loader.png", 1, 12);
         loading.setAnimating(true);
+
+        initBackground();
 	}
 
-	public MusicManager getMusicManger() {
+    private void initBackground() {
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inPreferredConfig = Bitmap.Config.RGB_565;
+        Bitmap bmp = BitmapFactory.decodeResource(
+                getResources(), R.drawable.background_menu, opts);
+        Bitmap bmpResize = Bitmap.createScaledBitmap(bmp, displayWidth, displayHeight, true);
+        bmp.recycle();
+        background = new BitmapDrawable(bmpResize);
+    }
+
+    public MusicManager getMusicManger() {
 		return musicManager;
 	}
 
@@ -75,7 +91,11 @@ public class PandaApplication extends Application {
         return levelParser;
     }
 
-	public boolean getSound() {
+    public Drawable getBackground() {
+        return background;
+    }
+
+    public boolean getSound() {
 		return sound;
 	}
 

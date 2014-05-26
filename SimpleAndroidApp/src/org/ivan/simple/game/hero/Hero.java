@@ -543,11 +543,8 @@ public class Hero {
 //		activeSprite = sprites.getSprite("fall");
         activeSprite = sprites.getSprite("detonate");
         activeSprite.setPlayOnce(true);
-        if(!activeSprite.isAnimatingOrDelayed()) {
-            return false;
-        }
-        return true;
-	}
+        return activeSprite.isAnimatingOrDelayed();
+    }
 	
 	/**
 	 * Play win animation

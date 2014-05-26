@@ -20,6 +20,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import java.util.Iterator;
@@ -131,7 +132,17 @@ public class GameActivity extends PandaBaseActivity {
 //        nestedGame.setBackgroundResource(R.drawable.settings_border);
         nestedGame.setLevId(-1);
         nestedGame.getControl().setAutoControls(Solutions.getDemo(type));
-        tutorialDialog.setContentView(nestedGame);
+        tutorialDialog.setContentView(R.layout.tutorial_dialog);
+        ((RelativeLayout) tutorialDialog.findViewById(R.id.tutorial_content_panel)).addView(nestedGame);
+        Button continueBtn = (Button) tutorialDialog.findViewById(R.id.continue_button);
+        continueBtn.setTypeface(app().getFontProvider().regular());
+        continueBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopTutorial();
+            }
+        });
+        continueBtn.bringToFront();
         tutorialDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {

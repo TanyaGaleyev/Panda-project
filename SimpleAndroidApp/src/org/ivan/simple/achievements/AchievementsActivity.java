@@ -1,13 +1,9 @@
 package org.ivan.simple.achievements;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
-
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,7 +12,6 @@ import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
 import org.ivan.simple.utils.PandaButtonsPanel;
 
-import java.io.File;
 import java.io.IOException;
 
 public class AchievementsActivity extends PandaBaseActivity {
@@ -25,6 +20,7 @@ public class AchievementsActivity extends PandaBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_achievements);
+        findViewById(R.id.activity_content).setBackgroundDrawable(app().getBackground());
         View backBtn = prepare(R.drawable.back);
         PandaButtonsPanel bp = (PandaButtonsPanel) findViewById(R.id.achiv_bp);
         bp.customAddView(backBtn);

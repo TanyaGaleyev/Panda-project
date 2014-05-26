@@ -19,5 +19,10 @@
     "row" : 4,
     "col" : 9
 },
-"monsterRoute" : [[9, 2], [0, 2], [0, 1], [9, 1], [9, 2]]
+"monsterRoute" : [[9, 2], [0, 2], [0, 1], [9, 1], [9, 2]],
+"scores" : {
+    "lowScore" : 3,
+    "mediumScore" : 10,
+    "highScore" : 20
+}
 }

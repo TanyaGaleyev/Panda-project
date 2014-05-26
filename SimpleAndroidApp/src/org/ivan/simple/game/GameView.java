@@ -356,18 +356,39 @@ public class GameView extends SurfaceView {
         hero.y += ySpeed;
     }
 
+    private int loseDelay = 3;
+
     /**
 	 * Random rotating movement if hero was spiked
 	 * @return
 	 */
 	private boolean moveLose() {
-        if(level.model.outOfBounds() && !monsterLose) {
-            regularMove();
-            return !outOfAnimationBounds();
+        if(monsterLose) {
+            return doMonsterLose();
+        } else if(level.model.outOfBounds()) {
+            return doFallLose();
+        } else {
+            return doSpikeLose();
+        }
+	}
+
+    private boolean doSpikeLose() {
+        if (loseDelay > 0) {
+            loseDelay--;
+            return true;
         } else {
             return hero.playLoseAnimation();
         }
-	}
+    }
+
+    private boolean doFallLose() {
+        regularMove();
+        return !outOfAnimationBounds();
+    }
+
+    private boolean doMonsterLose() {
+        return hero.playLoseAnimation();
+    }
 
     private boolean outOfAnimationBounds() {
         return hero.x <= LEFT_BOUND - GRID_STEP || hero.x >= RIGHT_BOUND + GRID_STEP ||

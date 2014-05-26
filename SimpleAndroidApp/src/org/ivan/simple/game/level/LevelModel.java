@@ -1,6 +1,5 @@
 package org.ivan.simple.game.level;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -15,6 +14,7 @@ import org.ivan.simple.game.monster.MonsterDirection;
 import org.ivan.simple.game.monster.MonsterModel;
 import org.ivan.simple.game.monster.strategies.MonsterStrategy;
 import org.ivan.simple.game.monster.strategies.RouteDirectionStrategyFactory;
+import org.ivan.simple.game.scores.ScoreProvider;
 
 public class LevelModel {
 	private LevelCell[][] levelGrid;
@@ -22,7 +22,9 @@ public class LevelModel {
 	private final int cols;
 	public final MonsterModel monster;
 	public final HeroModel hero;
-	private int prizesLeft = 0;
+	private int totalPrizes;
+    private int prizesCollected = 0;
+    private ScoreProvider scoreProvider;
 	private boolean lose = false;
 	private boolean complete = false;
 	private LevelCell winCell;
@@ -30,7 +32,7 @@ public class LevelModel {
 	private ArrayList<Platform> switchList = new ArrayList<Platform>();
 	private ArrayList<Platform> unlockList = new ArrayList<Platform>();
 	private HashMap<CellCoords, CellCoords> floorTPMap = new HashMap<CellCoords, CellCoords>();
-	private int steps = 1;
+	private int steps = 0;
 	
 	private class CellCoords {
 		int i;
@@ -98,6 +100,8 @@ public class LevelModel {
         rows=mylevel.length;
         cols=mylevel[0].length;
         int[][] prizes = levelInfo.prizesMap;
+        totalPrizes = 0;
+        scoreProvider = new ScoreProvider(levelInfo.scoreStruct);
         int[] winCellCoord = levelInfo.winCell;
         hero = new HeroModel(rows - 1, 0);
         levelGrid = new LevelCell[rows][cols];
@@ -107,7 +111,7 @@ public class LevelModel {
 			for(int j=0;j<cols;j++){
 				levelGrid[i][j] = new LevelCell();
 				levelGrid[i][j].setPrize(prizes[i][j]);
-                if(prizes[i][j] != 0) prizesLeft++;
+                if(prizes[i][j] != 0) totalPrizes++;
 				int leftWallType = mylevel[i][j][0][0];
 				// create left wall only for first column's cells
 				if(j == 0) {
@@ -641,24 +645,28 @@ public class LevelModel {
 		// check if we gonna teleport
 		checkTeleport();
 		// collect prize 
-		prizesLeft -= getHeroCell().removePrize();
-		/*
+		prizesCollected += getHeroCell().removePrize();
+        checkWin();
+        updatePosition();
+	}
+
+    private void checkWin() {
+        /*
 		 * if all prizes are collected show win platform
 		 * level will be complete after hero reaches win cell (with win floor platform now)
 		 */
-		if(prizesLeft == 0) {
-			if(winCell.getFloor().getType() != PlatformType.WIN) {
-				// TODO careful with roof (of underlying cell)
-				winCell.createFloor(PlatformType.WIN);
-			}
-			if(getHeroCell() == winCell && !skipWinPlatform(hero.finishingMotion, hero.currentMotion)) {
-				complete = true;
-			}
-		}
-		updatePosition();
-	}
-	
-	private void updatePosition() {
+        if(scoreProvider.hasScore(prizesCollected)/* || prizesCollected >= totalPrizes*/) {
+            if(winCell.getFloor().getType() != PlatformType.WIN) {
+                // TODO careful with roof (of underlying cell)
+                winCell.createFloor(PlatformType.WIN);
+            }
+            if(getHeroCell() == winCell && !skipWinPlatform(hero.finishingMotion, hero.currentMotion)) {
+                complete = true;
+            }
+        }
+    }
+
+    private void updatePosition() {
 		if(hero.currentMotion.getType() == MotionType.TP_LEFT) {
 			TpPeer toCoords = tpGroupMap.get(new CellCoords(hero.getY(), hero.getX()));
 			hero.setX(toCoords.endCol);
@@ -785,7 +793,7 @@ public class LevelModel {
 	}
 	
 	public int getScore() {
-		return 1000 / steps + 1;
+		return scoreProvider.getScoreConst(prizesCollected);
 	}
 	
 	public boolean isLost() {

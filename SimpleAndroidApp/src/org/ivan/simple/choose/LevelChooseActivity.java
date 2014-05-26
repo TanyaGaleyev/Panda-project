@@ -14,6 +14,7 @@ import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
 import org.ivan.simple.achievements.Achievement;
 import org.ivan.simple.achievements.AchievementsDirectories;
+import org.ivan.simple.game.scores.Scores;
 import org.ivan.simple.utils.PandaButtonsPanel;
 import org.ivan.simple.welcome.StartActivity;
 
@@ -131,7 +132,7 @@ public class LevelChooseActivity extends PandaBaseActivity {
 
     private void submitNewScore(int score) {
         int oldScore = view.completeCurrentLevel(score);
-        if(score > oldScore) {
+        if(Scores.better(score, oldScore)) {
             SharedPreferences.Editor prEditor = preferences.edit();
             prEditor.putString(FINISHED_LEVELS + levelsSetId, view.getFinishedLevels());
             prEditor.commit();

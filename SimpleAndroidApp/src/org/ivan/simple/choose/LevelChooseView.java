@@ -10,6 +10,7 @@ import org.ivan.simple.bitmaputils.ColorBackground;
 import org.ivan.simple.bitmaputils.PandaBackground;
 import org.ivan.simple.bitmaputils.TextureAtlasParser;
 import org.ivan.simple.game.GameActivity;
+import org.ivan.simple.game.scores.Scores;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
@@ -59,8 +60,6 @@ public class LevelChooseView extends SurfaceView {
 	private String backgroundId;
 //	private Bitmap background;
     private PandaBackground bgr;
-//	private Bitmap back;
-//	private Bitmap sound;
 
 	// Scores bitmaps
 	private Bitmap highscore;
@@ -75,8 +74,8 @@ public class LevelChooseView extends SurfaceView {
 	 */
 	private Bitmap marker;
 	// coordinates of marker center on screen
-	private int markerX;
-	private int markerY;
+	private int markerX = -1;
+	private int markerY = -1;
 
 	// Thread redrawing view
 	private Redrawer redrawer;
@@ -105,7 +104,6 @@ public class LevelChooseView extends SurfaceView {
 
 	private void init(Context context) {
         this.context = (LevelChooseActivity) context;
-        initGrid();
 		textPaint = new Paint();
 		textPaint.setColor(Color.DKGRAY);
 		textPaint.setTextSize(36);
@@ -145,10 +143,7 @@ public class LevelChooseView extends SurfaceView {
 
 	}
 
-    private void initGrid() {
-        int width = context.app().displayWidth;
-        int height = context.app().displayHeight;
-
+    private void initGrid(int width, int height) {
         int xStep = width / LEVELS_COLS;
         int yStep = height / LEVELS_ROWS;
         if(xStep < yStep) {
@@ -160,11 +155,14 @@ public class LevelChooseView extends SurfaceView {
             TOP_BOUND = 0;
             LEFT_BOUND = (width - GRID_STEP * LEVELS_COLS) / 2;
         }
-        markerX = LEFT_BOUND + GRID_STEP / 2;
-        markerY = TOP_BOUND + GRID_STEP / 2;
+        if(markerX < 0) {
+            markerX = getScreenX(0);
+            markerY = getScreenY(0);
+        }
     }
 
     private void initSurface() {
+        initGrid(getWidth(), getHeight());
         border = imageProvider().getBitmapNoCache("menu/border.png");
 //        cross = imageProvider().getBitmapNoCache("menu/cross.png");
 //        background = background != null ? background : Bitmap.createScaledBitmap(
@@ -181,8 +179,6 @@ public class LevelChooseView extends SurfaceView {
             bgr = new ColorBackground();
         }
         marker = imageProvider().getBitmapNoCache("menu/single_panda.png");
-//        back = imageProvider().getBitmapNoCache("menu/back_choose.png");
-//        sound = imageProvider().getBitmapNoCache("menu/sound_choose.png");
         highscore = imageProvider().getBitmapNoCache("menu/high_score.png");
         mediumscore = imageProvider().getBitmapNoCache("menu/medium_score.png");
         lowscore = imageProvider().getBitmapNoCache("menu/low_score.png");
@@ -225,8 +221,6 @@ public class LevelChooseView extends SurfaceView {
         drawGrid(canvas);
         drawLevelsIcons(canvas);
         drawOnCenterCoordinates(marker, markerX, markerY, canvas);
-//        drawOnCenterCoordinates(back, 0 + GRID_STEP / 2, getHeight() - GRID_STEP / 2, canvas);
-//        drawOnCenterCoordinates(sound, getWidth() - GRID_STEP / 2, getHeight() - GRID_STEP / 2, canvas);
     }
 
     private void drawGrid(Canvas canvas) {
@@ -262,12 +256,20 @@ public class LevelChooseView extends SurfaceView {
                 int y = getScreenY(i);
                 drawOnCenterCoordinates(border, x, y, canvas);
                 canvas.drawText("" + levels[i][j][0], x - 16, y + 16, textPaint);
-                if(finishedLevels[i][j] != 0) {
-//                    drawOnCenterCoordinates(cross, x + border.getWidth() / 4, y + border.getHeight() / 4, canvas);
-                    Bitmap scoresImg = getScoreAward(i, j);
-                    drawOnCenterCoordinates(scoresImg, x + border.getWidth() / 2 - 10, y + border.getHeight() / 2, canvas);
-                }
+                drawScore(i, j, canvas);
             }
+        }
+    }
+
+    private void drawScore(int i, int j, Canvas canvas) {
+//        drawOnCenterCoordinates(cross, x + border.getWidth() / 4, y + border.getHeight() / 4, canvas);
+        Bitmap scoresImg = getScoreAward(i, j);
+        if(scoresImg != null) {
+            drawOnCenterCoordinates(
+                    scoresImg,
+                    getScreenX(j) + border.getWidth() / 2 - 10,
+                    getScreenY(i) + border.getHeight() / 2,
+                    canvas);
         }
     }
 
@@ -283,16 +285,17 @@ public class LevelChooseView extends SurfaceView {
 	
 	private Bitmap getScoreAward(int i, int j) {
 		int score = finishedLevels[i][j];
-		int high = levels[i][j][2];
-		int medium =  levels[i][j][1];
 		// TODO add uniq score gradations for each level
-		if(score < medium) {
+        if(score == Scores.LOW_SCORE) {
 			return lowscore;
-		} else if (score < high){
+		} else if (score == Scores.MEDIUM_SCORE) {
 			return mediumscore;
-		} else {
+		} else if (score == Scores.HIGH_SCORE) {
 			return highscore;
-		}// А Танюшка Ванюшка!!!
+		} else {
+		    return null;
+		    // А Танюшка Ванюшка!!!
+        }
 	}
 	
 	private int getScreenX(int col) {
@@ -305,21 +308,6 @@ public class LevelChooseView extends SurfaceView {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-//		// back button pressed
-//		if(event.getAction() == MotionEvent.ACTION_DOWN &&
-//				0 < event.getX() && event.getX() < GRID_STEP &&
-//				getHeight() - GRID_STEP < event.getY() && event.getY() < getHeight()) {
-//			context.finish();
-//			return true;
-//		}
-//		// sound button pressed
-//		if(event.getAction() == MotionEvent.ACTION_DOWN &&
-//				getWidth() - GRID_STEP < event.getX() && event.getX() < getWidth() &&
-//				getHeight() - GRID_STEP < event.getY() && event.getY() < getHeight()) {
-//			boolean sound = PandaApplication.getPandaApplication().getSound();
-//			PandaApplication.getPandaApplication().setSound(!sound);
-//			return true;
-//		}
 		// get level Id depending on by click on screen selection
 		final int levId = getLevelId(event);
 		// if level selected (levId != 0) start next GameActivity with specified level
@@ -427,11 +415,11 @@ public class LevelChooseView extends SurfaceView {
     }
 	
 	public int completeCurrentLevel(int score) {
-		int ret = finishedLevels[levelY][levelX];
-        if(score > ret) {
+		int oldScore = finishedLevels[levelY][levelX];
+        if(Scores.better(score, oldScore)) {
             finishedLevels[levelY][levelX] = score;
         }
-		return ret;
+		return oldScore;
 	}
 	
 	protected String getFinishedLevels() {
