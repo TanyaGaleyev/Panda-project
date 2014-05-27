@@ -88,64 +88,45 @@ public class LevelModel {
         CellCoords winCellCoord = levelInfo.winCell;
         hero = new HeroModel(startCellCoord.i, startCellCoord.j);
         levelGrid = new LevelCell[rows][cols];
-		HashMap<Integer, TpPeer> groups = new HashMap<Integer, TpPeer>();
 		Multimap<Integer, PlatformCellPair> inGroups = new Multimap<Integer, PlatformCellPair>();
 		HashMap<Integer, PlatformCellPair> outGroups = new HashMap<Integer, PlatformCellPair>();
 		TreeMap<Integer, CellCoords> tpSequence = new TreeMap<Integer, CellCoords>();
 		for(int i=0;i<rows;i++){
 			for(int j=0;j<cols;j++){
-				levelGrid[i][j] = new LevelCell();
-				levelGrid[i][j].setPrize(prizes[i][j]);
+                LevelCell newCell = new LevelCell();
+                levelGrid[i][j] = newCell;
+				newCell.setPrize(prizes[i][j]);
                 if(prizes[i][j] != 0) totalPrizes++;
-				int leftWallType = mylevel[i][j][0][0];
 				// create left wall only for first column's cells
-				if(j == 0) {
-					levelGrid[i][j].createLeft(leftWallType);
-					if(leftWallType==11) {
-						int inKey = mylevel[i][j][0][1];
-						int outKey = mylevel[i][j][0][2];
+                if(j == 0) {
+                    int[] leftWallDescr = mylevel[i][j][0];
+                    newCell.createLeft(type(leftWallDescr));
+                    Platform leftWall = newCell.getLeft();
+                    if(leftWall.getType()==PlatformType.TELEPORT_L_V) {
 						CellCoords coords = new CellCoords(i, j);
-                        inGroups.put(inKey, new PlatformCellPair(levelGrid[i][j].getLeft(), coords));
-                        outGroups.put(outKey, new PlatformCellPair(levelGrid[i][j].getLeft(), coords));
-                        if(!groups.containsKey(inKey)) {
-							TpPeer newPeer = new TpPeer();
-							newPeer.setStart(levelGrid[i][j].getLeft(), coords);
-							groups.put(inKey, newPeer);
-						} else {
-							TpPeer existedPeer = groups.get(inKey);
-							existedPeer.setEnd(levelGrid[i][j].getLeft(), coords);
-						}
+                        inGroups.put(inKey(leftWallDescr), new PlatformCellPair(leftWall, coords));
+                        outGroups.put(outKey(leftWallDescr), new PlatformCellPair(leftWall, coords));
 					}
-					if(leftWallType==12 && j != 0) {
-						int inKey = mylevel[i][j][0][1];
-						int outKey = mylevel[i][j][0][2];
+					if(leftWall.getType()==PlatformType.TELEPORT_R_V && j != 0) {
 						CellCoords coords = new CellCoords(i, j - 1);
-                        inGroups.put(inKey, new PlatformCellPair(levelGrid[i][j].getLeft(), coords));
-                        outGroups.put(outKey, new PlatformCellPair(levelGrid[i][j].getLeft(), coords));
-						if(!groups.containsKey(inKey)) {
-							TpPeer newPeer = new TpPeer();
-                            newPeer.setStart(levelGrid[i][j].getLeft(), coords);
-							groups.put(inKey, newPeer);
-						} else {
-							TpPeer existedPeer = groups.get(inKey);
-                            existedPeer.setEnd(levelGrid[i][j].getLeft(), coords);
-						}
+                        inGroups.put(inKey(leftWallDescr), new PlatformCellPair(leftWall, coords));
+                        outGroups.put(outKey(leftWallDescr), new PlatformCellPair(leftWall, coords));
 					}
-					if(leftWallType==17) {
-						switchList.add(levelGrid[i][j].getLeft());
+					if(leftWall.getType()==PlatformType.SWITCH) {
+						switchList.add(leftWall);
 					}
-					if(leftWallType==18) {
-						unlockList.add(levelGrid[i][j].getLeft());
+					if(leftWall.getType()==PlatformType.UNLOCK) {
+						unlockList.add(leftWall);
 					}
 					// else set left wall as right wall of nearest left cell
 				} else {
-					levelGrid[i][j].left_wall = levelGrid[i][j - 1].right_wall;
+                    newCell.left_wall = levelGrid[i][j - 1].right_wall;
 				}
 				
 				int roofType = mylevel[i][j][1][0];
 				// create roof only for first row's cells
 				if(i == 0) {
-					levelGrid[i][j].createRoof(roofType);
+                    newCell.createRoof(roofType);
 					// keep i!=0 do nothing check if level building model will change
 					if(roofType == 23 && i != 0) {
 						int key = mylevel[i][j][1][1];
@@ -154,51 +135,32 @@ public class LevelModel {
 					}
 					// else set roof as floor of nearest upper cell
 				} else {
-					levelGrid[i][j].roof = levelGrid[i - 1][j].floor;
+                    newCell.roof = levelGrid[i - 1][j].floor;
 				}
 
-				int rightWallType = mylevel[i][j][2][0];
-				levelGrid[i][j] .createRight(rightWallType);
-				if(rightWallType==11 && j != cols - 1) {
-					int inKey = mylevel[i][j][2][1];
-					int outKey = mylevel[i][j][2][2];
+				int[] rightWallDescr = mylevel[i][j][2];
+                newCell.createRight(type(rightWallDescr));
+                Platform rightWall = newCell.getRight();
+                if(rightWall.getType()==PlatformType.TELEPORT_L_V && j != cols - 1) {
 					CellCoords coords = new CellCoords(i, j + 1);
-                    inGroups.put(inKey, new PlatformCellPair(levelGrid[i][j].getRight(), coords));
-                    outGroups.put(outKey, new PlatformCellPair(levelGrid[i][j].getRight(), coords));
-					if(!groups.containsKey(inKey)) {
-						TpPeer newPeer = new TpPeer();
-						newPeer.setStart(levelGrid[i][j].getRight(), coords);
-						groups.put(inKey, newPeer);
-					} else {
-						TpPeer existedPeer = groups.get(inKey);
-						existedPeer.setEnd(levelGrid[i][j].getRight(), coords);
-					}
+                    inGroups.put(inKey(rightWallDescr), new PlatformCellPair(rightWall, coords));
+                    outGroups.put(outKey(rightWallDescr), new PlatformCellPair(rightWall, coords));
 				}
-				if(rightWallType==12) {
-					int inKey = mylevel[i][j][2][1];
-					int outKey = mylevel[i][j][2][2];
+				if(rightWall.getType()==PlatformType.TELEPORT_R_V) {
 					CellCoords coords = new CellCoords(i, j);
-                    inGroups.put(inKey, new PlatformCellPair(levelGrid[i][j].getRight(), coords));
-                    outGroups.put(outKey, new PlatformCellPair(levelGrid[i][j].getRight(), coords));
-					if(!groups.containsKey(inKey)) {
-						TpPeer newPeer = new TpPeer();
-						newPeer.setStart(levelGrid[i][j].getRight(), coords);
-						groups.put(inKey, newPeer);
-					} else {
-						TpPeer existedPeer = groups.get(inKey);
-						existedPeer.setEnd(levelGrid[i][j].getRight(), coords);
-					}
+                    inGroups.put(inKey(rightWallDescr), new PlatformCellPair(rightWall, coords));
+                    outGroups.put(outKey(rightWallDescr), new PlatformCellPair(rightWall, coords));
 				}
-				if(rightWallType==17) {
-					switchList.add(levelGrid[i][j].getRight());
+				if(rightWall.getType()==PlatformType.SWITCH) {
+					switchList.add(rightWall);
 				}
-				if(rightWallType==18) {
-					unlockList.add(levelGrid[i][j].getRight());
+				if(rightWall.getType()==PlatformType.UNLOCK) {
+					unlockList.add(rightWall);
 				}
 				
 				
 				int floorType = mylevel[i][j][3][0];
-				levelGrid[i][j].createFloor(floorType);
+                newCell.createFloor(floorType);
 				if(floorType == 23) {
 					int key = mylevel[i][j][3][1];
 					CellCoords cell = new CellCoords(i, j);
@@ -206,7 +168,7 @@ public class LevelModel {
 				}
 				
 				if(i == winCellCoord.i && j == winCellCoord.j) {
-					winCell = levelGrid[i][j];
+					winCell = newCell;
 				}
 				
 				
@@ -230,6 +192,18 @@ public class LevelModel {
         }
         if(winCell == null) winCell = levelGrid[0][0];
 	}
+
+    private int type(int[] wallDescr) {
+        return wallDescr[0];
+    }
+
+    private int inKey(int[] wallDescr) {
+        return wallDescr[1];
+    }
+
+	private int outKey(int[] wallDescr) {
+        return wallDescr[2];
+    }
 
 	public LevelCell getCell(int i, int j) {
 		return levelGrid[i][j];
