@@ -39,7 +39,7 @@ public class GameView extends SurfaceView {
 	private static int TOP_BOUND;
 	private static int BOTTOM_BOUND;
 
-	private Hero hero;
+	protected Hero hero;
 	private Monster monster;
 	protected LevelView level;
     GuideAnimation guideAnimation = new GuideAnimation();
@@ -446,7 +446,7 @@ public class GameView extends SurfaceView {
 //		if(control.processServiceButton(event)) {
 //			return true;
 //		}
-		if(control.scanControl(event, hero.x, hero.y)) {
+		if(control.scanControl(event)) {
 			return true;
 		}
 		return super.onTouchEvent(event);
