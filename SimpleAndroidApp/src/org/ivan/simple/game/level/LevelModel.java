@@ -74,7 +74,7 @@ public class LevelModel {
 		Multimap<Integer, PlatformCellPair> inGroupsLR = new Multimap<Integer, PlatformCellPair>();
 		HashMap<Integer, PlatformCellPair> outGroupsLR = new HashMap<Integer, PlatformCellPair>();
         Multimap<Integer, PlatformCellPair> inGroupsFloor = new Multimap<Integer, PlatformCellPair>();
-		HashMap<Integer, PlatformCellPair> outGroupsHFloor = new HashMap<Integer, PlatformCellPair>();
+		HashMap<Integer, PlatformCellPair> outGroupsFloor = new HashMap<Integer, PlatformCellPair>();
 		for(int i=0;i<rows;i++) {
 			for(int j=0;j<cols;j++) {
                 LevelCell newCell = new LevelCell();
@@ -116,7 +116,7 @@ public class LevelModel {
                     if(roof.getType() == PlatformType.TELEPORT && i != 0) {
                         CellCoords coords = new CellCoords(i, j);
                         inGroupsFloor.put(inKey(roofDescr), new PlatformCellPair(roof, coords));
-						outGroupsHFloor.put(outKey(roofDescr), new PlatformCellPair(roof, coords));
+						outGroupsFloor.put(outKey(roofDescr), new PlatformCellPair(roof, coords));
 					}
 					// else set roof as floor of nearest upper cell
 				} else {
@@ -150,7 +150,7 @@ public class LevelModel {
 				if(floor.getType() == PlatformType.TELEPORT) {
 					CellCoords coords = new CellCoords(i, j);
                     inGroupsFloor.put(inKey(floorDescr), new PlatformCellPair(floor, coords));
-                    outGroupsHFloor.put(outKey(floorDescr), new PlatformCellPair(floor, coords));
+                    outGroupsFloor.put(outKey(floorDescr), new PlatformCellPair(floor, coords));
 				}
 				
 				if(i == winCellCoord.i && j == winCellCoord.j) {
@@ -160,7 +160,7 @@ public class LevelModel {
 		}
 
         leftRightTpDestMap = tpDestMap(inGroupsLR, outGroupsLR);
-        floorTpDestMap = tpDestMap(inGroupsFloor, outGroupsHFloor);
+        floorTpDestMap = tpDestMap(inGroupsFloor, outGroupsFloor);
         if(winCell == null) winCell = levelGrid[0][0];
 	}
 
