@@ -33,6 +33,10 @@ public class LevelGrid {
         return getRight(coords.i, coords.j);
     }
 
+    public VerticalPlatformCoords getRightCoords(CellCoords coords) {
+        return new VerticalPlatformCoords(getRight(coords.i, coords.j), coords.i, coords.j);
+    }
+
     public Platform getFloor(int i, int j) {
         if(i == -1) return get(0, j).getRoof();
         else       return get(i, j).getFloor();
@@ -42,33 +46,93 @@ public class LevelGrid {
         return getFloor(coords.i, coords.j);
     }
 
-    public Iterator<Platform> horizontalIt() {
+    public HorizontalPlatformCoords getFloorCoords(CellCoords coords) {
+        return new HorizontalPlatformCoords(getFloor(coords.i, coords.j), coords.i, coords.j);
+    }
+
+    public static class HorizontalPlatformCoords {
+        private Platform platform;
+        private int rowAbove;
+        private int col;
+
+        public HorizontalPlatformCoords(Platform platform, int rowAbove, int col) {
+            this.platform = platform;
+            this.rowAbove = rowAbove;
+            this.col = col;
+        }
+
+        public int getCol() {
+            return col;
+        }
+
+        public int getRowAbove() {
+            return rowAbove;
+        }
+
+        public int getRowBehind() {
+            return rowAbove + 1;
+        }
+
+        public Platform getPlatform() {
+            return platform;
+        }
+    }
+
+    public static class VerticalPlatformCoords {
+        private Platform platform;
+        private int row;
+        private int colAtLeft;
+
+        public VerticalPlatformCoords(Platform platform, int row, int colAtLeft) {
+            this.platform = platform;
+            this.row = row;
+            this.colAtLeft = colAtLeft;
+        }
+
+        public int getRow() {
+            return row;
+        }
+
+        public int getColAtLeft() {
+            return colAtLeft;
+        }
+
+        public int getColAtRight() {
+            return colAtLeft + 1;
+        }
+
+        public Platform getPlatform() {
+            return platform;
+        }
+    }
+
+    public Iterator<HorizontalPlatformCoords> horizontalIt() {
         return new HorizontalIterator();
     }
 
-    public Iterable<Platform> horizontalPlatforms() {
-        return new Iterable<Platform>() {
+    public Iterable<HorizontalPlatformCoords> horizontalPlatforms() {
+        return new Iterable<HorizontalPlatformCoords>() {
             @Override
-            public Iterator<Platform> iterator() {
+            public Iterator<HorizontalPlatformCoords> iterator() {
                 return horizontalIt();
             }
         };
     }
 
-    public Iterable<Platform> verticalPlatforms() {
-        return new Iterable<Platform>() {
+    public Iterable<VerticalPlatformCoords> verticalPlatforms() {
+        return new Iterable<VerticalPlatformCoords>() {
             @Override
-            public Iterator<Platform> iterator() {
+            public Iterator<VerticalPlatformCoords> iterator() {
                 return verticalIt();
             }
         };
     }
 
-    public Iterator<Platform> verticalIt() {
+    public Iterator<VerticalPlatformCoords> verticalIt() {
         return new VerticalIterator();
     }
 
-    private class HorizontalIterator implements Iterator<Platform> {
+    private class HorizontalIterator implements Iterator<HorizontalPlatformCoords> {
         private CoordsIterator coordsIt = new CoordsIterator(-1, 0);
 
         @Override
@@ -77,8 +141,8 @@ public class LevelGrid {
         }
 
         @Override
-        public Platform next() {
-            return getFloor(coordsIt.next());
+        public HorizontalPlatformCoords next() {
+            return getFloorCoords(coordsIt.next());
         }
 
         @Override
@@ -87,7 +151,7 @@ public class LevelGrid {
         }
     }
 
-    private class VerticalIterator implements Iterator<Platform> {
+    private class VerticalIterator implements Iterator<VerticalPlatformCoords> {
         private CoordsIterator coordsIt = new CoordsIterator(0, -1);
 
         @Override
@@ -96,8 +160,8 @@ public class LevelGrid {
         }
 
         @Override
-        public Platform next() {
-            return getRight(coordsIt.next());
+        public VerticalPlatformCoords next() {
+            return getRightCoords(coordsIt.next());
         }
 
         @Override
@@ -113,8 +177,8 @@ public class LevelGrid {
 
         private CoordsIterator(int startI, int startJ) {
             this.startJ = startJ;
-            this.i = startI - 1;
-            this.j = startJ - 1;
+            this.i = startI;
+            this.j = startJ;
         }
 
         @Override
@@ -124,13 +188,14 @@ public class LevelGrid {
 
         @Override
         public CellCoords next() {
-            if(j < cols) {
+            CellCoords ret = new CellCoords(i, j);
+            if(j + 1 < cols) {
                 j++;
             } else {
                 i++;
                 j = startJ;
             }
-            return new CellCoords(i, j);
+            return ret;
         }
 
         @Override
