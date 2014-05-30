@@ -183,7 +183,7 @@ public class GameView extends SurfaceView {
 	}
 	
 	protected void onDraw(Canvas canvas, boolean update) {
-		canvas.drawColor(0xffC6E10E);
+		canvas.drawColor(0xFFB6D76E);
 //		drawOnCenterCoordinates(
 //                background, getWidth() / 2, getHeight() / 2, backgroundPaint, canvas);
 //        bgr.draw(canvas);

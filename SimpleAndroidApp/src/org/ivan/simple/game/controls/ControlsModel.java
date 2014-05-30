@@ -7,8 +7,12 @@ import java.util.List;
  * Created by ivan on 30.05.2014.
  */
 public class ControlsModel {
-    private ControlsType controlsType = ControlsType.SIMPLE;
+    private ControlsType controlsType;
     private List<ControlChangeObserver> observers = new ArrayList<ControlChangeObserver>();
+
+    {
+        setControlsType(ControlsType.ONE_FINGER);
+    }
 
     public ControlsType getControlsType() {
         return controlsType;
