@@ -119,7 +119,7 @@ public class GameActivity extends PandaBaseActivity {
     @Override
     protected void onDestroy() {
     	super.onDestroy();
-        app().getSettingsModel().registerControlChangeObserver(gControl);
+        app().getSettingsModel().unregisterControlChangeObserver(gControl);
     	gControl = null;
     }
 
