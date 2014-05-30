@@ -37,7 +37,7 @@ public class PandaApplication extends Application {
 	// TODO get rid of singletons
     private static PandaApplication INSTANCE;
 
-    private SettingsModel settingsModel = new SettingsModel();
+    private SettingsModel settingsModel;
     public static PandaApplication getPandaApplication() {
 		return INSTANCE;
 	}
@@ -55,6 +55,7 @@ public class PandaApplication extends Application {
         fontProvider = new FontProvider(getApplicationContext());
         imageProvider = new ImageProvider(getApplicationContext(), displayWidth, displayHeight);
         levelParser = new LevelParser(getApplicationContext());
+        settingsModel = new SettingsModel(this);
         loading = new Sprite("menu/loader.png", 1, 12);
         loading.setAnimating(true);
 

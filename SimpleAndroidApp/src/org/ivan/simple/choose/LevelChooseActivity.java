@@ -122,9 +122,7 @@ public class LevelChooseActivity extends PandaBaseActivity {
             boolean setWasNotCompleteBefore =
                     levelsSetId > preferences.getInt(StartActivity.LAST_FINISHED_SET, 0);
             if(setWasNotCompleteBefore) {
-                SharedPreferences.Editor prEditor = preferences.edit();
-                prEditor.putInt(StartActivity.LAST_FINISHED_SET, levelsSetId);
-                prEditor.commit();
+                preferences.edit().putInt(StartActivity.LAST_FINISHED_SET, levelsSetId).commit();
                 finishComplete();
             }
         }
@@ -133,9 +131,8 @@ public class LevelChooseActivity extends PandaBaseActivity {
     private void submitNewScore(int score) {
         int oldScore = view.completeCurrentLevel(score);
         if(Scores.better(score, oldScore)) {
-            SharedPreferences.Editor prEditor = preferences.edit();
-            prEditor.putString(FINISHED_LEVELS + levelsSetId, view.getFinishedLevels());
-            prEditor.commit();
+            preferences.edit()
+                    .putString(FINISHED_LEVELS + levelsSetId, view.getFinishedLevels()).commit();
         }
     }
 
