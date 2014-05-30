@@ -1,6 +1,8 @@
 package org.ivan.simple.settings;
 
-import java.util.HashMap;
+import org.ivan.simple.game.controls.ControlChangeObserver;
+import org.ivan.simple.game.controls.ControlsModel;
+import org.ivan.simple.game.controls.ControlsType;
 
 /**
  * Created by ivan on 21.11.13.
@@ -8,9 +10,9 @@ import java.util.HashMap;
 public class SettingsModel {
     private boolean effects = true;
     private boolean music = true;
+    private ControlsModel controlsModel = new ControlsModel();
 
-    public SettingsModel() {
-    }
+    public SettingsModel() {}
 
     public void setEffectsEnabled(boolean enabled) {
         effects = enabled;
@@ -28,5 +30,19 @@ public class SettingsModel {
         return music;
     }
 
+    public ControlsType getControlsType() {
+        return controlsModel.getControlsType();
+    }
 
+    public void setControlsType(ControlsType controlsType) {
+        controlsModel.setControlsType(controlsType);
+    }
+
+    public void registerControlChangeObserver(ControlChangeObserver obs) {
+        controlsModel.registerObserver(obs);
+    }
+
+    public void unregisterControlChangeObserver(ControlChangeObserver obs) {
+        controlsModel.unregisterObserver(obs);
+    }
 }

@@ -1,18 +1,10 @@
 package org.ivan.simple.game;
 
-import org.ivan.simple.choose.LevelChooseActivity;
-import org.ivan.simple.PandaBaseActivity;
-import org.ivan.simple.R;
-import org.ivan.simple.game.tutorial.SolutionStep;
-import org.ivan.simple.game.tutorial.Solutions;
-import org.ivan.simple.game.tutorial.TutorialGame;
-import org.ivan.simple.settings.SettingsInGamePanel;
-
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.os.Bundle;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,7 +15,12 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
-import java.util.Iterator;
+import org.ivan.simple.PandaBaseActivity;
+import org.ivan.simple.R;
+import org.ivan.simple.choose.LevelChooseActivity;
+import org.ivan.simple.game.tutorial.Solutions;
+import org.ivan.simple.game.tutorial.TutorialGame;
+import org.ivan.simple.settings.SettingsInGamePanel;
 
 public class GameActivity extends PandaBaseActivity {
 
@@ -60,6 +57,7 @@ public class GameActivity extends PandaBaseActivity {
         gControl = gView.getControl();
         settingsBtn.bringToFront();
         helpBtn.bringToFront();
+        app().getSettingsModel().registerControlChangeObserver(gControl);
     }
 
     @Override
@@ -121,6 +119,7 @@ public class GameActivity extends PandaBaseActivity {
     @Override
     protected void onDestroy() {
     	super.onDestroy();
+        app().getSettingsModel().registerControlChangeObserver(gControl);
     	gControl = null;
     }
 

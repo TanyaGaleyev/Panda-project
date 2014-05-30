@@ -39,12 +39,12 @@ public class GameView extends SurfaceView {
 	private static int TOP_BOUND;
 	private static int BOTTOM_BOUND;
 
-	protected Hero hero;
+	private Hero hero;
 	private Monster monster;
 	protected LevelView level;
     GuideAnimation guideAnimation = new GuideAnimation();
 	
-	private GameControl control = new GameControl(this);
+	private GameControl control;
 	
 	private String backgroundId;
 //	private Bitmap background;
@@ -65,7 +65,8 @@ public class GameView extends SurfaceView {
 		super(context);
         this.gameContext = context;
 		init();
-	}
+        control = new GameControl(this);
+    }
 
 	public GameControl getControl() {
 		return control;
@@ -493,5 +494,9 @@ public class GameView extends SurfaceView {
 
     public GameActivity getGameContext() {
         return gameContext;
+    }
+
+    protected Hero getHero() {
+        return hero;
     }
 }
