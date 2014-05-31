@@ -1,12 +1,12 @@
 package org.ivan.simple.game.sound;
 
-import org.ivan.simple.R;
-import org.ivan.simple.game.motion.Motion;
-import org.ivan.simple.game.motion.MotionType;
-
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
+
+import org.ivan.simple.R;
+import org.ivan.simple.game.motion.Motion;
+import org.ivan.simple.game.motion.MotionType;
 
 public class SoundManager {
 	private SoundPool soundPool;
@@ -27,11 +27,7 @@ public class SoundManager {
 	public void playSound(Motion motion, Motion prevMotion) {
 		MotionType mt = motion.getType();
 		MotionType prevMt = prevMotion.getType();
-		float actualVolume = (float) audioManager
-				.getStreamVolume(AudioManager.STREAM_MUSIC);
-		float maxVolume = (float) audioManager
-				.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-		float volume = actualVolume / maxVolume;
+        float volume = getVolume();
 		switch(mt) {
 		case JUMP:
 			if(motion.getStage() == 0) {
@@ -71,4 +67,12 @@ public class SoundManager {
 			break;
 		}
 	}
+
+    private float getVolume() {
+        float actualVolume = (float) audioManager
+                .getStreamVolume(AudioManager.STREAM_MUSIC);
+        float maxVolume = (float) audioManager
+                .getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        return actualVolume / maxVolume;
+    }
 }
