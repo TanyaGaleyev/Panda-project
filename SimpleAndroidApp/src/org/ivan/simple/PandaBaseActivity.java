@@ -26,12 +26,12 @@ public abstract class PandaBaseActivity extends Activity {
     @Override
 	protected void onResume() {
 		super.onResume();
-		app().getMusicManger().resumeMusic();
+		app().getMusicManger().setMusicPaused(false);
 	}
 	
 	protected void onPause() {
 		super.onPause();
-        app().getMusicManger().pauseMusic();
+        app().getMusicManger().setMusicPaused(true);
 	}
 
     protected void gotoSettingsScreen() {

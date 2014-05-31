@@ -87,7 +87,7 @@ public class GameControl implements ControlChangeObserver {
 	}
 	
 	protected void playSound(LevelModel model) {
-		if(PandaApplication.getPandaApplication().getSound()) {
+		if(view.getGameContext().app().getSound()) {
 			soundManager.playSound(model.hero.currentMotion, model.hero.finishingMotion);
 		}
 	}

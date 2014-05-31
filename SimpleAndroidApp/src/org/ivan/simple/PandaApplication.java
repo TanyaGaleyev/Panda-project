@@ -102,13 +102,7 @@ public class PandaApplication extends Application {
 
 	public void setSound(boolean sound) {
 		this.sound = sound;
-		if(sound) {
-			musicManager.resumeMusic();
-		} else {
-			musicManager.pauseMusic();
-		}
 	}
-
 
     private Point windowSize() {
         WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);

@@ -26,7 +26,7 @@ public class SettingsModel {
         this.app = app;
         settingsPreferences = app.getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
         setEffectsEnabled(settingsPreferences.getBoolean(EFFECTS, true));
-        setMusicEnabled(music = settingsPreferences.getBoolean(MUSIC, true));
+        setMusicEnabled(settingsPreferences.getBoolean(MUSIC, true));
         int controlsId = settingsPreferences.getInt(CONTROLS, ControlsType.ONE_FINGER.ordinal());
         setControlsType(ControlsType.values()[controlsId]);
     }
@@ -39,6 +39,7 @@ public class SettingsModel {
 
     public void setMusicEnabled(boolean enabled) {
         music = enabled;
+        app.getMusicManger().setMusicEnabled(enabled);
         settingsPreferences.edit().putBoolean(MUSIC, music).commit();
     }
 
