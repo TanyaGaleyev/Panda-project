@@ -86,9 +86,14 @@ public class GameControl implements ControlChangeObserver {
 		return gameLoopThread;
 	}
 	
-	protected void playSound(LevelModel model) {
+	protected void playSound() {
 		if(view.getGameContext().app().getSound()) {
-			soundManager.playSound(model.hero.currentMotion, model.hero.finishingMotion);
+			soundManager.playSound(
+                    view.level.model.hero.currentMotion,
+                    view.level.model.hero.finishingMotion,
+                    view.level.model.getHeroCell(),
+                    view.prevCell
+            );
 		}
 	}
 
@@ -137,5 +142,25 @@ public class GameControl implements ControlChangeObserver {
     private void initControlProvider() {
         controlProvider = controlsFactory.createControlProvider(
                 view.getGameContext().app().getSettingsModel().getControlsType());
+    }
+
+    private boolean detonate = false;
+    protected void playDetonateSound() {
+        if (!detonate) {
+            detonate = true;
+            if (view.getGameContext().app().getSound()) {
+                soundManager.playDetonate();
+            }
+        }
+    }
+
+    private boolean win = false;
+    protected void playWinSound() {
+        if (!win) {
+            win = true;
+            if (view.getGameContext().app().getSound()) {
+                soundManager.playWin();
+            }
+        }
     }
 }

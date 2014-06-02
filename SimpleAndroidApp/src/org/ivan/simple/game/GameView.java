@@ -52,7 +52,7 @@ public class GameView extends SurfaceView {
 
     private Paint backgroundPaint;
 
-	private LevelCell prevCell;
+	protected LevelCell prevCell;
 	
 	private int levId = 0;
 	
@@ -200,6 +200,7 @@ public class GameView extends SurfaceView {
 			drawLose(canvas);
 		} else if(isReadyToPlayWinAnimation()) {
 			drawWin(canvas);
+            control.playWinSound();
 		}
 	}
 
@@ -311,7 +312,7 @@ public class GameView extends SurfaceView {
 			prevCell.updateCell(hero.model.currentMotion, hero.model.finishingMotion);
 		}
 		
-		control.playSound(level.model);
+		control.playSound();
 	}
 
     /**
@@ -378,7 +379,8 @@ public class GameView extends SurfaceView {
             loseDelay--;
             return true;
         } else {
-            return hero.playLoseAnimation();
+            control.playDetonateSound();
+            return hero.playDetonateAnimation();
         }
     }
 
@@ -388,7 +390,8 @@ public class GameView extends SurfaceView {
     }
 
     private boolean doMonsterLose() {
-        return hero.playLoseAnimation();
+        control.playDetonateSound();
+        return hero.playDetonateAnimation();
     }
 
     private boolean outOfAnimationBounds() {
@@ -430,11 +433,11 @@ public class GameView extends SurfaceView {
 
 	private String getBackgroundId(int levId) {
 		switch(levId) {
-		case 1: return "background/background_l_1.jpg";
-		case 2: return "background/background_l_2.jpg";
-		case 3: return "background/background_l_3.jpg";
-		case 4: return "background/background_l_4.jpg";
-		default:return "background/background_l_4.jpg";
+            case 1: return "background/background_l_1.jpg";
+            case 2: return "background/background_l_2.jpg";
+            case 3: return "background/background_l_3.jpg";
+            case 4: return "background/background_l_4.jpg";
+            default:return "background/background_l_4.jpg";
 		}
 	}
 	

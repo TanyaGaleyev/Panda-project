@@ -539,7 +539,7 @@ public class Hero {
 	/**
 	 * Play loose animation
 	 */
-	public boolean playLoseAnimation() {
+	public boolean playDetonateAnimation() {
 //		activeSprite = sprites.getSprite("fall");
         activeSprite = sprites.getSprite("detonate");
         activeSprite.setPlayOnce(true);
