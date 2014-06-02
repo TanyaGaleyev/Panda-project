@@ -186,7 +186,13 @@ public class LevelModel {
 	}
 
 	public LevelCell getHeroCell() {
-		return levelGrid.get(hero.getY(), hero.getX());
+        LevelCell ret;
+        try {
+            ret = levelGrid.get(hero.getY(), hero.getX());
+        } catch (ArrayIndexOutOfBoundsException e) {
+            ret = new LevelCell();
+        }
+        return ret;
 	}
 
 	private MotionType stayCheck(UserControlType controlType) {
@@ -260,7 +266,8 @@ public class LevelModel {
 	
 	private MotionType platformsCheck(UserControlType controlType) {
 		MotionType motionType;
-		switch (getHeroCell().getFloor().getType()){
+        MotionType prevMt = hero.finishingMotion.getType();
+        switch (getHeroCell().getFloor().getType()){
 
 		case ANGLE_RIGHT:
 			motionType = moveRight();			
@@ -287,10 +294,12 @@ public class LevelModel {
 			break;
 		case SLICK:
 			if(controlType == UserControlType.IDLE &&
-				(hero.finishingMotion.getType() == MotionType.JUMP_LEFT || hero.finishingMotion.getType() == MotionType.JUMP_RIGHT_WALL)) {
+				(prevMt == MotionType.JUMP_LEFT || prevMt == MotionType.JUMP_RIGHT_WALL ||
+                prevMt == MotionType.THROW_LEFT)) {
 				motionType = moveLeft();
 			} else if (controlType == UserControlType.IDLE &&
-					(hero.finishingMotion.getType() == MotionType.JUMP_RIGHT || hero.finishingMotion.getType() == MotionType.JUMP_LEFT_WALL)) {
+					(prevMt == MotionType.JUMP_RIGHT || prevMt == MotionType.JUMP_LEFT_WALL ||
+                    prevMt == MotionType.THROW_RIGHT)) {
 				motionType = moveRight();
 			} else {
 				motionType = stayCheck(controlType);
@@ -314,7 +323,7 @@ public class LevelModel {
 			}
 			break;
 		case WAY_UP_DOWN:
-			if(controlType == UserControlType.DOWN && hero.finishingMotion.getType() != MotionType.JUMP) {
+			if(controlType == UserControlType.DOWN && prevMt != MotionType.JUMP) {
 				if(hero.getY() + 1 > rows - 1) lose = true;
 				motionType = MotionType.FALL;
 			} else {
@@ -328,7 +337,7 @@ public class LevelModel {
 			motionType = stayCheck(controlType);
 			break;
 		case GLUE:
-			if(hero.finishingMotion.getType() == MotionType.STAY && controlType == UserControlType.UP) {
+			if(prevMt == MotionType.STAY && controlType == UserControlType.UP) {
 				controlType = UserControlType.IDLE;
 			}
 			motionType = stayCheck(controlType);
