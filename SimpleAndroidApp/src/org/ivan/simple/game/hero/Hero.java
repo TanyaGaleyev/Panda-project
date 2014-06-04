@@ -60,7 +60,7 @@ public class Hero {
 				finishingState) {
 			return activeSprite.getFrame() == 4;
 		}
-		if(model.currentMotion.getType() == MotionType.FALL_BLANSH) {
+        if(model.currentMotion.getType() == MotionType.FALL_BLANSH) {
 			return activeSprite.getFrame() % 8 == 0;
 		}
 		if(prevCell != null && prevCell.getFloor().getType() == PlatformType.GLUE) {
@@ -144,6 +144,7 @@ public class Hero {
 //			prevMt = currentMotion.getChildMotion().getType();
 //			prevStage = currentMotion.getChildMotion().getStage();
 //		}
+        activeSprite.goToFrame(0);
 		switch (mt) {
 		case STAY:
 			if(prevCell.getFloor().getType() == PlatformType.GLUE){
