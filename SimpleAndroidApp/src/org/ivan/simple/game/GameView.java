@@ -298,6 +298,7 @@ public class GameView extends SurfaceView {
 		// (obtained yet means that pre- or post- motion was just ended)
 		if(!continued) {
 			updateModel(controlType);
+            control.playSound();
 		}
 	}
 	
@@ -319,8 +320,6 @@ public class GameView extends SurfaceView {
 			hero.switchToCurrentMotion();
 			prevCell.updateCell(hero.model.currentMotion, hero.model.finishingMotion);
 		}
-
-//		control.playSound();
 	}
 
     /**
