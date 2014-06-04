@@ -1,5 +1,6 @@
 package org.ivan.simple.game.tutorial;
 
+import org.ivan.simple.UserControlType;
 import org.ivan.simple.game.GameActivity;
 import org.ivan.simple.game.GameView;
 import org.ivan.simple.game.level.Prize;
@@ -14,7 +15,7 @@ public class TutorialGame extends GameView {
     }
 
     @Override
-    protected void updateGame() {
+    protected void updateGame(UserControlType controlType) {
         final Prize prize = level.model.getHeroCell().getPrize();
         if(prize != null && prize.getKind() >= 2) {
             getControl().postStopManager();
@@ -25,6 +26,6 @@ public class TutorialGame extends GameView {
                 }
             });
         }
-        super.updateGame();
+        super.updateGame(controlType);
     }
 }

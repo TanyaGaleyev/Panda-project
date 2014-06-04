@@ -262,12 +262,13 @@ public class GameView extends SurfaceView {
 	 * Checks if game is ready to switch hero animation and/or motion
 	 * @return
 	 */
-	protected boolean readyForUpdate() {
+	protected boolean readyForUpdate(UserControlType controlType) {
 		// if the level is complete or lost the game should be not updatable on this level 
 		if(level.model.isLost()) return false;
 		if(isReadyToPlayWinAnimation()) return false;
 		
 		boolean inControlState = hero.isInControlState();
+        boolean interruptStayCase = checkInterruptStay(controlType);
 		/*
 		 * Hero is in control state usually when motion animation has ended
 		 * If hero animation is in starting state game model should not be updated
@@ -275,21 +276,28 @@ public class GameView extends SurfaceView {
 		 * If hero animation is in finishing state game model should not be updated
 		 * (after finishing animation next motion animation will begin)   
 		 */
-		boolean stateReady = inControlState;
+		boolean stateReady = inControlState || interruptStayCase;
 		// change behavior only if hero is in ready for update state AND is on grid point
 		return stateReady;
 	}
-	
-	/**
+
+    private boolean checkInterruptStay(UserControlType controlType) {
+        return hero.getRealMotion().getType() == MotionType.STAY &&
+                (controlType == UserControlType.LEFT ||
+                controlType == UserControlType.RIGHT ||
+                controlType == UserControlType.UP);
+    }
+
+    /**
 	 * Switch hero animation and motion
 	 */
-	protected void updateGame() {
+	protected void updateGame(UserControlType controlType) {
 		// try to end pre/post motion if it exists
 		boolean continued = continueModel();
 		// get new motion type only if it was not obtained yet
 		// (obtained yet means that pre- or post- motion was just ended)
 		if(!continued) {
-			updateModel();
+			updateModel(controlType);
 		}
 	}
 	
@@ -297,9 +305,9 @@ public class GameView extends SurfaceView {
 	 * Use user control to obtain next motion type, move hero in model (to next level cell),
 	 * switch hero motion animation and cell platforms reaction to this animation  
 	 */
-	private void updateModel() {
+	private void updateModel(UserControlType controlType) {
 		// Used to remember pressed control (action down performed and no other actions after)
-		UserControlType controlType = control.getUserControl();
+//		UserControlType controlType = control.getUserControl();
         // Store cell before update in purpose to play cell animation (like floor movement while jump)
 		prevCell = level.model.getHeroCell();
 		// calculate new motion depending on current motion, hero cell and user control

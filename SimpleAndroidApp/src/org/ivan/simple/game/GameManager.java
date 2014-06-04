@@ -3,6 +3,8 @@ package org.ivan.simple.game;
 
 import android.graphics.Canvas;
 
+import org.ivan.simple.UserControlType;
+
 public class GameManager extends Thread {
 	private GameView view;
 
@@ -15,8 +17,8 @@ public class GameManager extends Thread {
 		FPS = 25;
 		ticksPS = 1000 / FPS;
 	}
-	
-	public static void changeFPS(int dFPS) {
+
+    public static void changeFPS(int dFPS) {
 		if(FPS == 1) {
 			FPS = 5;
 			ticksPS = 1000 / FPS;
@@ -28,33 +30,39 @@ public class GameManager extends Thread {
 			ticksPS = 1000 / FPS;
 		}
 	}
-	
+
 	public static long getFPS() {
 		return FPS;
 	}
-	
+
 	public GameManager(GameView view) {
 		this.view = view;
 	}
-	
+
 	public void setRunning(boolean run) {
 		running = run;
 	}
-	
+
 	public boolean isRunning() {
 		return running;
 	}
-	
+
+    private UserControlType rememberedControl = UserControlType.IDLE;
+
 	@Override
 	public void run() {
-		
+
         long startTime;
         long sleepTime;
 		while(running) {
 			startTime = System.currentTimeMillis();
-			
-			if(view.readyForUpdate()) {
-				view.updateGame();
+
+            UserControlType userControl = view.getControl().getUserControl();
+            if(userControl == UserControlType.IDLE) userControl = rememberedControl;
+            rememberedControl = userControl;
+            if(view.readyForUpdate(userControl)) {
+				view.updateGame(userControl);
+                rememberedControl = UserControlType.IDLE;
 			}
             view.updatePositions();
 			doDraw(true);
