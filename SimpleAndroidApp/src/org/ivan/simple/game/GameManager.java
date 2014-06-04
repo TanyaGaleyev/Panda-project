@@ -48,6 +48,7 @@ public class GameManager extends Thread {
 	}
 
     private UserControlType rememberedControl = UserControlType.IDLE;
+    private long rememberTime = 0;
 
 	@Override
 	public void run() {
@@ -57,9 +58,16 @@ public class GameManager extends Thread {
 		while(running) {
 			startTime = System.currentTimeMillis();
 
+            if(System.currentTimeMillis() - rememberTime > ticksPS / 2) {
+                rememberedControl = UserControlType.IDLE;
+            }
             UserControlType userControl = view.getControl().getUserControl();
-            if(userControl == UserControlType.IDLE) userControl = rememberedControl;
-            rememberedControl = userControl;
+            if(userControl == UserControlType.IDLE) {
+                userControl = rememberedControl;
+            } else {
+                rememberTime = startTime;
+                rememberedControl = userControl;
+            }
             if(view.readyForUpdate(userControl)) {
 				view.updateGame(userControl);
                 rememberedControl = UserControlType.IDLE;
