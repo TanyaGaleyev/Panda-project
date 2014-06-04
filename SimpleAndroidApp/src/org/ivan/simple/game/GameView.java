@@ -60,6 +60,7 @@ public class GameView extends SurfaceView {
     private boolean monsterLose = false;
     private GameActivity gameContext;
 //    ServiceButtons serviceButtons;
+    private boolean initialized = false;
 
     public GameView(GameActivity context) {
 		super(context);
@@ -89,7 +90,10 @@ public class GameView extends SurfaceView {
 			
 			public void surfaceCreated(SurfaceHolder holder) {
 				System.out.println("surfaceCreated");
-				initSurface();
+                if(!initialized) {
+                    initialized = true;
+                    initSurface();
+                }
 				if(control.getGameLoopThread() == null) {
 					control.startManager();
 				}

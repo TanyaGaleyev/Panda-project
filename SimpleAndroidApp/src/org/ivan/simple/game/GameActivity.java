@@ -106,9 +106,15 @@ public class GameActivity extends PandaBaseActivity {
     	System.out.println("onPause!");
     }
 
+    private boolean firstRun = true;
     @Override
     protected void onResume() {
     	super.onResume();
+        if(firstRun) {
+            firstRun = false;
+        } else {
+            gotoSettingsScreen();
+        }
     }
 
     @Override
@@ -159,8 +165,8 @@ public class GameActivity extends PandaBaseActivity {
     @Override
     protected void gotoSettingsScreen() {
         SettingsInGamePanel settings = new SettingsInGamePanel(this, app().getSettingsModel());
-        final Dialog dialog = getSettingsDialog(PAUSE_TITLE, settings);
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        final Dialog settingsDialog = getSettingsDialog(PAUSE_TITLE, settings);
+        settingsDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
                 gControl.startManager();
@@ -169,7 +175,7 @@ public class GameActivity extends PandaBaseActivity {
         settings.setExitOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.cancel();
+                settingsDialog.cancel();
                 finish();
             }
         });
@@ -177,18 +183,18 @@ public class GameActivity extends PandaBaseActivity {
             @Override
             public void onClick(View view) {
                 gControl.restartGame();
-                dialog.cancel();
+                settingsDialog.cancel();
             }
         });
         settings.setResumeOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.cancel();
+                settingsDialog.cancel();
                 gControl.startManager();
             }
         });
         gControl.stopManager();
-        dialog.show();
+        settingsDialog.show();
     }
 
     /** Show an event in the LogCat view, for debugging */
