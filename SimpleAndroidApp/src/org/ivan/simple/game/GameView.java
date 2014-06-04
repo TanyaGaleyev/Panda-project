@@ -311,8 +311,8 @@ public class GameView extends SurfaceView {
 			hero.switchToCurrentMotion();
 			prevCell.updateCell(hero.model.currentMotion, hero.model.finishingMotion);
 		}
-		
-		control.playSound();
+
+//		control.playSound();
 	}
 
     /**
