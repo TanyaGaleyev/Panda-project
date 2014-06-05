@@ -56,7 +56,7 @@ public class Platform {
 			sprite.setAnimating(true);
 			break;
         case SPIKE_UP:
-            sprite = new Sprite("platform_h/spike.png", 1, 8);
+            sprite = new Sprite("platform_h/spike_up.png", 1, 8);
             sprite.setAnimating(true);
             break;
 		case WIN:
