@@ -38,7 +38,7 @@ public class Platform {
 			sprite = new Sprite("platform_h/throw_out_platform_left.png", 1, 8);
 			break;	
 		case TRAMPOLINE:
-			sprite = new Sprite("platform_h/trampoline_platform.png",1,6);
+			sprite = new Sprite("platform_h/trampoline_platform.png",1,8);
 			break;
 		case ELECTRO:
 			sprite = new Sprite("platform_h/electro_platform.png",1,4);
