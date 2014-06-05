@@ -9,6 +9,8 @@ import org.ivan.simple.PandaApplication;
 import org.ivan.simple.UserControlType;
 import org.ivan.simple.game.controls.ControlChangeObserver;
 import org.ivan.simple.game.controls.ControlsType;
+import org.ivan.simple.game.controls.ObtainedControl;
+import org.ivan.simple.game.controls.UserControl;
 import org.ivan.simple.game.controls.UserControlProvider;
 import org.ivan.simple.game.level.LevelModel;
 import org.ivan.simple.game.sound.SoundManager;
@@ -103,14 +105,14 @@ public class GameControl implements ControlChangeObserver {
     }
 
 
-    protected UserControlType getUserControl() {
-        UserControlType controlType;
+    protected UserControl getUserControl() {
+        UserControl control;
         if(!robotMode) {
-            controlType = controlProvider.getUserControl();
+            control = controlProvider.getUserControl();
         } else {
             if(autoControls.hasNext()) {
                 final SolutionStep step = autoControls.next();
-                controlType = step.getControl();
+                control = new ObtainedControl(step.getControl());
                 view.guideAnimation.init(step);
                 view.post(new Runnable() {
                     @Override
@@ -119,11 +121,11 @@ public class GameControl implements ControlChangeObserver {
                     }
                 });
             } else {
-                controlType = UserControlType.IDLE;
+                control = new ObtainedControl(UserControlType.IDLE);
                 view.getGameContext().stopTutorial();
             }
         }
-        return controlType;
+        return control;
     }
 
     public void toastMessage(Context context, String message) {

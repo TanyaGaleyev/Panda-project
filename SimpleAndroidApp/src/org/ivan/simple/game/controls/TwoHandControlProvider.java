@@ -22,12 +22,12 @@ public class TwoHandControlProvider implements UserControlProvider {
     }
 
     @Override
-    public UserControlType getUserControl() {
-        UserControlType controlType;
+    public UserControl getUserControl() {
+        UserControl controlType;
         if(obtainedControl == UserControlType.IDLE) {
-            controlType = pressedControl;
+            controlType = new PressedControl(pressedControl);
         } else {
-            controlType = obtainedControl;
+            controlType = new ObtainedControl(obtainedControl);
             obtainedControl = UserControlType.IDLE;
         }
         return controlType;

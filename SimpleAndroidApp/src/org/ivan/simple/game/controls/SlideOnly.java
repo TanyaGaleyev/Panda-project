@@ -12,24 +12,27 @@ import java.util.TimerTask;
  */
 public class SlideOnly implements UserControlProvider {
 
-    public static final int SLIDE_MIN_STEP = 30;
-    private final PivotPoint pivot;
+    public static final int SLIDE_MIN_STEP = 15;
     private UserControlType pressedControl = UserControlType.IDLE;
+    private boolean pressedUsed = true;
     private UserControlType obtainedControl = UserControlType.IDLE;
     private float[] startPressedY = new float[2];
     private float[] startPressedX = new float[2];
 
-    public SlideOnly(PivotPoint pivot) {
-        this.pivot = pivot;
-    }
+    public SlideOnly() {}
 
     @Override
-    public UserControlType getUserControl() {
-        UserControlType controlType;
+    public UserControl getUserControl() {
+        UserControl controlType;
         if(obtainedControl == UserControlType.IDLE) {
-            controlType = pressedControl;
+            if(pressedUsed) {
+                controlType = new PressedControl(pressedControl);
+            } else {
+                controlType = new ObtainedControl(pressedControl);
+            }
+            pressedUsed = true;
         } else {
-            controlType = obtainedControl;
+            controlType = new ObtainedControl(obtainedControl);
             obtainedControl = UserControlType.IDLE;
         }
         return controlType;
@@ -54,6 +57,7 @@ public class SlideOnly implements UserControlProvider {
                 if(event.getPointerCount() > 2) return true;
                 return true;
             case MotionEvent.ACTION_UP:
+                if(!pressedUsed) obtainedControl = pressedControl;
                 pressedControl = UserControlType.IDLE;
                 return true;
             case MotionEvent.ACTION_MOVE:
@@ -78,13 +82,15 @@ public class SlideOnly implements UserControlProvider {
                     }
                 }
                 return true;
+            default:
+                return false;
         }
-        return false;
     }
 
     private void receiveSlideControl(UserControlType control, int pointerId, float x, float y) {
+        if(pressedControl != control) pressedUsed = false;
         pressedControl = control;
-        obtainedControl = control;
+        obtainedControl = UserControlType.IDLE;
         startPressedY[pointerId] = y;
         startPressedX[pointerId] = x;
     }

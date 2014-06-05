@@ -27,7 +27,7 @@ public class ControlsFactory {
                 return new TwoHandControlProvider(new ScreenMiddleXProvider());
             case ONE_FINGER:
             default:
-                return new SlideOnly(new HeroPivot());
+                return new SlideOnly();
         }
     }
 

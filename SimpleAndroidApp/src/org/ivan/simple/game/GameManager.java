@@ -4,6 +4,7 @@ package org.ivan.simple.game;
 import android.graphics.Canvas;
 
 import org.ivan.simple.UserControlType;
+import org.ivan.simple.game.controls.UserControl;
 
 public class GameManager extends Thread {
 	private GameView view;
@@ -48,7 +49,7 @@ public class GameManager extends Thread {
 	}
 
     private UserControlType rememberedControl = UserControlType.IDLE;
-    private long rememberTime = 0;
+//    private long rememberTime = 0;
 
 	@Override
 	public void run() {
@@ -57,19 +58,9 @@ public class GameManager extends Thread {
         long sleepTime;
 		while(running) {
 			startTime = System.currentTimeMillis();
-
-            if(System.currentTimeMillis() - rememberTime > ticksPS / 2) {
-                rememberedControl = UserControlType.IDLE;
-            }
-            UserControlType userControl = view.getControl().getUserControl();
-            if(userControl == UserControlType.IDLE) {
-                userControl = rememberedControl;
-            } else {
-                rememberTime = startTime;
-                rememberedControl = userControl;
-            }
-            if(view.readyForUpdate(userControl)) {
-				view.updateGame(userControl);
+            UserControlType controlType = receiveUserControlType();
+            if(view.readyForUpdate(controlType)) {
+				view.updateGame(controlType);
                 rememberedControl = UserControlType.IDLE;
 			}
             view.updatePositions();
@@ -89,6 +80,21 @@ public class GameManager extends Thread {
             }
 		}
 	}
+
+    private UserControlType receiveUserControlType() {
+//        if(System.currentTimeMillis() - rememberTime > ticksPS * 8) {
+//            rememberedControl = UserControlType.IDLE;
+//        }
+        UserControl userControl = view.getControl().getUserControl();
+        UserControlType controlType = userControl.getControlType();
+        if(controlType == UserControlType.IDLE) {
+            controlType = rememberedControl;
+        } else if(userControl.getRememberControlType() != UserControlType.IDLE) {
+//            rememberTime = startTime;
+            rememberedControl = userControl.getRememberControlType();
+        }
+        return controlType;
+    }
 
     protected void doDraw(boolean update) {
 		Canvas c = null;
