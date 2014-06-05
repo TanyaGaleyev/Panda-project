@@ -371,6 +371,10 @@ public class LevelModel {
 		case CLOUD:
 			motionType = MotionType.CLOUD_IDLE;
 			break;
+        case SPIKE_UP:
+            lose = true;
+            motionType = stayCheck(controlType);
+            break;
 		default:
 			motionType = stayCheck(controlType);
 			break;	

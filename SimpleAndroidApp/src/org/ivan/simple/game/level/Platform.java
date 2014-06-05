@@ -31,7 +31,6 @@ public class Platform {
 		case ANGLE_LEFT:
 			sprite = new Sprite("platform_h/angle_platform_left.png", 1, 8);
 			break;
-			
 		case THROW_OUT_RIGHT:
 			sprite = new Sprite("platform_h/throw_out_platform_right.png", 1, 8);
 			break;
@@ -56,6 +55,10 @@ public class Platform {
 			sprite = new Sprite("platform_v/spike_v.png", 1, 8);
 			sprite.setAnimating(true);
 			break;
+        case SPIKE_UP:
+            sprite = new Sprite("platform_h/spike.png", 1, 8);
+            sprite.setAnimating(true);
+            break;
 		case WIN:
 			sprite = new Sprite("platform_h/win_platform.png", 1, 8);
 			sprite.setAnimating(true);

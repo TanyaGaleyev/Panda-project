@@ -38,9 +38,10 @@ public enum PlatformType {
 	TRANSPARENT_V,
 	WAY_UP_DOWN,
 	CLOUD,
+    SPIKE_UP,
 	
 	NONE;
-	
+
 	//0-none
 	//1-simple
 	//2- reduce
@@ -58,39 +59,39 @@ public enum PlatformType {
 	//14-slope
 	//15-one way right
 	//16-one way left
-	public static PlatformType getTypeById(int typeid, boolean horizontal) {
-		switch(typeid) {
-		case 1: return horizontal ? SIMPLE : SIMPLE_V;
-		case 2: return REDUCE;
-		case 3: return ANGLE_RIGHT;
-		case 4: return ANGLE_LEFT;
-		case 5: return TRAMPOLINE;
-		case 6: return ELECTRO;
-		case 7: return THROW_OUT_RIGHT;
-		case 8: return THROW_OUT_LEFT;
-		case 9: return SPRING;
-		case 10: return horizontal? SPIKE : SPIKE_V;
-		case 11: return TELEPORT_L_V;
-		case 12: return TELEPORT_R_V;
-		case 13: return SLICK;
-		case 14: return SLOPE;
-		case 15: return horizontal ? ONE_WAY_DOWN : ONE_WAY_RIGHT;
-		case 16: return horizontal ? ONE_WAY_UP : ONE_WAY_LEFT;
-		case 17: return SWITCH;
-		case 18: return UNLOCK;
-		case 19: return STRING;
-		case 20: return LIMIT;
-		case 21: return horizontal ? BRICK : BRICK_V;
-		case 22: return horizontal ? GLUE : GLUE_V;
-		case 23: return TELEPORT;
-		case 24: return horizontal ? TRANSPARENT : TRANSPARENT_V;
-		case 25: return WAY_UP_DOWN;
-		case 26: return INVISIBLE;
-		case 27: return CLOUD;
-		default:
-			return NONE;
-		}
-	}
+    public static PlatformType getTypeById(int typeid, boolean horizontal) {
+        switch(typeid) {
+            case 1: return horizontal ? SIMPLE : SIMPLE_V;
+            case 2: return REDUCE;
+            case 3: return ANGLE_RIGHT;
+            case 4: return ANGLE_LEFT;
+            case 5: return TRAMPOLINE;
+            case 6: return ELECTRO;
+            case 7: return THROW_OUT_RIGHT;
+            case 8: return THROW_OUT_LEFT;
+            case 9: return SPRING;
+            case 10: return horizontal? SPIKE : SPIKE_V;
+            case 11: return TELEPORT_L_V;
+            case 12: return TELEPORT_R_V;
+            case 13: return SLICK;
+            case 14: return SLOPE;
+            case 15: return horizontal ? ONE_WAY_DOWN : ONE_WAY_RIGHT;
+            case 16: return horizontal ? ONE_WAY_UP : ONE_WAY_LEFT;
+            case 17: return SWITCH;
+            case 18: return UNLOCK;
+            case 19: return STRING;
+            case 20: return LIMIT;
+            case 21: return horizontal ? BRICK : BRICK_V;
+            case 22: return horizontal ? GLUE : GLUE_V;
+            case 23: return TELEPORT;
+            case 24: return horizontal ? TRANSPARENT : TRANSPARENT_V;
+            case 25: return WAY_UP_DOWN;
+            case 26: return INVISIBLE;
+            case 27: return CLOUD;
+            case 28: return SPIKE_UP;
+            default: return NONE;
+        }
+    }
 	
 }
 
