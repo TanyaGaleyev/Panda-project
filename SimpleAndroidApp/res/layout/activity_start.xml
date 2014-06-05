@@ -13,14 +13,12 @@
         android:text="@string/welcome" />
 
     <TableLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/text_view"
-        android:layout_marginBottom="60dp"
-        android:layout_marginRight="60dp"
-        android:layout_marginLeft="60dp"
-        android:id="@+id/packs_panel">
+        android:id="@+id/packs_panel"
+        android:gravity="center">
 
         <!--<TableRow-->
             <!--android:layout_width="fill_parent"-->

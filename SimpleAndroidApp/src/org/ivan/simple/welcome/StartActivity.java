@@ -5,7 +5,6 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -26,7 +25,8 @@ public class StartActivity extends PandaBaseActivity {
 	
 	public static final String SET_ID = "Id of levels set";
 	public static final String LAST_FINISHED_SET = "Last finished set of levels";
-	private final String[] levelsCaptions = {"ACCESS", "BUTTON", "ZOMBIE", "SYSTEM"};
+    public static final int PACKS_IN_ROW = 3;
+    private final String[] levelsCaptions = {"ACCESS", "BUTTON", "ZOMBIE", "SYSTEM"};
 	public final int levCount = levelsCaptions.length;
 	private SparseArray<ImageView> levButtons = new SparseArray<ImageView>();
 
@@ -71,22 +71,17 @@ public class StartActivity extends PandaBaseActivity {
                 .getInt(LAST_FINISHED_SET, 0);
     }
 
+    private float chestRatio = 173f / 225f;
+
     private void initPacksButtons() {
         TableLayout buttonsPane = (TableLayout) findViewById(R.id.packs_panel);
         TableRow row = null;
         TableLayout.LayoutParams rowParams = new TableLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
-        rowParams.weight = 1;
-        TableRow.LayoutParams packButtonParam = new TableRow.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        packButtonParam.weight = 1;
-        packButtonParam.setMargins(5, 5, 5, 5);
-        packButtonParam.gravity = Gravity.CENTER;
-
+        TableRow.LayoutParams packButtonParam = createPackLayoutParams();
         for(int i = 0; i < levCount; i++) {
-            if(i % 3 == 0) {
+            if(i % PACKS_IN_ROW == 0) {
                 row = new TableRow(this);
                 buttonsPane.addView(row, rowParams);
             }
@@ -94,10 +89,10 @@ public class StartActivity extends PandaBaseActivity {
 //            levbtn.setText(levelsCaptions[i]);
             final int id = i + 1;
             if(id <= lastFinishedSet() + 1) {
-                levbtn.setImageResource(R.drawable.chest_open);
+                levbtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.chest_open));
                 levbtn.setEnabled(true);
             } else {
-                levbtn.setImageResource(R.drawable.chest_close);
+                levbtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.chest_close));
                 levbtn.setEnabled(false);
             }
             levbtn.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +107,21 @@ public class StartActivity extends PandaBaseActivity {
         }
     }
 
+    private TableRow.LayoutParams createPackLayoutParams() {
+        float availableWidth = app().displayWidth * 0.8f;
+        float availableHeight = app().displayHeight * 0.55f;
+        int chestWidth = (int) (availableWidth / PACKS_IN_ROW);
+        int chestHeight = (int) (availableHeight / Math.ceil((float) levCount / PACKS_IN_ROW));
+        if(chestWidth * chestRatio < chestHeight) {
+            chestHeight = (int) (chestWidth * chestRatio);
+        } else {
+            chestWidth = (int) (chestHeight / chestRatio);
+        }
+        TableRow.LayoutParams packButtonParam = new TableRow.LayoutParams(chestWidth, chestHeight);
+        packButtonParam.setMargins(10, 10, 10, 10);
+        return packButtonParam;
+    }
+
 
     @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -122,13 +132,13 @@ public class StartActivity extends PandaBaseActivity {
             int startedSet = data.getIntExtra(SET_ID, 0);
             int packToOpenId = startedSet + 1;
             final ImageView packToOpen;
+            setComplete = true;
             if(setComplete && (packToOpen = levButtons.get(packToOpenId)) != null) {
                 final AnimationDrawable chestOpening =
                         app().loadAnimationFromFolder("animations/menu/pack_opening");
                 chestOpening.setOneShot(true);
                 packToOpen.setBackgroundDrawable(chestOpening);
                 // TODO rake here, get rid of alpha channel manipulation, calculate chests sizes instead
-                packToOpen.setImageAlpha(0);
                 packToOpen.post(new Runnable() {
                     @Override
                     public void run() {
@@ -140,9 +150,7 @@ public class StartActivity extends PandaBaseActivity {
                                 packToOpen.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        packToOpen.setImageAlpha(255);
-                                        packToOpen.setImageResource(R.drawable.chest_open);
-                                        packToOpen.setBackgroundDrawable(null);
+                                        packToOpen.setBackgroundDrawable(getResources().getDrawable(R.drawable.chest_open));
                                     }
                                 });
                             }
