@@ -258,12 +258,14 @@ public class LevelChooseView extends SurfaceView {
     }
 
     private void drawLevelsIcons(Canvas canvas) {
+        int k = 1;
         for(int i = 0; i < levels.length; i++) {
             for(int j = 0; j < levels[i].length; j++) {
                 int x = getScreenX(j);
                 int y = getScreenY(i);
                 drawOnCenterCoordinates(border, x, y, canvas);
-                drawTextOnCenter("" + levels[i][j][0], x, y, canvas);
+//                drawTextOnCenter("" + levels[i][j][0], x, y, canvas);
+                drawTextOnCenter("" + k++, x, y, canvas);
                 drawScore(i, j, canvas);
             }
         }
