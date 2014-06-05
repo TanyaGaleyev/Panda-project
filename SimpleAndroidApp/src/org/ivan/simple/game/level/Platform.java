@@ -440,8 +440,13 @@ public class Platform {
 	public int getStatus() {
 		return currentStatus;
 	}
-	
-	public void onDraw(Canvas canvas, int x, int y, boolean update) {
+
+    public void setStatus(int currentStatus) {
+        this.currentStatus = currentStatus;
+        sprite.changeSet(currentStatus);
+    }
+
+    public void onDraw(Canvas canvas, int x, int y, boolean update) {
 		if(sprite != null) {
 			if(type == PlatformType.NONE && !sprite.isAnimatingOrDelayed()) {
 				sprite = null;

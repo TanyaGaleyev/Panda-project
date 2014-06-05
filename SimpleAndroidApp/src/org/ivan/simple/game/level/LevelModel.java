@@ -55,7 +55,7 @@ public class LevelModel {
         }
         int[][] routeArray = levelInfo.monsterRoute;
 
-        if(routeArray != null && (lev == 3 || lev == 5 || lev==8))  {
+        if(routeArray != null && routeArray.length != 0)  {
             MonsterStrategy route = RouteDirectionStrategyFactory.createRouteDirectionStrategy(routeArray);
             monster = new MonsterModel(routeArray[0][1], routeArray[0][0], route, 1);
         } else {
@@ -113,7 +113,26 @@ public class LevelModel {
 		}
         initFloorTps(platformMetaMap);
         initLeftRightTps(platformMetaMap);
+        initStatePlatforms(platformMetaMap);
         if(winCell == null) winCell = levelGrid.get(0, 0);
+    }
+
+    private void initStatePlatforms(Map<Platform, int[]> platformMetaMap) {
+        for (LevelGrid.VerticalPlatformCoords vp : levelGrid.verticalPlatforms()) {
+            initStatus(vp.getPlatform(), platformMetaMap);
+        }
+        for (LevelGrid.HorizontalPlatformCoords hp : levelGrid.horizontalPlatforms()) {
+            initStatus(hp.getPlatform(), platformMetaMap);
+        }
+    }
+
+    private void initStatus(Platform wall, Map<Platform, int[]> platformMetaMap) {
+        int[] meta;
+        if((meta = platformMetaMap.get(wall)).length > 1 &&
+                (wall.getType() == PlatformType.LIMIT || wall.getType() == PlatformType.REDUCE ||
+                wall.getType() == PlatformType.BRICK || wall.getType() == PlatformType.BRICK_V)) {
+            wall.setStatus(meta[1]);
+        }
     }
 
     private void initLeftRightTps(Map<Platform, int[]> platformMetaMap) {
