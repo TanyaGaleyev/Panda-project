@@ -229,23 +229,30 @@ public class LevelChooseView extends SurfaceView {
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(2);
         paint.setPathEffect(new DashPathEffect(new float[] {5,2}, 0));
+        int gap = 5;
         for(int i = 0; i < LEVELS_COLS; i++) {
-            canvas.drawLine(
-                    getScreenX(i),
-                    getScreenY(0),
-                    getScreenX(i),
-                    getScreenY(LEVELS_ROWS - 1),
-                    paint
-            );
+            int colX = getScreenX(i);
+            for(int j = 0; j < LEVELS_ROWS - 1; j++) {
+                canvas.drawLine(
+                        colX,
+                        getScreenY(j) + border.getWidth() / 2 - gap,
+                        colX,
+                        getScreenY(j + 1) - border.getWidth() / 2 + gap,
+                        paint
+                );
+            }
         }
         for(int j = 0; j < LEVELS_ROWS; j++) {
-            canvas.drawLine(
-                    getScreenX(0),
-                    getScreenY(j),
-                    getScreenX(LEVELS_COLS - 1),
-                    getScreenY(j),
-                    paint
-            );
+            int rowY = getScreenY(j);
+            for(int i = 0; i < LEVELS_COLS - 1; i++) {
+                canvas.drawLine(
+                        getScreenX(i) + border.getWidth() / 2 - gap,
+                        rowY,
+                        getScreenX(i + 1) - border.getWidth() / 2 + gap,
+                        rowY,
+                        paint
+                );
+            }
         }
     }
 
