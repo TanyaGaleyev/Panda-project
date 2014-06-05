@@ -20,6 +20,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -262,10 +263,16 @@ public class LevelChooseView extends SurfaceView {
                 int x = getScreenX(j);
                 int y = getScreenY(i);
                 drawOnCenterCoordinates(border, x, y, canvas);
-                canvas.drawText("" + levels[i][j][0], x - 16, y + 16, textPaint);
+                drawTextOnCenter("" + levels[i][j][0], x, y, canvas);
                 drawScore(i, j, canvas);
             }
         }
+    }
+
+    private void drawTextOnCenter(String text, int x, int y, Canvas canvas) {
+        Rect textRect = new Rect();
+        textPaint.getTextBounds(text, 0, text.length(), textRect);
+        canvas.drawText(text, x - textRect.centerX(), y - textRect.centerY(), textPaint);
     }
 
     private void drawScore(int i, int j, Canvas canvas) {
