@@ -264,8 +264,13 @@ public class Platform {
 			return;
 		}
 		if(type == PlatformType.INVISIBLE) {
-			sprite.playOnce(currentStatus == 0);
-			currentStatus = 1;
+            if(currentStatus == 0) {
+                sprite.playOnce(true);
+                currentStatus = 1;
+            } else {
+                sprite.changeSet(1);
+                sprite.playOnce();
+            }
 			return;
 		}
 		if(type == PlatformType.TRANSPARENT) {
