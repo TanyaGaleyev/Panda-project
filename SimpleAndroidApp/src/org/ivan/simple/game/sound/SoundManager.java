@@ -40,6 +40,12 @@ public class SoundManager {
         mapSound(R.raw.reduce);
         mapSound(R.raw.slick);
         mapSound(R.raw.tp);
+        mapSound(R.raw.blansh);
+        mapSound(R.raw.brick);
+        mapSound(R.raw.switch0);
+        mapSound(R.raw.open);
+        mapSound(R.raw.magnet);
+        mapSound(R.raw.trampoline);
     }
 
     private void mapSound(int resId) {
@@ -49,7 +55,10 @@ public class SoundManager {
     public void playSound(Motion motion, Motion prevMotion, LevelCell nextCell, LevelCell prevCell) {
         MotionType mt = motion.getType();
         MotionType prevMt = prevMotion.getType();
-        if(prevCell.getFloor().getType() == PlatformType.REDUCE) {
+        PlatformType prevFloor = prevCell.getFloor().getType();
+        PlatformType prevLeft = prevCell.getLeft().getType();
+        PlatformType prevRight = prevCell.getRight().getType();
+        if(prevFloor == PlatformType.REDUCE && (mt != MotionType.JUMP || prevMotion.getStage() == 0)) {
             playSound(R.raw.reduce);
             return;
         }
@@ -57,34 +66,60 @@ public class SoundManager {
             case JUMP:
                 if(motion.getStage() == 0) {
                     playSound(R.raw.jump);
-                } else if (prevCell.getFloor().getType() == PlatformType.TRAMPOLINE) {
-                    playSound(R.raw.war);
+                } else if (prevFloor == PlatformType.TRAMPOLINE) {
+                    playSound(R.raw.trampoline);
+                } else if(prevCell.getRoof().getType() == PlatformType.ONE_WAY_UP) {
+                    playSound(R.raw.open);
                 }
                 break;
             case JUMP_LEFT:
-            case JUMP_RIGHT:
-                if(prevMt == MotionType.JUMP || prevMt == MotionType.TP) {
-                } else if(prevCell.getFloor().getType() == PlatformType.ANGLE_LEFT ||
-                prevCell.getFloor().getType() == PlatformType.ANGLE_RIGHT) {
-                    playSound(R.raw.angle);
-                } else if(prevCell.getFloor().getType() == PlatformType.SLICK) {
-                    playSound(R.raw.slick);
+                if(prevLeft == PlatformType.LIMIT || prevLeft == PlatformType.ONE_WAY_LEFT) {
+                    playSound(R.raw.open);
                 } else {
-                    playSound(R.raw.jump);
+                    jumpLR(prevMt, prevFloor);
+                }
+                break;
+            case JUMP_RIGHT:
+                if(prevRight == PlatformType.LIMIT || prevRight == PlatformType.ONE_WAY_RIGHT) {
+                    playSound(R.raw.open);
+                } else {
+                    jumpLR(prevMt, prevFloor);
                 }
                 break;
             case JUMP_LEFT_WALL:
+                if(prevLeft == PlatformType.SWITCH) {
+                    playSound(R.raw.switch0);
+                } else if(prevLeft == PlatformType.BRICK_V) {
+                    playSound(R.raw.brick);
+                } else {
+                    playSound(R.raw.coin);
+                }
+                break;
             case JUMP_RIGHT_WALL:
-                playSound(R.raw.coin);
+                if(prevRight == PlatformType.SWITCH) {
+                    playSound(R.raw.switch0);
+                } else if(prevRight == PlatformType.BRICK_V) {
+                    playSound(R.raw.brick);
+                } else if(prevRight == PlatformType.LIMIT) {
+                    playSound(R.raw.open);
+                } else {
+                    playSound(R.raw.coin);
+                }
                 break;
             case FLY_LEFT:
             case FLY_RIGHT:
                 if(motion.getStage() == 0) {
                     playSound(R.raw.fly);
+                } else if(prevLeft == PlatformType.ONE_WAY_LEFT || prevRight == PlatformType.ONE_WAY_RIGHT) {
+                    playSound(R.raw.open);
                 }
                 break;
             case BEAT_ROOF:
-                playSound(R.raw.war);
+                if(prevCell.getRoof().getType() == PlatformType.BRICK) {
+                    playSound(R.raw.brick);
+                } else {
+                    playSound(R.raw.war);
+                }
                 break;
             case THROW_LEFT:
             case THROW_RIGHT:
@@ -93,10 +128,19 @@ public class SoundManager {
                 }
                 break;
             case FALL:
+                if(prevFloor == PlatformType.ONE_WAY_DOWN || prevFloor == PlatformType.WAY_UP_DOWN) {
+                    playSound(R.raw.open);
+                }
+                break;
             case FALL_BLANSH:
+//                playSound(R.raw.blansh);
+                break;
             case STICK_LEFT:
             case STICK_RIGHT:
+                break;
             case MAGNET:
+                playSound(R.raw.magnet);
+                break;
             case TP:
                 break;
             case TP_LEFT:
@@ -104,8 +148,9 @@ public class SoundManager {
                 playSound(R.raw.tp);
                 break;
             case STAY:
-                if(prevCell.getFloor().getType() == PlatformType.BRICK ||
-                        prevCell.getFloor().getType() == PlatformType.GLUE) {
+                if(prevFloor == PlatformType.GLUE) {
+                } else if(prevFloor == PlatformType.BRICK) {
+                    playSound(R.raw.brick);
                 } else {
                     playSound(R.raw.jump);
                 }
@@ -113,6 +158,18 @@ public class SoundManager {
             default:
                 playSound(R.raw.jump);
                 break;
+        }
+    }
+
+    private void jumpLR(MotionType prevMt, PlatformType prevFloor) {
+        if(prevMt == MotionType.JUMP || prevMt == MotionType.TP) {
+        } else if(prevFloor == PlatformType.ANGLE_LEFT ||
+                prevFloor == PlatformType.ANGLE_RIGHT) {
+            playSound(R.raw.angle);
+        } else if(prevFloor == PlatformType.SLICK) {
+            playSound(R.raw.slick);
+        } else {
+            playSound(R.raw.jump);
         }
     }
 
