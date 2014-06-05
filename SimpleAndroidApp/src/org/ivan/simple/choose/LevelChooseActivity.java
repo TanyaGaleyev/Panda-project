@@ -143,10 +143,4 @@ public class LevelChooseActivity extends PandaBaseActivity {
 		setResult(RESULT_OK, resultIntent);
 		finish();
 	}
-	
-//	@Override
-//	protected void onDestroy() {
-//		super.onDestroy();
-//		view = null;
-//	}
 }
