@@ -18,7 +18,7 @@ public class MonsterFactory {
             monsterSprite = new Sprite("monster/whirligig.png", 1, 16);
 			break;
 		case 3:
-            monsterSprite = new Sprite("monster/monster2.png", 2, 16);
+            monsterSprite = new Sprite("monster/monster.png", 1, 32);
 			break;
 		default:
             monsterSprite = new Sprite("monster/dishes.png", 1, 16);
