@@ -46,6 +46,7 @@ public class SoundManager {
         mapSound(R.raw.open);
         mapSound(R.raw.magnet);
         mapSound(R.raw.trampoline);
+        mapSound(R.raw.transparent);
     }
 
     private void mapSound(int resId) {
@@ -58,6 +59,7 @@ public class SoundManager {
         PlatformType prevFloor = prevCell.getFloor().getType();
         PlatformType prevLeft = prevCell.getLeft().getType();
         PlatformType prevRight = prevCell.getRight().getType();
+        PlatformType prevRoof = prevCell.getRoof().getType();
         if(prevFloor == PlatformType.REDUCE && (mt != MotionType.JUMP || prevMotion.getStage() == 0)) {
             playSound(R.raw.reduce);
             return;
@@ -70,11 +72,15 @@ public class SoundManager {
                     playSound(R.raw.trampoline);
                 } else if(prevCell.getRoof().getType() == PlatformType.ONE_WAY_UP) {
                     playSound(R.raw.open);
+                } else if(prevRoof == PlatformType.TRANSPARENT) {
+                    playSound(R.raw.transparent);
                 }
                 break;
             case JUMP_LEFT:
                 if(prevLeft == PlatformType.LIMIT || prevLeft == PlatformType.ONE_WAY_LEFT) {
                     playSound(R.raw.open);
+                } else if(prevLeft == PlatformType.TRANSPARENT_V) {
+                    playSound(R.raw.transparent);
                 } else {
                     jumpLR(prevMt, prevFloor);
                 }
@@ -82,6 +88,8 @@ public class SoundManager {
             case JUMP_RIGHT:
                 if(prevRight == PlatformType.LIMIT || prevRight == PlatformType.ONE_WAY_RIGHT) {
                     playSound(R.raw.open);
+                } else if(prevRight == PlatformType.TRANSPARENT_V) {
+                    playSound(R.raw.transparent);
                 } else {
                     jumpLR(prevMt, prevFloor);
                 }
@@ -110,8 +118,11 @@ public class SoundManager {
             case FLY_RIGHT:
                 if(motion.getStage() == 0) {
                     playSound(R.raw.fly);
-                } else if(prevLeft == PlatformType.ONE_WAY_LEFT || prevRight == PlatformType.ONE_WAY_RIGHT) {
+                } else if(prevLeft == PlatformType.ONE_WAY_LEFT || prevRight == PlatformType.ONE_WAY_RIGHT ||
+                        prevLeft == PlatformType.LIMIT || prevRight == PlatformType.LIMIT) {
                     playSound(R.raw.open);
+                } else if(prevLeft == PlatformType.TRANSPARENT_V || prevRight == PlatformType.TRANSPARENT_V) {
+                    playSound(R.raw.transparent);
                 }
                 break;
             case BEAT_ROOF:
@@ -130,9 +141,14 @@ public class SoundManager {
             case FALL:
                 if(prevFloor == PlatformType.ONE_WAY_DOWN || prevFloor == PlatformType.WAY_UP_DOWN) {
                     playSound(R.raw.open);
+                } else if(prevFloor == PlatformType.TRANSPARENT) {
+                    playSound(R.raw.transparent);
                 }
                 break;
             case FALL_BLANSH:
+                if(prevFloor == PlatformType.TRANSPARENT) {
+                    playSound(R.raw.transparent);
+                }
 //                playSound(R.raw.blansh);
                 break;
             case STICK_LEFT:
