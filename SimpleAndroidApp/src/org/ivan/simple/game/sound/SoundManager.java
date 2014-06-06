@@ -62,17 +62,19 @@ public class SoundManager {
         PlatformType prevLeft = prevCell.getLeft().getType();
         PlatformType prevRight = prevCell.getRight().getType();
         PlatformType prevRoof = prevCell.getRoof().getType();
-        if(prevFloor == PlatformType.REDUCE && (mt != MotionType.JUMP || motion.getStage() == 0)) {
-            playSound(R.raw.reduce);
-            return;
-        }
-        if(prevFloor == PlatformType.STRING && (mt != MotionType.JUMP || motion.getStage() == 0)) {
-            playSound(R.raw.string);
-            return;
+        if(mt != MotionType.FLY_LEFT && mt != MotionType.FLY_RIGHT) {
+            if (prevFloor == PlatformType.REDUCE && (mt != MotionType.JUMP || motion.getStage() == 0)) {
+                playSound(R.raw.reduce);
+                return;
+            }
+            if (prevFloor == PlatformType.STRING && (mt != MotionType.JUMP || motion.getStage() == 0)) {
+                playSound(R.raw.string);
+                return;
+            }
         }
         switch(mt) {
             case JUMP:
-                if(motion.getStage() == 0) {
+                if(motion.getStage() == 0 && prevFloor != PlatformType.SPIKE_UP) {
                     playSound(R.raw.jump);
                 } else if (prevFloor == PlatformType.TRAMPOLINE) {
                     playSound(R.raw.trampoline);
@@ -105,7 +107,7 @@ public class SoundManager {
                     playSound(R.raw.switch0);
                 } else if(prevLeft == PlatformType.BRICK_V) {
                     playSound(R.raw.brick);
-                } else {
+                } else if(prevFloor != PlatformType.SPIKE_UP && prevLeft != PlatformType.SPIKE_V) {
                     playSound(R.raw.coin);
                 }
                 break;
@@ -116,7 +118,7 @@ public class SoundManager {
                     playSound(R.raw.brick);
                 } else if(prevRight == PlatformType.LIMIT) {
                     playSound(R.raw.open);
-                } else {
+                } else if(prevFloor != PlatformType.SPIKE_UP && prevRight != PlatformType.SPIKE_V) {
                     playSound(R.raw.coin);
                 }
                 break;
@@ -134,7 +136,7 @@ public class SoundManager {
             case BEAT_ROOF:
                 if(prevRoof == PlatformType.BRICK) {
                     playSound(R.raw.brick);
-                } else {
+                } else if(prevRoof != PlatformType.SPIKE) {
                     playSound(R.raw.war);
                 }
                 break;
@@ -179,7 +181,7 @@ public class SoundManager {
                         playSound(R.raw.glue);
                 } else if(prevFloor == PlatformType.BRICK) {
                     playSound(R.raw.brick);
-                } else {
+                } else if(prevFloor != PlatformType.SPIKE_UP) {
                     playSound(R.raw.jump);
                 }
                 break;
@@ -196,7 +198,7 @@ public class SoundManager {
             playSound(R.raw.angle);
         } else if(prevFloor == PlatformType.SLICK) {
             playSound(R.raw.slick);
-        } else {
+        } else if(prevFloor != PlatformType.SPIKE_UP) {
             playSound(R.raw.jump);
         }
     }
