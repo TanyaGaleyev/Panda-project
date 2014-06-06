@@ -20,6 +20,7 @@
     "col" : 8
 },
 "monsterRoute" : [[8, 4], [0, 4]],
+"monsterType" : 2,
 "scores" : {
     "lowScore" : 3,
     "mediumScore" : 10,

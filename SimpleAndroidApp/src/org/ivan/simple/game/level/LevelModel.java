@@ -57,7 +57,7 @@ public class LevelModel {
 
         if(routeArray != null && routeArray.length != 0)  {
             MonsterStrategy route = RouteDirectionStrategyFactory.createRouteDirectionStrategy(routeArray);
-            monster = new MonsterModel(routeArray[0][1], routeArray[0][0], route, 1);
+            monster = new MonsterModel(routeArray[0][1], routeArray[0][0], route, levelInfo.monsterType);
         } else {
             monster = null;
         }

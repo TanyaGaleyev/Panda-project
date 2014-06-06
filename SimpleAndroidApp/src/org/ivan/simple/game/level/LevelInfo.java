@@ -12,6 +12,7 @@ public class LevelInfo {
     public final CellCoords winCell;
     public final int[][] monsterRoute;
     public final ScoreStruct scoreStruct;
+    public final int monsterType;
 
     public LevelInfo(
             int[][][][] levelGrid,
@@ -19,12 +20,13 @@ public class LevelInfo {
             CellCoords startCell,
             CellCoords winCell,
             int[][] monsterRoute,
-            ScoreStruct scoreStruct) {
+            int monsterType, ScoreStruct scoreStruct) {
         this.levelGrid = levelGrid;
         this.prizesMap = prizesMap;
         this.startCell = startCell;
         this.winCell = winCell;
         this.monsterRoute = monsterRoute;
+        this.monsterType = monsterType;
         this.scoreStruct = scoreStruct;
     }
 }

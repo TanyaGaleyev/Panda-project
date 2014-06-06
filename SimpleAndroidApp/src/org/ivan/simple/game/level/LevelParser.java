@@ -25,6 +25,7 @@ public class LevelParser {
     public static final String SCORES_KEY = "scores";
     public static final String LEVEL_GRID_KEY = "level";
     public static final String LEVELS_BASEDIR = "levels/";
+    public static final String MONSTER_TYPE_KEY = "monsterType";
     private final AssetManager assets;
 
     public LevelParser(Context context) {
@@ -39,6 +40,7 @@ public class LevelParser {
                 parseCell(levelJson.getJSONObject(START_CELL_KEY)),
                 parseCell(levelJson.getJSONObject(WIN_CELL_KEY)),
                 levelJson.has(ROUTE_KEY) ? parse2dim(levelJson.getJSONArray(ROUTE_KEY)) : null,
+                levelJson.has(MONSTER_TYPE_KEY) ? levelJson.getInt(MONSTER_TYPE_KEY) : 0,
                 parseScores(levelJson.getJSONObject(SCORES_KEY))
         );
     }
