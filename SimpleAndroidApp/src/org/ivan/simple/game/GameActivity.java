@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
 import org.ivan.simple.choose.LevelChooseActivity;
+import org.ivan.simple.game.tutorial.MessageTutorialGame;
 import org.ivan.simple.game.tutorial.Solutions;
 import org.ivan.simple.game.tutorial.TutorialGame;
 import org.ivan.simple.settings.SettingsInGamePanel;
@@ -51,7 +52,7 @@ public class GameActivity extends PandaBaseActivity {
         });
 //        GameView gView = (GameView) findViewById(R.id.game);
         RelativeLayout contentPanel = (RelativeLayout) findViewById(R.id.game_content_panel);
-        GameView gView = levid == 9 ? new TutorialGame(this) : new GameView(this);
+        GameView gView = levid == 9 ? new MessageTutorialGame(this) : new GameView(this);
         contentPanel.addView(gView);
         gView.setLevId(levid);
         gControl = gView.getControl();

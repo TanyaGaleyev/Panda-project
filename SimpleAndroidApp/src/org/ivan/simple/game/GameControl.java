@@ -111,15 +111,10 @@ public class GameControl implements ControlChangeObserver {
             control = controlProvider.getUserControl();
         } else {
             if(autoControls.hasNext()) {
-                final SolutionStep step = autoControls.next();
+                SolutionStep step = autoControls.next();
                 control = new ObtainedControl(step.getControl());
                 view.guideAnimation.init(step);
-                view.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        toastMessage(view.getContext(), step.getMessage());
-                    }
-                });
+                toastMessage(view.getContext(), step.getMessage());
             } else {
                 control = new ObtainedControl(UserControlType.IDLE);
                 view.getGameContext().stopTutorial();
@@ -128,12 +123,19 @@ public class GameControl implements ControlChangeObserver {
         return control;
     }
 
-    public void toastMessage(Context context, String message) {
-        if(message.length() > 0) {
-            Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-            toast.show();
-        }
+    private Toast lastToast;
+    public void toastMessage(final Context context, final String message) {
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                if(message.length() > 0) {
+                    if(lastToast != null) lastToast.cancel();
+                    lastToast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+                    lastToast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                    lastToast.show();
+                }
+            }
+        });
     }
 
     @Override
