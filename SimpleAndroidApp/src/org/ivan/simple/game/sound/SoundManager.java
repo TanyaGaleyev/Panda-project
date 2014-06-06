@@ -47,6 +47,8 @@ public class SoundManager {
         mapSound(R.raw.magnet);
         mapSound(R.raw.trampoline);
         mapSound(R.raw.transparent);
+        mapSound(R.raw.glue);
+        mapSound(R.raw.string);
     }
 
     private void mapSound(int resId) {
@@ -60,8 +62,12 @@ public class SoundManager {
         PlatformType prevLeft = prevCell.getLeft().getType();
         PlatformType prevRight = prevCell.getRight().getType();
         PlatformType prevRoof = prevCell.getRoof().getType();
-        if(prevFloor == PlatformType.REDUCE && (mt != MotionType.JUMP || prevMotion.getStage() == 0)) {
+        if(prevFloor == PlatformType.REDUCE && (mt != MotionType.JUMP || motion.getStage() == 0)) {
             playSound(R.raw.reduce);
+            return;
+        }
+        if(prevFloor == PlatformType.STRING && (mt != MotionType.JUMP || motion.getStage() == 0)) {
+            playSound(R.raw.string);
             return;
         }
         switch(mt) {
@@ -70,7 +76,7 @@ public class SoundManager {
                     playSound(R.raw.jump);
                 } else if (prevFloor == PlatformType.TRAMPOLINE) {
                     playSound(R.raw.trampoline);
-                } else if(prevCell.getRoof().getType() == PlatformType.ONE_WAY_UP) {
+                } else if(prevRoof == PlatformType.ONE_WAY_UP || prevRoof == PlatformType.WAY_UP_DOWN) {
                     playSound(R.raw.open);
                 } else if(prevRoof == PlatformType.TRANSPARENT) {
                     playSound(R.raw.transparent);
@@ -126,7 +132,7 @@ public class SoundManager {
                 }
                 break;
             case BEAT_ROOF:
-                if(prevCell.getRoof().getType() == PlatformType.BRICK) {
+                if(prevRoof == PlatformType.BRICK) {
                     playSound(R.raw.brick);
                 } else {
                     playSound(R.raw.war);
@@ -153,11 +159,15 @@ public class SoundManager {
                 break;
             case STICK_LEFT:
             case STICK_RIGHT:
+                if(motion.getStage() == 0)
+                    playSound(R.raw.glue);
                 break;
             case MAGNET:
                 playSound(R.raw.magnet);
                 break;
             case TP:
+                if(motion.getStage() == 0)
+                    playSound(R.raw.tp);
                 break;
             case TP_LEFT:
             case TP_RIGHT:
@@ -165,6 +175,8 @@ public class SoundManager {
                 break;
             case STAY:
                 if(prevFloor == PlatformType.GLUE) {
+                    if(prevMt != MotionType.STAY)
+                        playSound(R.raw.glue);
                 } else if(prevFloor == PlatformType.BRICK) {
                     playSound(R.raw.brick);
                 } else {
