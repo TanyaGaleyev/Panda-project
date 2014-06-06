@@ -296,14 +296,16 @@ public class GameView extends SurfaceView {
 	 * Switch hero animation and motion
 	 */
 	protected void updateGame(UserControlType controlType) {
-		// try to end pre/post motion if it exists
-		boolean continued = continueModel();
-		// get new motion type only if it was not obtained yet
-		// (obtained yet means that pre- or post- motion was just ended)
-		if(!continued) {
+	    if(hero.isFinishing()) {
+            // try to end pre/post motion if it exists
+            continueModel();
+        } else {
+            // get new motion type only if it was not obtained yet
+            // (obtained yet means that pre- or post- motion was just ended)
 			updateModel(controlType);
             control.playSound();
 		}
+        prevCell.updateCell(hero.model.currentMotion, hero.model.finishingMotion);
 	}
 	
 	/**
@@ -322,7 +324,6 @@ public class GameView extends SurfaceView {
 		// play cell reaction to new motion
 		if(!hero.isFinishing()) {
 			hero.switchToCurrentMotion();
-			prevCell.updateCell(hero.model.currentMotion, hero.model.finishingMotion);
 		}
 	}
 
@@ -330,16 +331,11 @@ public class GameView extends SurfaceView {
 	 * Switch to next animation after pre/post- animation finished
 	 * @return true if pre or post animation ended, otherwise - false 
 	 */
-	private boolean continueModel() {
-		if(hero.isFinishing()) {
-			// when motion at last switches we need to play cell animation
-			if(hero.isFinishingMotionEnded(/*level.model.getPrevMotion()*/)) {
-				hero.switchToCurrentMotion();
-				prevCell.updateCell(hero.model.currentMotion, hero.model.finishingMotion);
-			}
-			return true;
-		}
-		return false;
+	private void continueModel() {
+        // when motion at last switches we need to play cell animation
+        if(hero.isFinishingMotionEnded(/*level.model.getPrevMotion()*/)) {
+            hero.switchToCurrentMotion();
+        }
 	}
 	
 	/**
