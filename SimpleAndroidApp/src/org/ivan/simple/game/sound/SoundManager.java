@@ -13,14 +13,6 @@ import org.ivan.simple.game.motion.MotionType;
 
 public class SoundManager {
     private SoundPool soundPool;
-//    private int jumpSoundId;
-//    private int flySoundId;
-//    private int dieSoundId;
-//    private int winSoundId;
-//    private int warSoundId;
-//    private int coinSoundId;
-//    private int throwSoundId;
-//    private int angleSoundId;
     private AudioManager audioManager;
     private SparseArray<Integer> soundMap = new SparseArray<Integer>();
     private final Context context;
