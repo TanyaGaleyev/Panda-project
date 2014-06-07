@@ -58,7 +58,6 @@ public class GameView extends SurfaceView {
 	protected boolean finished = false;
     private boolean monsterLose = false;
     private GameActivity gameContext;
-//    ServiceButtons serviceButtons;
     private boolean initialized = false;
 
     public GameView(GameActivity context) {
@@ -108,19 +107,6 @@ public class GameView extends SurfaceView {
 	}
 	
 	protected void initSurface() {
-//		GRID_STEP = ImageProvider.loadBitmapSize(R.drawable.single_panda).outWidth;
-//		System.out.println(getHeight());
-//		if(getHeight() < 432) {
-//			GRID_STEP = 48;
-//		} else if(getHeight() < 528) {
-//			GRID_STEP = 72;
-//		} else if(getHeight() < 672) {
-//			GRID_STEP = 88;
-//		} else {
-//			GRID_STEP = 112;
-//		}
-//		GRID_STEP = GRID_STEP % 8 == 0 ? GRID_STEP : GRID_STEP + 8 - GRID_STEP % 8;
-//		ImageProvider.setGridStep(GRID_STEP);
 //        try {
 //            bgr = new TextureAtlasParser().createTextureAtlasBackground(gameContext, backgroundId);
 //        } catch (IOException e) {
@@ -130,13 +116,7 @@ public class GameView extends SurfaceView {
 //        }
         background = imageProvider().getBackground(getBackgroundId(levId), getWidth(), getHeight());
 
-//        int gridWidth = getWidth() - 100;
-//        int gridHeight = getHeight();
-//        GRID_STEP = imageProvider().setScaleParameters(gridWidth, gridHeight);
         GRID_STEP = imageProvider().getGridStep();
-
-//        serviceButtons = new ServiceButtons(10, 50);
-        //GRID_STEP = 112;//88dp,48dp
 //		System.out.println("GRID_STEP = " + GRID_STEP);
 
         LevelModel model =
@@ -153,7 +133,6 @@ public class GameView extends SurfaceView {
         level = new LevelView(model, GRID_STEP, LEFT_BOUND, TOP_BOUND);
 
 		prevCell = level.model.getHeroCell();
-//		prevMotion = level.model.getMotion();
 
 		hero = new Hero(level.model.hero);
 		monster = MonsterFactory.createMonster(level.model.monster, GRID_STEP);
@@ -184,7 +163,6 @@ public class GameView extends SurfaceView {
 	protected void onDraw(Canvas canvas, boolean update) {
 		canvas.drawColor(0xFFB6D76E);
 //        bgr.draw(canvas);
-//		serviceButtons.draw(canvas);
         canvas.drawBitmap(background, 0, 0, backgroundPaint);
 		level.onDraw(canvas, update);
 		hero.onDraw(canvas, update);
@@ -327,7 +305,7 @@ public class GameView extends SurfaceView {
 	 */
 	private void continueModel() {
         // when motion at last switches we need to play cell animation
-        if(hero.isFinishingMotionEnded(/*level.model.getPrevMotion()*/)) {
+        if(hero.isFinishingMotionEnded()) {
             hero.switchToCurrentMotion();
         }
 	}
@@ -447,9 +425,6 @@ public class GameView extends SurfaceView {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-//		if(control.processServiceButton(event)) {
-//			return true;
-//		}
 		if(control.scanControl(event)) {
 			return true;
 		}

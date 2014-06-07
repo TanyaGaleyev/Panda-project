@@ -5,14 +5,11 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
-import org.ivan.simple.PandaApplication;
 import org.ivan.simple.UserControlType;
 import org.ivan.simple.game.controls.ControlChangeObserver;
-import org.ivan.simple.game.controls.ControlsType;
 import org.ivan.simple.game.controls.ObtainedControl;
 import org.ivan.simple.game.controls.UserControl;
 import org.ivan.simple.game.controls.UserControlProvider;
-import org.ivan.simple.game.level.LevelModel;
 import org.ivan.simple.game.sound.SoundManager;
 import org.ivan.simple.game.tutorial.SolutionStep;
 
