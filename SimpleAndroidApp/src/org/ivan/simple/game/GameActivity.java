@@ -52,7 +52,7 @@ public class GameActivity extends PandaBaseActivity {
         });
 //        GameView gView = (GameView) findViewById(R.id.game);
         RelativeLayout contentPanel = (RelativeLayout) findViewById(R.id.game_content_panel);
-        GameView gView = levid == 9 ? new MessageTutorialGame(this) : new GameView(this);
+        GameView gView = levid == 1 ? new MessageTutorialGame(this) : new GameView(this);
         contentPanel.addView(gView);
         gView.setLevId(levid);
         gControl = gView.getControl();

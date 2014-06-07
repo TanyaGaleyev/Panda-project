@@ -3,7 +3,6 @@ package org.ivan.simple.game.sound;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.util.SparseArray;
 
 import org.ivan.simple.R;
 import org.ivan.simple.game.level.LevelCell;
@@ -14,37 +13,14 @@ import org.ivan.simple.game.motion.MotionType;
 public class SoundManager {
     private SoundPool soundPool;
     private AudioManager audioManager;
-    private SparseArray<Integer> soundMap = new SparseArray<Integer>();
+    private final SoundMap soundMap;
     private final Context context;
 
     public SoundManager(Context context) {
         this.context = context;
         soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        mapSound(R.raw.jump);
-        mapSound(R.raw.fly);
-        mapSound(R.raw.war);
-        mapSound(R.raw.detonate);
-        mapSound(R.raw.win);
-        mapSound(R.raw.coin);
-        mapSound(R.raw.throw0);
-        mapSound(R.raw.angle);
-        mapSound(R.raw.reduce);
-        mapSound(R.raw.slick);
-        mapSound(R.raw.tp);
-        mapSound(R.raw.blansh);
-        mapSound(R.raw.brick);
-        mapSound(R.raw.switch0);
-        mapSound(R.raw.open);
-        mapSound(R.raw.magnet);
-        mapSound(R.raw.trampoline);
-        mapSound(R.raw.transparent);
-        mapSound(R.raw.glue);
-        mapSound(R.raw.string);
-    }
-
-    private void mapSound(int resId) {
-        soundMap.put(resId, soundPool.load(context, resId, 1));
+        soundMap = new SoundMap(context, soundPool);
     }
 
     public void playSound(Motion motion, Motion prevMotion, LevelCell nextCell, LevelCell prevCell) {
