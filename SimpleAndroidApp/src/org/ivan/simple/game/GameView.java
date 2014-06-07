@@ -46,9 +46,8 @@ public class GameView extends SurfaceView {
 	
 	private GameControl control;
 	
-	private String backgroundId;
-//	private Bitmap background;
-    private PandaBackground bgr;
+	protected Bitmap background;
+//    private PandaBackground bgr;
 
     private Paint backgroundPaint;
 
@@ -76,7 +75,7 @@ public class GameView extends SurfaceView {
 	private void init() {
         backgroundPaint = new Paint();
         backgroundPaint.setAntiAlias(true);
-		getHolder().addCallback(new SurfaceHolder.Callback() {
+        getHolder().addCallback(new SurfaceHolder.Callback() {
 			
 			public void surfaceDestroyed(SurfaceHolder holder) {
 				System.out.println("surfaceDestroyed");
@@ -122,18 +121,14 @@ public class GameView extends SurfaceView {
 //		}
 //		GRID_STEP = GRID_STEP % 8 == 0 ? GRID_STEP : GRID_STEP + 8 - GRID_STEP % 8;
 //		ImageProvider.setGridStep(GRID_STEP);
-//        background = Bitmap.createScaledBitmap(
-//                imageProvider().getBitmapNoCache(backgroundId),
-//                getWidth(),
-//                getHeight(),
-//                false);
-        try {
-            bgr = new TextureAtlasParser().createTextureAtlasBackground(gameContext, backgroundId);
-        } catch (IOException e) {
-            bgr = new ColorBackground();
-        } catch (XmlPullParserException e) {
-            bgr = new ColorBackground();
-        }
+//        try {
+//            bgr = new TextureAtlasParser().createTextureAtlasBackground(gameContext, backgroundId);
+//        } catch (IOException e) {
+//            bgr = new ColorBackground();
+//        } catch (XmlPullParserException e) {
+//            bgr = new ColorBackground();
+//        }
+        background = imageProvider().getBackground(getBackgroundId(levId), getWidth(), getHeight());
 
 //        int gridWidth = getWidth() - 100;
 //        int gridHeight = getHeight();
@@ -188,10 +183,9 @@ public class GameView extends SurfaceView {
 	
 	protected void onDraw(Canvas canvas, boolean update) {
 		canvas.drawColor(0xFFB6D76E);
-//		drawOnCenterCoordinates(
-//                background, getWidth() / 2, getHeight() / 2, backgroundPaint, canvas);
 //        bgr.draw(canvas);
 //		serviceButtons.draw(canvas);
+        canvas.drawBitmap(background, 0, 0, backgroundPaint);
 		level.onDraw(canvas, update);
 		hero.onDraw(canvas, update);
 		monster.onDraw(canvas, update);
@@ -435,18 +429,17 @@ public class GameView extends SurfaceView {
 	
 	protected void setLevId(int levId) {
 		this.levId = levId;
-		this.backgroundId = getBackgroundId(levId);
 	}
 
-	private String getBackgroundId(int levId) {
-		switch(levId) {
+    private String getBackgroundId(int levId) {
+        switch(levId) {
             case 1: return "background/background_l_1.jpg";
             case 2: return "background/background_l_2.jpg";
             case 3: return "background/background_l_3.jpg";
             case 4: return "background/background_l_4.jpg";
             default:return "background/background_l_4.jpg";
-		}
-	}
+        }
+    }
 	
 	protected int getLevId() {
 		return levId;

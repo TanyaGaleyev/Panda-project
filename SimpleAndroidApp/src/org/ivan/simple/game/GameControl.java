@@ -167,4 +167,8 @@ public class GameControl implements ControlChangeObserver {
             }
         }
     }
+
+    public void releaseResources() {
+        if(view.background != null) view.background.recycle();
+    }
 }

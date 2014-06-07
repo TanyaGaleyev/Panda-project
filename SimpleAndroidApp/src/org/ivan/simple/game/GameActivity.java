@@ -127,7 +127,7 @@ public class GameActivity extends PandaBaseActivity {
     protected void onDestroy() {
     	super.onDestroy();
         app().getSettingsModel().unregisterControlChangeObserver(gControl);
-    	gControl = null;
+        gControl.releaseResources();
     }
 
     public void startTutorial(int type) {

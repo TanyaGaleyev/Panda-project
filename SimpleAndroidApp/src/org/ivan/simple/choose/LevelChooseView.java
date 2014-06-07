@@ -59,8 +59,8 @@ public class LevelChooseView extends SurfaceView {
 
 	// Backgroung image of LevelChooseView
 	private String backgroundId;
-//	private Bitmap background;
-    private PandaBackground bgr;
+	private Bitmap background;
+//    private PandaBackground bgr;
 
 	// Scores bitmaps
 	private Bitmap highscore;
@@ -103,7 +103,8 @@ public class LevelChooseView extends SurfaceView {
 		init(context);
 	}
 
-	private void init(Context context) {
+	private boolean initialized = false;
+    private void init(Context context) {
         this.context = (LevelChooseActivity) context;
 		textPaint = new Paint();
 		textPaint.setColor(Color.DKGRAY);
@@ -125,13 +126,14 @@ public class LevelChooseView extends SurfaceView {
 
                    }
                 }
-//				background.recycle();
-//				background = null;
 				System.out.println("Choose view destroyed!");
 			}
 
 			public void surfaceCreated(SurfaceHolder holder) {
-                initSurface();
+                if(!initialized) {
+                    initSurface();
+                    initialized = true;
+                }
 
 				redrawer = new Redrawer();
 				redrawer.start();
@@ -166,19 +168,15 @@ public class LevelChooseView extends SurfaceView {
         initGrid(getWidth(), getHeight());
         border = imageProvider().getBitmapNoCache("menu/border.png");
 //        cross = imageProvider().getBitmapNoCache("menu/cross.png");
-//        background = background != null ? background : Bitmap.createScaledBitmap(
-//                imageProvider().getBitmapNoCache(backgroundId),
-//                getWidth(),
-//                getHeight(),
-//                false);
-        try {
-            bgr = new TextureAtlasParser().createTextureAtlasBackground(context, backgroundId);
-        } catch (IOException e) {
-            e.printStackTrace();
-            bgr = new ColorBackground();
-        } catch (XmlPullParserException e) {
-            bgr = new ColorBackground();
-        }
+//        try {
+//            bgr = new TextureAtlasParser().createTextureAtlasBackground(context, backgroundId);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            bgr = new ColorBackground();
+//        } catch (XmlPullParserException e) {
+//            bgr = new ColorBackground();
+//        }
+        background = imageProvider().getBackground(backgroundId, getWidth(), getHeight());
         marker = imageProvider().getBitmapNoCache("menu/single_panda.png");
         highscore = imageProvider().getBitmapNoCache("menu/high_score.png");
         mediumscore = imageProvider().getBitmapNoCache("menu/medium_score.png");
@@ -217,8 +215,8 @@ public class LevelChooseView extends SurfaceView {
             break;
         }
         canvas.drawColor(Color.rgb(218, 228, 115));
-//        drawOnCenterCoordinates(background, getWidth() / 2, getHeight() / 2, canvas);
 //        bgr.draw(canvas);
+        canvas.drawBitmap(background, 0, 0, backgroundPaint);
         drawGrid(canvas);
         drawLevelsIcons(canvas);
         drawOnCenterCoordinates(marker, markerX, markerY, canvas);
@@ -487,16 +485,19 @@ public class LevelChooseView extends SurfaceView {
 			finishedLevels[i] = new int[levels[i].length];
 		}
 	}
-	
-	private String getBackgroundId(int levelsid) {
-		switch(levelsid) {
-		case 1: return "background/background_c_1.jpg";
-		case 2: return "background/background_c_2.jpg";
-		case 3: return "background/background_c_3.jpg";
-		default:return "background/background_c_1.jpg";
-		}
-		
-	}
+
+    private String getBackgroundId(int levelsid) {
+        switch(levelsid) {
+            case 1: return "background/background_c_1.jpg";
+            case 2: return "background/background_c_2.jpg";
+            case 3: return "background/background_c_3.jpg";
+            default:return "background/background_c_1.jpg";
+        }
+    }
+
+    public void releaseResources() {
+        if(background != null) background.recycle();
+    }
 	
 	private class Redrawer extends Thread {
 		boolean running = true;

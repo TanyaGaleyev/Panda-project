@@ -148,12 +148,18 @@ public class ImageProvider {
         return asssetsMananger.list(base + resSet + path);
     }
 
-    // FIXME I am rake =)
-    public Bitmap getBackground(String path) {
+    public Bitmap getBackground(String path, int width, int height) {
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inPreferredConfig = Bitmap.Config.RGB_565;
+        return getScaledBitmapNoCache(path, width, height, opts);
+    }
+
+    public Bitmap getScaledBitmapNoCache(String path, int width, int height, BitmapFactory.Options opts) {
         try {
-            BitmapFactory.Options opts = new BitmapFactory.Options();
-            return BitmapFactory.decodeStream(
-                    asssetsMananger.open(base + resSet + path), null, opts);
+            Bitmap orig = loadBitmap(path, opts);
+            Bitmap scaled = Bitmap.createScaledBitmap(orig, width, height, true);
+            orig.recycle();
+            return scaled;
         } catch (IOException e) {
             e.printStackTrace();
             return null;
