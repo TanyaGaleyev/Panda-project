@@ -26,14 +26,14 @@ public class GameControl implements ControlChangeObserver {
 	
 	private GameManager gameLoopThread;
 	private boolean paused;
-	
+
 	private SoundManager soundManager;
 	
 	public GameControl(final GameView view) {
 		this.view  = view;
         controlsFactory = new ControlsFactory(this);
         initControlProvider();
-        soundManager = new SoundManager(view.getContext());
+        soundManager = view.getGameContext().app().getSoundManager();
 	}
 
     protected boolean scanControl(MotionEvent event) {

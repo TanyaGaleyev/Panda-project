@@ -1,10 +1,11 @@
 /**
  * Created by ivan on 10.11.13.
  */
+package achievements;
+
 def base = args[0];
 def codePackage = "org.ivan.simple.achievements";
 def enumFile = new File("$base/generated/" + codePackage.replace(".", "/") + "/Achievement.java");
-print(enumFile);
 enumFile.getParentFile().mkdirs();
 enumFile.write("");
 enumFile << "package " + codePackage + ";\n";
