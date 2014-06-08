@@ -16,11 +16,13 @@ import org.ivan.simple.settings.SettingsPanel;
 public abstract class PandaBaseActivity extends Activity {
 
     public static final String SETTINGS = "Settings";
+    protected Dialog settingsDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        initSettingsDialog();
     }
 
     @Override
@@ -35,7 +37,8 @@ public abstract class PandaBaseActivity extends Activity {
 	}
 
     protected void gotoSettingsScreen() {
-        getSettingsDialog(SETTINGS, new SettingsPanel(this, app().getSettingsModel())).show();
+        settingsDialog.setContentView(new SettingsPanel(this, app().getSettingsModel()));
+        settingsDialog.show();
     }
 
     public View prepare(View view) {
@@ -57,19 +60,17 @@ public abstract class PandaBaseActivity extends Activity {
         return PandaApplication.getPandaApplication();
     }
 
-    protected Dialog getSettingsDialog(String title, SettingsPanel content) {
-        Dialog ret = new Dialog(this);
-        ret.setTitle(title);
-        TextView titleView = (TextView) ret.findViewById(android.R.id.title);
+    protected void initSettingsDialog() {
+        settingsDialog = new Dialog(this);
+        settingsDialog.setTitle(SETTINGS);
+        TextView titleView = (TextView) settingsDialog.findViewById(android.R.id.title);
         titleView.setTypeface(app().getFontProvider().bold());
         titleView.setTextColor(Color.DKGRAY);
         titleView.setBackgroundResource(R.drawable.settings_border);
-        ret.setContentView(content);
-        ret.setCanceledOnTouchOutside(true);
-        ret.getWindow().setLayout(
+        settingsDialog.setCanceledOnTouchOutside(true);
+        settingsDialog.getWindow().setLayout(
                 (int) (app().displayWidth * 0.6),
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-        ret.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        return ret;
+        settingsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 }
