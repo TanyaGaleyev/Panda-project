@@ -385,12 +385,11 @@ public class LevelChooseView extends SurfaceView {
         return tempAction;
     }
 
-    private void startLevel(int levId) {
+    void startLevel(int levId) {
         Intent intent = new Intent(context, GameActivity.class);
         intent.putExtra(LevelChooseActivity.LEVEL_ID, levId);
         context.startActivityForResult(intent, LevelChooseActivity.FINISHED_LEVEL_ID);
     }
-
 
     private static final long FAST_CLICK_MILLS = 200L;
     private long lastClickTime = 0L;
