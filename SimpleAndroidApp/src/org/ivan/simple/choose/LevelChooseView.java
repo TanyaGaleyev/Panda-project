@@ -197,29 +197,38 @@ public class LevelChooseView extends SurfaceView {
     }
 
     private void drawChoose(Canvas canvas) {
-        // move marker
-        switch(performingAction) {
-        case UP:
-            markerY -= markerSpeed();
-            break;
-        case DOWN:
-            markerY += markerSpeed();
-            break;
-        case LEFT:
-            markerX -= markerSpeed();
-            break;
-        case RIGHT:
-            markerX += markerSpeed();
-            break;
-        default:
-            break;
-        }
+        moveMarker(performingAction);
         canvas.drawColor(Color.rgb(218, 228, 115));
 //        bgr.draw(canvas);
         canvas.drawBitmap(background, 0, 0, backgroundPaint);
         drawGrid(canvas);
         drawLevelsIcons(canvas);
         drawOnCenterCoordinates(marker, markerX, markerY, canvas);
+    }
+
+    private void moveMarker(UserControlType moveAction) {
+        // move marker
+        switch(moveAction) {
+            case UP:
+                markerY -= markerSpeed();
+                break;
+            case DOWN:
+                markerY += markerSpeed();
+                break;
+            case LEFT:
+                markerX -= markerSpeed();
+                break;
+            case RIGHT:
+                markerX += markerSpeed();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void moveMarker(int row, int col) {
+        markerX = getScreenX(col);
+        markerY = getScreenY(row);
     }
 
     private void drawGrid(Canvas canvas) {
@@ -315,45 +324,66 @@ public class LevelChooseView extends SurfaceView {
 	private int getScreenX(int col) {
 		return LEFT_BOUND + col * GRID_STEP + GRID_STEP / 2;
 	}
+
+    private int getGridCol(int x) {
+        return (x - LEFT_BOUND) / GRID_STEP;
+    }
 	
 	private int getScreenY(int row) {
 		return TOP_BOUND + row * GRID_STEP + GRID_STEP / 2;
 	}
+
+    private int getGridRow(int y) {
+        return (y - TOP_BOUND) / GRID_STEP;
+    }
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+        // ignore other actions
+        if(event.getAction() != MotionEvent.ACTION_DOWN) return super.onTouchEvent(event);
 		// get level Id depending on by click on screen selection
 		final int levId = getLevelId(event);
 		// if level selected (levId != 0) start next GameActivity with specified level
 		if(levId != 0) {
             context.setLoading(true);
             new AsyncTask<Void, Void, Void>() {
-//                public ProgressDialog mDialog;
-
-//                @Override
-//                protected void onPreExecute() {
-//                    super.onPreExecute();
-//                    mDialog = new ProgressDialog(context);
-//                    mDialog.setMessage("Please wait...");
-//                    mDialog.show();
-//                }
-
-//                @Override
-//                protected void onPostExecute(Void aVoid) {
-//                    super.onPostExecute(aVoid);
-//                    mDialog.dismiss();
-//                }
-
                 @Override
                 protected Void doInBackground(Void... voids) {
                     startLevel(levId);
                     return null;
                 }
             }.execute();
-			return true;
-		}
-		return super.onTouchEvent(event);
+		} else {
+            chooseAcion = scanMoveDiection(event);
+        }
+		return true;
 	}
+
+    private UserControlType scanMoveDiection(MotionEvent event) {
+        // Get choice direction
+        UserControlType tempAction = getMoveType(event);
+        switch(tempAction) {
+            case UP:
+                if(levelY <= 0 || levelX >= levels[levelY - 1].length) tempAction = UserControlType.IDLE;
+                else levelY -= 1;
+                break;
+            case DOWN:
+                if(levelY >= levels.length - 1 || levelX >= levels[levelY + 1].length) tempAction = UserControlType.IDLE;
+                else levelY += 1;
+                break;
+            case LEFT:
+                if(levelX <= 0) tempAction = UserControlType.IDLE;
+                else levelX -= 1;
+                break;
+            case RIGHT:
+                if(levelX >= levels[levelY].length - 1) tempAction = UserControlType.IDLE;
+                else levelX += 1;
+                break;
+            default:
+                break;
+        }
+        return tempAction;
+    }
 
     private void startLevel(int levId) {
         Intent intent = new Intent(context, GameActivity.class);
@@ -361,10 +391,22 @@ public class LevelChooseView extends SurfaceView {
         context.startActivityForResult(intent, LevelChooseActivity.FINISHED_LEVEL_ID);
     }
 
-	public synchronized int getLevelId(MotionEvent event) {
-		// ignore other actions
-		if(event.getAction() != MotionEvent.ACTION_DOWN) return 0;
-		// if marker is moving choosing are not allowed 
+
+    private static final long FAST_CLICK_MILLS = 200L;
+    private long lastClickTime = 0L;
+    public synchronized int getLevelId(MotionEvent event) {
+        // TODO strictly we need check that fast click chosen level was not changed
+        long gap = event.getEventTime() - lastClickTime;
+        if(gap < FAST_CLICK_MILLS) {
+            levelY = getGridRow((int) event.getY());
+            levelX = getGridCol((int) event.getX());
+            if(inGridBounds(levelX, levelY)) {
+                moveMarker(levelY, levelX);
+                return levels[levelY][levelX][0];
+            }
+        }
+        lastClickTime = event.getEventTime();
+        // if marker is moving choosing are not allowed
 		if(!chooseReady) return 0;
 		// switch to moving state
 		chooseReady = false;
@@ -375,33 +417,14 @@ public class LevelChooseView extends SurfaceView {
 				event.getY() < markerY + GRID_STEP / 2) {
 			return levels[levelY][levelX][0];
 		}
-		// Get choice direction
-		UserControlType tempAction = getMoveType(event);
-		switch(tempAction) {
-		case UP:
-			if(levelY <= 0 || levelX >= levels[levelY - 1].length) tempAction = UserControlType.IDLE;
-			else levelY -= 1;
-			break;
-		case DOWN:
-			if(levelY >= levels.length - 1 || levelX >= levels[levelY + 1].length) tempAction = UserControlType.IDLE; 
-			else levelY += 1;
-			break;
-		case LEFT:
-			if(levelX <= 0) tempAction = UserControlType.IDLE;
-			else levelX -= 1;
-			break;
-		case RIGHT:
-			if(levelX >= levels[levelY].length - 1) tempAction = UserControlType.IDLE;
-			else levelX += 1;
-			break;
-		default:
-			break;
-		}
-		chooseAcion = tempAction;
 		return 0;
 	}
-	
-	protected UserControlType getMoveType(MotionEvent event) {
+
+    private boolean inGridBounds(int levelX, int levelY) {
+        return levelY >= 0 && levelY < levels.length && levelX >=0 && levelX < levels[levelY].length;
+    }
+
+    protected UserControlType getMoveType(MotionEvent event) {
 		float dX = markerX - event.getX(); // positive dx move left
 		float dY = markerY - event.getY(); // positive dy move up
 		// use for get control max by absolute value dx, dy
