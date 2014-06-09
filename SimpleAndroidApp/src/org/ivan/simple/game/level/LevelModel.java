@@ -422,7 +422,7 @@ public class LevelModel {
 		hero.currentMotion = hero.currentMotion.getChildMotion();
 		hero.finishingMotion = hero.currentMotion;
 		hero.finishingMotion.continueMotion();
-        MotionType motionType = obtainMotionType(controlType, tpAwareFinishingMt);
+        MotionType motionType = obtainNextMotion(controlType, tpAwareFinishingMt, hero.finishingMotion.getStage());
 		if(motionType != tpAwareFinishingMt) {
             // finish prev motion if motion of another type obtained
             hero.finishingMotion.finishMotion();
@@ -444,13 +444,13 @@ public class LevelModel {
         updatePosition(hero.currentMotion);
 	}
 
-    private MotionType obtainMotionType(UserControlType controlType, MotionType tpAwareFinishingMt) {
+    private MotionType obtainNextMotion(UserControlType controlType, MotionType finishingMt, int finishingStage) {
         MotionType motionType;
-        switch(tpAwareFinishingMt){
+        switch(finishingMt){
         case JUMP:
             switch(controlType) {
             case DOWN:
-                motionType = platformsCheck(controlType, tpAwareFinishingMt);
+                motionType = platformsCheck(controlType, finishingMt);
                 break;
             case LEFT:
                 motionType = moveLeft();
@@ -461,14 +461,14 @@ public class LevelModel {
             case IDLE:
             case UP:
             default:
-                motionType = jump(hero.finishingMotion.getStage());
+                motionType = jump(finishingStage);
                 break;
             }
             break;
         case  MAGNET:
             switch(controlType){
             case DOWN:
-                motionType = platformsCheck(controlType, tpAwareFinishingMt);
+                motionType = platformsCheck(controlType, finishingMt);
                 break;
             default:
                 motionType = MotionType.MAGNET;
@@ -479,7 +479,7 @@ public class LevelModel {
             switch(controlType) {
             case DOWN:
             case RIGHT:
-                motionType = platformsCheck(controlType, tpAwareFinishingMt);
+                motionType = platformsCheck(controlType, finishingMt);
                 break;
             default:
                 motionType = MotionType.STICK_LEFT;
@@ -490,7 +490,7 @@ public class LevelModel {
             switch(controlType) {
             case DOWN:
             case LEFT:
-                motionType = platformsCheck(controlType, tpAwareFinishingMt);
+                motionType = platformsCheck(controlType, finishingMt);
                 break;
             default:
                 motionType = MotionType.STICK_RIGHT;
@@ -498,29 +498,29 @@ public class LevelModel {
             }
             break;
         case THROW_LEFT:
-            if(hero.finishingMotion.getStage() == 1) {
+            if(finishingStage == 1) {
                 if(!motionAvaible(MotionType.JUMP_LEFT) ) {
                     motionType = moveLeft();
                 } else {
                     motionType = MotionType.THROW_LEFT;
                 }
             } else {
-                motionType = platformsCheck(controlType, tpAwareFinishingMt);
+                motionType = platformsCheck(controlType, finishingMt);
             }
             break;
         case THROW_RIGHT:
-            if(hero.finishingMotion.getStage() == 1) {
+            if(finishingStage == 1) {
                 if(!motionAvaible(MotionType.JUMP_RIGHT) ) {
                     motionType = moveRight();
                 } else {
                     motionType = MotionType.THROW_RIGHT;
                 }
             } else {
-                motionType = platformsCheck(controlType, tpAwareFinishingMt);
+                motionType = platformsCheck(controlType, finishingMt);
             }
             break;
         case JUMP_LEFT_WALL:
-            motionType = platformsCheck(controlType, tpAwareFinishingMt);
+            motionType = platformsCheck(controlType, finishingMt);
             break;
 //		case TP_LEFT:
 //			if(!MotionType.FLY_LEFT.isUncontrolable() && motionAvaible(MotionType.JUMP_LEFT)) {
@@ -537,7 +537,7 @@ public class LevelModel {
             case DOWN:
             case RIGHT:
 //				motion.finishMotion();
-                motionType = platformsCheck(controlType, tpAwareFinishingMt);
+                motionType = platformsCheck(controlType, finishingMt);
                 break;
             default:
                 if(motionAvaible(MotionType.JUMP_LEFT)) {
@@ -549,7 +549,7 @@ public class LevelModel {
             }
             break;
         case JUMP_RIGHT_WALL:
-            motionType = platformsCheck(controlType, tpAwareFinishingMt);
+            motionType = platformsCheck(controlType, finishingMt);
             break;
 //		case TP_RIGHT:
 //			if(!MotionType.FLY_RIGHT.isUncontrolable() && motionAvaible(MotionType.JUMP_RIGHT)) {
@@ -564,7 +564,7 @@ public class LevelModel {
             case DOWN:
             case LEFT:
 //				motion.finishMotion();
-                motionType = platformsCheck(controlType, tpAwareFinishingMt);
+                motionType = platformsCheck(controlType, finishingMt);
                 break;
             default:
                 if(motionAvaible(MotionType.JUMP_RIGHT)) {
@@ -576,22 +576,22 @@ public class LevelModel {
             }
             break;
         case TP:
-            if(hero.finishingMotion.getStage() == 0) {
+            if(finishingStage == 0) {
                 if(controlType == UserControlType.UP || controlType == UserControlType.IDLE) {
                     // to start without pre jump
                     motionType = jump(1);
                 } else {
-                    motionType = platformsCheck(controlType, tpAwareFinishingMt);
+                    motionType = platformsCheck(controlType, finishingMt);
                 }
             } else {
                 motionType = MotionType.TP;
             }
             break;
         case FALL_BLANSH:
-            if(hero.finishingMotion.getStage() == 1) {
+            if(finishingStage == 1) {
                 motionType = MotionType.FALL_BLANSH;
             } else {
-                motionType = platformsCheck(controlType, tpAwareFinishingMt);
+                motionType = platformsCheck(controlType, finishingMt);
             }
             break;
         case CLOUD_IDLE:
@@ -634,7 +634,7 @@ public class LevelModel {
             }
             break;
         default:
-            motionType = platformsCheck(controlType, tpAwareFinishingMt);
+            motionType = platformsCheck(controlType, finishingMt);
             break;
         }
         return motionType;
