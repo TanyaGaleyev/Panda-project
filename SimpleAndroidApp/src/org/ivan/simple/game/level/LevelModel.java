@@ -414,7 +414,6 @@ public class LevelModel {
 
 	
 	public void updateGame(UserControlType controlType) {
-		
 		tryToUnlock();
 		if(hero.currentMotion.isUncontrolable()) {
 			controlType = UserControlType.IDLE;
@@ -423,198 +422,7 @@ public class LevelModel {
 		hero.currentMotion = hero.currentMotion.getChildMotion();
 		hero.finishingMotion = hero.currentMotion;
 		hero.finishingMotion.continueMotion();
-		MotionType motionType;
-		switch(tpAwareFinishingMt){
-		case JUMP:
-			switch(controlType) {
-			case DOWN:
-				motionType = platformsCheck(controlType, tpAwareFinishingMt);
-				break;
-			case LEFT:
-				motionType = moveLeft();
-				break;
-			case RIGHT:
-				motionType = moveRight();
-				break;
-			case IDLE:
-			case UP:	
-			default:
-				motionType = jump(hero.finishingMotion.getStage());
-				break;
-			}
-			break;
-		case  MAGNET:
-			switch(controlType){
-			case DOWN:
-				motionType = platformsCheck(controlType, tpAwareFinishingMt);
-				break;
-			default:
-				motionType = MotionType.MAGNET;
-				break;
-			}
-			break;
-		case STICK_LEFT:
-			switch(controlType) {
-			case DOWN:
-			case RIGHT:
-				motionType = platformsCheck(controlType, tpAwareFinishingMt);
-				break;
-			default:
-				motionType = MotionType.STICK_LEFT;
-				break;
-			}
-			break;
-		case STICK_RIGHT:
-			switch(controlType) {
-			case DOWN:
-			case LEFT:
-				motionType = platformsCheck(controlType, tpAwareFinishingMt);
-				break;
-			default:
-				motionType = MotionType.STICK_RIGHT;
-				break;
-			}
-			break;
-		case THROW_LEFT:
-			if(hero.finishingMotion.getStage() == 1) {
-				if(!motionAvaible(MotionType.JUMP_LEFT) ) {
-					motionType = moveLeft();
-				} else {
-					motionType = MotionType.THROW_LEFT;
-				}
-			} else {				
-				motionType = platformsCheck(controlType, tpAwareFinishingMt);
-			}
-			break;
-		case THROW_RIGHT:
-			if(hero.finishingMotion.getStage() == 1) {
-				if(!motionAvaible(MotionType.JUMP_RIGHT) ) {
-					motionType = moveRight();
-				} else {
-					motionType = MotionType.THROW_RIGHT;
-				}
-			} else {
-				motionType = platformsCheck(controlType, tpAwareFinishingMt);
-			}
-			break;
-		case JUMP_LEFT_WALL:
-			motionType = platformsCheck(controlType, tpAwareFinishingMt);
-			break;
-//		case TP_LEFT:
-//			if(!MotionType.FLY_LEFT.isUncontrolable() && motionAvaible(MotionType.JUMP_LEFT)) {
-//				motionType = MotionType.FLY_LEFT;
-//			} else if(MotionType.THROW_LEFT.getStage() == 1 && motionAvaible(MotionType.JUMP_LEFT)) {
-//				motionType = MotionType.THROW_LEFT;
-//			} else {
-//			motionType = platformsCheck();
-//			}
-//			break;
-		case FLY_LEFT:
-			switch(controlType) {
-			case UP:
-			case DOWN:
-			case RIGHT:
-//				motion.finishMotion();
-				motionType = platformsCheck(controlType, tpAwareFinishingMt);
-				break;
-			default:
-				if(motionAvaible(MotionType.JUMP_LEFT)) {
-					motionType = MotionType.FLY_LEFT;
-				} else {
-					motionType = moveLeft();
-				}
-				break;
-			}
-			break;
-		case JUMP_RIGHT_WALL:
-			motionType = platformsCheck(controlType, tpAwareFinishingMt);
-			break;
-//		case TP_RIGHT:
-//			if(!MotionType.FLY_RIGHT.isUncontrolable() && motionAvaible(MotionType.JUMP_RIGHT)) {
-//				motionType = MotionType.FLY_RIGHT;
-//			} else {
-//			motionType = platformsCheck();
-//			}
-//			break;
-		case FLY_RIGHT:
-			switch(controlType) {
-			case UP:
-			case DOWN:
-			case LEFT:
-//				motion.finishMotion();
-				motionType = platformsCheck(controlType, tpAwareFinishingMt);
-				break;
-			default:
-				if(motionAvaible(MotionType.JUMP_RIGHT)) {
-					motionType = MotionType.FLY_RIGHT;
-				} else {
-					motionType = moveRight();
-				}
-				break;
-			}
-			break;
-		case TP:
-			if(hero.finishingMotion.getStage() == 0) {
-				if(controlType == UserControlType.UP || controlType == UserControlType.IDLE) {
-					// to start without pre jump
-					motionType = jump(1);
-				} else {
-					motionType = platformsCheck(controlType, tpAwareFinishingMt);
-				}
-			} else {
-				motionType = MotionType.TP;
-			}
-			break;
-		case FALL_BLANSH:
-			if(hero.finishingMotion.getStage() == 1) {
-				motionType = MotionType.FALL_BLANSH;
-			} else {
-				motionType = platformsCheck(controlType, tpAwareFinishingMt);
-			}
-			break;
-		case CLOUD_IDLE:
-		case CLOUD_LEFT:
-		case CLOUD_RIGHT:
-		case CLOUD_UP:
-		case CLOUD_DOWN:
-			switch(controlType) {
-			case LEFT:
-				if(motionAvaible(MotionType.CLOUD_LEFT)) {
-					motionType = MotionType.CLOUD_LEFT;
-				} else {
-					motionType = moveLeft();
-				}
-				break;
-			case RIGHT:
-				if(motionAvaible(MotionType.CLOUD_RIGHT)) {
-					motionType = MotionType.CLOUD_RIGHT;
-				} else {
-					motionType = moveRight();
-				}
-				break;
-			case UP:
-				if(motionAvaible(MotionType.CLOUD_UP)) {
-					motionType = MotionType.CLOUD_UP;
-				} else {
-					motionType = MotionType.CLOUD_IDLE;
-				}
-				break;
-			case DOWN:
-				if(motionAvaible(MotionType.CLOUD_DOWN)) {
-					motionType = MotionType.CLOUD_DOWN;
-				} else {
-					motionType = MotionType.CLOUD_IDLE;
-				}
-				break;
-			default:
-				motionType = MotionType.CLOUD_IDLE;
-				break;
-			}
-			break;
-		default:
-			motionType = platformsCheck(controlType, tpAwareFinishingMt);
-			break;
-		}
+        MotionType motionType = obtainMotionType(controlType, tpAwareFinishingMt);
 		if(motionType != tpAwareFinishingMt) {
             // finish prev motion if motion of another type obtained
             hero.finishingMotion.finishMotion();
@@ -635,6 +443,202 @@ public class LevelModel {
         checkWin();
         updatePosition(hero.currentMotion);
 	}
+
+    private MotionType obtainMotionType(UserControlType controlType, MotionType tpAwareFinishingMt) {
+        MotionType motionType;
+        switch(tpAwareFinishingMt){
+        case JUMP:
+            switch(controlType) {
+            case DOWN:
+                motionType = platformsCheck(controlType, tpAwareFinishingMt);
+                break;
+            case LEFT:
+                motionType = moveLeft();
+                break;
+            case RIGHT:
+                motionType = moveRight();
+                break;
+            case IDLE:
+            case UP:
+            default:
+                motionType = jump(hero.finishingMotion.getStage());
+                break;
+            }
+            break;
+        case  MAGNET:
+            switch(controlType){
+            case DOWN:
+                motionType = platformsCheck(controlType, tpAwareFinishingMt);
+                break;
+            default:
+                motionType = MotionType.MAGNET;
+                break;
+            }
+            break;
+        case STICK_LEFT:
+            switch(controlType) {
+            case DOWN:
+            case RIGHT:
+                motionType = platformsCheck(controlType, tpAwareFinishingMt);
+                break;
+            default:
+                motionType = MotionType.STICK_LEFT;
+                break;
+            }
+            break;
+        case STICK_RIGHT:
+            switch(controlType) {
+            case DOWN:
+            case LEFT:
+                motionType = platformsCheck(controlType, tpAwareFinishingMt);
+                break;
+            default:
+                motionType = MotionType.STICK_RIGHT;
+                break;
+            }
+            break;
+        case THROW_LEFT:
+            if(hero.finishingMotion.getStage() == 1) {
+                if(!motionAvaible(MotionType.JUMP_LEFT) ) {
+                    motionType = moveLeft();
+                } else {
+                    motionType = MotionType.THROW_LEFT;
+                }
+            } else {
+                motionType = platformsCheck(controlType, tpAwareFinishingMt);
+            }
+            break;
+        case THROW_RIGHT:
+            if(hero.finishingMotion.getStage() == 1) {
+                if(!motionAvaible(MotionType.JUMP_RIGHT) ) {
+                    motionType = moveRight();
+                } else {
+                    motionType = MotionType.THROW_RIGHT;
+                }
+            } else {
+                motionType = platformsCheck(controlType, tpAwareFinishingMt);
+            }
+            break;
+        case JUMP_LEFT_WALL:
+            motionType = platformsCheck(controlType, tpAwareFinishingMt);
+            break;
+//		case TP_LEFT:
+//			if(!MotionType.FLY_LEFT.isUncontrolable() && motionAvaible(MotionType.JUMP_LEFT)) {
+//				motionType = MotionType.FLY_LEFT;
+//			} else if(MotionType.THROW_LEFT.getStage() == 1 && motionAvaible(MotionType.JUMP_LEFT)) {
+//				motionType = MotionType.THROW_LEFT;
+//			} else {
+//			motionType = platformsCheck();
+//			}
+//			break;
+        case FLY_LEFT:
+            switch(controlType) {
+            case UP:
+            case DOWN:
+            case RIGHT:
+//				motion.finishMotion();
+                motionType = platformsCheck(controlType, tpAwareFinishingMt);
+                break;
+            default:
+                if(motionAvaible(MotionType.JUMP_LEFT)) {
+                    motionType = MotionType.FLY_LEFT;
+                } else {
+                    motionType = moveLeft();
+                }
+                break;
+            }
+            break;
+        case JUMP_RIGHT_WALL:
+            motionType = platformsCheck(controlType, tpAwareFinishingMt);
+            break;
+//		case TP_RIGHT:
+//			if(!MotionType.FLY_RIGHT.isUncontrolable() && motionAvaible(MotionType.JUMP_RIGHT)) {
+//				motionType = MotionType.FLY_RIGHT;
+//			} else {
+//			motionType = platformsCheck();
+//			}
+//			break;
+        case FLY_RIGHT:
+            switch(controlType) {
+            case UP:
+            case DOWN:
+            case LEFT:
+//				motion.finishMotion();
+                motionType = platformsCheck(controlType, tpAwareFinishingMt);
+                break;
+            default:
+                if(motionAvaible(MotionType.JUMP_RIGHT)) {
+                    motionType = MotionType.FLY_RIGHT;
+                } else {
+                    motionType = moveRight();
+                }
+                break;
+            }
+            break;
+        case TP:
+            if(hero.finishingMotion.getStage() == 0) {
+                if(controlType == UserControlType.UP || controlType == UserControlType.IDLE) {
+                    // to start without pre jump
+                    motionType = jump(1);
+                } else {
+                    motionType = platformsCheck(controlType, tpAwareFinishingMt);
+                }
+            } else {
+                motionType = MotionType.TP;
+            }
+            break;
+        case FALL_BLANSH:
+            if(hero.finishingMotion.getStage() == 1) {
+                motionType = MotionType.FALL_BLANSH;
+            } else {
+                motionType = platformsCheck(controlType, tpAwareFinishingMt);
+            }
+            break;
+        case CLOUD_IDLE:
+        case CLOUD_LEFT:
+        case CLOUD_RIGHT:
+        case CLOUD_UP:
+        case CLOUD_DOWN:
+            switch(controlType) {
+            case LEFT:
+                if(motionAvaible(MotionType.CLOUD_LEFT)) {
+                    motionType = MotionType.CLOUD_LEFT;
+                } else {
+                    motionType = moveLeft();
+                }
+                break;
+            case RIGHT:
+                if(motionAvaible(MotionType.CLOUD_RIGHT)) {
+                    motionType = MotionType.CLOUD_RIGHT;
+                } else {
+                    motionType = moveRight();
+                }
+                break;
+            case UP:
+                if(motionAvaible(MotionType.CLOUD_UP)) {
+                    motionType = MotionType.CLOUD_UP;
+                } else {
+                    motionType = MotionType.CLOUD_IDLE;
+                }
+                break;
+            case DOWN:
+                if(motionAvaible(MotionType.CLOUD_DOWN)) {
+                    motionType = MotionType.CLOUD_DOWN;
+                } else {
+                    motionType = MotionType.CLOUD_IDLE;
+                }
+                break;
+            default:
+                motionType = MotionType.CLOUD_IDLE;
+                break;
+            }
+            break;
+        default:
+            motionType = platformsCheck(controlType, tpAwareFinishingMt);
+            break;
+        }
+        return motionType;
+    }
 
     private void checkWin() {
         /*
