@@ -55,7 +55,7 @@ public class Sprite {
 		this(imageProvider().getBitmap(bmpid, rows, cols), rows, cols);
 	}
 
-    private static ImageProvider imageProvider() {
+    protected static ImageProvider imageProvider() {
         return PandaApplication.getPandaApplication().getImageProvider();
     }
 

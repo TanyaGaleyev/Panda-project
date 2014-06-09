@@ -141,6 +141,8 @@ public class SoundManager {
                 break;
             case TP_LEFT:
             case TP_RIGHT:
+            case TP_LR:
+            case TP_RL:
                 playSound(R.raw.tp);
                 break;
             case STAY:

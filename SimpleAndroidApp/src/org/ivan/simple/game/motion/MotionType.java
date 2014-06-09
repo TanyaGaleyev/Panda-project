@@ -30,6 +30,8 @@ public enum MotionType {
 	FLY_LEFT,
 	TP_RIGHT,
 	TP_LEFT,
+	TP_RL,
+	TP_LR,
 	STICK_LEFT,
 	STICK_RIGHT,
 	TP,
@@ -52,4 +54,20 @@ public enum MotionType {
 			return false;
 		}
 	}
+
+    public boolean isHorizontalTP() {
+        return this == TP_LEFT || this == TP_RIGHT || this == TP_LR || this == TP_RL;
+    }
+
+    public MotionType opposite() {
+        switch (this) {
+            case JUMP_LEFT: return JUMP_RIGHT;
+            case JUMP_RIGHT: return JUMP_LEFT;
+            case THROW_LEFT: return THROW_RIGHT;
+            case THROW_RIGHT: return THROW_LEFT;
+            case FLY_LEFT: return FLY_RIGHT;
+            case FLY_RIGHT: return FLY_LEFT;
+            default: return this;
+        }
+    }
 }

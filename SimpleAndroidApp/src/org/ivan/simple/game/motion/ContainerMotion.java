@@ -19,4 +19,14 @@ public class ContainerMotion extends Motion {
 	public Motion getChildMotion() {
 		return childMotion;
 	}
+
+    @Override
+    public MotionType getTpAwareChildMotionType() {
+        MotionType ret;
+        if(getType() == MotionType.TP_LR || getType() == MotionType.TP_RL)
+            ret = getChildMotion().getType().opposite();
+        else
+            ret = getChildMotion().getType();
+        return ret;
+    }
 }

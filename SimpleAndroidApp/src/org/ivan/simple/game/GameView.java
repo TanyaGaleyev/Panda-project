@@ -324,8 +324,7 @@ public class GameView extends SurfaceView {
 	}
 
     private void regularMove() {
-        if(hero.getRealMotion().getType() == MotionType.TP_LEFT ||
-                hero.getRealMotion().getType() == MotionType.TP_RIGHT ||
+        if(hero.getRealMotion().getType().isHorizontalTP() ||
                 hero.getRealMotion().getType() == MotionType.TP) {
             hero.x = LEFT_BOUND + level.model.hero.getX() * GRID_STEP;
             hero.y = TOP_BOUND + level.model.hero.getY() * GRID_STEP;

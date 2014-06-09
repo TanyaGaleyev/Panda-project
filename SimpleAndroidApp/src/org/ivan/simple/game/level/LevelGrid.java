@@ -24,6 +24,10 @@ public class LevelGrid {
         return grid[i][j];
     }
 
+    public LevelCell get(CellCoords coords) {
+        return get(coords.i, coords.j);
+    }
+
     public Platform getRight(int i, int j) {
         if(j == -1) return get(i, 0).getLeft();
         else        return get(i, j).getRight();

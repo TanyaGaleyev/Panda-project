@@ -120,4 +120,8 @@ public class Motion {
 	public Motion getChildMotion() {
 		return this;
 	}
+
+    public MotionType getTpAwareChildMotionType() {
+        return getChildMotion().getType();
+    }
 }

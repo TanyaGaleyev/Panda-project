@@ -2,14 +2,11 @@ package org.ivan.simple.game.hero;
 
 import java.util.HashMap;
 
-import org.ivan.simple.ImageProvider;
 import org.ivan.simple.PandaApplication;
-import org.ivan.simple.R;
 
 
 public class SpriteSet {
-    private SpriteSet() {
-    }
+    private SpriteSet() {}
 
     public HashMap<String, Sprite> sprites = new HashMap<String, Sprite>();
 	
@@ -23,10 +20,23 @@ public class SpriteSet {
 	
 	public void putTPSprite(String name, String resid, int rows, int cols, boolean left) {
         int shiftSt = PandaApplication.getPandaApplication().getImageProvider().getGridStep() / 8;
-        putSprite(name, new TPSprite(resid, rows, cols, shiftSt, left));
+        putSprite(name, new SymmetricTPSprite(resid, rows, cols, shiftSt, left));
 	}
-	
-	public Sprite getSprite(String name) {
+
+    public void putAsymmetricTPSprite(String name, String inBmpid, String outBmpId, int rows, int cols, boolean lIn, boolean lOut) {
+        int shiftSt = PandaApplication.getPandaApplication().getImageProvider().getGridStep() / 8;
+        putSprite(name, new AsymmetricTPSprite(inBmpid, outBmpId, rows, cols, shiftSt, lIn, lOut));
+    }
+    
+    public void putAsymmetricTPSpriteLR(String name, String inBmpid, String outBmpid) {
+        putAsymmetricTPSprite(name, inBmpid, outBmpid, 1, 8, true, false);
+    }
+    
+    public void putAsymmetricTPSpriteRL(String name, String inBmpid, String outBmpid) {
+        putAsymmetricTPSprite(name, inBmpid, outBmpid, 1, 8, false, true);
+    }
+
+    public Sprite getSprite(String name) {
 		return sprites.get(name);
 	}
 	
@@ -102,6 +112,22 @@ public class SpriteSet {
 		set.putTPSprite("slickleft_tp", "panda/panda_sprite8_slickleft.png", 1, 8, true);
 		set.putTPSprite("startslickright_tp", "panda/panda_sprite8_startslickright.png", 1, 8, false);
 		set.putTPSprite("slickright_tp", "panda/panda_sprite8_slickright.png", 1, 8, false);
+
+        set.putAsymmetricTPSpriteLR("flyLR_tp", "panda/panda_sprite8_flyleft.png", "panda/panda_sprite8_flyright.png");
+		set.putAsymmetricTPSpriteLR("stepLR_tp", "panda/panda_sprite8_stepleft.png", "panda/panda_sprite8_stepright.png");
+        set.putAsymmetricTPSpriteLR("jumpLR_tp", "panda/panda_sprite8_jumpleft.png", "panda/panda_sprite8_jumpright.png");
+        set.putAsymmetricTPSpriteLR("throwLR1_tp", "panda/panda_sprite8_throwleft1.png", "panda/panda_sprite8_throwright1.png");
+        set.putAsymmetricTPSpriteLR("throwLR2_tp", "panda/panda_sprite8_throwleft2.png", "panda/panda_sprite8_throwright2.png");
+        set.putAsymmetricTPSpriteLR("startslickLR_tp", "panda/panda_sprite8_startslickleft.png", "panda/panda_sprite8_startslickright.png");
+        set.putAsymmetricTPSpriteLR("slickLR_tp", "panda/panda_sprite8_slickleft.png", "panda/panda_sprite8_slickright.png");
+
+        set.putAsymmetricTPSpriteRL("flyRL_tp", "panda/panda_sprite8_flyright.png", "panda/panda_sprite8_flyleft.png");
+        set.putAsymmetricTPSpriteRL("stepRL_tp", "panda/panda_sprite8_stepright.png", "panda/panda_sprite8_stepleft.png");
+        set.putAsymmetricTPSpriteRL("jumpRL_tp", "panda/panda_sprite8_jumpright.png", "panda/panda_sprite8_jumpleft.png");
+        set.putAsymmetricTPSpriteRL("throwRL1_tp", "panda/panda_sprite8_throwright1.png", "panda/panda_sprite8_throwleft1.png");
+        set.putAsymmetricTPSpriteRL("throwRL2_tp", "panda/panda_sprite8_throwright2.png", "panda/panda_sprite8_throwleft2.png");
+        set.putAsymmetricTPSpriteRL("startslickRL_tp", "panda/panda_sprite8_startslickright.png", "panda/panda_sprite8_startslickleft.png");
+        set.putAsymmetricTPSpriteRL("slickRL_tp", "panda/panda_sprite8_slickright.png", "panda/panda_sprite8_slickleft.png");
 
 //		set.putSprite("flyleft_tp", "panda/panda_sprite8_flyleft_tp.png", 1, 8);
 //		set.putSprite("flyright_tp", "panda/panda_sprite8_flyright_tp.png", 1, 8);

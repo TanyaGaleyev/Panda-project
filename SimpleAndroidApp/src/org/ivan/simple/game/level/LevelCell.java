@@ -86,7 +86,7 @@ public class LevelCell {
 		}
 		right_wall.updateRightWall(motion, prevMotion);
 		left_wall.updateLeftWall(motion, prevMotion);
-		floor.changeSet(motion, prevMotion);
+		floor.updateFloor(motion, prevMotion);
 	}
 	
 	

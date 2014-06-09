@@ -143,7 +143,7 @@ public class Platform {
 		return type;
 	}
 	
-	public void changeSet(Motion motion, Motion prevMotion) {
+	public void updateFloor(Motion motion, Motion prevMotion) {
 		MotionType mt = motion.getType();
 		MotionType prevMt = prevMotion.getType();
 		// CLOUD
@@ -164,6 +164,8 @@ public class Platform {
 				mt == MotionType.FLY_RIGHT && motion.getStage() != 0 ||
 				mt == MotionType.TP_LEFT && prevMt == MotionType.FLY_LEFT ||
 				mt == MotionType.TP_RIGHT && prevMt == MotionType.FLY_RIGHT ||
+				mt == MotionType.TP_LR && prevMt == MotionType.FLY_LEFT ||
+				mt == MotionType.TP_RL && prevMt == MotionType.FLY_RIGHT ||
 				mt == MotionType.JUMP_LEFT_WALL && prevMt == MotionType.FLY_LEFT ||
 				mt == MotionType.JUMP_RIGHT_WALL && prevMt == MotionType.FLY_RIGHT ||
 				mt == MotionType.FLY_RIGHT && prevMt == MotionType.FLY_LEFT && prevMotion.getStage() != 0 ||

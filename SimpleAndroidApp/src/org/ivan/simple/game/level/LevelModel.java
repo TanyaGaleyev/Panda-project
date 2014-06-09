@@ -29,8 +29,8 @@ public class LevelModel {
 	private boolean lose = false;
 	private boolean complete = false;
 	private LevelCell winCell;
-	private Map<Platform, CellCoords> leftRightTpDestMap;
-	private Map<Platform, CellCoords> floorTpDestMap;
+	private Map<Platform, PlatformCellPair> leftRightTpDestMap;
+	private Map<Platform, PlatformCellPair> floorTpDestMap;
 	private List<Platform> switchList = new ArrayList<Platform>();
 	private List<Platform> unlockList = new ArrayList<Platform>();
 	private int steps = 0;
@@ -176,13 +176,13 @@ public class LevelModel {
         floorTpDestMap = tpDestMap(inGroupsFloor, outGroupsFloor);
     }
 
-    private Map<Platform, CellCoords> tpDestMap(
+    private Map<Platform, PlatformCellPair> tpDestMap(
             Multimap<Integer, PlatformCellPair> inGroups,
             HashMap<Integer, PlatformCellPair> outGroups) {
-        Map<Platform, CellCoords> retMap = new HashMap<Platform, CellCoords>();
+        Map<Platform, PlatformCellPair> retMap = new HashMap<Platform, PlatformCellPair>();
         for (int key : inGroups.keySet()) {
             for (PlatformCellPair platformCellPair : inGroups.get(key)) {
-                retMap.put(platformCellPair.p, outGroups.get(key).c);
+                retMap.put(platformCellPair.p, outGroups.get(key));
             }
         }
         return retMap;
@@ -283,9 +283,8 @@ public class LevelModel {
 		return motionType;
 	}
 	
-	private MotionType platformsCheck(UserControlType controlType) {
+	private MotionType platformsCheck(UserControlType controlType, MotionType prevMt) {
 		MotionType motionType;
-        MotionType prevMt = hero.finishingMotion.getType();
         switch (getHeroCell().getFloor().getType()){
 
 		case ANGLE_RIGHT:
@@ -381,29 +380,37 @@ public class LevelModel {
 		}
 		return motionType;
 	}
-	
-	private void checkTeleport() {
-		MotionType mt = hero.currentMotion.getType();
-		MotionType prevMt = hero.finishingMotion.getType();
-		switch(mt) {
-		case JUMP_LEFT:
-		case THROW_LEFT:
-		case FLY_LEFT:
-			if(!(mt == MotionType.FLY_LEFT && prevMt != MotionType.FLY_LEFT) && getHeroCell().getLeft().getType() == PlatformType.TELEPORT_L_V) {
-				hero.currentMotion = new ContainerMotion(MotionType.TP_LEFT, hero.currentMotion);
-			}
-			break;
-		case JUMP_RIGHT:
-		case THROW_RIGHT:
-		case FLY_RIGHT:
-			if(!(mt == MotionType.FLY_RIGHT && prevMt != MotionType.FLY_RIGHT) && getHeroCell().getRight().getType() == PlatformType.TELEPORT_R_V) {
-				hero.currentMotion = new ContainerMotion(MotionType.TP_RIGHT, hero.currentMotion);
-			}
-			break;
-		default:
-			break;
-		}
-	}
+
+    private void checkTeleport(MotionType mt, MotionType prevMt) {
+        switch(mt) {
+            case JUMP_LEFT:
+            case THROW_LEFT:
+            case FLY_LEFT:
+                if(!(mt == MotionType.FLY_LEFT && prevMt != MotionType.FLY_LEFT) && getHeroCell().getLeft().getType() == PlatformType.TELEPORT_L_V) {
+                    Platform peer = leftRightTpDestMap.get(getHeroCell().getLeft()).p;
+                    if(peer.getType() == PlatformType.TELEPORT_R_V) {
+                        hero.currentMotion = new ContainerMotion(MotionType.TP_LEFT, hero.currentMotion);
+                    } else {
+                        hero.currentMotion = new ContainerMotion(MotionType.TP_LR, hero.currentMotion);
+                    }
+                }
+                break;
+            case JUMP_RIGHT:
+            case THROW_RIGHT:
+            case FLY_RIGHT:
+                if(!(mt == MotionType.FLY_RIGHT && prevMt != MotionType.FLY_RIGHT) && getHeroCell().getRight().getType() == PlatformType.TELEPORT_R_V) {
+                    Platform peer = leftRightTpDestMap.get(getHeroCell().getRight()).p;
+                    if(peer.getType() == PlatformType.TELEPORT_L_V) {
+                        hero.currentMotion = new ContainerMotion(MotionType.TP_RIGHT, hero.currentMotion);
+                    } else {
+                        hero.currentMotion = new ContainerMotion(MotionType.TP_RL, hero.currentMotion);
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
 	
 	public void updateGame(UserControlType controlType) {
@@ -412,15 +419,16 @@ public class LevelModel {
 		if(hero.currentMotion.isUncontrolable()) {
 			controlType = UserControlType.IDLE;
 		}
+        MotionType tpAwareFinishingMt = hero.currentMotion.getTpAwareChildMotionType();
 		hero.currentMotion = hero.currentMotion.getChildMotion();
 		hero.finishingMotion = hero.currentMotion;
 		hero.finishingMotion.continueMotion();
 		MotionType motionType;
-		switch(hero.finishingMotion.getType()){
+		switch(tpAwareFinishingMt){
 		case JUMP:
 			switch(controlType) {
 			case DOWN:
-				motionType = platformsCheck(controlType);
+				motionType = platformsCheck(controlType, tpAwareFinishingMt);
 				break;
 			case LEFT:
 				motionType = moveLeft();
@@ -438,7 +446,7 @@ public class LevelModel {
 		case  MAGNET:
 			switch(controlType){
 			case DOWN:
-				motionType = platformsCheck(controlType);
+				motionType = platformsCheck(controlType, tpAwareFinishingMt);
 				break;
 			default:
 				motionType = MotionType.MAGNET;
@@ -449,7 +457,7 @@ public class LevelModel {
 			switch(controlType) {
 			case DOWN:
 			case RIGHT:
-				motionType = platformsCheck(controlType);
+				motionType = platformsCheck(controlType, tpAwareFinishingMt);
 				break;
 			default:
 				motionType = MotionType.STICK_LEFT;
@@ -460,7 +468,7 @@ public class LevelModel {
 			switch(controlType) {
 			case DOWN:
 			case LEFT:
-				motionType = platformsCheck(controlType);
+				motionType = platformsCheck(controlType, tpAwareFinishingMt);
 				break;
 			default:
 				motionType = MotionType.STICK_RIGHT;
@@ -475,7 +483,7 @@ public class LevelModel {
 					motionType = MotionType.THROW_LEFT;
 				}
 			} else {				
-				motionType = platformsCheck(controlType);
+				motionType = platformsCheck(controlType, tpAwareFinishingMt);
 			}
 			break;
 		case THROW_RIGHT:
@@ -486,11 +494,11 @@ public class LevelModel {
 					motionType = MotionType.THROW_RIGHT;
 				}
 			} else {
-				motionType = platformsCheck(controlType);
+				motionType = platformsCheck(controlType, tpAwareFinishingMt);
 			}
 			break;
 		case JUMP_LEFT_WALL:
-			motionType = platformsCheck(controlType);
+			motionType = platformsCheck(controlType, tpAwareFinishingMt);
 			break;
 //		case TP_LEFT:
 //			if(!MotionType.FLY_LEFT.isUncontrolable() && motionAvaible(MotionType.JUMP_LEFT)) {
@@ -507,7 +515,7 @@ public class LevelModel {
 			case DOWN:
 			case RIGHT:
 //				motion.finishMotion();
-				motionType = platformsCheck(controlType);
+				motionType = platformsCheck(controlType, tpAwareFinishingMt);
 				break;
 			default:
 				if(motionAvaible(MotionType.JUMP_LEFT)) {
@@ -519,7 +527,7 @@ public class LevelModel {
 			}
 			break;
 		case JUMP_RIGHT_WALL:
-			motionType = platformsCheck(controlType);
+			motionType = platformsCheck(controlType, tpAwareFinishingMt);
 			break;
 //		case TP_RIGHT:
 //			if(!MotionType.FLY_RIGHT.isUncontrolable() && motionAvaible(MotionType.JUMP_RIGHT)) {
@@ -534,7 +542,7 @@ public class LevelModel {
 			case DOWN:
 			case LEFT:
 //				motion.finishMotion();
-				motionType = platformsCheck(controlType);
+				motionType = platformsCheck(controlType, tpAwareFinishingMt);
 				break;
 			default:
 				if(motionAvaible(MotionType.JUMP_RIGHT)) {
@@ -551,7 +559,7 @@ public class LevelModel {
 					// to start without pre jump
 					motionType = jump(1);
 				} else {
-					motionType = platformsCheck(controlType);
+					motionType = platformsCheck(controlType, tpAwareFinishingMt);
 				}
 			} else {
 				motionType = MotionType.TP;
@@ -561,7 +569,7 @@ public class LevelModel {
 			if(hero.finishingMotion.getStage() == 1) {
 				motionType = MotionType.FALL_BLANSH;
 			} else {
-				motionType = platformsCheck(controlType);
+				motionType = platformsCheck(controlType, tpAwareFinishingMt);
 			}
 			break;
 		case CLOUD_IDLE:
@@ -604,26 +612,28 @@ public class LevelModel {
 			}
 			break;
 		default:
-			motionType = platformsCheck(controlType);
+			motionType = platformsCheck(controlType, tpAwareFinishingMt);
 			break;
 		}
-		// finish prev motion if motion of another type obtained
-		if(motionType != hero.finishingMotion.getType()) {
-			hero.finishingMotion.finishMotion();
-			/* 
+		if(motionType != tpAwareFinishingMt) {
+            // finish prev motion if motion of another type obtained
+            hero.finishingMotion.finishMotion();
+			/*
 			 * If new Motion has not created yet (e.g. stage 1 jump on trampoline)
 			 * we create it
 			 */
 			if(hero.currentMotion == hero.finishingMotion) {
 				hero.currentMotion = new Motion(motionType);
 			}
-		}
+		} else if(hero.currentMotion.getType() != tpAwareFinishingMt) {
+            hero.finishingMotion = hero.currentMotion = new Motion(tpAwareFinishingMt, hero.currentMotion.getStage());
+        }
 		// check if we gonna teleport
-		checkTeleport();
+		checkTeleport(hero.currentMotion.getType(), tpAwareFinishingMt);
 		// collect prize 
 		prizesCollected += getHeroCell().removePrize();
         checkWin();
-        updatePosition();
+        updatePosition(hero.currentMotion);
 	}
 
     private void checkWin() {
@@ -642,22 +652,23 @@ public class LevelModel {
         }
     }
 
-    private void updatePosition() {
-		if(hero.currentMotion.getType() == MotionType.TP_LEFT) {
-			CellCoords nextCell = leftRightTpDestMap.get(getHeroCell().getLeft());
+    private void updatePosition(Motion motion) {
+        MotionType mt = motion.getType();
+        if(mt == MotionType.TP_LEFT || mt == MotionType.TP_LR) {
+			CellCoords nextCell = leftRightTpDestMap.get(getHeroCell().getLeft()).c;
 			hero.setX(nextCell.j);
 			hero.setY(nextCell.i);
-		} else if(hero.currentMotion.getType() == MotionType.TP_RIGHT) {
-			CellCoords nextCell = leftRightTpDestMap.get(getHeroCell().getRight());
+		} else if(mt == MotionType.TP_RIGHT || mt == MotionType.TP_RL) {
+			CellCoords nextCell = leftRightTpDestMap.get(getHeroCell().getRight()).c;
 			hero.setX(nextCell.j);
 			hero.setY(nextCell.i);
-		} else if(hero.currentMotion.getType() == MotionType.TP && hero.currentMotion.getStage() == 1) {
-			CellCoords nextCell = floorTpDestMap.get(getHeroCell().getFloor());
+		} else if(mt == MotionType.TP && motion.getStage() == 1) {
+			CellCoords nextCell = floorTpDestMap.get(getHeroCell().getFloor()).c;
 			hero.setX(nextCell.j);
 			hero.setY(nextCell.i);
 		} else {
-			hero.setX(hero.getX() + hero.currentMotion.getXSpeed());
-			hero.setY(hero.getY() + hero.currentMotion.getYSpeed());
+			hero.setX(hero.getX() + motion.getXSpeed());
+			hero.setY(hero.getY() + motion.getYSpeed());
 		}
 		if(hero.hasMoved()) steps++;
 	}
