@@ -55,6 +55,10 @@ public class Motion {
 			break;
 		}
 	}
+
+    public void copyStage(Motion motion) {
+        this.stage = motion.stage;
+    }
 	
 	public boolean isFinishing() {
 		switch(type) {
@@ -121,7 +125,7 @@ public class Motion {
 		return this;
 	}
 
-    public MotionType getTpAwareChildMotionType() {
-        return getChildMotion().getType();
+    public Motion getTpAwareChildMotion() {
+        return getChildMotion();
     }
 }
