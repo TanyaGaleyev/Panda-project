@@ -686,57 +686,65 @@ public class LevelModel {
 	private boolean motionAvaible(MotionType mt, int stage) {
 		int xSpeed = Motion.getXSpeedAtStage(mt, stage);
 		int ySpeed = Motion.getYSpeedAtStage(mt, stage);
-		switch (mt) {
+        PlatformType roofType = getHeroCell().getRoof().getType();
+        PlatformType floorType = getHeroCell().getFloor().getType();
+        PlatformType leftWallType = getHeroCell().getLeft().getType();
+        PlatformType rightWallType = getHeroCell().getRight().getType();
+        switch (mt) {
 		case JUMP:
-			if(ySpeed < 0 && getHeroCell().getRoof().getType() == PlatformType.SPIKE) lose = true;
+			if(ySpeed < 0 && roofType == PlatformType.SPIKE) lose = true;
 			if(hero.getY() + ySpeed < 0) return false;
-			if(getHeroCell().getRoof().getType() == PlatformType.ONE_WAY_UP) return true;
-			if(getHeroCell().getRoof().getType() == PlatformType.WAY_UP_DOWN) return true;
-			if(getHeroCell().getRoof().getType() == PlatformType.TRANSPARENT) return true;
-			if(ySpeed < 0 && getHeroCell().getRoof().getType() != PlatformType.NONE) return false;
+			if(roofType == PlatformType.ONE_WAY_UP) return true;
+			if(roofType == PlatformType.WAY_UP_DOWN) return true;
+			if(roofType == PlatformType.TRANSPARENT) return true;
+			if(ySpeed < 0 && roofType != PlatformType.NONE) return false;
 			return true;
 		case FLY_LEFT:
 		case JUMP_LEFT:
 		case THROW_LEFT:
-			if(getHeroCell().getLeft().getType() == PlatformType.SPIKE_V) lose = true;
-			if(getHeroCell().getLeft().getType() == PlatformType.TELEPORT_L_V) return true;
+            if(leftWallType == PlatformType.SPIKE_V) lose = true;
+			if(leftWallType == PlatformType.TELEPORT_L_V) return true;
 			if(hero.getX() + xSpeed < 0) return false;
-			if(getHeroCell().getLeft().getType() == PlatformType.ONE_WAY_LEFT) return true;
-			if(getHeroCell().getLeft().getType() == PlatformType.LIMIT &&
+			if(leftWallType == PlatformType.ONE_WAY_LEFT) return true;
+			if(leftWallType == PlatformType.LIMIT &&
 					getHeroCell().getLeft().getStatus() < 3) return true;
-			if(getHeroCell().getLeft().getType() == PlatformType.TRANSPARENT_V) return true;
-			if(getHeroCell().getLeft().getType() != PlatformType.NONE) return false;
+			if(leftWallType == PlatformType.TRANSPARENT_V) return true;
+            if(leftWallType == PlatformType.UNLOCK &&
+                    getHeroCell().getLeft().getStatus() == 1) return true;
+			if(leftWallType != PlatformType.NONE) return false;
 			return true;
 		case FLY_RIGHT:
 		case JUMP_RIGHT:
-		case THROW_RIGHT:	
-			if(getHeroCell().getRight().getType() == PlatformType.SPIKE_V) lose = true;
-			if(getHeroCell().getRight().getType() == PlatformType.TELEPORT_R_V) return true;
+		case THROW_RIGHT:
+            if(rightWallType == PlatformType.SPIKE_V) lose = true;
+			if(rightWallType == PlatformType.TELEPORT_R_V) return true;
 			if(hero.getX() + xSpeed > cols - 1) return false;
-			if(getHeroCell().getRight().getType() == PlatformType.ONE_WAY_RIGHT) return true;
-			if(getHeroCell().getRight().getType() == PlatformType.LIMIT &&
+			if(rightWallType == PlatformType.ONE_WAY_RIGHT) return true;
+			if(rightWallType == PlatformType.LIMIT &&
 					getHeroCell().getRight().getStatus() < 3) return true;
-			if(getHeroCell().getRight().getType() == PlatformType.TRANSPARENT_V) return true;
-			if(getHeroCell().getRight().getType() != PlatformType.NONE) return false;
+			if(rightWallType == PlatformType.TRANSPARENT_V) return true;
+			if(rightWallType == PlatformType.UNLOCK &&
+                    getHeroCell().getRight().getStatus() == 1) return true;
+			if(rightWallType != PlatformType.NONE) return false;
 			return true;
 		case FALL:
-			if(getHeroCell().getFloor().getType() != PlatformType.NONE &&
-				getHeroCell().getFloor().getType() != PlatformType.TRANSPARENT) return false;
+			if(floorType != PlatformType.NONE &&
+				floorType != PlatformType.TRANSPARENT) return false;
 			if(hero.getY() + 1 > rows - 1) lose = true;
 			return true;
 		case FALL_BLANSH:
-			if(getHeroCell().getFloor().getType() != PlatformType.NONE &&
-					getHeroCell().getFloor().getType() != PlatformType.TRANSPARENT) return false;
+			if(floorType != PlatformType.NONE &&
+					floorType != PlatformType.TRANSPARENT) return false;
 			if(hero.getY() + 2 > rows - 1) return false;
 			if(getCell(hero.getY() + 1, hero.getX()).getFloor().getType() != PlatformType.NONE &&
 					getCell(hero.getY() + 1, hero.getX()).getFloor().getType() != PlatformType.TRANSPARENT) return false;
 			return true;
 		case BEAT_ROOF:
-			if(getHeroCell().getRoof().getType() != PlatformType.NONE) return true;
+			if(roofType != PlatformType.NONE) return true;
 			if(hero.getY() - 1 < 0) return true;
 			return false;
 		case MAGNET:
-			if(getHeroCell().getRoof().getType() == PlatformType.ELECTRO) return true;
+			if(roofType == PlatformType.ELECTRO) return true;
 			return false;	
 		case CLOUD_LEFT:
 			if(hero.getX() - 1 < 0) return false;

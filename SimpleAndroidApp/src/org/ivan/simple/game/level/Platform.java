@@ -95,7 +95,8 @@ public class Platform {
 			switchHelper = (switchHelper + 1) % 4;
 			break;
 		case UNLOCK:
-			sprite = new Sprite("platform_v/unlock_platform.png", 1, 1);
+			sprite = new Sprite("platform_v/unlock_platform.png", 2, 6);
+            sprite.setAnimating(true);
 			break;
 		case STRING:
 			sprite = new Sprite("platform_h/string_platform.png", 2, 16);
@@ -440,9 +441,7 @@ public class Platform {
 	}
 	
 	public void unlock() {
-//		sprite = null;
-        sprite.changeSet(1);
-        sprite.goToFrame(1);
+        setStatus(1);
         sprite.playOnce();
 		type = PlatformType.NONE;
 	}
