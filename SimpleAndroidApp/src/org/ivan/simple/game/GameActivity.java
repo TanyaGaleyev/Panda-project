@@ -20,7 +20,6 @@ import org.ivan.simple.R;
 import org.ivan.simple.choose.LevelChooseActivity;
 import org.ivan.simple.game.tutorial.MessageTutorialGame;
 import org.ivan.simple.game.tutorial.Solutions;
-import org.ivan.simple.game.tutorial.TutorialGame;
 import org.ivan.simple.settings.SettingsInGamePanel;
 
 public class GameActivity extends PandaBaseActivity {
@@ -52,13 +51,14 @@ public class GameActivity extends PandaBaseActivity {
         });
 //        GameView gView = (GameView) findViewById(R.id.game);
         RelativeLayout contentPanel = (RelativeLayout) findViewById(R.id.game_content_panel);
-        GameView gView = levid == 9 ? new MessageTutorialGame(this) : new GameView(this);
+        GameView gView = levid == 1 ? new MessageTutorialGame(this) : new GameView(this);
         contentPanel.addView(gView);
         gView.setLevId(levid);
         gControl = gView.getControl();
         settingsBtn.bringToFront();
         helpBtn.bringToFront();
         app().getSettingsModel().registerControlChangeObserver(gControl);
+        settingsDialog.setTitle(PAUSE_TITLE);
     }
 
     @Override
@@ -127,7 +127,7 @@ public class GameActivity extends PandaBaseActivity {
     protected void onDestroy() {
     	super.onDestroy();
         app().getSettingsModel().unregisterControlChangeObserver(gControl);
-    	gControl = null;
+        gControl.releaseResources();
     }
 
     public void startTutorial(int type) {
@@ -135,7 +135,6 @@ public class GameActivity extends PandaBaseActivity {
         tutorialDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         tutorialDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         GameView nestedGame = new GameView(this);
-//        nestedGame.setBackgroundResource(R.drawable.settings_border);
         nestedGame.setLevId(-1);
         nestedGame.getControl().setAutoControls(Solutions.getDemo(type));
         tutorialDialog.setContentView(R.layout.tutorial_dialog);
@@ -166,7 +165,7 @@ public class GameActivity extends PandaBaseActivity {
     @Override
     protected void gotoSettingsScreen() {
         SettingsInGamePanel settings = new SettingsInGamePanel(this, app().getSettingsModel());
-        final Dialog settingsDialog = getSettingsDialog(PAUSE_TITLE, settings);
+        settingsDialog.setContentView(settings);
         settingsDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
@@ -191,7 +190,6 @@ public class GameActivity extends PandaBaseActivity {
             @Override
             public void onClick(View view) {
                 settingsDialog.cancel();
-                gControl.startManager();
             }
         });
         gControl.stopManager();

@@ -31,12 +31,19 @@ android {
     }
 }
 
+def runScript(String path) {
+    def scrFile = new File(path)
+    def scr = new GroovyShell().parse(scrFile)
+    scr.run(scrFile, rootDir.absolutePath)
+}
 
 task generateAchievementsEnum << {
-    def scrFile = new File("$rootDir/groovy/achievements/generateEnum.groovy")
-    def scr = new GroovyShell().parse(scrFile);
-    scr.run(scrFile, rootDir.absolutePath);
+    runScript("$rootDir/groovy/achievements/generateEnum.groovy")
 }
 //generateAchievementsEnum.enabled = false;
-preBuild.dependsOn generateAchievementsEnum
 
+task generateSoundMap << {
+    runScript("$rootDir/groovy/sound/generateMap.groovy")
+}
+preBuild.dependsOn generateAchievementsEnum
+preBuild.dependsOn generateSoundMap

@@ -59,8 +59,8 @@ public class LevelChooseView extends SurfaceView {
 
 	// Backgroung image of LevelChooseView
 	private String backgroundId;
-//	private Bitmap background;
-    private PandaBackground bgr;
+	private Bitmap background;
+//    private PandaBackground bgr;
 
 	// Scores bitmaps
 	private Bitmap highscore;
@@ -103,7 +103,8 @@ public class LevelChooseView extends SurfaceView {
 		init(context);
 	}
 
-	private void init(Context context) {
+	private boolean initialized = false;
+    private void init(Context context) {
         this.context = (LevelChooseActivity) context;
 		textPaint = new Paint();
 		textPaint.setColor(Color.DKGRAY);
@@ -125,13 +126,14 @@ public class LevelChooseView extends SurfaceView {
 
                    }
                 }
-//				background.recycle();
-//				background = null;
 				System.out.println("Choose view destroyed!");
 			}
 
 			public void surfaceCreated(SurfaceHolder holder) {
-                initSurface();
+                if(!initialized) {
+                    initSurface();
+                    initialized = true;
+                }
 
 				redrawer = new Redrawer();
 				redrawer.start();
@@ -166,19 +168,15 @@ public class LevelChooseView extends SurfaceView {
         initGrid(getWidth(), getHeight());
         border = imageProvider().getBitmapNoCache("menu/border.png");
 //        cross = imageProvider().getBitmapNoCache("menu/cross.png");
-//        background = background != null ? background : Bitmap.createScaledBitmap(
-//                imageProvider().getBitmapNoCache(backgroundId),
-//                getWidth(),
-//                getHeight(),
-//                false);
-        try {
-            bgr = new TextureAtlasParser().createTextureAtlasBackground(context, backgroundId);
-        } catch (IOException e) {
-            e.printStackTrace();
-            bgr = new ColorBackground();
-        } catch (XmlPullParserException e) {
-            bgr = new ColorBackground();
-        }
+//        try {
+//            bgr = new TextureAtlasParser().createTextureAtlasBackground(context, backgroundId);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            bgr = new ColorBackground();
+//        } catch (XmlPullParserException e) {
+//            bgr = new ColorBackground();
+//        }
+        background = imageProvider().getBackground(backgroundId, getWidth(), getHeight());
         marker = imageProvider().getBitmapNoCache("menu/single_panda.png");
         highscore = imageProvider().getBitmapNoCache("menu/high_score.png");
         mediumscore = imageProvider().getBitmapNoCache("menu/medium_score.png");
@@ -199,29 +197,38 @@ public class LevelChooseView extends SurfaceView {
     }
 
     private void drawChoose(Canvas canvas) {
-        // move marker
-        switch(performingAction) {
-        case UP:
-            markerY -= markerSpeed();
-            break;
-        case DOWN:
-            markerY += markerSpeed();
-            break;
-        case LEFT:
-            markerX -= markerSpeed();
-            break;
-        case RIGHT:
-            markerX += markerSpeed();
-            break;
-        default:
-            break;
-        }
+        moveMarker(performingAction);
         canvas.drawColor(Color.rgb(218, 228, 115));
-//        drawOnCenterCoordinates(background, getWidth() / 2, getHeight() / 2, canvas);
 //        bgr.draw(canvas);
+        canvas.drawBitmap(background, 0, 0, backgroundPaint);
         drawGrid(canvas);
         drawLevelsIcons(canvas);
         drawOnCenterCoordinates(marker, markerX, markerY, canvas);
+    }
+
+    private void moveMarker(UserControlType moveAction) {
+        // move marker
+        switch(moveAction) {
+            case UP:
+                markerY -= markerSpeed();
+                break;
+            case DOWN:
+                markerY += markerSpeed();
+                break;
+            case LEFT:
+                markerX -= markerSpeed();
+                break;
+            case RIGHT:
+                markerX += markerSpeed();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void moveMarker(int row, int col) {
+        markerX = getScreenX(col);
+        markerY = getScreenY(row);
     }
 
     private void drawGrid(Canvas canvas) {
@@ -317,56 +324,88 @@ public class LevelChooseView extends SurfaceView {
 	private int getScreenX(int col) {
 		return LEFT_BOUND + col * GRID_STEP + GRID_STEP / 2;
 	}
+
+    private int getGridCol(int x) {
+        return (x - LEFT_BOUND) / GRID_STEP;
+    }
 	
 	private int getScreenY(int row) {
 		return TOP_BOUND + row * GRID_STEP + GRID_STEP / 2;
 	}
+
+    private int getGridRow(int y) {
+        return (y - TOP_BOUND) / GRID_STEP;
+    }
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+        // ignore other actions
+        if(event.getAction() != MotionEvent.ACTION_DOWN) return super.onTouchEvent(event);
 		// get level Id depending on by click on screen selection
 		final int levId = getLevelId(event);
 		// if level selected (levId != 0) start next GameActivity with specified level
 		if(levId != 0) {
             context.setLoading(true);
             new AsyncTask<Void, Void, Void>() {
-//                public ProgressDialog mDialog;
-
-//                @Override
-//                protected void onPreExecute() {
-//                    super.onPreExecute();
-//                    mDialog = new ProgressDialog(context);
-//                    mDialog.setMessage("Please wait...");
-//                    mDialog.show();
-//                }
-
-//                @Override
-//                protected void onPostExecute(Void aVoid) {
-//                    super.onPostExecute(aVoid);
-//                    mDialog.dismiss();
-//                }
-
                 @Override
                 protected Void doInBackground(Void... voids) {
                     startLevel(levId);
                     return null;
                 }
             }.execute();
-			return true;
-		}
-		return super.onTouchEvent(event);
+		} else {
+            chooseAcion = scanMoveDiection(event);
+        }
+		return true;
 	}
 
-    private void startLevel(int levId) {
+    private UserControlType scanMoveDiection(MotionEvent event) {
+        // Get choice direction
+        UserControlType tempAction = getMoveType(event);
+        switch(tempAction) {
+            case UP:
+                if(levelY <= 0 || levelX >= levels[levelY - 1].length) tempAction = UserControlType.IDLE;
+                else levelY -= 1;
+                break;
+            case DOWN:
+                if(levelY >= levels.length - 1 || levelX >= levels[levelY + 1].length) tempAction = UserControlType.IDLE;
+                else levelY += 1;
+                break;
+            case LEFT:
+                if(levelX <= 0) tempAction = UserControlType.IDLE;
+                else levelX -= 1;
+                break;
+            case RIGHT:
+                if(levelX >= levels[levelY].length - 1) tempAction = UserControlType.IDLE;
+                else levelX += 1;
+                break;
+            default:
+                break;
+        }
+        return tempAction;
+    }
+
+    void startLevel(int levId) {
         Intent intent = new Intent(context, GameActivity.class);
         intent.putExtra(LevelChooseActivity.LEVEL_ID, levId);
         context.startActivityForResult(intent, LevelChooseActivity.FINISHED_LEVEL_ID);
     }
 
-	public synchronized int getLevelId(MotionEvent event) {
-		// ignore other actions
-		if(event.getAction() != MotionEvent.ACTION_DOWN) return 0;
-		// if marker is moving choosing are not allowed 
+    private static final long FAST_CLICK_MILLS = 200L;
+    private long lastClickTime = 0L;
+    public synchronized int getLevelId(MotionEvent event) {
+        // TODO strictly we need check that fast click chosen level was not changed
+        long gap = event.getEventTime() - lastClickTime;
+        if(gap < FAST_CLICK_MILLS) {
+            levelY = getGridRow((int) event.getY());
+            levelX = getGridCol((int) event.getX());
+            if(inGridBounds(levelX, levelY)) {
+                moveMarker(levelY, levelX);
+                return levels[levelY][levelX][0];
+            }
+        }
+        lastClickTime = event.getEventTime();
+        // if marker is moving choosing are not allowed
 		if(!chooseReady) return 0;
 		// switch to moving state
 		chooseReady = false;
@@ -377,33 +416,14 @@ public class LevelChooseView extends SurfaceView {
 				event.getY() < markerY + GRID_STEP / 2) {
 			return levels[levelY][levelX][0];
 		}
-		// Get choice direction
-		UserControlType tempAction = getMoveType(event);
-		switch(tempAction) {
-		case UP:
-			if(levelY <= 0 || levelX >= levels[levelY - 1].length) tempAction = UserControlType.IDLE;
-			else levelY -= 1;
-			break;
-		case DOWN:
-			if(levelY >= levels.length - 1 || levelX >= levels[levelY + 1].length) tempAction = UserControlType.IDLE; 
-			else levelY += 1;
-			break;
-		case LEFT:
-			if(levelX <= 0) tempAction = UserControlType.IDLE;
-			else levelX -= 1;
-			break;
-		case RIGHT:
-			if(levelX >= levels[levelY].length - 1) tempAction = UserControlType.IDLE;
-			else levelX += 1;
-			break;
-		default:
-			break;
-		}
-		chooseAcion = tempAction;
 		return 0;
 	}
-	
-	protected UserControlType getMoveType(MotionEvent event) {
+
+    private boolean inGridBounds(int levelX, int levelY) {
+        return levelY >= 0 && levelY < levels.length && levelX >=0 && levelX < levels[levelY].length;
+    }
+
+    protected UserControlType getMoveType(MotionEvent event) {
 		float dX = markerX - event.getX(); // positive dx move left
 		float dY = markerY - event.getY(); // positive dy move up
 		// use for get control max by absolute value dx, dy
@@ -487,16 +507,19 @@ public class LevelChooseView extends SurfaceView {
 			finishedLevels[i] = new int[levels[i].length];
 		}
 	}
-	
-	private String getBackgroundId(int levelsid) {
-		switch(levelsid) {
-		case 1: return "background/background_c_1.jpg";
-		case 2: return "background/background_c_2.jpg";
-		case 3: return "background/background_c_3.jpg";
-		default:return "background/background_c_1.jpg";
-		}
-		
-	}
+
+    private String getBackgroundId(int levelsid) {
+        switch(levelsid) {
+            case 1: return "background/background_c_1.jpg";
+            case 2: return "background/background_c_2.jpg";
+            case 3: return "background/background_c_3.jpg";
+            default:return "background/background_c_1.jpg";
+        }
+    }
+
+    public void releaseResources() {
+        if(background != null) background.recycle();
+    }
 	
 	private class Redrawer extends Thread {
 		boolean running = true;

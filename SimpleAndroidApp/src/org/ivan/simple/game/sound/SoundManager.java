@@ -3,7 +3,6 @@ package org.ivan.simple.game.sound;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.util.SparseArray;
 
 import org.ivan.simple.R;
 import org.ivan.simple.game.level.LevelCell;
@@ -13,43 +12,15 @@ import org.ivan.simple.game.motion.MotionType;
 
 public class SoundManager {
     private SoundPool soundPool;
-//    private int jumpSoundId;
-//    private int flySoundId;
-//    private int dieSoundId;
-//    private int winSoundId;
-//    private int warSoundId;
-//    private int coinSoundId;
-//    private int throwSoundId;
-//    private int angleSoundId;
     private AudioManager audioManager;
-    private SparseArray<Integer> soundMap = new SparseArray<Integer>();
+    private final SoundMap soundMap;
     private final Context context;
 
     public SoundManager(Context context) {
         this.context = context;
         soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        mapSound(R.raw.jump);
-        mapSound(R.raw.fly);
-        mapSound(R.raw.war);
-        mapSound(R.raw.detonate);
-        mapSound(R.raw.win);
-        mapSound(R.raw.coin);
-        mapSound(R.raw.throw0);
-        mapSound(R.raw.angle);
-        mapSound(R.raw.reduce);
-        mapSound(R.raw.slick);
-        mapSound(R.raw.tp);
-        mapSound(R.raw.blansh);
-        mapSound(R.raw.brick);
-        mapSound(R.raw.switch0);
-        mapSound(R.raw.open);
-        mapSound(R.raw.magnet);
-        mapSound(R.raw.trampoline);
-    }
-
-    private void mapSound(int resId) {
-        soundMap.put(resId, soundPool.load(context, resId, 1));
+        soundMap = new SoundMap(context, soundPool);
     }
 
     public void playSound(Motion motion, Motion prevMotion, LevelCell nextCell, LevelCell prevCell) {
@@ -58,23 +29,34 @@ public class SoundManager {
         PlatformType prevFloor = prevCell.getFloor().getType();
         PlatformType prevLeft = prevCell.getLeft().getType();
         PlatformType prevRight = prevCell.getRight().getType();
-        if(prevFloor == PlatformType.REDUCE && (mt != MotionType.JUMP || prevMotion.getStage() == 0)) {
-            playSound(R.raw.reduce);
-            return;
+        PlatformType prevRoof = prevCell.getRoof().getType();
+        if(mt != MotionType.FLY_LEFT && mt != MotionType.FLY_RIGHT) {
+            if (prevFloor == PlatformType.REDUCE && (mt != MotionType.JUMP || motion.getStage() == 0)) {
+                playSound(R.raw.reduce);
+                return;
+            }
+            if (prevFloor == PlatformType.STRING && (mt != MotionType.JUMP || motion.getStage() == 0)) {
+                playSound(R.raw.string);
+                return;
+            }
         }
         switch(mt) {
             case JUMP:
-                if(motion.getStage() == 0) {
+                if(motion.getStage() == 0 && prevFloor != PlatformType.SPIKE_UP) {
                     playSound(R.raw.jump);
                 } else if (prevFloor == PlatformType.TRAMPOLINE) {
                     playSound(R.raw.trampoline);
-                } else if(prevCell.getRoof().getType() == PlatformType.ONE_WAY_UP) {
+                } else if(prevRoof == PlatformType.ONE_WAY_UP || prevRoof == PlatformType.WAY_UP_DOWN) {
                     playSound(R.raw.open);
+                } else if(prevRoof == PlatformType.TRANSPARENT) {
+                    playSound(R.raw.transparent);
                 }
                 break;
             case JUMP_LEFT:
                 if(prevLeft == PlatformType.LIMIT || prevLeft == PlatformType.ONE_WAY_LEFT) {
                     playSound(R.raw.open);
+                } else if(prevLeft == PlatformType.TRANSPARENT_V) {
+                    playSound(R.raw.transparent);
                 } else {
                     jumpLR(prevMt, prevFloor);
                 }
@@ -82,6 +64,8 @@ public class SoundManager {
             case JUMP_RIGHT:
                 if(prevRight == PlatformType.LIMIT || prevRight == PlatformType.ONE_WAY_RIGHT) {
                     playSound(R.raw.open);
+                } else if(prevRight == PlatformType.TRANSPARENT_V) {
+                    playSound(R.raw.transparent);
                 } else {
                     jumpLR(prevMt, prevFloor);
                 }
@@ -91,7 +75,7 @@ public class SoundManager {
                     playSound(R.raw.switch0);
                 } else if(prevLeft == PlatformType.BRICK_V) {
                     playSound(R.raw.brick);
-                } else {
+                } else if(prevFloor != PlatformType.SPIKE_UP && prevLeft != PlatformType.SPIKE_V) {
                     playSound(R.raw.coin);
                 }
                 break;
@@ -102,7 +86,7 @@ public class SoundManager {
                     playSound(R.raw.brick);
                 } else if(prevRight == PlatformType.LIMIT) {
                     playSound(R.raw.open);
-                } else {
+                } else if(prevFloor != PlatformType.SPIKE_UP && prevRight != PlatformType.SPIKE_V) {
                     playSound(R.raw.coin);
                 }
                 break;
@@ -110,14 +94,17 @@ public class SoundManager {
             case FLY_RIGHT:
                 if(motion.getStage() == 0) {
                     playSound(R.raw.fly);
-                } else if(prevLeft == PlatformType.ONE_WAY_LEFT || prevRight == PlatformType.ONE_WAY_RIGHT) {
+                } else if(prevLeft == PlatformType.ONE_WAY_LEFT || prevRight == PlatformType.ONE_WAY_RIGHT ||
+                        prevLeft == PlatformType.LIMIT || prevRight == PlatformType.LIMIT) {
                     playSound(R.raw.open);
+                } else if(prevLeft == PlatformType.TRANSPARENT_V || prevRight == PlatformType.TRANSPARENT_V) {
+                    playSound(R.raw.transparent);
                 }
                 break;
             case BEAT_ROOF:
-                if(prevCell.getRoof().getType() == PlatformType.BRICK) {
+                if(prevRoof == PlatformType.BRICK) {
                     playSound(R.raw.brick);
-                } else {
+                } else if(prevRoof != PlatformType.SPIKE) {
                     playSound(R.raw.war);
                 }
                 break;
@@ -130,18 +117,27 @@ public class SoundManager {
             case FALL:
                 if(prevFloor == PlatformType.ONE_WAY_DOWN || prevFloor == PlatformType.WAY_UP_DOWN) {
                     playSound(R.raw.open);
+                } else if(prevFloor == PlatformType.TRANSPARENT) {
+                    playSound(R.raw.transparent);
                 }
                 break;
             case FALL_BLANSH:
+                if(prevFloor == PlatformType.TRANSPARENT) {
+                    playSound(R.raw.transparent);
+                }
 //                playSound(R.raw.blansh);
                 break;
             case STICK_LEFT:
             case STICK_RIGHT:
+                if(motion.getStage() == 0)
+                    playSound(R.raw.glue);
                 break;
             case MAGNET:
                 playSound(R.raw.magnet);
                 break;
             case TP:
+                if(motion.getStage() == 0)
+                    playSound(R.raw.tp);
                 break;
             case TP_LEFT:
             case TP_RIGHT:
@@ -149,9 +145,11 @@ public class SoundManager {
                 break;
             case STAY:
                 if(prevFloor == PlatformType.GLUE) {
+                    if(prevMt != MotionType.STAY)
+                        playSound(R.raw.glue);
                 } else if(prevFloor == PlatformType.BRICK) {
                     playSound(R.raw.brick);
-                } else {
+                } else if(prevFloor != PlatformType.SPIKE_UP) {
                     playSound(R.raw.jump);
                 }
                 break;
@@ -168,7 +166,7 @@ public class SoundManager {
             playSound(R.raw.angle);
         } else if(prevFloor == PlatformType.SLICK) {
             playSound(R.raw.slick);
-        } else {
+        } else if(prevFloor != PlatformType.SPIKE_UP) {
             playSound(R.raw.jump);
         }
     }

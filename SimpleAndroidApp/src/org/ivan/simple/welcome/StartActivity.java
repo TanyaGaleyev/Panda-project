@@ -132,7 +132,6 @@ public class StartActivity extends PandaBaseActivity {
             int startedSet = data.getIntExtra(SET_ID, 0);
             int packToOpenId = startedSet + 1;
             final ImageView packToOpen;
-            setComplete = true;
             if(setComplete && (packToOpen = levButtons.get(packToOpenId)) != null) {
                 final AnimationDrawable chestOpening =
                         app().loadAnimationFromFolder("animations/menu/pack_opening");

@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import org.ivan.simple.game.hero.Sprite;
 import org.ivan.simple.game.level.LevelParser;
 import org.ivan.simple.game.sound.MusicManager;
+import org.ivan.simple.game.sound.SoundManager;
 import org.ivan.simple.settings.SettingsModel;
 
 import java.io.File;
@@ -25,6 +26,7 @@ public class PandaApplication extends Application {
     public int displayHeight;
 
     private MusicManager musicManager;
+    private SoundManager soundManager;
     private FontProvider fontProvider;
     private ImageProvider imageProvider;
     private Sprite loading;
@@ -52,6 +54,7 @@ public class PandaApplication extends Application {
         displayHeight = size.y;
 
         musicManager = new MusicManager(getApplicationContext());
+        soundManager = new SoundManager(getApplicationContext());
         fontProvider = new FontProvider(getApplicationContext());
         imageProvider = new ImageProvider(getApplicationContext(), displayWidth, displayHeight);
         levelParser = new LevelParser(getApplicationContext());
@@ -75,6 +78,10 @@ public class PandaApplication extends Application {
     public MusicManager getMusicManger() {
 		return musicManager;
 	}
+
+    public SoundManager getSoundManager() {
+        return soundManager;
+    }
 
     public ImageProvider getImageProvider() {
         return imageProvider;
