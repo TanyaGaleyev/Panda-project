@@ -239,8 +239,8 @@ public class GameView extends SurfaceView {
 	 * @return
 	 */
 	protected boolean readyForUpdate(UserControlType controlType) {
-		// if the level is complete or lost the game should be not updatable on this level 
-		if(level.model.isLost()) return false;
+		// if the level is complete or lost the game should be not updateable on this level
+		if(level.model.isLost() && !hero.isFinishing()) return false;
 		if(isReadyToPlayWinAnimation()) return false;
 		
 		boolean inControlState = hero.isInControlState();
