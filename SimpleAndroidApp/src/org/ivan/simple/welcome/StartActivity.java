@@ -26,8 +26,8 @@ public class StartActivity extends PandaBaseActivity {
 	public static final String SET_ID = "Id of levels set";
 	public static final String LAST_FINISHED_SET = "Last finished set of levels";
     public static final int PACKS_IN_ROW = 3;
-    private final String[] levelsCaptions = {"ACCESS", "BUTTON", "ZOMBIE", "SYSTEM"};
-	public final int levCount = levelsCaptions.length;
+//    private final String[] levelsCaptions = {"ACCESS", "BUTTON", "ZOMBIE", "SYSTEM"};
+	public final int levCount = 6;
 	private SparseArray<ImageView> levButtons = new SparseArray<ImageView>();
 
 	
