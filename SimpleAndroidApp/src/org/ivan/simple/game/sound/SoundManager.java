@@ -5,10 +5,14 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 
 import org.ivan.simple.R;
+import org.ivan.simple.game.GameManager;
 import org.ivan.simple.game.level.LevelCell;
 import org.ivan.simple.game.level.PlatformType;
 import org.ivan.simple.game.motion.Motion;
 import org.ivan.simple.game.motion.MotionType;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class SoundManager {
     private SoundPool soundPool;
@@ -93,7 +97,12 @@ public class SoundManager {
             case FLY_LEFT:
             case FLY_RIGHT:
                 if(motion.getStage() == 0) {
-                    playSound(R.raw.fly);
+                    if(prevMt == MotionType.JUMP ||
+                            prevMt == MotionType.THROW_LEFT || prevMt == MotionType.THROW_RIGHT ||
+                            prevMt == MotionType.FLY_LEFT || prevMt == MotionType.FLY_RIGHT)
+                        playSound(R.raw.fly);
+                    else
+                        playDelayed(R.raw.fly, 4);
                 } else if(prevLeft == PlatformType.ONE_WAY_LEFT || prevRight == PlatformType.ONE_WAY_RIGHT ||
                         prevLeft == PlatformType.LIMIT || prevRight == PlatformType.LIMIT) {
                     playSound(R.raw.open);
@@ -184,6 +193,16 @@ public class SoundManager {
     private void playSound(int resId) {
         float volume = getVolume();
         soundPool.play(soundMap.get(resId), volume, volume, 1, 0, 1f);
+    }
+
+    private void playDelayed(final int resId, int framesDelay) {
+        TimerTask delayedPlayback = new TimerTask() {
+            @Override
+            public void run() {
+                playSound(resId);
+            }
+        };
+        new Timer().schedule(delayedPlayback, framesDelay * GameManager.getOneFrameDuration());
     }
 
     private float getVolume() {

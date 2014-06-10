@@ -36,6 +36,10 @@ public class GameManager extends Thread {
 		return FPS;
 	}
 
+    public static long getOneFrameDuration() {
+        return ticksPS;
+    }
+
 	public GameManager(GameView view) {
 		this.view = view;
 	}
