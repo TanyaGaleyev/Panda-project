@@ -3,8 +3,10 @@ package org.ivan.simple.game;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -223,14 +225,31 @@ public class GameView extends SurfaceView {
 	}
 
     private void drawStamp(Canvas canvas, String complete, int color) {
-        Paint paint = new Paint();
-        paint.setTextSize(80);
-        Rect textRect = new Rect();
-        paint.getTextBounds(complete, 0, complete.length(), textRect);
         canvas.rotate(-35, getWidth() / 2, getHeight() / 2);
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(color);
-        canvas.drawText(complete, getWidth() / 2 - textRect.exactCenterX(), getHeight() / 2 - textRect.exactCenterY(), paint);
+
+        Paint textPaint = new Paint();
+        textPaint.setColor(color);
+        textPaint.setStyle(Paint.Style.FILL);
+        textPaint.setTextSize(80);
+        textPaint.setTypeface(PandaApplication.getPandaApplication().getFontProvider().bold());
+
+        Paint borderPaint = new Paint();
+        borderPaint.setColor(color);
+        borderPaint.setStyle(Paint.Style.STROKE);
+        borderPaint.setStrokeWidth(10);
+        borderPaint.setPathEffect(new DashPathEffect(new float[]{30, 15}, 0));
+
+        Rect textRect = new Rect();
+        textPaint.getTextBounds(complete, 0, complete.length(), textRect);
+        canvas.drawText(complete, getWidth() / 2 - textRect.exactCenterX(), getHeight() / 2 - textRect.exactCenterY(), textPaint);
+
+        RectF border = new RectF(
+                getWidth() / 2 - textRect.centerX() - 50,
+                getHeight() / 2 - textRect.centerY() - 100,
+                getWidth() / 2 + textRect.centerX() + 50,
+                getHeight() / 2 + textRect.centerY() + 100);
+        canvas.drawRoundRect(border, 10, 10, borderPaint);
+
         canvas.restore();
     }
 
