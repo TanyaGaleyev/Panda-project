@@ -34,23 +34,23 @@ public class LevelChooseView extends SurfaceView {
     private int GRID_STEP;
 	private int LEFT_BOUND;
 	private int TOP_BOUND;
-	private int markerSpeed() {
+    private int markerSpeed() {
         return GRID_STEP / 8;
     }
-	// selected level coordinates in array
+
+    // selected level coordinates in array
 	private int levelX = 0;
-	private int levelY = 0;
-	/**
+    private int levelY = 0;
+    /**
 	 * Matrix with levels IDs
 	 */
 	private int[][][] levels;
-	private int[][] finishedLevels;
-
-
+    private int[][] finishedLevels;
 	/**
 	 * Border of levels to select
 	 */
 	private Bitmap border;
+
 
 	/**
 	 * Marks complete levels
@@ -59,16 +59,17 @@ public class LevelChooseView extends SurfaceView {
 
 	// Backgroung image of LevelChooseView
 	private String backgroundId;
-	private Bitmap background;
+    private Bitmap background;
 //    private PandaBackground bgr;
 
-	// Scores bitmaps
-	private Bitmap highscore;
-	private Bitmap mediumscore;
-	private Bitmap lowscore;
+    // Scores bitmaps
+    private Bitmap highscore;
 
+    private Bitmap mediumscore;
+    private Bitmap lowscore;
 	private Paint textPaint;
     private Paint backgroundPaint;
+    private Paint gridPaint;
 
 	/**
 	 * Marker is a panda image moving from one level to another (choosing level)
@@ -113,6 +114,11 @@ public class LevelChooseView extends SurfaceView {
         textPaint.setAntiAlias(true);
         backgroundPaint = new Paint();
         backgroundPaint.setAntiAlias(true);
+        gridPaint = new Paint();
+        gridPaint.setColor(Color.WHITE);
+        gridPaint.setStyle(Paint.Style.STROKE);
+        gridPaint.setStrokeWidth(2);
+        gridPaint.setPathEffect(new DashPathEffect(new float[]{5, 2}, 0));
 		getHolder().addCallback(new SurfaceHolder.Callback() {
 
 			public void surfaceDestroyed(SurfaceHolder holder) {
@@ -232,11 +238,6 @@ public class LevelChooseView extends SurfaceView {
     }
 
     private void drawGrid(Canvas canvas) {
-        Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(2);
-        paint.setPathEffect(new DashPathEffect(new float[] {5,2}, 0));
         int gap = 5;
         for(int i = 0; i < LEVELS_COLS; i++) {
             int colX = getScreenX(i);
@@ -246,7 +247,7 @@ public class LevelChooseView extends SurfaceView {
                         getScreenY(j) + border.getWidth() / 2 - gap,
                         colX,
                         getScreenY(j + 1) - border.getWidth() / 2 + gap,
-                        paint
+                        gridPaint
                 );
             }
         }
@@ -258,7 +259,7 @@ public class LevelChooseView extends SurfaceView {
                         rowY,
                         getScreenX(i + 1) - border.getWidth() / 2 + gap,
                         rowY,
-                        paint
+                        gridPaint
                 );
             }
         }
