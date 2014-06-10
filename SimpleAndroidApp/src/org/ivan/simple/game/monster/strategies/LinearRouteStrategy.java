@@ -3,7 +3,6 @@ package org.ivan.simple.game.monster.strategies;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.ivan.simple.game.level.LevelCell;
 import org.ivan.simple.game.monster.MonsterDirection;
 
 public class LinearRouteStrategy implements MonsterStrategy {
@@ -25,6 +24,12 @@ public class LinearRouteStrategy implements MonsterStrategy {
 		if(decline) {
 			id += adder;
 		}
+        if(id < 0) {
+            id = 0;
+        }
+        if(id >= availableDirections.size()) {
+            id = availableDirections.size() - 1;
+        }
 		MonsterDirection nd = backOrForward();
 		id += adder;
 		return nd;
