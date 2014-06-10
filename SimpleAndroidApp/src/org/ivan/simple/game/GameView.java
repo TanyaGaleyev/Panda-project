@@ -255,7 +255,6 @@ public class GameView extends SurfaceView {
 
 	/**
 	 * Checks if game is ready to switch hero animation and/or motion
-	 * @return
 	 */
 	protected boolean readyForUpdate(UserControlType controlType) {
 		// if the level is complete or lost the game should be not updateable on this level
@@ -320,7 +319,6 @@ public class GameView extends SurfaceView {
 
     /**
 	 * Switch to next animation after pre/post- animation finished
-	 * @return true if pre or post animation ended, otherwise - false 
 	 */
 	private void continueModel() {
         // when motion at last switches we need to play cell animation
@@ -359,7 +357,6 @@ public class GameView extends SurfaceView {
 
     /**
 	 * Random rotating movement if hero was spiked
-	 * @return
 	 */
 	private boolean moveLose() {
         if(monsterLose) {
