@@ -442,8 +442,9 @@ public class Platform {
 	
 	public void unlock() {
         setStatus(1);
+        sprite.goToFrame(1);
         sprite.playOnce();
-		type = PlatformType.NONE;
+//		type = PlatformType.NONE;
 	}
 	
 	public int getStatus() {
