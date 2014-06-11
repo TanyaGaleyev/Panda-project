@@ -28,7 +28,7 @@ public class LevelModel {
     private ScoreProvider scoreProvider;
 	private boolean lose = false;
 	private boolean complete = false;
-	private LevelCell winCell;
+	private CellCoords winCellCoords;
 	private Map<Platform, PlatformCellPair> leftRightTpDestMap;
 	private Map<Platform, PlatformCellPair> floorTpDestMap;
 	private List<Platform> switchList = new ArrayList<Platform>();
@@ -68,7 +68,7 @@ public class LevelModel {
         totalPrizes = 0;
         scoreProvider = new ScoreProvider(levelInfo.scoreStruct);
         CellCoords startCellCoord = levelInfo.startCell;
-        CellCoords winCellCoord = levelInfo.winCell;
+        winCellCoords = levelInfo.winCell;
         hero = new HeroModel(startCellCoord.i, startCellCoord.j);
         levelGrid = new LevelGrid(rows, cols);
         Map<Platform, int[]> platformMetaMap = new HashMap<Platform, int[]>();
@@ -105,16 +105,11 @@ public class LevelModel {
 				int[] floorDescr = mylevel[i][j][3];
                 newCell.createFloor(type(floorDescr));
                 platformMetaMap.put(newCell.getFloor(), floorDescr);
-
-				if(i == winCellCoord.i && j == winCellCoord.j) {
-					winCell = newCell;
-				}
 			}
 		}
         initFloorTps(platformMetaMap);
         initLeftRightTps(platformMetaMap);
         initStatePlatforms(platformMetaMap);
-        if(winCell == null) winCell = levelGrid.get(0, 0);
     }
 
     private void initStatePlatforms(Map<Platform, int[]> platformMetaMap) {
@@ -640,12 +635,15 @@ public class LevelModel {
 		 * level will be complete after hero reaches win cell (with win floor platform now)
 		 */
         if(scoreProvider.hasScore(prizesCollected)/* || prizesCollected >= totalPrizes*/) {
+            LevelCell winCell = levelGrid.get(winCellCoords);
             if(winCell.getFloor().getType() != PlatformType.WIN) {
-                // TODO careful with roof (of underlying cell)
                 winCell.createFloor(PlatformType.WIN);
+                if(winCellCoords.i < rows - 1)
+                    levelGrid.get(winCellCoords.i + 1, winCellCoords.j).roof = winCell.getFloor();
             }
             if(getHeroCell() == winCell && !skipWinPlatform(hero.finishingMotion, hero.currentMotion)) {
                 complete = true;
+                lose = false;
             }
         }
     }
