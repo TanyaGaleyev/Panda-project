@@ -84,25 +84,25 @@ public class TwoHandControlProvider implements UserControlProvider {
                 if(event.getPointerCount() > 2) return true;
                 for(int ai = 0; ai < event.getPointerCount(); ai++) {
                     pointerId = event.getPointerId(ai);
-                    if(event.getY(ai) - startPressedY[pointerId] > 20) {
-                        useDelayedControl.cancel();
-                        pressedControl = UserControlType.DOWN;
-                        obtainedControl = pressedControl;
-                        startPressedY[pointerId] = event.getY(ai);
-                        slideSenderID = pointerId;
+                    float eventY = event.getY(ai);
+                    if(eventY - startPressedY[pointerId] > 20) {
+                        receiveSlide(UserControlType.DOWN, pointerId, eventY);
                         break;
-                    } else if(event.getY(ai) - startPressedY[pointerId] < -20) {
-                        useDelayedControl.cancel();
-                        pressedControl = UserControlType.UP;
-                        obtainedControl = pressedControl;
-                        startPressedY[pointerId] = event.getY(ai);
-                        slideSenderID = pointerId;
+                    } else if(eventY - startPressedY[pointerId] < -20) {
+                        receiveSlide(UserControlType.UP, pointerId, eventY);
                         break;
                     }
                 }
                 return true;
         }
         return false;
+    }
+
+    private void receiveSlide(UserControlType controlType, int pointerId, float y) {
+        useDelayedControl.cancel();
+        obtainedControl = pressedControl = controlType;
+        startPressedY[pointerId] = y;
+        slideSenderID = pointerId;
     }
 
     private void receiveTap(float tapX) {
