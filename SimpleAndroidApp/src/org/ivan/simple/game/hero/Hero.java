@@ -574,7 +574,6 @@ public class Hero {
 
     /**
 	 * Used to get proper bitmap for motion
-	 * @param mt
 	 */
 	private void pickActiveSprite(MotionType mt) {
 		switch(mt) {
@@ -595,10 +594,9 @@ public class Hero {
 	
 	/**
 	 * Draw proper hero animation frame by center coordinates
-	 * @param canvas
 	 */
 	public void onDraw(Canvas canvas, boolean update) {
-		if(!finishingState && (model.currentMotion.getType().isHorizontalTP())) {
+		if(!detonate && !finishingState && (model.currentMotion.getType().isHorizontalTP())) {
 			tpSprite.onDraw(canvas, prevX, prevY, x, y, update);
 		} else {
 			activeSprite.onDraw(canvas, x, y, update);
@@ -607,7 +605,6 @@ public class Hero {
 	
 	/**
 	 * Real motion type used to get proper hero speed on start/finish/main animations
-	 * @return
 	 */
 	public Motion getRealMotion() {
 		if(finishingState) {
@@ -617,11 +614,13 @@ public class Hero {
 		}
 	}
 	
+	private boolean detonate = false;
 	/**
 	 * Play loose animation
 	 */
 	public boolean playDetonateAnimation() {
 //		activeSprite = sprites.getSprite("fall");
+        detonate = true;
         activeSprite = sprites.getSprite("detonate");
         activeSprite.setPlayOnce(true);
         return activeSprite.isAnimatingOrDelayed();
