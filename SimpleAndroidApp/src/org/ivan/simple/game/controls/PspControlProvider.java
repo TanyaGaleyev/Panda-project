@@ -10,13 +10,10 @@ import java.util.TimerTask;
 /**
  * Created by ivan on 28.05.2014.
  */
-public class TwoHandControlProvider implements UserControlProvider {
+public class PspControlProvider implements UserControlProvider {
 
     public static final int USE_TAP_DELAY = 100;
 
-    public static interface FloatProvider {
-        float get();
-    }
     private final FloatProvider lrBound;
     private UserControlType pressedControl = UserControlType.IDLE;
     private UserControlType obtainedControl = UserControlType.IDLE;
@@ -28,7 +25,7 @@ public class TwoHandControlProvider implements UserControlProvider {
     private float[] startPressedY = new float[2];
     private int slideSenderID;
 
-    public TwoHandControlProvider(FloatProvider lrBound) {
+    public PspControlProvider(FloatProvider lrBound) {
         this.lrBound = lrBound;
     }
 

@@ -1,11 +1,11 @@
 package org.ivan.simple.game;
 
 import org.ivan.simple.game.controls.ControlsType;
-import org.ivan.simple.game.controls.OneHandControlProvider;
+import org.ivan.simple.game.controls.FloatProvider;
 import org.ivan.simple.game.controls.PivotPoint;
 import org.ivan.simple.game.controls.SimpleControlProvider;
 import org.ivan.simple.game.controls.SlideOnly;
-import org.ivan.simple.game.controls.TwoHandControlProvider;
+import org.ivan.simple.game.controls.PspControlProvider;
 import org.ivan.simple.game.controls.UserControlProvider;
 import org.ivan.simple.game.hero.Hero;
 
@@ -24,7 +24,7 @@ public class ControlsFactory {
             case SIMPLE:
                 return new SimpleControlProvider(new HeroPivot());
             case TWO_FINGERS:
-                return new TwoHandControlProvider(new ScreenMiddleXProvider());
+                return new PspControlProvider(new ScreenMiddleXProvider());
             case ONE_FINGER:
             default:
                 return new SlideOnly();
@@ -47,7 +47,7 @@ public class ControlsFactory {
         }
     }
 
-    private class ScreenMiddleXProvider implements TwoHandControlProvider.FloatProvider {
+    private class ScreenMiddleXProvider implements FloatProvider {
         @Override
         public float get() {
             return gameControl.view.getWidth() / 2f;
