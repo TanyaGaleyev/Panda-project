@@ -51,6 +51,8 @@ public class StartActivityNew extends PandaBaseActivity {
         panda = new ImageView(this);
         int width = (int) (app().displayWidth * .3125f);
         int height = (int) (app().displayHeight * .5f);
+        if(width > height)  width = height;
+        else                height = width;
         int left = (int) (app().displayWidth * .65f);
         int top = (int) (app().displayHeight * .20f);
 
