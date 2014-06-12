@@ -42,9 +42,13 @@ public class ImageProvider {
 			baseStep = 144;
 			resSet = "small/";
 		} else if(height < 672) {
-			gridStep = 88;
-			baseStep = 144;
-			resSet = "small/";
+            gridStep = 88;
+            baseStep = 144;
+            resSet = "small/";
+        } else if(height < 1280) {
+            gridStep = 144;
+            baseStep = 144;
+            resSet = "small/";
 		} else {
 			gridStep = 112;
 			baseStep = 230;
@@ -69,19 +73,20 @@ public class ImageProvider {
                 try {
 				    original = loadBitmap(path, opts);
                 } catch (OutOfMemoryError error) {
-                    System.err.println("Error loading path " + path);
-                    System.err.println("Max heap: " + Runtime.getRuntime().maxMemory());
-                    System.err.println("Total heap: " + Runtime.getRuntime().totalMemory());
-                    System.err.println("Free heap: " + Runtime.getRuntime().freeMemory());
+                    reportOutOfMemory(path);
                     throw error;
                 }
 				int width = (int) Math.ceil(opts.outWidth * scale);
 				width -= width % cols;
 				int height = (int) Math.ceil(opts.outHeight * scale);
 				height -= height % rows;
-				// TODO learn aboul filter flag
-				ret = Bitmap.createScaledBitmap(original, width, height, true);
-				original.recycle();
+                if(original.getWidth() == width && original.getHeight() == height) {
+                    ret = original;
+                } else {
+                    // TODO learn about filter flag
+                    ret = Bitmap.createScaledBitmap(original, width, height, true);
+                    original.recycle();
+                }
 			}
 			return ret;
 		} catch (IOException e) {
@@ -90,8 +95,15 @@ public class ImageProvider {
 			return null;
 		}
 	}
-	
-	public Bitmap getBitmap(String path, int rows, int cols) {
+
+    private void reportOutOfMemory(String path) {
+        System.err.println("Error loading path " + path);
+        System.err.println("Max heap: " + Runtime.getRuntime().maxMemory());
+        System.err.println("Total heap: " + Runtime.getRuntime().totalMemory());
+        System.err.println("Free heap: " + Runtime.getRuntime().freeMemory());
+    }
+
+    public Bitmap getBitmap(String path, int rows, int cols) {
 		Bitmap  bmp = images.get(path);
 		if(bmp == null) {
 			bmp = getBitmapNoCache(path, rows, cols);
@@ -157,9 +169,13 @@ public class ImageProvider {
     public Bitmap getScaledBitmapNoCache(String path, int width, int height, BitmapFactory.Options opts) {
         try {
             Bitmap orig = loadBitmap(path, opts);
-            Bitmap scaled = Bitmap.createScaledBitmap(orig, width, height, true);
-            orig.recycle();
-            return scaled;
+            if(orig.getWidth() == width && orig.getHeight() == height) {
+                return orig;
+            } else {
+                Bitmap scaled = Bitmap.createScaledBitmap(orig, width, height, true);
+                orig.recycle();
+                return scaled;
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return null;
