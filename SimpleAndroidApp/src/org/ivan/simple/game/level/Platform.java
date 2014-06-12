@@ -167,8 +167,8 @@ public class Platform {
 				mt == MotionType.TP_RIGHT && prevMt == MotionType.FLY_RIGHT ||
 				mt == MotionType.TP_LR && prevMt == MotionType.FLY_LEFT ||
 				mt == MotionType.TP_RL && prevMt == MotionType.FLY_RIGHT ||
-				mt == MotionType.JUMP_LEFT_WALL && prevMt == MotionType.FLY_LEFT ||
-				mt == MotionType.JUMP_RIGHT_WALL && prevMt == MotionType.FLY_RIGHT ||
+				mt == MotionType.JUMP_LEFT_WALL && (prevMt == MotionType.FLY_LEFT || prevMt == MotionType.THROW_LEFT) ||
+				mt == MotionType.JUMP_RIGHT_WALL && (prevMt == MotionType.FLY_RIGHT || prevMt == MotionType.THROW_RIGHT) ||
 				mt == MotionType.FLY_RIGHT && prevMt == MotionType.FLY_LEFT && prevMotion.getStage() != 0 ||
 				mt == MotionType.FLY_LEFT && prevMt == MotionType.FLY_RIGHT && prevMotion.getStage() != 0) {
 			return;
