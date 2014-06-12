@@ -4,9 +4,6 @@ import android.view.MotionEvent;
 
 import org.ivan.simple.UserControlType;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 /**
  * Created by ivan on 28.05.2014.
  */
