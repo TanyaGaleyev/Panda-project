@@ -21,7 +21,10 @@ public class TwoHandControlProvider implements UserControlProvider {
     private UserControlType pressedControl = UserControlType.IDLE;
     private UserControlType obtainedControl = UserControlType.IDLE;
     private UserControlType delayedControl = UserControlType.IDLE;
-    private TimerTask useDelayedControl;
+    private TimerTask useDelayedControl = new TimerTask() {
+        @Override
+        public void run() {}
+    };
     private float[] startPressedY = new float[2];
     private int slideSenderID;
 
@@ -63,18 +66,16 @@ public class TwoHandControlProvider implements UserControlProvider {
                         pressedControl != UserControlType.DOWN) ||
                         slideSenderID == pointerId) {
                     if(event.getX(anotherActionIndex) > lrBound.get()) {
-                        if(useDelayedControl != null) useDelayedControl.cancel();
+                        useDelayedControl.cancel();
                         pressedControl = UserControlType.RIGHT;
                     } else {
-                        if(useDelayedControl != null) useDelayedControl.cancel();
+                        useDelayedControl.cancel();
                         pressedControl = UserControlType.LEFT;
                     }
                 }
                 return true;
             case MotionEvent.ACTION_UP:
-                if(useDelayedControl != null &&
-                        useDelayedControl.cancel() &&
-                        obtainedControl == UserControlType.IDLE) {
+                if(useDelayedControl.cancel() && obtainedControl == UserControlType.IDLE) {
                     obtainedControl = delayedControl;
                 }
                 pressedControl = UserControlType.IDLE;
@@ -84,14 +85,14 @@ public class TwoHandControlProvider implements UserControlProvider {
                 for(int ai = 0; ai < event.getPointerCount(); ai++) {
                     pointerId = event.getPointerId(ai);
                     if(event.getY(ai) - startPressedY[pointerId] > 20) {
-                        if(useDelayedControl != null) useDelayedControl.cancel();
+                        useDelayedControl.cancel();
                         pressedControl = UserControlType.DOWN;
                         obtainedControl = pressedControl;
                         startPressedY[pointerId] = event.getY(ai);
                         slideSenderID = pointerId;
                         break;
                     } else if(event.getY(ai) - startPressedY[pointerId] < -20) {
-                        if(useDelayedControl != null) useDelayedControl.cancel();
+                        useDelayedControl.cancel();
                         pressedControl = UserControlType.UP;
                         obtainedControl = pressedControl;
                         startPressedY[pointerId] = event.getY(ai);
@@ -105,7 +106,7 @@ public class TwoHandControlProvider implements UserControlProvider {
     }
 
     private void receiveTap(float tapX) {
-        if(useDelayedControl != null) useDelayedControl.cancel();
+        useDelayedControl.cancel();
         if(tapX > lrBound.get()) {
             delayedControl = UserControlType.RIGHT;
         } else {
