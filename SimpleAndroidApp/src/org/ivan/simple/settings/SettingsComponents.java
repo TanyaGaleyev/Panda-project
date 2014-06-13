@@ -11,9 +11,11 @@ import android.widget.TextView;
 
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.game.controls.ControlsType;
+import org.ivan.simple.utils.BiMap;
 
-import java.util.EnumMap;
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by ivan on 21.11.13.
@@ -29,12 +31,46 @@ public class SettingsComponents {
     private CheckBox effects;
     private CheckBox music;
     private Spinner selectControl;
-    private LinkedHashMap<Integer, ControlsType> positionToControlsTypeMap =
-            new LinkedHashMap<Integer, ControlsType>();
-    private EnumMap<ControlsType, Integer> controlsTypeToPositionMap =
-            new EnumMap<ControlsType, Integer>(ControlsType.class);
+    private BiMap<Integer, ControlsType> positionToControlsTypeMap =
+        new BiMap<Integer, ControlsType>();
+    private ControlsSequence controlsSequence = new ControlsSequence(
+            new ControlsName(ControlsType.ONE_FINGER, ONE_FINGER_CONTROL),
+            new ControlsName(ControlsType.TWO_FINGERS, TWO_FINGERS_CONTROL)
+    );
     private SettingsModel model;
     private Typeface regular;
+
+    private static class ControlsSequence {
+        List<ControlsName> sequence;
+
+        ControlsSequence(ControlsName... controlsNames) {
+            sequence = Arrays.asList(controlsNames);
+        }
+
+        List<ControlsType> types() {
+            ArrayList<ControlsType> ret = new ArrayList<ControlsType>();
+            for(ControlsName cn : sequence)
+                ret.add(cn.type);
+            return ret;
+        }
+
+        List<String> names() {
+            ArrayList<String> ret = new ArrayList<String>();
+            for(ControlsName cn : sequence)
+                ret.add(cn.name);
+            return ret;
+        }
+    }
+
+    private static class ControlsName {
+        ControlsType type;
+        String name;
+
+        ControlsName(ControlsType type, String name) {
+            this.type = type;
+            this.name = name;
+        }
+    }
 
     public SettingsComponents(PandaBaseActivity context, SettingsModel model) {
         this.model = model;
@@ -46,29 +82,24 @@ public class SettingsComponents {
         music.setChecked(model.isMusicEnabled());
         selectControl = new Spinner(context);
         initControls();
-        // TODO mapping between positon, name and type of controls are inconsistent, need to rework
+        // TODO mapping between position, name and type of controls are inconsistent, need to rework
         FontArrayAdapter controlsAdapter = new FontArrayAdapter(
                 context,
                 android.R.layout.simple_spinner_item,
                 regular,
                 Color.BLACK,
-                SIMPLE_CONTROL, ONE_FINGER_CONTROL, TWO_FINGERS_CONTROL);
+                controlsSequence.names());
         controlsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         selectControl.setAdapter(controlsAdapter);
-        selectControl.setSelection(controlsTypeToPositionMap.get(model.getControlsType()));
+        selectControl.setSelection(positionToControlsTypeMap.getReverse(model.getControlsType()));
 
         initListeners();
     }
 
     private void initControls() {
-        putControlsEntry(ControlsType.SIMPLE, 0);
-        putControlsEntry(ControlsType.ONE_FINGER, 1);
-        putControlsEntry(ControlsType.TWO_FINGERS, 2);
-    }
-
-    private void putControlsEntry(ControlsType type, int position) {
-        positionToControlsTypeMap.put(position, type);
-        controlsTypeToPositionMap.put(type, position);
+        List<ControlsType> types = controlsSequence.types();
+        for (int i = 0; i < types.size(); i++)
+            positionToControlsTypeMap.put(i, types.get(i));
     }
 
     private void initListeners() {

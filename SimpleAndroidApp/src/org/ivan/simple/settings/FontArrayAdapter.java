@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.List;
+
 /**
  * Created by ivan on 30.05.2014.
  */
@@ -16,6 +18,12 @@ public class FontArrayAdapter extends ArrayAdapter<String> {
     private final Typeface tf;
 
     public FontArrayAdapter(Context context, int resource, Typeface tf, int tColor, String... objects) {
+        super(context, resource, objects);
+        this.tColor = tColor;
+        this.tf = tf;
+    }
+
+    public FontArrayAdapter(Context context, int resource, Typeface tf, int tColor, List<String> objects) {
         super(context, resource, objects);
         this.tColor = tColor;
         this.tf = tf;
