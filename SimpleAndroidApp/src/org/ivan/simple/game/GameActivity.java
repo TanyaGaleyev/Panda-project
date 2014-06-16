@@ -130,6 +130,7 @@ public class GameActivity extends PandaBaseActivity {
     	super.onDestroy();
         app().getSettingsModel().unregisterControlChangeObserver(gControl);
         gControl.releaseResources();
+        loseDialog.cancel();
     }
 
     public void startTutorial(int type) {
@@ -216,7 +217,6 @@ public class GameActivity extends PandaBaseActivity {
         loseDialog.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loseDialog.cancel();
                 finish();
             }
         });
