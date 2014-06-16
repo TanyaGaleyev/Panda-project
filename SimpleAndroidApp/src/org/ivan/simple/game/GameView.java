@@ -174,13 +174,13 @@ public class GameView extends SurfaceView {
 		drawFPS(canvas);
 		drawScore(canvas);
         drawMemoryUsage(canvas);
-		if(isReadyToPlayLoseAnimation()) {
-			drawLose(canvas);
-		} else if(isReadyToPlayWinAnimation()) {
-			drawWin(canvas);
+        if(isReadyToPlayLoseAnimation()) {
+//            drawLose(canvas);
+        } else if(isReadyToPlayWinAnimation()) {
+            drawWin(canvas);
             control.playWinSound();
-		}
-	}
+        }
+    }
 
     private void drawOnCenterCoordinates(Bitmap bitmap, int x, int y, Paint paint, Canvas canvas) {
         canvas.drawBitmap(bitmap, x - bitmap.getWidth() / 2, y - bitmap.getHeight() / 2, paint);
