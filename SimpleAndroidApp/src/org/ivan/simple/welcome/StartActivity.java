@@ -93,7 +93,7 @@ public class StartActivity extends PandaBaseActivity {
                 levbtn.setEnabled(true);
             } else {
                 levbtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.chest_close));
-                levbtn.setEnabled(false);
+//                levbtn.setEnabled(false);
             }
             levbtn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
