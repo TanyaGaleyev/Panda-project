@@ -51,14 +51,14 @@ public class ImageProvider {
             gridStep = 88;
             baseStep = 144;
             resSet = "small/";
-        } else if(height < 1280) {
+        } else if(height < 1080) {
+            gridStep = 112;
+            baseStep = 230;
+            resSet = "large/";
+		} else {
             gridStep = 144;
             baseStep = 144;
             resSet = "small/";
-		} else {
-			gridStep = 112;
-			baseStep = 230;
-			resSet = "large/";
 		}
 		return gridStep;
 	}
