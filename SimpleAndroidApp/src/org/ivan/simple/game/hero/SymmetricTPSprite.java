@@ -1,5 +1,6 @@
 package org.ivan.simple.game.hero;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
@@ -7,11 +8,16 @@ public class SymmetricTPSprite extends Sprite implements TPSprite {
 	private final int shiftStep;
 	private final boolean left;
 	
-	public SymmetricTPSprite(String bmpid, int rows, int cols, int shiftSt, boolean l) {
-		super(bmpid, rows, cols);
+	protected SymmetricTPSprite(Bitmap bmp, int rows, int cols, int shiftSt, boolean l) {
+		super(bmp, rows, cols);
 		shiftStep = shiftSt;
 		left = l;
 	}
+
+    public static SymmetricTPSprite createStrict(String bmpid, int rows, int cols, int shiftSt, boolean l) {
+        Bitmap bmp = imageProvider().getBitmapStrictCache(bmpid, rows, cols);
+        return new SymmetricTPSprite(bmp, rows, cols, shiftSt, l);
+    }
 
     @Override
     public void onDraw(Canvas c, int prevX, int prevY, int x, int y, boolean update) {

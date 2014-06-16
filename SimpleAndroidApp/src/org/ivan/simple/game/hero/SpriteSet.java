@@ -15,17 +15,17 @@ public class SpriteSet {
 	}
 	
 	public void putSprite(String name, String resid, int rows, int cols) {
-		putSprite(name, new Sprite(resid, rows, cols));
+		putSprite(name, Sprite.createStrict(resid, rows, cols));
 	}
 	
 	public void putTPSprite(String name, String resid, int rows, int cols, boolean left) {
         int shiftSt = PandaApplication.getPandaApplication().getImageProvider().getGridStep() / 8;
-        putSprite(name, new SymmetricTPSprite(resid, rows, cols, shiftSt, left));
+        putSprite(name, SymmetricTPSprite.createStrict(resid, rows, cols, shiftSt, left));
 	}
 
     public void putAsymmetricTPSprite(String name, String inBmpid, String outBmpId, int rows, int cols, boolean lIn, boolean lOut) {
         int shiftSt = PandaApplication.getPandaApplication().getImageProvider().getGridStep() / 8;
-        putSprite(name, new AsymmetricTPSprite(inBmpid, outBmpId, rows, cols, shiftSt, lIn, lOut));
+        putSprite(name, AsymmetricTPSprite.createStrict(inBmpid, outBmpId, rows, cols, shiftSt, lIn, lOut));
     }
     
     public void putAsymmetricTPSpriteLR(String name, String inBmpid, String outBmpid) {

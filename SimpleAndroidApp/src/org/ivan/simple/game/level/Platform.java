@@ -17,123 +17,124 @@ public class Platform {
 		this.type = type;
 		switch(type) {
 		case SIMPLE:
-			sprite = new Sprite("platform_h/simple_platform.png", 4, 8);
+			sprite = Sprite.createLru("platform_h/simple_platform.png", 4, 8);
 			break;
 		case SIMPLE_V:
-			sprite  = new Sprite("platform_v/simple_platform_v.png", 1, 1);
+			sprite  = Sprite.createLru("platform_v/simple_platform_v.png", 1, 1);
 			break;
 		case REDUCE:
-			sprite = new Sprite("platform_h/reduce_platform.png", 4, 8);
+			sprite = Sprite.createLru("platform_h/reduce_platform.png", 4, 8);
 			break;
 		case ANGLE_RIGHT:
-			sprite = new Sprite("platform_h/angle_platform_right.png", 1, 8);
+			sprite = Sprite.createLru("platform_h/angle_platform_right.png", 1, 8);
 			break;
 		case ANGLE_LEFT:
-			sprite = new Sprite("platform_h/angle_platform_left.png", 1, 8);
+			sprite = Sprite.createLru("platform_h/angle_platform_left.png", 1, 8);
 			break;
 		case THROW_OUT_RIGHT:
-			sprite = new Sprite("platform_h/throw_out_platform_right.png", 1, 8);
+			sprite = Sprite.createLru("platform_h/throw_out_platform_right.png", 1, 8);
 			break;
 		case THROW_OUT_LEFT:
-			sprite = new Sprite("platform_h/throw_out_platform_left.png", 1, 8);
+			sprite = Sprite.createLru("platform_h/throw_out_platform_left.png", 1, 8);
 			break;	
 		case TRAMPOLINE:
-			sprite = new Sprite("platform_h/trampoline_platform.png",1,8);
+			sprite = Sprite.createLru("platform_h/trampoline_platform.png",1,8);
 			break;
 		case ELECTRO:
-			sprite = new Sprite("platform_h/electro_platform.png",1,4);
+			sprite = Sprite.createLru("platform_h/electro_platform.png",1,4);
 			sprite.setAnimating(true);
 			break;
 		case SPRING:
-			sprite = new Sprite("platform_v/spring_platform.png",2,16);
+			sprite = Sprite.createLru("platform_v/spring_platform.png",2,16);
 			break;
 		case SPIKE:
-			sprite = new Sprite("platform_h/spike.png",1,8);
+			sprite = Sprite.createLru("platform_h/spike.png",1,8);
 			sprite.setAnimating(true);
 			break;
 		case SPIKE_V:
-			sprite = new Sprite("platform_v/spike_v.png", 1, 8);
+			sprite = Sprite.createLru("platform_v/spike_v.png", 1, 8);
 			sprite.setAnimating(true);
 			break;
         case SPIKE_UP:
-            sprite = new Sprite("platform_h/spike_up.png", 1, 8);
+            sprite = Sprite.createLru("platform_h/spike_up.png", 1, 8);
             sprite.setAnimating(true);
             break;
 		case WIN:
-			sprite = new Sprite("platform_h/win_platform.png", 1, 8);
+			sprite = Sprite.createLru("platform_h/win_platform.png", 1, 8);
 			sprite.setAnimating(true);
 			break;
 		case TELEPORT_L_V:
-			sprite = new Sprite("platform_v/teleport_l_v.png", 1, 16);
+			sprite = Sprite.createLru("platform_v/teleport_l_v.png", 1, 16);
 			sprite.setAnimating(true);
 			break;
 		case TELEPORT_R_V:
-			sprite = new Sprite("platform_v/teleport_r_v.png", 1, 16);
+			sprite = Sprite.createLru("platform_v/teleport_r_v.png", 1, 16);
 			sprite.setAnimating(true);
 			break;
 		case SLICK:
-			sprite = new Sprite("platform_h/slick.png", 1, 1);
+			sprite = Sprite.createLru("platform_h/slick.png", 1, 1);
 			break;
 		case SLOPE:
-			sprite = new Sprite("platform_h/slope.png", 3, 1);
+			sprite = Sprite.createLru("platform_h/slope.png", 3, 1);
 			break;
 		case ONE_WAY_LEFT:
-			sprite = new Sprite("platform_v/one_way_right.png", 1, 16);
+			sprite = Sprite.createLru("platform_v/one_way_right.png", 1, 16);
 			break;
 		case ONE_WAY_RIGHT:
-			sprite = new Sprite("platform_v/one_way_left.png", 1, 16);
+			sprite = Sprite.createLru("platform_v/one_way_left.png", 1, 16);
 			break;
 		case ONE_WAY_DOWN:
-			sprite = new Sprite("platform_h/one_way_down.png", 1, 16);
+			sprite = Sprite.createLru("platform_h/one_way_down.png", 1, 16);
 			break;
 		case ONE_WAY_UP:
-			sprite = new Sprite("platform_h/one_way_up.png", 1, 16);
+			sprite = Sprite.createLru("platform_h/one_way_up.png", 1, 16);
 			break;
 		case SWITCH:
-			sprite = new Sprite("platform_v/switch_platform.png", 4, 8, switchHelper);
-			currentStatus = switchHelper;
+			sprite = Sprite.createLru("platform_v/switch_platform.png", 4, 8);
+            sprite.changeSet(switchHelper);
+            currentStatus = switchHelper;
 			switchHelper = (switchHelper + 1) % 4;
 			break;
 		case UNLOCK:
-			sprite = new Sprite("platform_v/unlock_platform.png", 2, 8);
+			sprite = Sprite.createLru("platform_v/unlock_platform.png", 2, 8);
             sprite.setAnimating(true);
 			break;
 		case STRING:
-			sprite = new Sprite("platform_h/string_platform.png", 2, 16);
+			sprite = Sprite.createLru("platform_h/string_platform.png", 2, 16);
 			break;
 		case LIMIT:
-			sprite = new Sprite("platform_v/limit_way.png", 4, 8);
+			sprite = Sprite.createLru("platform_v/limit_way.png", 4, 8);
 			break;
 		case BRICK:
-			sprite = new Sprite("platform_h/brick.png", 4, 1);
+			sprite = Sprite.createLru("platform_h/brick.png", 4, 1);
 			break;
 		case BRICK_V:
-			sprite = new Sprite("platform_v/brick_v.png", 4, 1);
+			sprite = Sprite.createLru("platform_v/brick_v.png", 4, 1);
 			break;
 		case GLUE:
-			sprite = new Sprite("platform_h/glue.png", 1, 1);
+			sprite = Sprite.createLru("platform_h/glue.png", 1, 1);
 			break;
 		case GLUE_V:
-			sprite = new Sprite("platform_v/glue_v.png", 1, 1);
+			sprite = Sprite.createLru("platform_v/glue_v.png", 1, 1);
 			break;
 		case TELEPORT:
-			sprite = new Sprite("platform_h/teleport.png", 1, 16);
+			sprite = Sprite.createLru("platform_h/teleport.png", 1, 16);
 			sprite.setAnimating(true);
 			break;
 		case INVISIBLE:
-			sprite = new Sprite("platform_h/invisible_platform.png", 2, 8);
+			sprite = Sprite.createLru("platform_h/invisible_platform.png", 2, 8);
 			break;
 		case TRANSPARENT:
-			sprite = new Sprite("platform_h/transparent_platform.png", 1, 8);
+			sprite = Sprite.createLru("platform_h/transparent_platform.png", 1, 8);
 			break;
 		case TRANSPARENT_V:
-			sprite = new Sprite("platform_v/transparent_platform_v.png", 1, 8);
+			sprite = Sprite.createLru("platform_v/transparent_platform_v.png", 1, 8);
 			break;
 		case WAY_UP_DOWN:
-			sprite = new Sprite("platform_h/way_up_down.png", 2, 16);
+			sprite = Sprite.createLru("platform_h/way_up_down.png", 2, 16);
 			break;
 		case CLOUD:
-			sprite = new Sprite("platform_h/cloud.png", 1, 1);
+			sprite = Sprite.createLru("platform_h/cloud.png", 1, 1);
 			break;
 		case NONE:
 			break;
@@ -151,7 +152,7 @@ public class Platform {
 		if(type == PlatformType.NONE) {
 			if(!mt.isCLOUD() && prevMt.isCLOUD()) {
 				type = PlatformType.CLOUD;
-				sprite = new Sprite("platform_h/cloud.png", 1, 1);
+				sprite = Sprite.createLru("platform_h/cloud.png", 1, 1);
 			}
 			return;
 		}

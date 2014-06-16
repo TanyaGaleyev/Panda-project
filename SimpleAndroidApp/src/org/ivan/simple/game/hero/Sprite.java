@@ -50,19 +50,18 @@ public class Sprite {
 		this(bmp, rows, cols);
 		changeSet(set);
 	}
-	
-	public Sprite(String bmpid, int rows, int cols) {
-		this(imageProvider().getBitmap(bmpid, rows, cols), rows, cols);
-	}
+
+    public static Sprite createStrict(String bmpid, int rows, int cols) {
+        return new Sprite(imageProvider().getBitmapStrictCache(bmpid, rows, cols), rows, cols);
+    }
+
+    public static Sprite createLru(String bmpid, int rows, int cols) {
+        return new Sprite(imageProvider().getBitmapLruCache(bmpid, rows, cols), rows, cols);
+    }
 
     protected static ImageProvider imageProvider() {
         return PandaApplication.getPandaApplication().getImageProvider();
     }
-
-    public Sprite(String bmpid, int rows, int cols, int set) {
-		this(bmpid, rows, cols);
-		changeSet(set);
-	}
 
 	/**
 	 * Draw current frame by specified center coordinates

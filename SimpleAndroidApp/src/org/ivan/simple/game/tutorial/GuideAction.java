@@ -43,7 +43,7 @@ public enum GuideAction {
     }
 
     private GuideAction(String spritePath) {
-        sprite = new Sprite(GUIDE_BASE_PATH + spritePath, 1, 7);
+        sprite = Sprite.createLru(GUIDE_BASE_PATH + spritePath, 1, 7);
     }
 
     private GuideAction() {}

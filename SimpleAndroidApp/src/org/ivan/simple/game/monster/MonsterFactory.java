@@ -9,22 +9,22 @@ public class MonsterFactory {
 		Sprite monsterSprite;
 		switch(model.getMonsterId()) {
 		case 0: 
-			monsterSprite = new Sprite("monster/dishes.png", 1, 16);
+			monsterSprite = Sprite.createLru("monster/dishes.png", 1, 16);
 			break;
 		case 1:
-            monsterSprite = new Sprite("monster/harmonica.png", 1, 16);
+            monsterSprite = Sprite.createLru("monster/harmonica.png", 1, 16);
 			break;
 		case 2:
-            monsterSprite = new Sprite("monster/whirligig.png", 1, 16);
+            monsterSprite = Sprite.createLru("monster/whirligig.png", 1, 16);
 			break;
 		case 3:
-            monsterSprite = new Sprite("monster/monster.png", 1, 32);
+            monsterSprite = Sprite.createLru("monster/monster.png", 1, 32);
 			break;
 		case 4:
-            monsterSprite = new Sprite("monster/clown.png", 1, 36);
+            monsterSprite = Sprite.createLru("monster/clown.png", 1, 36);
 			break;
 		default:
-            monsterSprite = new Sprite("monster/dishes.png", 1, 16);
+            monsterSprite = Sprite.createLru("monster/dishes.png", 1, 16);
 			break;
 		}
 		monsterSprite.setAnimating(true);

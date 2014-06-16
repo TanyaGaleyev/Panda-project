@@ -13,12 +13,18 @@ public class AsymmetricTPSprite extends Sprite implements TPSprite{
     private final boolean leftOut;
     protected final Bitmap shadeBmp;
 
-    public AsymmetricTPSprite(String inBmpid, String outBmpid, int rows, int cols, int shiftSt, boolean lIn, boolean lOut) {
-        super(outBmpid, rows, cols);
-        shadeBmp = imageProvider().getBitmap(inBmpid, rows, cols);
+    protected AsymmetricTPSprite(Bitmap inBmp, Bitmap outBmp, int rows, int cols, int shiftSt, boolean lIn, boolean lOut) {
+        super(outBmp, rows, cols);
+        shadeBmp = inBmp;
         shiftStep = shiftSt;
         leftIn = lIn;
         leftOut = lOut;
+    }
+
+    public static AsymmetricTPSprite createStrict(String inBmpid, String outBmpid, int rows, int cols, int shiftSt, boolean lIn, boolean lOut) {
+        Bitmap inBmp = imageProvider().getBitmapStrictCache(inBmpid, rows, cols);
+        Bitmap outBmp = imageProvider().getBitmapStrictCache(outBmpid, rows, cols);
+        return new AsymmetricTPSprite(inBmp, outBmp, rows, cols, shiftSt, lIn, lOut);
     }
 
     @Override

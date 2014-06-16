@@ -10,7 +10,7 @@ public class Prize {
     private int kind;
 
     public Prize(int kind) {
-		sprite = new Sprite("prize/star.png", 1, 14);
+		sprite = Sprite.createStrict("prize/star.png", 1, 14);
 		sprite.setAnimating(true);
         this.kind = kind;
 	}

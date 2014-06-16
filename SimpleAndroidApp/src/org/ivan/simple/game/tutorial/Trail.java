@@ -19,7 +19,7 @@ public enum Trail {
     private int yOffset = 0;
 
     Trail(String trailSpritePath, int xOffset, int yOffset) {
-        this.trailSprite = new Sprite(GuideAction.GUIDE_BASE_PATH + trailSpritePath, 1, 7);
+        this.trailSprite = Sprite.createLru(GuideAction.GUIDE_BASE_PATH + trailSpritePath, 1, 7);
         this.xOffset = xOffset;
         this.yOffset = yOffset;
     }

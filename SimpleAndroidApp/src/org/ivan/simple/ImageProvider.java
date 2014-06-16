@@ -4,22 +4,28 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v4.util.LruCache;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
 public class ImageProvider {
-    public static final int CACHE_SIZE = 8 * 1024 * 1024;
+    public static final int CACHE_SIZE = 2048;
     private static String resSet = "large/";
     private static final String base = "sprites/";
 
     private AssetManager asssetsMananger;
     private HashMap<String, Bitmap> images = new HashMap<String, Bitmap>();
-    //	private static LruCache<String, Bitmap> images = new LruCache<String, Bitmap>(CACHE_SIZE);
 	private int gridStep = 128;
 	private double baseStep = 230d;
 	private int cacheSize = 0;
+    private LruCache<String, Bitmap> lruCache = new LruCache<String, Bitmap>(CACHE_SIZE) {
+        @Override
+        protected int sizeOf(String key, Bitmap value) {
+            return value.getWidth() * value.getHeight() * 4 / 1024;
+        }
+    };
 
 	public ImageProvider(Context context, int displayWidth, int displayHeight) {
         init(context);
@@ -103,7 +109,16 @@ public class ImageProvider {
         System.err.println("Free heap: " + Runtime.getRuntime().freeMemory());
     }
 
-    public Bitmap getBitmap(String path, int rows, int cols) {
+    public Bitmap getBitmapLruCache(String path, int rows, int cols) {
+        Bitmap bmp = lruCache.get(path);
+        if(bmp == null) {
+            bmp = getBitmapNoCache(path, rows, cols);
+            lruCache.put(path, bmp);
+        }
+        return bmp;
+    }
+
+    public Bitmap getBitmapStrictCache(String path, int rows, int cols) {
 		Bitmap  bmp = images.get(path);
 		if(bmp == null) {
 			bmp = getBitmapNoCache(path, rows, cols);
@@ -113,8 +128,8 @@ public class ImageProvider {
 		return bmp;
 	}
 	
-	public Bitmap getBitmap(String path) {
-		return getBitmap(path, 1, 1);
+	public Bitmap getBitmapStrictCache(String path) {
+		return getBitmapStrictCache(path, 1, 1);
 	}
 	
 	public Bitmap getBitmapNoCache(String path) {

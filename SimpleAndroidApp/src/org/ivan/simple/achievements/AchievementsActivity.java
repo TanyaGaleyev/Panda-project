@@ -50,7 +50,7 @@ public class AchievementsActivity extends PandaBaseActivity {
         String description = achiv.description;
         LinearLayout hp = new LinearLayout(this);
         hp.setOrientation(LinearLayout.HORIZONTAL);
-//        icon.setImageBitmap(app().getImageProvider().getBitmap(iconPath));
+//        icon.setImageBitmap(app().getImageProvider().getBitmapStrictCache(iconPath));
         ViewGroup.MarginLayoutParams margins = new ViewGroup.MarginLayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);

@@ -20,9 +20,9 @@ public class ServiceButtons {
 
     public ServiceButtons(Point topLeftCorner) {
         this.topLeftCorner = topLeftCorner;
-        pause = imageProvider().getBitmap("menu/pause.png");
-        restart = imageProvider().getBitmap("menu/restart.png");
-        back = imageProvider().getBitmap("menu/back.png");
+        pause = imageProvider().getBitmapStrictCache("menu/pause.png");
+        restart = imageProvider().getBitmapStrictCache("menu/restart.png");
+        back = imageProvider().getBitmapStrictCache("menu/back.png");
     }
 
     private ImageProvider imageProvider() {
