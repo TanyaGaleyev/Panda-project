@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -207,6 +209,7 @@ public class GameActivity extends PandaBaseActivity {
         loseDialog = new Dialog(this);
         loseDialog.setTitle("Oops...");
         loseDialog.setContentView(R.layout.lose_dialog);
+        loseDialog.getWindow().setBackgroundDrawableResource(R.drawable.settings_border);
         loseDialog.findViewById(R.id.replay).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
