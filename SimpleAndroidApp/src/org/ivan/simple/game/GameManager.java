@@ -70,9 +70,12 @@ public class GameManager extends Thread {
             view.updatePositions();
 			doDraw(true);
 			if(view.finished) {
-				((GameActivity) view.getContext()).switchBackToChooseActivity(
-                        view.isComplete(),
-                        view.getScore());
+                view.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.getGameContext().showLoseDialog();
+                    }
+                });
 			}
 
 			// calculate sleep time to reach needed fps

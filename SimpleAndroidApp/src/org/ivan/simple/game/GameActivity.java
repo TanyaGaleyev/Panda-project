@@ -28,6 +28,7 @@ public class GameActivity extends PandaBaseActivity {
     private GameControl gControl;
 	private int levid;
     private Dialog tutorialDialog;
+    private Dialog loseDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,7 @@ public class GameActivity extends PandaBaseActivity {
         helpBtn.bringToFront();
         app().getSettingsModel().registerControlChangeObserver(gControl);
         settingsDialog.setTitle(PAUSE_TITLE);
+        initLoseDialog();
     }
 
     @Override
@@ -194,6 +196,30 @@ public class GameActivity extends PandaBaseActivity {
         });
         gControl.stopManager();
         settingsDialog.show();
+    }
+
+    public void showLoseDialog() {
+        loseDialog.show();
+    }
+
+    private void initLoseDialog() {
+        loseDialog = new Dialog(this);
+        loseDialog.setTitle("Oops...");
+        loseDialog.setContentView(R.layout.lose_dialog);
+        loseDialog.findViewById(R.id.replay).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gControl.restartGame();
+                loseDialog.cancel();
+            }
+        });
+        loseDialog.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loseDialog.cancel();
+                finish();
+            }
+        });
     }
 
     /** Show an event in the LogCat view, for debugging */
