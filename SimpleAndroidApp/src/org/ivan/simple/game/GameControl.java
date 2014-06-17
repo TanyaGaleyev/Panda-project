@@ -42,9 +42,8 @@ public class GameControl implements ControlChangeObserver {
 	}
 
     protected void restartGame() {
-        view.finished = false;
         stopManager();
-        view.initSurface();
+        view.initGame();
         startManager();
     }
 	

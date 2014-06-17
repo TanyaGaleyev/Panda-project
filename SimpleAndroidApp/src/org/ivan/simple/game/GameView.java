@@ -14,9 +14,6 @@ import android.view.SurfaceView;
 import org.ivan.simple.ImageProvider;
 import org.ivan.simple.PandaApplication;
 import org.ivan.simple.UserControlType;
-import org.ivan.simple.bitmaputils.ColorBackground;
-import org.ivan.simple.bitmaputils.PandaBackground;
-import org.ivan.simple.bitmaputils.TextureAtlasParser;
 import org.ivan.simple.game.hero.Hero;
 import org.ivan.simple.game.level.LevelCell;
 import org.ivan.simple.game.level.LevelModel;
@@ -25,9 +22,6 @@ import org.ivan.simple.game.monster.Monster;
 import org.ivan.simple.game.monster.MonsterFactory;
 import org.ivan.simple.game.motion.MotionType;
 import org.ivan.simple.game.tutorial.GuideAnimation;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
 
 public class GameView extends SurfaceView {
 	
@@ -61,6 +55,7 @@ public class GameView extends SurfaceView {
     private boolean monsterLose = false;
     private GameActivity gameContext;
     private boolean initialized = false;
+    private int loseDelay = 3;
 
     public GameView(GameActivity context) {
 		super(context);
@@ -92,7 +87,8 @@ public class GameView extends SurfaceView {
 				System.out.println("surfaceCreated");
                 if(!initialized) {
                     initialized = true;
-                    initSurface();
+                    initBackground();
+                    initGame();
                 }
 				if(control.getGameLoopThread() == null) {
 					control.startManager();
@@ -107,8 +103,8 @@ public class GameView extends SurfaceView {
 		});
 
 	}
-	
-	protected void initSurface() {
+
+    private void initBackground() {
 //        try {
 //            bgr = new TextureAtlasParser().createTextureAtlasBackground(gameContext, backgroundId);
 //        } catch (IOException e) {
@@ -117,12 +113,17 @@ public class GameView extends SurfaceView {
 //            bgr = new ColorBackground();
 //        }
         background = imageProvider().getBackground(getBackgroundId(levId), getWidth(), getHeight());
-
-        GRID_STEP = imageProvider().getGridStep();
-//		System.out.println("GRID_STEP = " + GRID_STEP);
+    }
+	
+	protected void initGame() {
+        finished = false;
+        monsterLose = false;
+        loseDelay = 3;
 
         LevelModel model =
                 new LevelModel(levId, PandaApplication.getPandaApplication().getLevelParser());
+        GRID_STEP = imageProvider().getGridStep();
+//		System.out.println("GRID_STEP = " + GRID_STEP);;
 		TOP_BOUND = (getHeight() - GRID_STEP * model.getRows()) / 2 + GRID_STEP / 2;
 		// TODO check this bound carefully!
 		LEFT_BOUND = (getWidth() - GRID_STEP * model.getCols()) / 2 + GRID_STEP / 2;
@@ -352,8 +353,6 @@ public class GameView extends SurfaceView {
         hero.x += xSpeed;
         hero.y += ySpeed;
     }
-
-    private int loseDelay = 3;
 
     /**
 	 * Random rotating movement if hero was spiked
