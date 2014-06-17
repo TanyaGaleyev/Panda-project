@@ -43,6 +43,8 @@ public class GameControl implements ControlChangeObserver {
 
     protected void restartGame() {
         stopManager();
+        win = false;
+        detonate = false;
         view.initGame();
         startManager();
     }
