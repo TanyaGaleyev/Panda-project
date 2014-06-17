@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import org.ivan.simple.PandaBaseActivity;
 import org.ivan.simple.R;
 import org.ivan.simple.choose.LevelChooseActivity;
+import org.ivan.simple.game.dialogs.LoseDialog;
 import org.ivan.simple.game.tutorial.MessageTutorialGame;
 import org.ivan.simple.game.tutorial.Solutions;
 import org.ivan.simple.settings.SettingsInGamePanel;
@@ -30,7 +31,7 @@ public class GameActivity extends PandaBaseActivity {
     private GameControl gControl;
 	private int levid;
     private Dialog tutorialDialog;
-    private Dialog loseDialog;
+    private LoseDialog loseDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -206,11 +207,8 @@ public class GameActivity extends PandaBaseActivity {
     }
 
     private void initLoseDialog() {
-        loseDialog = new Dialog(this);
-        loseDialog.setTitle("Oops...");
-        loseDialog.setContentView(R.layout.lose_dialog);
-        loseDialog.getWindow().setBackgroundDrawableResource(R.drawable.settings_border);
-        loseDialog.findViewById(R.id.replay).setOnClickListener(new View.OnClickListener() {
+        loseDialog = new LoseDialog(this);
+        loseDialog.setReplayOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 gControl.restartGame();
@@ -222,7 +220,7 @@ public class GameActivity extends PandaBaseActivity {
                 });
             }
         });
-        loseDialog.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
+        loseDialog.setBackOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();

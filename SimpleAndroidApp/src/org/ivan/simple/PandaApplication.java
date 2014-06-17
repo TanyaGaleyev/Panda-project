@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.TypedValue;
 import android.view.WindowManager;
 
 import org.ivan.simple.game.hero.Sprite;
@@ -150,5 +151,10 @@ public class PandaApplication extends Application {
 
     public SettingsModel getSettingsModel() {
         return settingsModel;
+    }
+
+    public int convertDpToPixels(int dp) {
+        return (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 }

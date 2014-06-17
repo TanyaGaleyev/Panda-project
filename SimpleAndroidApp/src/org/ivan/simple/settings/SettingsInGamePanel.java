@@ -13,6 +13,7 @@ import org.ivan.simple.R;
  */
 public class SettingsInGamePanel extends SettingsPanel {
 
+    public static final int PADDING_DP = 4;
     private final View exit;
     private final View replay;
     private final View resume;
@@ -24,7 +25,9 @@ public class SettingsInGamePanel extends SettingsPanel {
         this.context = context;
         buttonsPanel = new LinearLayout(context);
         buttonsPanel.setOrientation(HORIZONTAL);
-        buttonsPanel.setGravity(Gravity.CENTER_HORIZONTAL);
+        buttonsPanel.setGravity(Gravity.CENTER);
+        int padding = context.app().convertDpToPixels(PADDING_DP);
+        buttonsPanel.setPadding(padding, padding, padding, padding);
         exit = context.prepare(R.drawable.back);
         addLabeledView(exit, "Exit");
         replay = context.prepare(R.drawable.replay);

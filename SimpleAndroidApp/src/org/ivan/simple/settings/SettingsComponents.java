@@ -135,9 +135,7 @@ public class SettingsComponents {
     }
 
     protected void setTextDefault(TextView component, String caption) {
-        component.setText(caption);
-        component.setTypeface(regular);
-        component.setTextColor(Color.BLACK);
+        setText(component, caption, regular, Color.BLACK);
     }
 
     public CheckBox getEffects() {
