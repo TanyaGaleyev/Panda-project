@@ -68,7 +68,7 @@ public class LevelChooseActivity extends PandaBaseActivity {
         spec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                view.startLevel(999);
+                view.startLevel(888);
             }
         });
         backBtn.setOnClickListener(new View.OnClickListener() {

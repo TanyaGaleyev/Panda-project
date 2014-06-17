@@ -164,6 +164,12 @@ public class SoundManager {
                     playSound(R.raw.jump);
                 }
                 break;
+            case CLOUD_IDLE:
+            case CLOUD_LEFT:
+            case CLOUD_RIGHT:
+            case CLOUD_UP:
+            case CLOUD_DOWN:
+                break;
             default:
                 playSound(R.raw.jump);
                 break;
@@ -171,7 +177,7 @@ public class SoundManager {
     }
 
     private void jumpLR(MotionType prevMt, PlatformType prevFloor) {
-        if(prevMt == MotionType.JUMP || prevMt == MotionType.TP) {
+        if(prevMt == MotionType.JUMP || prevMt == MotionType.TP || prevMt.isCLOUD()) {
         } else if(prevFloor == PlatformType.ANGLE_LEFT ||
                 prevFloor == PlatformType.ANGLE_RIGHT) {
             playSound(R.raw.angle);
