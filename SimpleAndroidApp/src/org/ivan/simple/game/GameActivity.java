@@ -214,7 +214,12 @@ public class GameActivity extends PandaBaseActivity {
             @Override
             public void onClick(View v) {
                 gControl.restartGame();
-                loseDialog.cancel();
+                gControl.view.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        loseDialog.cancel();
+                    }
+                });
             }
         });
         loseDialog.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
