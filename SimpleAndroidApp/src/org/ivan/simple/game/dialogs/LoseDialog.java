@@ -1,7 +1,8 @@
 package org.ivan.simple.game.dialogs;
 
 import android.app.Dialog;
-import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.View;
 import android.widget.TextView;
 
@@ -24,11 +25,11 @@ public class LoseDialog extends Dialog {
         setTitle(TITLE);
         setContentView(R.layout.lose_dialog);
         getWindow().setBackgroundDrawableResource(R.drawable.settings_border);
-        ((TextView) findViewById(android.R.id.title)).setTypeface(context.app().getFontProvider().bold());
+        styleText(android.R.id.title, context.app().getFontProvider().bold(), Color.DKGRAY);
         context.prepare(findViewById(R.id.replay));
-        ((TextView) findViewById(R.id.replay_caption)).setTypeface(context.app().getFontProvider().regular());
+        styleText(R.id.replay_caption, context.app().getFontProvider().regular(), Color.DKGRAY);
         context.prepare(findViewById(R.id.back));
-        ((TextView) findViewById(R.id.back_caption)).setTypeface(context.app().getFontProvider().regular());
+        styleText(R.id.back_caption, context.app().getFontProvider().regular(), Color.DKGRAY);
     }
 
     public void setReplayOnClickListener(View.OnClickListener l) {
@@ -37,5 +38,11 @@ public class LoseDialog extends Dialog {
 
     public void setBackOnClickListener(View.OnClickListener l) {
         findViewById(R.id.back).setOnClickListener(l);
+    }
+
+    private void styleText(int id, Typeface font, int color) {
+        TextView textView = (TextView) findViewById(id);
+        textView.setTypeface(font);
+        textView.setTextColor(color);
     }
 }
