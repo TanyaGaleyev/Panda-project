@@ -434,6 +434,9 @@ public class GameView extends SurfaceView {
             case 2: return "background/background_l_2.jpg";
             case 3: return "background/background_l_3.jpg";
             case 4: return "background/background_l_4.jpg";
+            case 5: return "background/background_l_5.jpg";
+            case 6: return "background/background_l_6.jpg";
+            case 7: return "background/background_l_7.jpg";
             default:return "background/background_l_4.jpg";
         }
     }
