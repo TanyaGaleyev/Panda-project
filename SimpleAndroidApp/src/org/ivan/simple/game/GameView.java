@@ -22,6 +22,7 @@ import org.ivan.simple.game.monster.Monster;
 import org.ivan.simple.game.monster.MonsterFactory;
 import org.ivan.simple.game.motion.MotionType;
 import org.ivan.simple.game.tutorial.GuideAnimation;
+import org.ivan.simple.utils.OneShotAction;
 
 public class GameView extends SurfaceView {
 	
@@ -90,9 +91,6 @@ public class GameView extends SurfaceView {
                     initBackground();
                     initGame();
                 }
-				if(control.getGameLoopThread() == null) {
-					control.startManager();
-				}
 				control.getGameLoopThread().doDraw(false);
 			}
 			
@@ -443,9 +441,16 @@ public class GameView extends SurfaceView {
 	protected int getLevId() {
 		return levId;
 	}
-	
+
+    private OneShotAction firstStartGame = new OneShotAction() {
+        @Override
+        protected void doAction() {
+            control.startManager();
+        }
+    };
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+        firstStartGame.act();
 		if(control.scanControl(event)) {
 			return true;
 		}

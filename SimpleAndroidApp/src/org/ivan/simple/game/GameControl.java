@@ -31,6 +31,7 @@ public class GameControl implements ControlChangeObserver {
 	
 	public GameControl(final GameView view) {
 		this.view  = view;
+        gameLoopThread = new GameManager(view);
         controlsFactory = new ControlsFactory(this);
         initControlProvider();
         soundManager = view.getGameContext().app().getSoundManager();
