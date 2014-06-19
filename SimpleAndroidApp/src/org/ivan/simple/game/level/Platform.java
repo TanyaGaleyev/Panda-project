@@ -10,7 +10,6 @@ public class Platform {
 	private PlatformType type = PlatformType.NONE;
 	private Sprite sprite = null;
 	private int currentStatus = 0;
-	private static int switchHelper = 0;
 
 	public Platform(PlatformType type) {
 		if(type == null) return;
@@ -91,9 +90,6 @@ public class Platform {
 			break;
 		case SWITCH:
 			sprite = Sprite.createLru("platform_v/switch_platform.png", 4, 8);
-            sprite.changeSet(switchHelper);
-            currentStatus = switchHelper;
-			switchHelper = (switchHelper + 1) % 4;
 			break;
 		case UNLOCK:
 			sprite = Sprite.createLru("platform_v/unlock_platform.png", 2, 8);

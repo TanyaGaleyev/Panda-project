@@ -115,6 +115,12 @@ public class LevelModel {
     private void initStatePlatforms(Map<Platform, int[]> platformMetaMap) {
         for (LevelGrid.VerticalPlatformCoords vp : levelGrid.verticalPlatforms()) {
             initStatus(vp.getPlatform(), platformMetaMap);
+            if (vp.getPlatform().getType() == PlatformType.SWITCH) {
+                switchList.add(vp.getPlatform());
+            }
+            if (vp.getPlatform().getType() == PlatformType.UNLOCK) {
+                unlockList.add(vp.getPlatform());
+            }
         }
         for (LevelGrid.HorizontalPlatformCoords hp : levelGrid.horizontalPlatforms()) {
             initStatus(hp.getPlatform(), platformMetaMap);
@@ -122,10 +128,12 @@ public class LevelModel {
     }
 
     private void initStatus(Platform wall, Map<Platform, int[]> platformMetaMap) {
-        int[] meta;
-        if((meta = platformMetaMap.get(wall)).length > 1 &&
-                (wall.getType() == PlatformType.LIMIT || wall.getType() == PlatformType.REDUCE ||
-                wall.getType() == PlatformType.BRICK || wall.getType() == PlatformType.BRICK_V)) {
+        PlatformType type = wall.getType();
+        int[] meta = platformMetaMap.get(wall);
+        if(meta.length > 1 &&
+                (type == PlatformType.LIMIT || type == PlatformType.REDUCE ||
+                type == PlatformType.BRICK || type == PlatformType.BRICK_V ||
+                type == PlatformType.SWITCH)) {
             wall.setStatus(meta[1]);
         }
     }
@@ -145,12 +153,6 @@ public class LevelModel {
                 CellCoords coords = new CellCoords(vp.getRow(), vp.getColAtLeft());
                 inGroupsLR.put(inKey(meta), new PlatformCellPair(rightWall, coords));
                 outGroupsLR.put(outKey(meta), new PlatformCellPair(rightWall, coords));
-            }
-            if (rightWall.getType() == PlatformType.SWITCH) {
-                switchList.add(rightWall);
-            }
-            if (rightWall.getType() == PlatformType.UNLOCK) {
-                unlockList.add(rightWall);
             }
         }
         leftRightTpDestMap = tpDestMap(inGroupsLR, outGroupsLR);
