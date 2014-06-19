@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ImageProvider {
     public static final int CACHE_SIZE = 2048;
@@ -18,7 +19,7 @@ public class ImageProvider {
     private static final String base = "sprites/";
 
     private AssetManager asssetsMananger;
-    private HashMap<String, Bitmap> images = new HashMap<String, Bitmap>();
+    private Map<String, Bitmap> strictCache = new HashMap<String, Bitmap>();
 	private int gridStep = 128;
 	private double baseStep = 230d;
 	private int cacheSize = 0;
@@ -31,11 +32,11 @@ public class ImageProvider {
         @Override
         protected void entryRemoved(boolean evicted, String key, Bitmap oldValue, Bitmap newValue) {
             super.entryRemoved(evicted, key, oldValue, newValue);
-            cacheEvicted.add(oldValue);
+            cacheEvicted.add(key);
         }
     };
-
-    private List<Bitmap> cacheEvicted = new ArrayList<Bitmap>();
+    private Map<String, Bitmap> lruCacheLoaded = new HashMap<String, Bitmap>();
+    private List<String> cacheEvicted = new ArrayList<String>();
 
     public ImageProvider(Context context, int displayWidth, int displayHeight) {
         init(context);
@@ -43,8 +44,6 @@ public class ImageProvider {
 	}
 	
 	public void init(Context context) {
-//		int cacheSize = (int) (Runtime.getRuntime().maxMemory() / 8192);
-//		images = new LruCache<String, Bitmap>(cacheSize);
 		asssetsMananger = context.getAssets();
 	}
 	
@@ -118,20 +117,21 @@ public class ImageProvider {
     }
 
     public Bitmap getBitmapLruCache(String path, int rows, int cols) {
-        Bitmap bmp = lruCache.get(path);
+        Bitmap bmp = lruCacheLoaded.get(path);
         if(bmp == null) {
             bmp = getBitmapNoCache(path, rows, cols);
+            lruCacheLoaded.put(path, bmp);
             lruCache.put(path, bmp);
         }
         return bmp;
     }
 
     public Bitmap getBitmapStrictCache(String path, int rows, int cols) {
-		Bitmap  bmp = images.get(path);
+		Bitmap  bmp = strictCache.get(path);
 		if(bmp == null) {
 			bmp = getBitmapNoCache(path, rows, cols);
 			cacheSize += bmp.getWidth() * bmp.getHeight() / 256;// * 4 / 1024
-			images.put(path, bmp);
+			strictCache.put(path, bmp);
 		}
 		return bmp;
 	}
@@ -167,11 +167,11 @@ public class ImageProvider {
     }
 
     public void removeFromCatch(String path) {
-		Bitmap bmp = images.get(path);
+		Bitmap bmp = strictCache.get(path);
 		if(bmp == null) return;
 		cacheSize -= bmp.getWidth() * bmp.getHeight() / 256;// * 4 / 1024
 		bmp.recycle();
-		images.remove(path);
+		strictCache.remove(path);
 //		System.out.println("Bitmap removed");
 	}
 
@@ -209,8 +209,8 @@ public class ImageProvider {
     }
 
     public void recycleLruCache() {
-        for(Bitmap toRecycle : cacheEvicted)
-            toRecycle.recycle();
+        for(String toRecycle : cacheEvicted)
+            lruCacheLoaded.remove(toRecycle).recycle();
         cacheEvicted.clear();
     }
 }
