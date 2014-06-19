@@ -5,6 +5,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
+import org.ivan.simple.PandaApplication;
 import org.ivan.simple.UserControlType;
 import org.ivan.simple.game.controls.ControlChangeObserver;
 import org.ivan.simple.game.controls.ObtainedControl;
@@ -170,5 +171,6 @@ public class GameControl implements ControlChangeObserver {
 
     public void releaseResources() {
         if(view.background != null) view.background.recycle();
+        view.getGameContext().app().getImageProvider().recycleLruCache();
     }
 }

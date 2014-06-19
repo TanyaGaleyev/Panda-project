@@ -60,7 +60,7 @@ public class PandaApplication extends Application {
         imageProvider = new ImageProvider(getApplicationContext(), displayWidth, displayHeight);
         levelParser = new LevelParser(getApplicationContext());
         settingsModel = new SettingsModel(this);
-        loading = Sprite.createLru("menu/loader.png", 1, 12);
+        loading = Sprite.createStrict("menu/loader.png", 1, 12);
         loading.setAnimating(true);
 
         initBackground();

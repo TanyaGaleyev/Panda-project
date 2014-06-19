@@ -8,7 +8,9 @@ import android.support.v4.util.LruCache;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ImageProvider {
     public static final int CACHE_SIZE = 2048;
@@ -25,9 +27,17 @@ public class ImageProvider {
         protected int sizeOf(String key, Bitmap value) {
             return value.getWidth() * value.getHeight() * 4 / 1024;
         }
+
+        @Override
+        protected void entryRemoved(boolean evicted, String key, Bitmap oldValue, Bitmap newValue) {
+            super.entryRemoved(evicted, key, oldValue, newValue);
+            cacheEvicted.add(oldValue);
+        }
     };
 
-	public ImageProvider(Context context, int displayWidth, int displayHeight) {
+    private List<Bitmap> cacheEvicted = new ArrayList<Bitmap>();
+
+    public ImageProvider(Context context, int displayWidth, int displayHeight) {
         init(context);
         setScaleParameters(displayWidth, displayHeight);
 	}
@@ -76,12 +86,7 @@ public class ImageProvider {
 			} else {
 				double scale = gridStep / baseStep;
                 Bitmap original;
-                try {
-				    original = loadBitmap(path, opts);
-                } catch (OutOfMemoryError error) {
-                    reportOutOfMemory(path);
-                    throw error;
-                }
+                original = loadBitmap(path, opts);
 				int width = (int) Math.ceil(opts.outWidth * scale);
 				width -= width % cols;
 				int height = (int) Math.ceil(opts.outHeight * scale);
@@ -99,7 +104,10 @@ public class ImageProvider {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
-		}
+        } catch (OutOfMemoryError error) {
+            reportOutOfMemory(path);
+            throw error;
+        }
 	}
 
     private void reportOutOfMemory(String path) {
@@ -194,6 +202,15 @@ public class ImageProvider {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        } catch (OutOfMemoryError error) {
+            reportOutOfMemory(path);
+            throw error;
         }
+    }
+
+    public void recycleLruCache() {
+        for(Bitmap toRecycle : cacheEvicted)
+            toRecycle.recycle();
+        cacheEvicted.clear();
     }
 }

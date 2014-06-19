@@ -76,12 +76,7 @@ public class GameView extends SurfaceView {
 			
 			public void surfaceDestroyed(SurfaceHolder holder) {
 				System.out.println("surfaceDestroyed");
-				// turn motion to initial stage (stage == 0)
-				//level.model.getMotion().startMotion();
                 control.stopManager();
-                //ImageProvider.removeFromCatch(backgroundId);
-//                background.recycle();
-//                background = null;
 			}
 			
 			public void surfaceCreated(SurfaceHolder holder) {
@@ -150,7 +145,7 @@ public class GameView extends SurfaceView {
 	}
 
     private ImageProvider imageProvider() {
-        return PandaApplication.getPandaApplication().getImageProvider();
+        return getGameContext().app().getImageProvider();
     }
 
     /**
