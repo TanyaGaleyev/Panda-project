@@ -57,8 +57,8 @@ public class GameActivity extends PandaBaseActivity {
         RelativeLayout contentPanel = (RelativeLayout) findViewById(R.id.game_content_panel);
         GameView gView = levid == 1 ? new MessageTutorialGame(this) : new GameView(this);
         contentPanel.addView(gView);
-        gView.setLevId(levid);
         gControl = gView.getControl();
+        gControl.setLevId(levid);
         settingsBtn.bringToFront();
         helpBtn.bringToFront();
         app().getSettingsModel().registerControlChangeObserver(gControl);
@@ -141,7 +141,7 @@ public class GameActivity extends PandaBaseActivity {
         tutorialDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         tutorialDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         GameView nestedGame = new GameView(this);
-        nestedGame.setLevId(-1);
+        nestedGame.getControl().setLevId(-1);
         nestedGame.getControl().setAutoControls(Solutions.getDemo(type));
         tutorialDialog.setContentView(R.layout.tutorial_dialog);
         ((RelativeLayout) tutorialDialog.findViewById(R.id.tutorial_content_panel)).addView(nestedGame);

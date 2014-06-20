@@ -18,7 +18,7 @@ public class MessageTutorialGame extends GameView {
     protected void updateGame(UserControlType controlType) {
         final Prize prize = level.model.getHeroCell().getPrize();
         if(prize != null && prize.getKind() >= 2) {
-            getControl().toastMessage(getContext(), messages.get(prize.getKind()));
+            getControl().toastMessage(messages.get(prize.getKind()));
         }
         super.updateGame(controlType);
     }

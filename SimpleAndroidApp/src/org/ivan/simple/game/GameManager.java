@@ -69,7 +69,7 @@ public class GameManager extends Thread {
 			}
             view.updatePositions();
 			doDraw(true);
-			if(view.finished) {
+			if(view.getControl().finished) {
                 if(view.isComplete())
                     view.getGameContext().switchBackToChooseActivity(true, view.getScore());
                 else

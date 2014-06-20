@@ -22,15 +22,14 @@ import org.ivan.simple.game.monster.Monster;
 import org.ivan.simple.game.monster.MonsterFactory;
 import org.ivan.simple.game.motion.MotionType;
 import org.ivan.simple.game.tutorial.GuideAnimation;
-import org.ivan.simple.utils.OneShotAction;
 
 public class GameView extends SurfaceView {
 	
 	private static int GRID_STEP;
-	
+
 	private static int JUMP_SPEED;
 	private static int ANIMATION_JUMP_SPEED;
-	
+
 	private static int LEFT_BOUND;
 	private static int RIGHT_BOUND;
 	private static int TOP_BOUND;
@@ -49,14 +48,8 @@ public class GameView extends SurfaceView {
     private Paint backgroundPaint;
 
 	protected LevelCell prevCell;
-	
-	private int levId = 0;
-	
-	protected boolean finished = false;
-    private boolean monsterLose = false;
     private GameActivity gameContext;
     private boolean initialized = false;
-    private int loseDelay = 3;
 
     public GameView(GameActivity context) {
 		super(context);
@@ -84,7 +77,7 @@ public class GameView extends SurfaceView {
                 if(!initialized) {
                     initialized = true;
                     initBackground();
-                    initGame();
+                    control.initGame();
                 }
 				control.getGameLoopThread().doDraw(false);
 			}
@@ -105,16 +98,11 @@ public class GameView extends SurfaceView {
 //        } catch (XmlPullParserException e) {
 //            bgr = new ColorBackground();
 //        }
-        background = imageProvider().getBackground(getBackgroundId(levId), getWidth(), getHeight());
+        background = imageProvider().getBackground(
+                BackgroundFactory.getBackgroundPath(control.levId), getWidth(), getHeight());
     }
-	
-	protected void initGame() {
-        finished = false;
-        monsterLose = false;
-        loseDelay = 3;
 
-        LevelModel model =
-                new LevelModel(levId, PandaApplication.getPandaApplication().getLevelParser());
+	protected void initView(LevelModel model) {
         GRID_STEP = imageProvider().getGridStep();
 //		System.out.println("GRID_STEP = " + GRID_STEP);;
 		TOP_BOUND = (getHeight() - GRID_STEP * model.getRows()) / 2 + GRID_STEP / 2;
@@ -132,10 +120,10 @@ public class GameView extends SurfaceView {
 
 		hero = new Hero(level.model.hero);
 		monster = MonsterFactory.createMonster(level.model.monster, GRID_STEP);
-		
+
 		hero.x = LEFT_BOUND + level.model.hero.getX() * GRID_STEP;
 		hero.y = TOP_BOUND + level.model.hero.getY() * GRID_STEP;
-		
+
 		if(level.model.monster != null) {
 			monster.xCoordinate = LEFT_BOUND + level.model.monster.getCol() * GRID_STEP;
 			monster.yCoordinate = TOP_BOUND + level.model.monster.getRow() * GRID_STEP;
@@ -327,9 +315,9 @@ public class GameView extends SurfaceView {
 	 */
 	protected void updateHeroScreenPosition() {
 		if(isReadyToPlayLoseAnimation()) {
-			finished = !moveLose();
+			control.finished = !moveLose();
 		} else if(isReadyToPlayWinAnimation()) {
-			finished = !hero.playWinAnimation();
+			control.finished = !hero.playWinAnimation();
 		} else {
             regularMove();
 		}
@@ -352,7 +340,7 @@ public class GameView extends SurfaceView {
 	 * Random rotating movement if hero was spiked
 	 */
 	private boolean moveLose() {
-        if(monsterLose) {
+        if(control.monsterLose) {
             return doMonsterLose();
         } else if(level.model.outOfBounds()) {
             return doFallLose();
@@ -362,8 +350,8 @@ public class GameView extends SurfaceView {
 	}
 
     private boolean doSpikeLose() {
-        if (loseDelay > 0) {
-            loseDelay--;
+        if (control.loseDelay > 0) {
+            control.loseDelay--;
             return true;
         } else {
             control.playDetonateSound();
@@ -416,37 +404,10 @@ public class GameView extends SurfaceView {
 	public int getScore() {
 		return level.model.getScore();
 	}
-	
-	protected void setLevId(int levId) {
-		this.levId = levId;
-	}
 
-    private String getBackgroundId(int levId) {
-        switch(levId) {
-            case 1: return "background/background_l_1.jpg";
-            case 2: return "background/background_l_2.jpg";
-            case 3: return "background/background_l_3.jpg";
-            case 4: return "background/background_l_4.jpg";
-            case 5: return "background/background_l_5.jpg";
-            case 6: return "background/background_l_6.jpg";
-            case 7: return "background/background_l_7.jpg";
-            default:return "background/background_l_4.jpg";
-        }
-    }
-	
-	protected int getLevId() {
-		return levId;
-	}
-
-    private OneShotAction firstStartGame = new OneShotAction() {
-        @Override
-        protected void doAction() {
-            control.startManager();
-        }
-    };
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-        firstStartGame.act();
+        control.firstStartGame();
 		if(control.scanControl(event)) {
 			return true;
 		}
@@ -474,7 +435,7 @@ public class GameView extends SurfaceView {
                 monster.xCoordinate, monster.yCoordinate, GRID_STEP, GRID_STEP, monsterShrink);
         if(heroRect.intersect(monsterRect)) {
             level.model.setLost(true);
-            monsterLose = true;
+            control.monsterLose = true;
         }
 	}
 
