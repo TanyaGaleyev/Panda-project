@@ -11,7 +11,7 @@ import org.ivan.simple.game.controls.ObtainedControl;
 import org.ivan.simple.game.controls.UserControl;
 import org.ivan.simple.game.controls.UserControlProvider;
 import org.ivan.simple.game.level.LevelModel;
-import org.ivan.simple.game.sound.SoundManager;
+import org.ivan.simple.game.sound.SoundControl;
 import org.ivan.simple.game.tutorial.SolutionStep;
 import org.ivan.simple.utils.OneShotAction;
 
@@ -29,13 +29,11 @@ public class GameControl implements ControlChangeObserver {
 	private GameManager gameLoopThread;
 	private boolean paused;
 
-	private SoundManager soundManager;
+	private SoundControl soundControl;
     protected int levId = 0;
     protected boolean finished = false;
     protected boolean monsterLose = false;
     protected int loseDelay = 3;
-    private OneShotAction playWinSound;
-    private OneShotAction playLoseSound;
 
     protected void setLevId(int levId) {
         this.levId = levId;
@@ -46,7 +44,7 @@ public class GameControl implements ControlChangeObserver {
         gameLoopThread = new GameManager(view);
         controlsFactory = new ControlsFactory(this);
         initControlProvider();
-        soundManager = view.getGameContext().app().getSoundManager();
+        soundControl = new SoundControl(view.getGameContext());
 	}
 
     protected boolean scanControl(MotionEvent event) {
@@ -98,25 +96,10 @@ public class GameControl implements ControlChangeObserver {
         finished = false;
         monsterLose = false;
         loseDelay = 3;
-        playWinSound = new OneShotAction() {
-            @Override
-            protected void doAction() {
-                if (view.getGameContext().app().getSound()) {
-                    soundManager.playWin();
-                }
-            }
-        };
-        playLoseSound = new OneShotAction() {
-            @Override
-            protected void doAction() {
-                if (view.getGameContext().app().getSound()) {
-                    soundManager.playDetonate();
-                }
-            }
-        };
-        LevelModel model =
+        soundControl.init();
+        LevelModel levelModel =
                 new LevelModel(levId, PandaApplication.getPandaApplication().getLevelParser());
-        view.initView(model);
+        view.initView(levelModel);
     }
 	
 	protected GameManager getGameLoopThread() {
@@ -124,15 +107,21 @@ public class GameControl implements ControlChangeObserver {
 	}
 	
 	protected void playSound() {
-		if(view.getGameContext().app().getSound()) {
-			soundManager.playSound(
-                    view.level.model.hero.currentMotion,
-                    view.level.model.hero.finishingMotion,
-                    view.level.model.getHeroCell(),
-                    view.prevCell
-            );
-		}
+        soundControl.playSound(
+                view.level.model.hero.currentMotion,
+                view.level.model.hero.finishingMotion,
+                view.level.model.getHeroCell(),
+                view.prevCell
+        );
 	}
+
+    protected void playDetonateSound() {
+        soundControl.playDetonateSound();
+    }
+
+    protected void playWinSound() {
+        soundControl.playWinSound();
+    }
 
     public void setAutoControls(Iterator<SolutionStep> autoControls) {
         robotMode = true;
@@ -144,15 +133,21 @@ public class GameControl implements ControlChangeObserver {
         if(!robotMode) {
             control = controlProvider.getUserControl();
         } else {
-            if(autoControls.hasNext()) {
-                SolutionStep step = autoControls.next();
-                control = new ObtainedControl(step.getControl());
-                view.guideAnimation.init(step);
-                toastMessage(step.getMessage());
-            } else {
-                control = new ObtainedControl(UserControlType.IDLE);
-                view.getGameContext().stopTutorial();
-            }
+            control = getAutoControl();
+        }
+        return control;
+    }
+
+    private UserControl getAutoControl() {
+        UserControl control;
+        if(autoControls.hasNext()) {
+            SolutionStep step = autoControls.next();
+            control = new ObtainedControl(step.getControl());
+            view.guideAnimation.init(step);
+            toastMessage(step.getMessage());
+        } else {
+            control = new ObtainedControl(UserControlType.IDLE);
+            view.getGameContext().stopTutorial();
         }
         return control;
     }
@@ -180,14 +175,6 @@ public class GameControl implements ControlChangeObserver {
     private void initControlProvider() {
         controlProvider = controlsFactory.createControlProvider(
                 view.getGameContext().app().getSettingsModel().getControlsType());
-    }
-
-    protected void playDetonateSound() {
-        playLoseSound.act();
-    }
-
-    protected void playWinSound() {
-        playWinSound.act();
     }
 
     private OneShotAction firstStartGame = new OneShotAction() {
