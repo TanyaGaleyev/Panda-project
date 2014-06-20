@@ -289,7 +289,8 @@ public class GameView extends SurfaceView {
 			updateModel(controlType);
             control.playSound();
 		}
-        prevCell.updateCell(hero.model.currentMotion, hero.model.finishingMotion);
+        if(!hero.isFinishing())
+            prevCell.updateCell(hero.model.currentMotion, hero.model.finishingMotion);
 	}
 	
 	/**
