@@ -68,10 +68,12 @@ public class SpriteSet {
 		set.putSprite("postmagnet", "panda/panda_sprite8_postmagnet.png", 1, 8);
 		set.putSprite("prestickleft", "panda/panda_sprite8_prestickleft.png", 1, 8);
 		set.putSprite("prestickleftjump", "panda/in_sticky_left.png", 1, 8);
+        set.putSprite("prestickleftfly", "panda/stick_in_fly_left.png", 1, 8);
 		set.putSprite("stickleft", "panda/panda_sprite8_stickleft.png", 1, 8);
 		set.putSprite("poststickleft", "panda/panda_sprite8_poststickleft.png", 1, 8);
 		set.putSprite("prestickright", "panda/panda_sprite8_prestickright.png", 1, 8);
 		set.putSprite("prestickrightjump", "panda/in_sticky_right.png", 1, 8);
+		set.putSprite("prestickrightfly", "panda/stick_in_fly_right.png", 1, 8);
 		set.putSprite("stickright", "panda/panda_sprite8_stickright.png", 1, 8);
 		set.putSprite("poststickright", "panda/panda_sprite8_poststickright.png", 1, 8);
 		set.putSprite("beginflyleft8", "panda/panda_sprite8_beginflyleft.png", 1, 8);

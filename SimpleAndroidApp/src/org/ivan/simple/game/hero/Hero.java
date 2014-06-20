@@ -364,8 +364,10 @@ public class Hero {
             break;
 		case STICK_LEFT:
 			if(curStage == 0) {
-                if(prevMt == MotionType.JUMP || prevMt == MotionType.FLY_LEFT) {
-				    activeSprite = sprites.getSprite("prestickleftjump");
+                if(prevMt == MotionType.JUMP) {
+                    activeSprite = sprites.getSprite("prestickleftjump");
+                } if(prevMt == MotionType.FLY_LEFT || prevMt == MotionType.THROW_LEFT) {
+                    activeSprite = sprites.getSprite("prestickleftfly");
                 } else {
                     activeSprite = sprites.getSprite("prestickleft");
                 }
@@ -377,8 +379,10 @@ public class Hero {
 			break;
 		case STICK_RIGHT:
 			if(curStage == 0) {
-                if(prevMt == MotionType.JUMP || prevMt == MotionType.FLY_RIGHT) {
+                if(prevMt == MotionType.JUMP) {
                     activeSprite = sprites.getSprite("prestickrightjump");
+                } else if(prevMt == MotionType.FLY_RIGHT || prevMt == MotionType.THROW_RIGHT) {
+                    activeSprite = sprites.getSprite("prestickrightfly");
                 } else {
 				    activeSprite = sprites.getSprite("prestickright");
                 }
