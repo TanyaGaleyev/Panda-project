@@ -258,10 +258,12 @@ public class GameView extends SurfaceView {
 	}
 
     private boolean checkInterruptStay(UserControlType controlType) {
-        return hero.getRealMotion().getType() == MotionType.STAY &&
-                (controlType == UserControlType.LEFT ||
+        return hero.model.currentMotion.getType() == MotionType.STAY &&
+               (controlType == UserControlType.LEFT ||
                 controlType == UserControlType.RIGHT ||
-                controlType == UserControlType.UP);
+                controlType == UserControlType.UP) ||
+               hero.model.currentMotion.getType() == MotionType.TRY_JUMP_GLUE &&
+               (controlType == UserControlType.LEFT || controlType == UserControlType.RIGHT);
     }
 
     /**
