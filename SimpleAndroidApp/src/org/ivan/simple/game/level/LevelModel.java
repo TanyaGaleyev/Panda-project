@@ -351,10 +351,12 @@ public class LevelModel {
 			motion = stayCheck(controlType);
 			break;
 		case GLUE:
-			if(prevMt == MotionType.STAY && controlType == UserControlType.UP) {
-				controlType = UserControlType.IDLE;
-			}
-			motion = stayCheck(controlType);
+			if((prevMt == MotionType.STAY || prevMt == MotionType.TRY_JUMP_GLUE )
+                    && controlType == UserControlType.UP) {
+				motion = new Motion(MotionType.TRY_JUMP_GLUE);
+			} else {
+                motion = stayCheck(controlType);
+            }
 			break;
 		case TELEPORT:
 			if(controlType != UserControlType.LEFT && controlType != UserControlType.RIGHT) {

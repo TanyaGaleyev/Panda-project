@@ -34,6 +34,7 @@ public enum MotionType {
 	TP_LR,
 	STICK_LEFT,
 	STICK_RIGHT,
+    TRY_JUMP_GLUE,
 	TP,
 	CLOUD_IDLE,
 	CLOUD_LEFT,

@@ -63,9 +63,6 @@ public class Hero {
         if(model.currentMotion.getType() == MotionType.FALL_BLANSH) {
 			return activeSprite.getFrame() % 8 == 0;
 		}
-		if(prevCell != null && prevCell.getFloor().getType() == PlatformType.GLUE) {
-			return activeSprite.getFrame() % 8 == 0;
-		}
 		return activeSprite.getFrame() == 0 && ((Sprite) tpSprite).getFrame() == 0;
 	}
 	
@@ -165,6 +162,9 @@ public class Hero {
 //				activeSprite.changeSet(0);
 			}
 			break;
+        case TRY_JUMP_GLUE:
+            activeSprite = sprites.getSprite("tryjumpglue");
+            break;
 		case FALL:
 			if(Math.random() > 0.5) {
 				activeSprite = sprites.getSprite("fall");

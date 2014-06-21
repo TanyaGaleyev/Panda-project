@@ -170,6 +170,7 @@ public class SpriteSet {
 		set.putSprite("glue", "panda/panda_sprite16_glue.png", 1, 16);
 		set.putSprite("slickleftwall", "panda/panda_sprite16_slickleftwall.png", 1, 16);
 		set.putSprite("slickrightwall", "panda/panda_sprite16_slickrightwall.png", 1, 16);
+        set.putSprite("tryjumpglue", "panda/try_jump_stick.png", 1, 16);
 
         set.putSprite("detonate", "panda/detonate.png", 1, 16);
 		
