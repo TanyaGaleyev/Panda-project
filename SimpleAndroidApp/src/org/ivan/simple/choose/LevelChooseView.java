@@ -5,6 +5,7 @@ import java.util.StringTokenizer;
 import org.ivan.simple.ImageProvider;
 import org.ivan.simple.PandaApplication;
 import org.ivan.simple.UserControlType;
+import org.ivan.simple.game.BackgroundFactory;
 import org.ivan.simple.game.GameActivity;
 import org.ivan.simple.game.scores.Scores;
 
@@ -477,7 +478,7 @@ public class LevelChooseView extends SurfaceView {
 	protected void setChooseScreenProperties(int id, String finishedArray) {
 		setLevelsId(id);
 		setFinishedLevels(finishedArray);
-		backgroundId = getBackgroundId(id);
+		backgroundId = BackgroundFactory.getChooseBackgroundPath(id);
 	}
 	
 	private void setFinishedLevels(String finishedArray) {
@@ -503,15 +504,6 @@ public class LevelChooseView extends SurfaceView {
 			finishedLevels[i] = new int[levels[i].length];
 		}
 	}
-
-    private String getBackgroundId(int levelsid) {
-        switch(levelsid) {
-            case 1: return "background/background_c_1.jpg";
-            case 2: return "background/background_c_2.jpg";
-            case 3: return "background/background_c_3.jpg";
-            default:return "background/background_c_1.jpg";
-        }
-    }
 
     public void releaseResources() {
         if(background != null) background.recycle();

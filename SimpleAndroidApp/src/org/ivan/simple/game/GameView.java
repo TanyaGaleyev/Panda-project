@@ -99,7 +99,7 @@ public class GameView extends SurfaceView {
 //            bgr = new ColorBackground();
 //        }
         background = imageProvider().getBackground(
-                BackgroundFactory.getBackgroundPath(control.levId), getWidth(), getHeight());
+                BackgroundFactory.getGameBackgroundPath(control.levId), getWidth(), getHeight());
     }
 
 	protected void initView(LevelModel model) {
