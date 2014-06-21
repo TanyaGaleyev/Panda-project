@@ -28,20 +28,20 @@ android {
         }
 
         instrumentTest.setRoot('tests')
+    }
 
-        signingConfigs {
-            debug {
-                storeFile file('panda.jks')
-                storePassword 'panda0'
-                keyAlias 'panda'
-                keyPassword 'panda0'
-            }
+    signingConfigs {
+        pandaSign {
+            storeFile file('panda.jks')
+            storePassword 'panda0'
+            keyAlias 'panda'
+            keyPassword 'panda0'
         }
+    }
 
-        buildTypes {
-            debug {
-                signingConfig signingConfigs.debug
-            }
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.pandaSign
         }
     }
 }
