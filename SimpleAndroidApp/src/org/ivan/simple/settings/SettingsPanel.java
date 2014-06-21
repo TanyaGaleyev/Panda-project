@@ -15,7 +15,7 @@ public class SettingsPanel extends LinearLayout {
 
     public SettingsPanel(PandaBaseActivity context, SettingsModel model) {
         super(context);
-        setBackgroundResource(R.drawable.settings_border);
+//        setBackgroundResource(R.drawable.settings_border);
         setOrientation(VERTICAL);
         SettingsComponents components = new SettingsComponents(context, model);
         addView(components.getEffects());
