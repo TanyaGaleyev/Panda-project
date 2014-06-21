@@ -65,14 +65,15 @@ public abstract class PandaBaseActivity extends Activity {
     protected void initSettingsDialog() {
         settingsDialog = new Dialog(this);
         settingsDialog.setTitle(SETTINGS);
+        settingsDialog.getWindow().setBackgroundDrawableResource(R.drawable.settings_border);
         TextView titleView = (TextView) settingsDialog.findViewById(android.R.id.title);
         titleView.setTypeface(app().getFontProvider().bold());
         titleView.setTextColor(Color.DKGRAY);
-        titleView.setBackgroundResource(R.drawable.settings_border);
+//        titleView.setBackgroundResource(R.drawable.settings_border);
         settingsDialog.setCanceledOnTouchOutside(true);
         settingsDialog.getWindow().setLayout(
                 (int) (app().displayWidth * 0.6),
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-        settingsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        settingsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 }
