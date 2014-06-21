@@ -93,13 +93,22 @@ public class GameControl implements ControlChangeObserver {
     }
 
     protected void initGame() {
-        finished = false;
-        monsterLose = false;
-        loseDelay = 3;
-        soundControl.init();
-        LevelModel levelModel =
-                new LevelModel(levId, PandaApplication.getPandaApplication().getLevelParser());
-        view.initView(levelModel);
+        boolean retry = true;
+        while (retry) {
+            try {
+                finished = false;
+                monsterLose = false;
+                loseDelay = 3;
+                soundControl.init();
+                LevelModel levelModel =
+                        new LevelModel(levId, PandaApplication.getPandaApplication().getLevelParser());
+                view.initView(levelModel);
+                retry = false;
+            } catch (OutOfMemoryError e) {
+                view.getGameContext().app().getImageProvider().recycleLruCache();
+                System.err.println("Retry GameControl.initGame()");
+            }
+        }
     }
 	
 	protected GameManager getGameLoopThread() {

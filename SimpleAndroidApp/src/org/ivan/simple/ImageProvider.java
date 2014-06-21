@@ -73,41 +73,18 @@ public class ImageProvider {
 	}
 	
 	public Bitmap getBitmapNoCache(String path, int rows, int cols) {
-		System.out.println("Cache size: " + cacheSize);
-		try {
-			Bitmap ret;
-			BitmapFactory.Options opts = new BitmapFactory.Options();
-            if(rows == 1 && cols == 1) {
-//                opts.inPreferredConfig = Bitmap.Config.RGB_565;
-                opts.inSampleSize = (int) (baseStep / gridStep);
-//					System.out.println("Sample:" + opts.inSampleSize);
-				ret = loadBitmap(path, opts);
-			} else {
-				double scale = gridStep / baseStep;
-                Bitmap original;
-                original = loadBitmap(path, opts);
-				int width = (int) Math.ceil(opts.outWidth * scale);
-				width -= width % cols;
-				int height = (int) Math.ceil(opts.outHeight * scale);
-				height -= height % rows;
-                if(original.getWidth() == width && original.getHeight() == height) {
-                    ret = original;
-                } else {
-                    // TODO learn about filter flag
-                    ret = Bitmap.createScaledBitmap(original, width, height, true);
-                    original.recycle();
-                }
-			}
-			return ret;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-        } catch (OutOfMemoryError error) {
-            reportOutOfMemory(path);
-            throw error;
-        }
+        BitmapFactory.Options decodeBounds = loadBitmapSize(path);
+        double scale = gridStep / baseStep;
+        int width = (int) Math.ceil(decodeBounds.outWidth * scale);
+        width -= width % cols;
+        int height = (int) Math.ceil(decodeBounds.outHeight * scale);
+        height -= height % rows;
+        return getScaledBitmapNoCache(path, width, height, null);
 	}
+
+    private int calcSampling(int srcWidth, int srcHeight, int dstWidth, int dstHeight) {
+        return Math.min(srcWidth / dstWidth, srcHeight / dstHeight);
+    }
 
     private void reportOutOfMemory(String path) {
         System.err.println("Error loading path " + path);
@@ -118,6 +95,7 @@ public class ImageProvider {
 
     public Bitmap getBitmapLruCache(String path, int rows, int cols) {
         Bitmap bmp = lruCacheLoaded.get(path);
+        lruCache.get(path);
         if(bmp == null) {
             bmp = getBitmapNoCache(path, rows, cols);
             lruCacheLoaded.put(path, bmp);
@@ -129,40 +107,36 @@ public class ImageProvider {
     public Bitmap getBitmapStrictCache(String path, int rows, int cols) {
 		Bitmap  bmp = strictCache.get(path);
 		if(bmp == null) {
-			bmp = getBitmapNoCache(path, rows, cols);
-			cacheSize += bmp.getWidth() * bmp.getHeight() / 256;// * 4 / 1024
-			strictCache.put(path, bmp);
-		}
-		return bmp;
-	}
-	
-	public Bitmap getBitmapStrictCache(String path) {
-		return getBitmapStrictCache(path, 1, 1);
-	}
-	
-	public Bitmap getBitmapNoCache(String path) {
-		return getBitmapNoCache(path, 1, 1);
+            bmp = getBitmapNoCache(path, rows, cols);
+            cacheSize += bmp.getWidth() * bmp.getHeight() / 256;// * 4 / 1024
+            strictCache.put(path, bmp);
+        }
+        System.out.println("[get] cache size: " + cacheSize);
+        return bmp;
 	}
 	
 	public BitmapFactory.Options loadBitmapSize(String path) {
-		BitmapFactory.Options opts = new BitmapFactory.Options();
-		opts.inJustDecodeBounds = true;
-		try {
-			loadBitmap(path, opts);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return opts;
+        BitmapFactory.Options decodeBounds = new BitmapFactory.Options();
+        decodeBounds.inJustDecodeBounds = true;
+        loadBitmap(path, decodeBounds);
+		return decodeBounds;
 	}
 
-    private Bitmap loadBitmap(String path, BitmapFactory.Options opts) throws IOException {
+    private Bitmap loadBitmap(String path, BitmapFactory.Options opts) {
         InputStream input = null;
         try {
             input = asssetsMananger.open(base + resSet + path);
             return BitmapFactory.decodeStream(input, null, opts);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         } finally {
-            if(input != null) input.close();
+            if(input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    System.out.println("error closing stream, this should not happen");
+                }
+            }
         }
     }
 
@@ -170,9 +144,9 @@ public class ImageProvider {
 		Bitmap bmp = strictCache.get(path);
 		if(bmp == null) return;
 		cacheSize -= bmp.getWidth() * bmp.getHeight() / 256;// * 4 / 1024
-		bmp.recycle();
-		strictCache.remove(path);
-//		System.out.println("Bitmap removed");
+        strictCache.remove(path);
+        bmp.recycle();
+		System.out.println("[rm] cache size: " + cacheSize);
 	}
 
 	public int getGridStep() {
@@ -189,7 +163,33 @@ public class ImageProvider {
         return getScaledBitmapNoCache(path, width, height, opts);
     }
 
-    public Bitmap getScaledBitmapNoCache(String path, int width, int height, BitmapFactory.Options opts) {
+    public Bitmap getBitmapBySizeNoCache(String path, int width, int height) {
+        return getScaledBitmapNoCache(path, width, height, null);
+    }
+
+    public Bitmap getBitmapOrigSizeNoCache(String path) {
+        return loadBitmap(path, null);
+    }
+
+    public Bitmap getBitmapAutoResizeNoCache(String path) {
+        BitmapFactory.Options bounds = loadBitmapSize(path);
+        double scale = gridStep / baseStep;
+        return getBitmapBySizeNoCache(
+                path, (int) (bounds.outWidth * scale), (int) (bounds.outHeight * scale));
+    }
+
+    public Bitmap getBitmapAutoResizeStrictCache(String path) {
+        Bitmap  bmp = strictCache.get(path);
+        if(bmp == null) {
+            bmp = getBitmapAutoResizeNoCache(path);
+            cacheSize += bmp.getWidth() * bmp.getHeight() / 256;// * 4 / 1024
+            strictCache.put(path, bmp);
+        }
+        System.out.println("[get] cache size: " + cacheSize);
+        return bmp;
+    }
+
+    private Bitmap getScaledBitmapNoCache(String path, int width, int height, BitmapFactory.Options opts) {
         try {
             Bitmap orig = loadBitmap(path, opts);
             if(orig.getWidth() == width && orig.getHeight() == height) {
@@ -199,13 +199,16 @@ public class ImageProvider {
                 orig.recycle();
                 return scaled;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
         } catch (OutOfMemoryError error) {
             reportOutOfMemory(path);
             throw error;
         }
+    }
+
+    private void addSamplingToOpts(String path, int width, int height, BitmapFactory.Options opts) {
+        BitmapFactory.Options decodeBounds = loadBitmapSize(path);
+        opts.inSampleSize = calcSampling(
+                decodeBounds.outWidth, decodeBounds.outHeight, width, height);
     }
 
     public void recycleLruCache() {

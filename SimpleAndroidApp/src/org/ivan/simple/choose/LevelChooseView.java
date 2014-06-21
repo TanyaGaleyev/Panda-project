@@ -1,17 +1,12 @@
 package org.ivan.simple.choose;
 
-import java.io.IOException;
 import java.util.StringTokenizer;
 
 import org.ivan.simple.ImageProvider;
 import org.ivan.simple.PandaApplication;
 import org.ivan.simple.UserControlType;
-import org.ivan.simple.bitmaputils.ColorBackground;
-import org.ivan.simple.bitmaputils.PandaBackground;
-import org.ivan.simple.bitmaputils.TextureAtlasParser;
 import org.ivan.simple.game.GameActivity;
 import org.ivan.simple.game.scores.Scores;
-import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
 import android.content.Intent;
@@ -172,7 +167,6 @@ public class LevelChooseView extends SurfaceView {
 
     private void initSurface() {
         initGrid(getWidth(), getHeight());
-        border = imageProvider().getBitmapNoCache("menu/border.png");
 //        cross = imageProvider().getBitmapNoCache("menu/cross.png");
 //        try {
 //            bgr = new TextureAtlasParser().createTextureAtlasBackground(context, backgroundId);
@@ -183,10 +177,11 @@ public class LevelChooseView extends SurfaceView {
 //            bgr = new ColorBackground();
 //        }
         background = imageProvider().getBackground(backgroundId, getWidth(), getHeight());
-        marker = imageProvider().getBitmapNoCache("menu/single_panda.png");
-        highscore = imageProvider().getBitmapNoCache("menu/high_score.png");
-        mediumscore = imageProvider().getBitmapNoCache("menu/medium_score.png");
-        lowscore = imageProvider().getBitmapNoCache("menu/low_score.png");
+        border = imageProvider().getBitmapAutoResizeStrictCache("menu/border.png");
+        marker = imageProvider().getBitmapAutoResizeStrictCache("menu/single_panda.png");
+        highscore = imageProvider().getBitmapAutoResizeStrictCache("menu/high_score.png");
+        mediumscore = imageProvider().getBitmapAutoResizeStrictCache("menu/medium_score.png");
+        lowscore = imageProvider().getBitmapAutoResizeStrictCache("menu/low_score.png");
     }
 
     private ImageProvider imageProvider() {
