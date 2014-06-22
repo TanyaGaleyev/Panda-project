@@ -101,11 +101,6 @@ public class GameActivity extends PandaBaseActivity {
 	}
 
     @Override
-    public void onBackPressed() {
-    	super.onBackPressed();
-    }
-
-    @Override
     protected void onPause() {
     	super.onPause();
     	gControl.stopManager();
@@ -170,6 +165,7 @@ public class GameActivity extends PandaBaseActivity {
 
     @Override
     protected void gotoSettingsScreen() {
+        if(loseDialog.isShowing()) return;
         SettingsInGamePanel settings = new SettingsInGamePanel(this, app().getSettingsModel());
         settingsDialog.setContentView(settings);
         settingsDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -203,6 +199,7 @@ public class GameActivity extends PandaBaseActivity {
     }
 
     public void showLoseDialog() {
+        if(settingsDialog.isShowing()) return;
         loseDialog.show();
     }
 
