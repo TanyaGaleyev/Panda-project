@@ -136,8 +136,8 @@ public class GameView extends SurfaceView {
 		hero.y = TOP_BOUND + level.model.hero.getY() * GRID_STEP;
 
 		if(level.model.monster != null) {
-			monster.xCoordinate = LEFT_BOUND + level.model.monster.getCol() * GRID_STEP;
-			monster.yCoordinate = TOP_BOUND + level.model.monster.getRow() * GRID_STEP;
+			monster.setXCoordinate(LEFT_BOUND + level.model.monster.getCol() * GRID_STEP);
+			monster.setYCoordinate(TOP_BOUND + level.model.monster.getRow() * GRID_STEP);
 		}
 
         guideAnimation = new GuideAnimation();
@@ -428,7 +428,7 @@ public class GameView extends SurfaceView {
 	}
 	
 	public void updateMonster() {
-		if(isGridCoordinates(monster.xCoordinate, monster.yCoordinate)) {
+		if(isGridCoordinates(monster.getXCoordinate(), monster.getYCoordinate())) {
 			level.model.nextDirection();
 		}
 		monster.moveInCurrentDirection();
@@ -445,7 +445,7 @@ public class GameView extends SurfaceView {
         int monsterShrink = heroShrink;
         Rect heroRect = shrinkRect(hero.x, hero.y, GRID_STEP, GRID_STEP, heroShrink);
         Rect monsterRect = shrinkRect(
-                monster.xCoordinate, monster.yCoordinate, GRID_STEP, GRID_STEP, monsterShrink);
+                monster.getXCoordinate(), monster.getYCoordinate(), GRID_STEP, GRID_STEP, monsterShrink);
         if(heroRect.intersect(monsterRect)) {
             level.model.setLost(true);
             control.monsterLose = true;

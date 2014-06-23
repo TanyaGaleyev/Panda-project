@@ -10,14 +10,31 @@ import android.graphics.Canvas;
 
 public class Monster {
 
-    public static final int MONSTER_SPEED_SCALE = 16;
+    public static final float MONSTER_SPEED_SCALE = 16;
 
 	private Sprite sprite;
 	
-	public int xCoordinate = 0;
-	public int yCoordinate = 0;
+	private float xCoordinate = 0;
+
+    public int getXCoordinate() {
+        return Math.round(xCoordinate);
+    }
+
+    public void setXCoordinate(float xCoordinate) {
+        this.xCoordinate = xCoordinate;
+    }
+
+    public int getYCoordinate() {
+        return Math.round(yCoordinate);
+    }
+
+    public void setYCoordinate(float yCoordinate) {
+        this.yCoordinate = yCoordinate;
+    }
+
+    private float yCoordinate = 0;
     public final int gridStep;
-    public final int speed;
+    public final float speed;
 	
 	private final MonsterModel model;
 	
@@ -31,7 +48,7 @@ public class Monster {
 	
 	public void onDraw(Canvas canvas, boolean update) {
 		if(model == null) return;
-		sprite.onDraw(canvas, xCoordinate, yCoordinate, update);
+		sprite.onDraw(canvas, getXCoordinate(), getYCoordinate(), update);
 	}
 	
 	public void moveInCurrentDirection() {
