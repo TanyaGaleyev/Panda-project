@@ -195,8 +195,12 @@ public class ImageProvider {
             if(orig.getWidth() == width && orig.getHeight() == height) {
                 return orig;
             } else {
-                Bitmap scaled = Bitmap.createScaledBitmap(orig, width, height, true);
-                orig.recycle();
+                Bitmap scaled;
+                try {
+                    scaled = Bitmap.createScaledBitmap(orig, width, height, true);
+                } finally {
+                    orig.recycle();
+                }
                 return scaled;
             }
         } catch (OutOfMemoryError error) {
