@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.util.LruCache;
 
+import org.ivan.simple.bitmaputils.allochack.HackedBitmapFactory;
 import org.ivan.simple.bitmaputils.cache.BitmapCache;
 import org.ivan.simple.bitmaputils.cache.FixedSpaceRecycler;
 import org.ivan.simple.bitmaputils.cache.Recycler;
@@ -43,6 +44,11 @@ public class ImageProvider {
 //    private Map<String, Bitmap> lruCacheLoaded = new HashMap<String, Bitmap>();
 //    private List<String> cacheEvicted = new ArrayList<String>();
     private BitmapCache myLru = new BitmapCache();
+    private HackedBitmapFactory hackedBitmapFactory = new HackedBitmapFactory();
+
+    public HackedBitmapFactory getHackedBitmapFactory() {
+        return hackedBitmapFactory;
+    }
 
     public ImageProvider(Context context, int displayWidth, int displayHeight) {
         init(context);
@@ -143,7 +149,7 @@ public class ImageProvider {
         InputStream input = null;
         try {
             input = asssetsMananger.open(base + resSet + path);
-            return BitmapFactory.decodeStream(input, null, opts);
+            return hackedBitmapFactory.decodeStream(input, null, opts);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
@@ -162,7 +168,7 @@ public class ImageProvider {
 		if(bmp == null) return;
 		cacheSize -= bmp.getWidth() * bmp.getHeight() / 256;// * 4 / 1024
         strictCache.remove(path);
-        bmp.recycle();
+        hackedBitmapFactory.free(bmp);
 		System.out.println("[rm] cache size: " + cacheSize);
 	}
 
@@ -214,9 +220,9 @@ public class ImageProvider {
             } else {
                 Bitmap scaled;
                 try {
-                    scaled = Bitmap.createScaledBitmap(orig, width, height, true);
+                    scaled = hackedBitmapFactory.createScaledBitmap(orig, width, height, true);
                 } finally {
-                    orig.recycle();
+                    hackedBitmapFactory.free(orig);
                 }
                 return scaled;
             }

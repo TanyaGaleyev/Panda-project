@@ -202,7 +202,8 @@ public class GameControl implements ControlChangeObserver {
     }
 
     public void releaseResources() {
-        if(view.background != null) view.background.recycle();
+        if(view.background != null)
+            view.getGameContext().app().getImageProvider().getHackedBitmapFactory().free(view.background);
         view.getGameContext().app().getImageProvider().recycleLruCache();
     }
 }

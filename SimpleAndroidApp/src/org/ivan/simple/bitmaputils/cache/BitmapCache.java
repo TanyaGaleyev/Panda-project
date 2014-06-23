@@ -2,6 +2,8 @@ package org.ivan.simple.bitmaputils.cache;
 
 import android.graphics.Bitmap;
 
+import org.ivan.simple.PandaApplication;
+
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -28,7 +30,7 @@ public class BitmapCache {
         Map.Entry<String, Bitmap> oldestUsed = cache.entrySet().iterator().next();
         size -= bmpSize(oldestUsed.getValue());
         cache.remove(oldestUsed.getKey());
-        oldestUsed.getValue().recycle();
+        recycleBitmap(oldestUsed.getValue());
     }
 
     public void recycle(int kbs) {
@@ -42,19 +44,24 @@ public class BitmapCache {
             Bitmap toremove = it.next().getValue();
             it.remove();
             size -= bmpSize(toremove);
-            toremove.recycle();
+            recycleBitmap(toremove);
         }
     }
 
     public void recycleAll() {
         for(Map.Entry<String, Bitmap> entry : cache.entrySet())
-            entry.getValue().recycle();
+            recycleBitmap(entry.getValue());
         cache.clear();
         size = 0;
     }
 
     private int bmpSize(Bitmap bmp) {
-        return bmp.getWidth() * bmp.getHeight() / 256;
+        return bmp.getRowBytes() * bmp.getHeight();
+    }
+
+    private void recycleBitmap(Bitmap bmp) {
+        PandaApplication.getPandaApplication().getImageProvider().getHackedBitmapFactory()
+                .free(bmp);
     }
 
     public int kbSize() {
