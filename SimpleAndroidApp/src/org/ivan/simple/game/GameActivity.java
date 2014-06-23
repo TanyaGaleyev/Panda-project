@@ -185,8 +185,13 @@ public class GameActivity extends PandaBaseActivity {
         settings.setReplayOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gControl.restartGame();
                 settingsDialog.cancel();
+                gControl.view.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        gControl.restartGame();
+                    }
+                });
             }
         });
         settings.setResumeOnClickListener(new View.OnClickListener() {

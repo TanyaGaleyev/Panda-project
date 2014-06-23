@@ -55,7 +55,7 @@ public class GameControl implements ControlChangeObserver {
     protected void restartGame() {
         stopManager();
         initGame();
-        startManager();
+        gameLoopThread.doDraw(false);
     }
 	
 	protected boolean isRunning() {
@@ -99,6 +99,7 @@ public class GameControl implements ControlChangeObserver {
                 finished = false;
                 monsterLose = false;
                 loseDelay = 3;
+                firstStartGame = new FirstStartGame();
                 soundControl.init();
                 LevelModel levelModel =
                         new LevelModel(levId, PandaApplication.getPandaApplication().getLevelParser());
@@ -186,12 +187,13 @@ public class GameControl implements ControlChangeObserver {
                 view.getGameContext().app().getSettingsModel().getControlsType());
     }
 
-    private OneShotAction firstStartGame = new OneShotAction() {
+    private OneShotAction firstStartGame = new FirstStartGame();
+    private class FirstStartGame extends OneShotAction {
         @Override
         protected void doAction() {
             startManager();
         }
-    };
+    }
 
     protected void firstStartGame() {
         firstStartGame.act();
