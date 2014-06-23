@@ -14,6 +14,7 @@ import android.view.SurfaceView;
 import org.ivan.simple.ImageProvider;
 import org.ivan.simple.PandaApplication;
 import org.ivan.simple.UserControlType;
+import org.ivan.simple.bitmaputils.cache.Recycler;
 import org.ivan.simple.game.hero.Hero;
 import org.ivan.simple.game.level.LevelCell;
 import org.ivan.simple.game.level.LevelModel;
@@ -98,8 +99,18 @@ public class GameView extends SurfaceView {
 //        } catch (XmlPullParserException e) {
 //            bgr = new ColorBackground();
 //        }
-        background = imageProvider().getBackground(
-                BackgroundFactory.getGameBackgroundPath(control.levId), getWidth(), getHeight());
+        Recycler recycler = imageProvider().getCacheRecycler();
+        boolean retry = true;
+        while (retry) {
+            try {
+                background = imageProvider().getBackground(
+                        BackgroundFactory.getGameBackgroundPath(control.levId), getWidth(), getHeight());
+                retry = false;
+            } catch (OutOfMemoryError oom) {
+                recycler.recycle();
+                System.err.println("Retry GameView.initBackground()");
+            }
+        }
     }
 
 	protected void initView(LevelModel model) {

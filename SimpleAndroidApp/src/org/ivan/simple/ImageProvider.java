@@ -6,6 +6,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.util.LruCache;
 
+import org.ivan.simple.bitmaputils.cache.BitmapCache;
+import org.ivan.simple.bitmaputils.cache.FixedSpaceRecycler;
+import org.ivan.simple.bitmaputils.cache.Recycler;
+import org.ivan.simple.bitmaputils.cache.ThreeAttemptsRecycler;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -23,20 +28,21 @@ public class ImageProvider {
 	private int gridStep = 128;
 	private double baseStep = 230d;
 	private int cacheSize = 0;
-    private LruCache<String, Bitmap> lruCache = new LruCache<String, Bitmap>(CACHE_SIZE) {
-        @Override
-        protected int sizeOf(String key, Bitmap value) {
-            return value.getWidth() * value.getHeight() * 4 / 1024;
-        }
-
-        @Override
-        protected void entryRemoved(boolean evicted, String key, Bitmap oldValue, Bitmap newValue) {
-            super.entryRemoved(evicted, key, oldValue, newValue);
-            cacheEvicted.add(key);
-        }
-    };
-    private Map<String, Bitmap> lruCacheLoaded = new HashMap<String, Bitmap>();
-    private List<String> cacheEvicted = new ArrayList<String>();
+//    private LruCache<String, Bitmap> lruCache = new LruCache<String, Bitmap>(CACHE_SIZE) {
+//        @Override
+//        protected int sizeOf(String key, Bitmap value) {
+//            return value.getWidth() * value.getHeight() * 4 / 1024;
+//        }
+//
+//        @Override
+//        protected void entryRemoved(boolean evicted, String key, Bitmap oldValue, Bitmap newValue) {
+//            super.entryRemoved(evicted, key, oldValue, newValue);
+//            cacheEvicted.add(key);
+//        }
+//    };
+//    private Map<String, Bitmap> lruCacheLoaded = new HashMap<String, Bitmap>();
+//    private List<String> cacheEvicted = new ArrayList<String>();
+    private BitmapCache myLru = new BitmapCache();
 
     public ImageProvider(Context context, int displayWidth, int displayHeight) {
         init(context);
@@ -91,15 +97,26 @@ public class ImageProvider {
         System.err.println("Max heap: " + Runtime.getRuntime().maxMemory());
         System.err.println("Total heap: " + Runtime.getRuntime().totalMemory());
         System.err.println("Free heap: " + Runtime.getRuntime().freeMemory());
+        System.err.println("Strict cache: " + cacheSize);
+        System.err.println("Lru cache: " + myLru.kbSize());
     }
 
+//    public Bitmap getBitmapLruCache(String path, int rows, int cols) {
+//        Bitmap bmp = lruCacheLoaded.get(path);
+//        lruCache.get(path);
+//        if(bmp == null) {
+//            bmp = getBitmapNoCache(path, rows, cols);
+//            lruCacheLoaded.put(path, bmp);
+//            lruCache.put(path, bmp);
+//        }
+//        return bmp;
+//    }
+
     public Bitmap getBitmapLruCache(String path, int rows, int cols) {
-        Bitmap bmp = lruCacheLoaded.get(path);
-        lruCache.get(path);
+        Bitmap bmp = myLru.get(path);
         if(bmp == null) {
             bmp = getBitmapNoCache(path, rows, cols);
-            lruCacheLoaded.put(path, bmp);
-            lruCache.put(path, bmp);
+            myLru.put(path, bmp);
         }
         return bmp;
     }
@@ -215,9 +232,17 @@ public class ImageProvider {
                 decodeBounds.outWidth, decodeBounds.outHeight, width, height);
     }
 
+//    public void recycleLruCache() {
+//        for(String toRecycle : cacheEvicted)
+//            lruCacheLoaded.remove(toRecycle).recycle();
+//        cacheEvicted.clear();
+//    }
+
+    public Recycler getCacheRecycler() {
+        return new ThreeAttemptsRecycler(myLru);
+    }
+
     public void recycleLruCache() {
-        for(String toRecycle : cacheEvicted)
-            lruCacheLoaded.remove(toRecycle).recycle();
-        cacheEvicted.clear();
+        new FixedSpaceRecycler(1024, myLru).recycle();
     }
 }

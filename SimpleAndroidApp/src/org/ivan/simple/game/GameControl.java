@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import org.ivan.simple.PandaApplication;
 import org.ivan.simple.UserControlType;
+import org.ivan.simple.bitmaputils.cache.Recycler;
 import org.ivan.simple.game.controls.ControlChangeObserver;
 import org.ivan.simple.game.controls.ObtainedControl;
 import org.ivan.simple.game.controls.UserControl;
@@ -93,9 +94,10 @@ public class GameControl implements ControlChangeObserver {
     }
 
     protected void initGame() {
-//        boolean retry = true;
-//        while (retry) {
-//            try {
+        Recycler recycler = view.getGameContext().app().getImageProvider().getCacheRecycler();
+        boolean retry = true;
+        while (retry) {
+            try {
                 finished = false;
                 monsterLose = false;
                 loseDelay = 3;
@@ -104,12 +106,12 @@ public class GameControl implements ControlChangeObserver {
                 LevelModel levelModel =
                         new LevelModel(levId, PandaApplication.getPandaApplication().getLevelParser());
                 view.initView(levelModel);
-//                retry = false;
-//            } catch (OutOfMemoryError e) {
-//                view.getGameContext().app().getImageProvider().recycleLruCache();
-//                System.err.println("Retry GameControl.initGame()");
-//            }
-//        }
+                retry = false;
+            } catch (OutOfMemoryError oom) {
+                recycler.recycle();
+                System.err.println("Retry GameControl.initGame()");
+            }
+        }
     }
 	
 	protected GameManager getGameLoopThread() {
