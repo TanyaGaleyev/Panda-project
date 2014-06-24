@@ -152,6 +152,11 @@ public class StartActivityNew extends PandaBaseActivity {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+//        toastMemoryInfo();
+        return super.onTouchEvent(event);
+    }
+
+    private void toastMemoryInfo() {
         Toast toast = Toast.makeText(
                 this,
                 "Memory class: " + ((ActivityManager) getSystemService(ACTIVITY_SERVICE)).getMemoryClass() +
@@ -161,6 +166,5 @@ public class StartActivityNew extends PandaBaseActivity {
                 Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
         toast.show();
-        return super.onTouchEvent(event);
     }
 }
