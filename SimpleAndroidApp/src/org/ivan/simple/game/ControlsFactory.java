@@ -38,12 +38,12 @@ public class ControlsFactory {
 
         @Override
         public int getX() {
-            return hero().x;
+            return (int) hero().x;
         }
 
         @Override
         public int getY() {
-            return hero().y;
+            return (int) hero().y;
         }
     }
 

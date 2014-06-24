@@ -18,10 +18,10 @@ public class Hero {
 	private Sprite activeSprite;
 	private TPSprite tpSprite;
 	private SpriteSet sprites;
-	public int x;
-	public int y;
-	private int prevX;
-	private int prevY;
+	public float x;
+	public float y;
+	private float prevX;
+	private float prevY;
 	public final HeroModel model;
 	
 	public Hero(HeroModel model) {
@@ -60,6 +60,10 @@ public class Hero {
 				finishingState) {
 			return activeSprite.getFrame() == 4;
 		}
+        if(model.finishingMotion.getType() == MotionType.FLY_LEFT  ||
+                model.finishingMotion.getType() == MotionType.FLY_RIGHT) {
+            return true;
+        }
         if(model.currentMotion.getType() == MotionType.FALL_BLANSH) {
 			return activeSprite.getFrame() % 8 == 0;
 		}
@@ -601,11 +605,15 @@ public class Hero {
 	 */
 	public void onDraw(Canvas canvas, boolean update) {
 		if(!detonate && !finishingState && (model.currentMotion.getType().isHorizontalTP())) {
-			tpSprite.onDraw(canvas, prevX, prevY, x, y, update);
+			tpSprite.onDraw(canvas, r(prevX), r(prevY), r(x), r(y), update);
 		} else {
-			activeSprite.onDraw(canvas, x, y, update);
+			activeSprite.onDraw(canvas, r(x), r(y), update);
 		}
 	}
+
+    public int r(float f) {
+        return Math.round(f);
+    }
 	
 	/**
 	 * Real motion type used to get proper hero speed on start/finish/main animations

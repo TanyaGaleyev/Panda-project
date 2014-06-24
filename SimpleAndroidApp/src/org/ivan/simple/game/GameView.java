@@ -255,7 +255,7 @@ public class GameView extends SurfaceView {
 		if(isReadyToPlayLoseAnimation()) return false;
 		if(isReadyToPlayWinAnimation()) return false;
 		
-		boolean inControlState = hero.isInControlState();
+		boolean inControlState = hero.isInControlState() && isGridCoordinates(hero.r(hero.x), hero.r(hero.y));
         boolean interruptStayCase = checkInterruptStay(controlType);
 		/*
 		 * Hero is in control state usually when motion animation has ended
@@ -349,8 +349,12 @@ public class GameView extends SurfaceView {
             hero.x = LEFT_BOUND + level.model.hero.getX() * GRID_STEP;
             hero.y = TOP_BOUND + level.model.hero.getY() * GRID_STEP;
         }
-        int xSpeed = hero.getRealMotion().getXSpeed() * ANIMATION_JUMP_SPEED;
-        int ySpeed = hero.getRealMotion().getYSpeed() * ANIMATION_JUMP_SPEED;
+        float xSpeed = hero.getRealMotion().getXSpeed() * ANIMATION_JUMP_SPEED;
+        float ySpeed = hero.getRealMotion().getYSpeed() * ANIMATION_JUMP_SPEED;
+        if(hero.getRealMotion().getType() == MotionType.FLY_LEFT ||
+                hero.getRealMotion().getType() == MotionType.FLY_RIGHT) {
+            xSpeed = hero.getRealMotion().getXSpeed() * GRID_STEP / 5f;
+        }
 
         hero.x += xSpeed;
         hero.y += ySpeed;
@@ -450,7 +454,7 @@ public class GameView extends SurfaceView {
         if(monster == null) return;
         int heroShrink = (int) (GRID_STEP * 0.10);
         int monsterShrink = heroShrink;
-        Rect heroRect = shrinkRect(hero.x, hero.y, GRID_STEP, GRID_STEP, heroShrink);
+        Rect heroRect = shrinkRect((int) hero.x,(int)  hero.y, GRID_STEP, GRID_STEP, heroShrink);
         Rect monsterRect = shrinkRect(
                 monster.getXCoordinate(), monster.getYCoordinate(), GRID_STEP, GRID_STEP, monsterShrink);
         if(heroRect.intersect(monsterRect)) {
