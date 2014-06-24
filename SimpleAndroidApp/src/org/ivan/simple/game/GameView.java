@@ -19,6 +19,7 @@ import org.ivan.simple.game.hero.Hero;
 import org.ivan.simple.game.level.LevelCell;
 import org.ivan.simple.game.level.LevelModel;
 import org.ivan.simple.game.level.LevelView;
+import org.ivan.simple.game.level.PlatformType;
 import org.ivan.simple.game.monster.Monster;
 import org.ivan.simple.game.monster.MonsterFactory;
 import org.ivan.simple.game.motion.MotionType;
@@ -269,12 +270,18 @@ public class GameView extends SurfaceView {
 	}
 
     private boolean checkInterruptStay(UserControlType controlType) {
-        return hero.model.currentMotion.getType() == MotionType.STAY &&
+        MotionType mt = hero.model.currentMotion.getType();
+        PlatformType floorType = level.model.getHeroCell().getFloor().getType();
+        return mt == MotionType.STAY &&
                (controlType == UserControlType.LEFT ||
                 controlType == UserControlType.RIGHT ||
-                controlType == UserControlType.UP) ||
-               hero.model.currentMotion.getType() == MotionType.TRY_JUMP_GLUE &&
-               (controlType == UserControlType.LEFT || controlType == UserControlType.RIGHT);
+                controlType == UserControlType.UP && floorType != PlatformType.BRICK ||
+                controlType == UserControlType.DOWN &&
+                (floorType == PlatformType.ONE_WAY_DOWN || floorType == PlatformType.WAY_UP_DOWN)) ||
+               mt == MotionType.TRY_JUMP_GLUE &&
+               (controlType == UserControlType.LEFT || controlType == UserControlType.RIGHT) ||
+               mt == MotionType.MAGNET && hero.model.currentMotion.getStage() < 2 &&
+               controlType == UserControlType.DOWN;
     }
 
     /**
