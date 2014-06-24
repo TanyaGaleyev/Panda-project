@@ -46,10 +46,6 @@ public class ImageProvider {
     private BitmapCache myLru = new BitmapCache();
     private HackedBitmapFactory hackedBitmapFactory = new HackedBitmapFactory();
 
-    public HackedBitmapFactory getHackedBitmapFactory() {
-        return hackedBitmapFactory;
-    }
-
     public ImageProvider(Context context, int displayWidth, int displayHeight) {
         init(context);
         setScaleParameters(displayWidth, displayHeight);
@@ -168,11 +164,15 @@ public class ImageProvider {
 		if(bmp == null) return;
 		cacheSize -= bmp.getWidth() * bmp.getHeight() / 256;// * 4 / 1024
         strictCache.remove(path);
-        hackedBitmapFactory.free(bmp);
+        free(bmp);
 		System.out.println("[rm] cache size: " + cacheSize);
 	}
 
-	public int getGridStep() {
+    public void free(Bitmap bmp) {
+        hackedBitmapFactory.free(bmp);
+    }
+
+    public int getGridStep() {
 		return gridStep;
 	}
 
@@ -222,7 +222,7 @@ public class ImageProvider {
                 try {
                     scaled = hackedBitmapFactory.createScaledBitmap(orig, width, height, true);
                 } finally {
-                    hackedBitmapFactory.free(orig);
+                    free(orig);
                 }
                 return scaled;
             }

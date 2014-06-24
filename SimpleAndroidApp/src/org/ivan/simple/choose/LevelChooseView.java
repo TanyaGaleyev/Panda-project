@@ -506,7 +506,7 @@ public class LevelChooseView extends SurfaceView {
 	}
 
     public void releaseResources() {
-        if(background != null) imageProvider().getHackedBitmapFactory().free(background);
+        if(background != null) imageProvider().free(background);
     }
 	
 	private class Redrawer extends Thread {

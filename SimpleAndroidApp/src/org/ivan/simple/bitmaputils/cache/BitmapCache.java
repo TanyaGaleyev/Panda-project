@@ -60,8 +60,7 @@ public class BitmapCache {
     }
 
     private void recycleBitmap(Bitmap bmp) {
-        PandaApplication.getPandaApplication().getImageProvider().getHackedBitmapFactory()
-                .free(bmp);
+        PandaApplication.getPandaApplication().getImageProvider().free(bmp);
     }
 
     public int kbSize() {
