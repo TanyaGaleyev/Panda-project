@@ -1,12 +1,8 @@
 package org.ivan.simple.game.monster;
 
-import org.ivan.simple.ImageProvider;
-import org.ivan.simple.R;
-import org.ivan.simple.game.hero.Sprite;
-import org.ivan.simple.game.level.LevelCell;
-import org.ivan.simple.game.level.PlatformType;
-
 import android.graphics.Canvas;
+
+import org.ivan.simple.game.hero.Sprite;
 
 public class Monster {
 
@@ -14,24 +10,9 @@ public class Monster {
 
 	private Sprite sprite;
 	
+	/* strictly speaking float coordinates may lead to some precision bugs
+	 * may be we need some kind of "at least" uniform integral steps iterator */
 	private float xCoordinate = 0;
-
-    public int getXCoordinate() {
-        return Math.round(xCoordinate);
-    }
-
-    public void setXCoordinate(float xCoordinate) {
-        this.xCoordinate = xCoordinate;
-    }
-
-    public int getYCoordinate() {
-        return Math.round(yCoordinate);
-    }
-
-    public void setYCoordinate(float yCoordinate) {
-        this.yCoordinate = yCoordinate;
-    }
-
     private float yCoordinate = 0;
     public final int gridStep;
     public final float speed;
@@ -71,5 +52,21 @@ public class Monster {
 			break;
 		}
 	}
+
+    public int getXCoordinate() {
+        return Math.round(xCoordinate);
+    }
+
+    public void setXCoordinate(float xCoordinate) {
+        this.xCoordinate = xCoordinate;
+    }
+
+    public int getYCoordinate() {
+        return Math.round(yCoordinate);
+    }
+
+    public void setYCoordinate(float yCoordinate) {
+        this.yCoordinate = yCoordinate;
+    }
 	
 }
