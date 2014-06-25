@@ -16,6 +16,7 @@ import org.ivan.simple.achievements.Achievement;
 import org.ivan.simple.achievements.AchievementsDirectories;
 import org.ivan.simple.game.scores.Scores;
 import org.ivan.simple.utils.PandaButtonsPanel;
+import org.ivan.simple.utils.RateThisApp;
 import org.ivan.simple.welcome.StartActivity;
 
 import java.util.Timer;
@@ -69,6 +70,7 @@ public class LevelChooseActivity extends PandaBaseActivity {
             @Override
             public void onClick(View v) {
                 view.startLevel(888);
+//                RateThisApp.rate(LevelChooseActivity.this);
             }
         });
         backBtn.setOnClickListener(new View.OnClickListener() {
