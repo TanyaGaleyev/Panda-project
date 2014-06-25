@@ -4,13 +4,15 @@
     android:orientation="horizontal"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="10dp"
     android:gravity="center_vertical|center_horizontal">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
         android:gravity="center_vertical|center_horizontal"
         android:id="@+id/replay_container">
 
@@ -31,6 +33,9 @@
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingRight="10dp"
         android:gravity="center_vertical|center_horizontal"
         android:id="@+id/back_container">
 
