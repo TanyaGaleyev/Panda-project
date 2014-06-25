@@ -28,12 +28,9 @@ public class SettingsInGamePanel extends SettingsPanel {
         buttonsPanel.setGravity(Gravity.CENTER);
         int padding = context.app().convertDpToPixels(PADDING_DP);
         buttonsPanel.setPadding(padding, padding, padding, padding);
-        exit = context.prepare(R.drawable.back);
-        addLabeledView(exit, "Exit");
-        replay = context.prepare(R.drawable.replay);
-        addLabeledView(replay, "Replay");
-        resume = context.prepare(R.drawable.resume);
-        addLabeledView(resume, "Resume");
+        exit = addLabeledView(context.prepare(R.drawable.back), "Exit");
+        replay = addLabeledView(context.prepare(R.drawable.replay), "Replay");
+        resume = addLabeledView(context.prepare(R.drawable.resume), "Resume");
 
         addView(buttonsPanel);
     }
@@ -50,9 +47,14 @@ public class SettingsInGamePanel extends SettingsPanel {
         resume.setOnClickListener(listener);
     }
 
-    private void addLabeledView(View view, String text) {
-        buttonsPanel.addView(view);
-        buttonsPanel.addView(createLabel(text));
+    private View addLabeledView(View view, String text) {
+        LinearLayout labeledView = new LinearLayout(getContext());
+        labeledView.setOrientation(HORIZONTAL);
+        labeledView.setGravity(Gravity.CENTER);
+        labeledView.addView(view);
+        labeledView.addView(createLabel(text));
+        buttonsPanel.addView(labeledView);
+        return labeledView;
     }
 
     private TextView createLabel(String text) {
