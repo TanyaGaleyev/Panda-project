@@ -255,10 +255,11 @@ public class Platform {
 			return;
 		}
 		if(type == PlatformType.STRING) {
-			if(mt == MotionType.STAY) {
-				sprite.changeSet(1);
-				sprite.playOnce();
-				type = PlatformType.NONE;
+//			if(mt == MotionType.STAY) {
+            if(mt == MotionType.FALL) {
+                sprite.changeSet(1);
+                sprite.playOnce();
+                type = PlatformType.NONE;
 			} else if(mt == MotionType.JUMP) {
 				sprite.playOnce();
 			}

@@ -436,8 +436,8 @@ public class LevelModel {
         Motion motion;
         MotionType finishingMt = prevMotion.getType();
         int finishingStage = prevMotion.getStage();
-        switch(prevMotion.getType()){
-            case JUMP:
+        switch(prevMotion.getType()) {
+        case JUMP:
             switch(controlType) {
             case DOWN:
                 motion = platformsCheck(controlType, finishingMt);
@@ -627,9 +627,10 @@ public class LevelModel {
             motion = platformsCheck(controlType, finishingMt);
             break;
         }
-        if(motion.getType() == finishingMt) {
+        if(prevMotion.getType() == MotionType.STAY && motion.getType() == MotionType.STAY)
+            motion = new Motion(MotionType.FALL);
+        if(motion.getType() == finishingMt)
             motion.copyStage(prevMotion);
-        }
         return motion;
     }
 
