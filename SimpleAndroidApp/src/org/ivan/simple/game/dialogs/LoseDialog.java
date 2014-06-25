@@ -3,6 +3,7 @@ package org.ivan.simple.game.dialogs;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,6 +16,14 @@ import org.ivan.simple.R;
 public class LoseDialog extends Dialog {
 
     public static final String TITLE = "Oops...";
+
+//    OneShotAction increaseButtonsClickArea = new OneShotAction() {
+//        @Override
+//        protected void doAction() {
+//            increaseClickArea(findViewById(R.id.replay));
+//            increaseClickArea(findViewById(R.id.back));
+//        }
+//    };
 
     public LoseDialog(PandaBaseActivity context) {
         super(context);
@@ -33,11 +42,11 @@ public class LoseDialog extends Dialog {
     }
 
     public void setReplayOnClickListener(View.OnClickListener l) {
-        findViewById(R.id.replay).setOnClickListener(l);
+        findViewById(R.id.replay_container).setOnClickListener(l);
     }
 
     public void setBackOnClickListener(View.OnClickListener l) {
-        findViewById(R.id.back).setOnClickListener(l);
+        findViewById(R.id.back_container).setOnClickListener(l);
     }
 
     private void styleText(int id, Typeface font, int color) {
@@ -45,4 +54,29 @@ public class LoseDialog extends Dialog {
         textView.setTypeface(font);
         textView.setTextColor(color);
     }
+
+//    @Override
+//    public void show() {
+//        super.show();
+//        increaseButtonsClickArea.act();
+//    }
+
+//        private void increaseClickArea(final View viewToIncreaseArea) {
+//        if(!(viewToIncreaseArea.getParent() instanceof View)) return;
+//        final View parent = (View) viewToIncreaseArea.getParent();
+//        parent.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                Rect increasedArea = new Rect();
+//                viewToIncreaseArea.getHitRect(increasedArea);
+//                int dw = 4 * increasedArea.width(), dh = 4 * increasedArea.height();
+//                increasedArea.top -= dh;
+//                increasedArea.bottom += dh;
+//                increasedArea.left -= dw;
+//                increasedArea.right += dw;
+//                TouchDelegate expandedArea = new TouchDelegate(increasedArea, viewToIncreaseArea);
+//                parent.setTouchDelegate(expandedArea);
+//            }
+//        });
+//    }
 }
