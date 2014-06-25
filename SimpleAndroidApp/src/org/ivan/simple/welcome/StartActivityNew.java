@@ -60,7 +60,7 @@ public class StartActivityNew extends PandaBaseActivity {
         layoutParams.setMargins(left, top, 0 , 0);
         panda.setLayoutParams(layoutParams);
         contentPanel.addView(panda);
-        initPandaDrawable(false);
+        initPandaDrawable(true);
 
         initMainTitle();
         initListeners();
