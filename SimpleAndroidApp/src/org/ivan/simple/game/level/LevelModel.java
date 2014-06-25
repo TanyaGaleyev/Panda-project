@@ -372,6 +372,11 @@ public class LevelModel {
             lose = true;
             motion = stayCheck(controlType);
             break;
+        case STRING:
+            motion = stayCheck(controlType);
+            if(motion.getType() == MotionType.STAY && prevMt == MotionType.STAY)
+                motion = new Motion(MotionType.FALL);
+            break;
 		default:
 			motion = stayCheck(controlType);
 			break;	
@@ -627,8 +632,6 @@ public class LevelModel {
             motion = platformsCheck(controlType, finishingMt);
             break;
         }
-        if(prevMotion.getType() == MotionType.STAY && motion.getType() == MotionType.STAY)
-            motion = new Motion(MotionType.FALL);
         if(motion.getType() == finishingMt)
             motion.copyStage(prevMotion);
         return motion;
