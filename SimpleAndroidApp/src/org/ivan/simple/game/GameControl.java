@@ -18,6 +18,8 @@ import org.ivan.simple.utils.OneShotAction;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameControl implements ControlChangeObserver {
 	GameView view;
@@ -65,6 +67,7 @@ public class GameControl implements ControlChangeObserver {
 	
 	public void startManager() {
         if(gameLoopThread != null && gameLoopThread.isRunning()) return;
+        if(gameLoopThread != null) postStopManager();
 		System.out.println("Start game loop");
 		gameLoopThread = new GameManager(view);
 		gameLoopThread.setRunning(true);
@@ -107,6 +110,7 @@ public class GameControl implements ControlChangeObserver {
                         new LevelModel(levId, PandaApplication.getPandaApplication().getLevelParser());
                 view.initView(levelModel);
                 retry = false;
+                initControlProvider();
             } catch (OutOfMemoryError oom) {
                 recycler.recycle();
                 System.err.println("Retry GameControl.initGame()");

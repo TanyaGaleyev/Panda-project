@@ -57,38 +57,37 @@ public class GameManager extends Thread {
 
 	@Override
 	public void run() {
-
         long startTime;
         long sleepTime;
-		while(running) {
-			startTime = System.currentTimeMillis();
-            UserControlType controlType = receiveUserControlType();
-            if(view.readyForUpdate(controlType)) {
-				view.updateGame(controlType);
-                rememberedControl = UserControlType.IDLE;
-			}
-            view.updatePositions();
-			doDraw(true);
-			if(view.getControl().finished) {
-                if(view.isComplete())
-                    view.getGameContext().switchBackToChooseActivity(true, view.getScore());
-                else
-                    view.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            view.getGameContext().showLoseDialog();
-                        }
-                    });
-            }
-
-			// calculate sleep time to reach needed fps
-			sleepTime = ticksPS-(System.currentTimeMillis() - startTime);
-            try {
+        try {
+            Thread.sleep(100);
+            while(running) {
+                startTime = System.currentTimeMillis();
+                UserControlType controlType = receiveUserControlType();
+                if(view.readyForUpdate(controlType)) {
+                    view.updateGame(controlType);
+                    rememberedControl = UserControlType.IDLE;
+                }
+                view.updatePositions();
+                doDraw(true);
+                if(view.getControl().finished) {
+                    if(view.isComplete())
+                        view.getGameContext().switchBackToChooseActivity(true, view.getScore());
+                    else
+                        view.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                view.getGameContext().showLoseDialog();
+                            }
+                        });
+                }
+                // calculate sleep time to reach needed fps
+                sleepTime = ticksPS-(System.currentTimeMillis() - startTime);
                 if (sleepTime > 0) sleep(sleepTime);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-		}
+        } catch (InterruptedException e) {
+            System.out.println("Game loop thread interrupted");
+        }
 	}
 
     private UserControlType receiveUserControlType() {
