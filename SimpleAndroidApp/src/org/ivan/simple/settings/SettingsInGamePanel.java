@@ -26,11 +26,13 @@ public class SettingsInGamePanel extends SettingsPanel {
         buttonsPanel = new LinearLayout(context);
         buttonsPanel.setOrientation(HORIZONTAL);
         buttonsPanel.setGravity(Gravity.CENTER);
-        int padding = context.app().convertDpToPixels(PADDING_DP);
-        buttonsPanel.setPadding(padding, padding, padding, padding);
+        int p = context.app().convertDpToPixels(PADDING_DP);
         exit = addLabeledView(context.prepare(R.drawable.back), "Exit");
+        exit.setPadding(p, p, p, p);
         replay = addLabeledView(context.prepare(R.drawable.replay), "Replay");
+        replay.setPadding(p, p, p, p);
         resume = addLabeledView(context.prepare(R.drawable.resume), "Resume");
+        resume.setPadding(p, p, p, p);
 
         addView(buttonsPanel);
     }
