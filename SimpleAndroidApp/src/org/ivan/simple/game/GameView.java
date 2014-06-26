@@ -281,7 +281,8 @@ public class GameView extends SurfaceView {
                mt == MotionType.TRY_JUMP_GLUE &&
                (controlType == UserControlType.LEFT || controlType == UserControlType.RIGHT) ||
                mt == MotionType.MAGNET && hero.model.currentMotion.getStage() < 2 &&
-               controlType == UserControlType.DOWN;
+               controlType == UserControlType.DOWN ||
+               mt == MotionType.CLOUD_IDLE;
     }
 
     /**

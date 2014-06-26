@@ -141,7 +141,7 @@ public class Hero {
 //			prevMt = currentMotion.getChildMotion().getType();
 //			prevStage = currentMotion.getChildMotion().getStage();
 //		}
-        activeSprite.goToFrame(0);
+        if(mt != prevMt) activeSprite.goToFrame(0);
 		switch (mt) {
 		case STAY:
 			if(prevCell.getFloor().getType() == PlatformType.GLUE){
