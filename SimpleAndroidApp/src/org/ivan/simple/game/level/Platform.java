@@ -172,14 +172,14 @@ public class Platform {
 			return;
 		}
 		if(type == PlatformType.REDUCE) {
-			if(currentStatus<3) {
-				currentStatus++;
-				sprite.playOnce(true);
-			} else if(currentStatus<4){
-				currentStatus++;
-				sprite.playOnce(true);
+			if(currentStatus <= 3) {
+                sprite.changeSet(currentStatus);
+                sprite.playOnce(true);
+            }
+            if(currentStatus == 3) {
 				type = PlatformType.NONE;
 			}
+            currentStatus++;
 			return;
 		}
 		if(type == PlatformType.ANGLE_LEFT) {
