@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -61,6 +64,7 @@ public class StartActivityNew extends PandaBaseActivity {
         panda.setLayoutParams(layoutParams);
         contentPanel.addView(panda);
         initPandaDrawable(true);
+//        initPandaDrawable(false);
 
         initMainTitle();
         initListeners();
@@ -114,6 +118,27 @@ public class StartActivityNew extends PandaBaseActivity {
         } else {
             panda.setBackgroundResource(R.drawable.panda_icon);
         }
+//        panda.setBackgroundResource(R.drawable.panda_icon);
+//        asyncLoadAnimation();
+    }
+
+    private void asyncLoadAnimation() {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                if(pandaAnimation != null) return null;
+                pandaAnimation = app().loadAnimationFromFolder(ANIMATIONS_DIR);
+                pandaAnimation.setOneShot(false);
+                panda.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        panda.setBackgroundDrawable(pandaAnimation);
+                        pandaAnimation.start();
+                    }
+                });
+                return null;
+            }
+        }.execute();
     }
 
     private void initListeners() {
@@ -143,11 +168,28 @@ public class StartActivityNew extends PandaBaseActivity {
     }
 
     private void gotoPacksScreen() {
+//        disposePandaAnimation();
         Intent intent = new Intent(this, StartActivity.class);
-//        intent.putExtra(StartActivity.SET_ID, setId);
-//        startedSet = setId;
-        startActivity(intent);
-//        startActivityForResult(intent, 0);
+        startActivityForResult(intent, 0);
+    }
+
+    private void disposePandaAnimation() {
+        panda.setBackgroundResource(R.drawable.panda_icon);
+        pandaAnimation.stop();
+        for (int i = 0; i < pandaAnimation.getNumberOfFrames(); ++i){
+            Drawable frame = pandaAnimation.getFrame(i);
+            frame.setCallback(null);
+            if (frame instanceof BitmapDrawable)
+                ((BitmapDrawable) frame).getBitmap().recycle();
+        }
+        pandaAnimation.setCallback(null);
+        pandaAnimation = null;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+//        asyncLoadAnimation();
     }
 
     @Override
