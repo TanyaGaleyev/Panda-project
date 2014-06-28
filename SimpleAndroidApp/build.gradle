@@ -29,21 +29,6 @@ android {
 
         instrumentTest.setRoot('tests')
     }
-
-    signingConfigs {
-        pandaSign {
-            storeFile file('panda.jks')
-            storePassword 'panda0'
-            keyAlias 'panda'
-            keyPassword 'panda0'
-        }
-    }
-
-    buildTypes {
-        release {
-            signingConfig signingConfigs.pandaSign
-        }
-    }
 }
 
 def runScript(String path) {
