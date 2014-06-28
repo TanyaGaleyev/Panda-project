@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:background="#0000ff">
     
-    <org.ivan.simple.choose.LevelChooseView
+    <com.pavlukhin.acropanda.choose.LevelChooseView
         android:id="@+id/choose"
         android:layout_width="1232dp"
         android:layout_height="672dp"

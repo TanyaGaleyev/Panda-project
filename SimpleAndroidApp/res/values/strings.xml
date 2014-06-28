@@ -1,14 +1,7 @@
 <resources>
-
     <string name="app_name">Acro Panda</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
-    <string name="bugaga">BuGaGa</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_second">SecondActivity</string>
-    <string name="title_activity_start">Acro Panda</string>
-    <string name="title_activity_choose">Choose level</string>
-    <string name="title_activity_pause">Choose level</string>
-    <string name="title_activity_achievements">Achievements</string>
-    <string name="welcome">Select levels pack</string>
+    <string name="activity_title">Acro Panda</string>
+    <string name="choose_pack">Select levels pack</string>
 </resources>

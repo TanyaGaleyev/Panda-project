@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.ivan.simple"
+    package="com.pavlukhin.acropanda"
     android:versionCode="1"
-    android:versionName="1.0"
+    android:versionName="0.1.0"
     android:installLocation="preferExternal" >
 
     <uses-sdk
@@ -16,7 +16,7 @@
         android:name=".PandaApplication">
         <activity
             android:name=".game.GameActivity"
-            android:label="@string/title_activity_main"
+            android:label="@string/activity_title"
             android:screenOrientation="landscape"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
             <meta-data
@@ -26,7 +26,7 @@
 
         <activity
             android:name=".welcome.StartActivityNew"
-            android:label="@string/title_activity_start"
+            android:label="@string/activity_title"
             android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,7 +37,7 @@
 
         <activity
             android:name=".welcome.StartActivity"
-            android:label="@string/title_activity_start"
+            android:label="@string/activity_title"
             android:screenOrientation="landscape" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -46,7 +46,7 @@
         
         <activity
             android:name=".choose.LevelChooseActivity"
-            android:label="@string/title_activity_choose"
+            android:label="@string/activity_title"
             android:screenOrientation="landscape"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
             <meta-data
@@ -56,7 +56,7 @@
         
         <activity
             android:name=".game.pause.PauseActivity"
-            android:label="@string/title_activity_pause"
+            android:label="@string/activity_title"
             android:screenOrientation="landscape" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -65,7 +65,7 @@
 
         <activity
             android:name=".achievements.AchievementsActivity"
-            android:label="@string/title_activity_achievements"
+            android:label="@string/activity_title"
             android:screenOrientation="landscape">
         </activity>
     </application>

@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="@string/welcome" />
+        android:text="@string/choose_pack" />
 
     <TableLayout
         android:layout_width="wrap_content"
@@ -90,7 +90,7 @@
     <view
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        class="org.ivan.simple.utils.PandaButtonsPanel"
+        class="com.pavlukhin.acropanda.utils.PandaButtonsPanel"
         android:id="@+id/level_packs_bp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true" />

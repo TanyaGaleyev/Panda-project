@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:background="#0000ff">
     
-    <org.ivan.simple.choose.LevelChooseView
+    <com.pavlukhin.acropanda.choose.LevelChooseView
         android:id="@+id/choose"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -13,7 +13,7 @@
     <view
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        class="org.ivan.simple.utils.PandaButtonsPanel"
+        class="com.pavlukhin.acropanda.utils.PandaButtonsPanel"
         android:id="@+id/choose_bp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true" />

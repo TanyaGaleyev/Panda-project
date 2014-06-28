@@ -4,7 +4,8 @@
 package achievements;
 
 def base = args[0];
-def codePackage = "org.ivan.simple.achievements";
+def mainPackage = "com.pavlukhin.acropanda"
+def codePackage = mainPackage + ".achievements";
 def enumFile = new File("$base/generated/" + codePackage.replace(".", "/") + "/Achievement.java");
 enumFile.getParentFile().mkdirs();
 enumFile.write("");

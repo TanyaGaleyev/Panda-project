@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:background="#0000ff">
     
-    <org.ivan.simple.game.GameView
+    <com.pavlukhin.acropanda.game.GameView
         android:id="@+id/game"
         android:layout_width="968dp"
         android:layout_height="528dp"

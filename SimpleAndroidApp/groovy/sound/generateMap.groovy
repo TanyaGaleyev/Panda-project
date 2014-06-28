@@ -1,7 +1,8 @@
 package sound;
 
 def base = args[0]
-def codePackage = "org.ivan.simple.game.sound"
+def mainPackage = "com.pavlukhin.acropanda"
+def codePackage = mainPackage + ".game.sound"
 def destFile = new File("$base/generated/" + codePackage.replace(".", "/") + "/SoundMap.java")
 destFile.getParentFile().mkdirs()
 destFile.write("")
@@ -11,7 +12,7 @@ destFile << "import android.content.Context;\n"
 destFile << "import android.media.SoundPool;\n"
 destFile << "import android.util.SparseArray;\n"
 destFile << "\n"
-destFile << "import org.ivan.simple.R;\n"
+destFile << "import " + mainPackage + ".R;\n"
 destFile << "\n"
 destFile << "/** Auto generated " + new Date() + " */\n"
 destFile << "public class SoundMap {\n"
