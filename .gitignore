@@ -30,3 +30,6 @@ local.properties
 
 # other
 *.db
+
+# signing keys
+*.jks
