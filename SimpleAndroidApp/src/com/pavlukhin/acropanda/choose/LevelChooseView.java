@@ -189,8 +189,8 @@ public class LevelChooseView extends SurfaceView {
         return context.app().getImageProvider();
     }
 
-    @Override
-	protected void onDraw(Canvas canvas) {
+	@Override
+    public void draw(Canvas canvas) {
         if(context.isLoading()) {
             drawLoading(canvas);
         } else {
@@ -524,7 +524,7 @@ public class LevelChooseView extends SurfaceView {
 					c = getHolder().lockCanvas();
 					if(c != null) {
 						synchronized (getHolder()) {
-							onDraw(c);
+							draw(c);
 						}
 					}
 				} catch(Exception e) {

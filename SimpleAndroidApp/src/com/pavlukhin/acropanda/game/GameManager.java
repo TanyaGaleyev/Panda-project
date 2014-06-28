@@ -110,7 +110,7 @@ public class GameManager extends Thread {
 		try {
 			c = view.getHolder().lockCanvas();
 			synchronized (view.getHolder()) {
-				view.onDraw(c, update);
+				view.draw(c, update);
 			}
 		} catch(Exception ex) {
 			ex.printStackTrace();

@@ -152,11 +152,11 @@ public class GameView extends SurfaceView {
 	 * Draw hero, level and etc.
 	 */
 	@Override
-	protected void onDraw(Canvas canvas) {
-		onDraw(canvas, false);
+	public void draw(Canvas canvas) {
+		draw(canvas, false);
 	}
 	
-	protected void onDraw(Canvas canvas, boolean update) {
+	public void draw(Canvas canvas, boolean update) {
 		canvas.drawColor(0xFFB6D76E);
 //        bgr.draw(canvas);
         canvas.drawBitmap(background, 0, 0, backgroundPaint);
