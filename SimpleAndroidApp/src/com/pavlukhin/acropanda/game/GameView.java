@@ -167,7 +167,7 @@ public class GameView extends SurfaceView {
 //		level.drawGrid(canvas);
 		drawFPS(canvas);
 		drawScore(canvas);
-        drawMemoryUsage(canvas);
+//        drawMemoryUsage(canvas);
         if(isReadyToPlayLoseAnimation()) {
 //            drawLose(canvas);
         } else if(isReadyToPlayWinAnimation()) {
