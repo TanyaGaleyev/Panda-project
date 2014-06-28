@@ -52,7 +52,9 @@ public class ImageProvider {
 		asssetsMananger = context.getAssets();
 	}
 	
-	private int setScaleParameters(int width, int height) {
+
+    /* now we should use grid step divided by 8 */
+    private int setScaleParameters(int width, int height) {
 		if(height < 432) {
 			gridStep = 48;
 			baseStep = 144;
