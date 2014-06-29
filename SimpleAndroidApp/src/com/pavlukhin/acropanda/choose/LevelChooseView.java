@@ -30,13 +30,15 @@ public class LevelChooseView extends SurfaceView {
     private int GRID_STEP;
 	private int LEFT_BOUND;
 	private int TOP_BOUND;
+    private ChosenLevel chosenLevel = null;
+
     private int markerSpeed() {
         return GRID_STEP / 8;
     }
 
     // selected level coordinates in array
-	private int levelX = 0;
-    private int levelY = 0;
+//	private volatile int levelX = 0;
+//    private volatile int levelY = 0;
     /**
 	 * Matrix with levels IDs
 	 */
@@ -122,13 +124,12 @@ public class LevelChooseView extends SurfaceView {
 				redrawer.running = false;
 				while (retry) {
                    try {
-                         redrawer.join();
-                         retry = false;
+                       redrawer.join();
+                       retry = false;
                    } catch (InterruptedException e) {
-
+                       redrawer.interrupt();
                    }
                 }
-				System.out.println("Choose view destroyed!");
 			}
 
 			public void surfaceCreated(SurfaceHolder holder) {
@@ -136,14 +137,11 @@ public class LevelChooseView extends SurfaceView {
                     initSurface();
                     initialized = true;
                 }
-
 				redrawer = new Redrawer();
 				redrawer.start();
 			}
 
-			public void surfaceChanged(SurfaceHolder holder, int format, int width,
-					int height) {
-			}
+			public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
 		});
 
 	}
@@ -199,7 +197,6 @@ public class LevelChooseView extends SurfaceView {
     }
 
     private void drawChoose(Canvas canvas) {
-        moveMarker(performingAction);
         canvas.drawColor(Color.rgb(218, 228, 115));
 //        bgr.draw(canvas);
         canvas.drawBitmap(background, 0, 0, backgroundPaint);
@@ -211,20 +208,11 @@ public class LevelChooseView extends SurfaceView {
     private void moveMarker(UserControlType moveAction) {
         // move marker
         switch(moveAction) {
-            case UP:
-                markerY -= markerSpeed();
-                break;
-            case DOWN:
-                markerY += markerSpeed();
-                break;
-            case LEFT:
-                markerX -= markerSpeed();
-                break;
-            case RIGHT:
-                markerX += markerSpeed();
-                break;
-            default:
-                break;
+            case UP:    markerY -= markerSpeed(); break;
+            case DOWN:  markerY += markerSpeed(); break;
+            case LEFT:  markerX -= markerSpeed(); break;
+            case RIGHT: markerX += markerSpeed(); break;
+            default:    break;
         }
     }
 
@@ -335,46 +323,43 @@ public class LevelChooseView extends SurfaceView {
     }
 	
 	@Override
-	public boolean onTouchEvent(MotionEvent event) {
+	public synchronized boolean onTouchEvent(MotionEvent event) {
         // ignore other actions
-        if(event.getAction() != MotionEvent.ACTION_DOWN) return super.onTouchEvent(event);
+        if(event.getAction() != MotionEvent.ACTION_DOWN || context.isLoading())
+            return super.onTouchEvent(event);
 		// get level Id depending on by click on screen selection
-		final int levId = getLevelId(event);
-		// if level selected (levId != 0) start next GameActivity with specified level
-		if(levId != 0) {
+        chosenLevel = getLevel(event);
+		// if level selected start next GameActivity with specified level
+		if(chosenLevel != null) {
+            // ensure that marker is on right position
+            moveMarker(chosenLevel.levelY, chosenLevel.levelX);
             context.setLoading(true);
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... voids) {
-                    startLevel(levId);
+                    startLevel(chosenLevel.levelId);
                     return null;
                 }
             }.execute();
 		} else {
-            chooseAcion = scanMoveDiection(event);
+            chooseAcion = getMoveType(event);
         }
 		return true;
 	}
 
-    private UserControlType scanMoveDiection(MotionEvent event) {
-        // Get choice direction
-        UserControlType tempAction = getMoveType(event);
+    private UserControlType checkMoveDirection(UserControlType tempAction, int levelX, int levelY) {
         switch(tempAction) {
             case UP:
                 if(levelY <= 0 || levelX >= levels[levelY - 1].length) tempAction = UserControlType.IDLE;
-                else levelY -= 1;
                 break;
             case DOWN:
                 if(levelY >= levels.length - 1 || levelX >= levels[levelY + 1].length) tempAction = UserControlType.IDLE;
-                else levelY += 1;
                 break;
             case LEFT:
                 if(levelX <= 0) tempAction = UserControlType.IDLE;
-                else levelX -= 1;
                 break;
             case RIGHT:
                 if(levelX >= levels[levelY].length - 1) tempAction = UserControlType.IDLE;
-                else levelX += 1;
                 break;
             default:
                 break;
@@ -388,33 +373,59 @@ public class LevelChooseView extends SurfaceView {
         context.startActivityForResult(intent, LevelChooseActivity.FINISHED_LEVEL_ID);
     }
 
+    private static class ChosenLevel {
+        int levelX;
+        int levelY;
+        int levelId;
+
+        private ChosenLevel(int levelY, int levelX, int levelId) {
+            this.levelX = levelX;
+            this.levelY = levelY;
+            this.levelId = levelId;
+        }
+    }
     private static final long FAST_CLICK_MILLS = 200L;
     private long lastClickTime = 0L;
-    public synchronized int getLevelId(MotionEvent event) {
+    public ChosenLevel getLevel(MotionEvent event) {
         // TODO strictly we need check that fast click chosen level was not changed
-        long gap = event.getEventTime() - lastClickTime;
-        if(gap < FAST_CLICK_MILLS) {
-            levelY = getGridRow((int) event.getY());
-            levelX = getGridCol((int) event.getX());
-            if(inGridBounds(levelX, levelY)) {
-                moveMarker(levelY, levelX);
-                return levels[levelY][levelX][0];
+        ChosenLevel ret = getFastClickLevel(event);
+        if(ret == null)
+            ret = getMoveLevel(event);
+		return ret;
+	}
+
+    private ChosenLevel getMoveLevel(MotionEvent event) {
+        ChosenLevel ret = null;
+        // if marker is moving choosing are not allowed
+        if(chooseReady) {
+            // switch to moving state
+            chooseReady = false;
+            // Click on markered cell means level choice
+            if (markerX - GRID_STEP / 2 < event.getX() &&
+                    event.getX() < markerX + GRID_STEP / 2 &&
+                    markerY - GRID_STEP / 2 < event.getY() &&
+                    event.getY() < markerY + GRID_STEP / 2) {
+                int y = getGridRow(markerY);
+                int x = getGridCol(markerX);
+                ret = new ChosenLevel(y, x, levels[y][x][0]);
             }
         }
+        return ret;
+    }
+
+    private ChosenLevel getFastClickLevel(MotionEvent event) {
+        ChosenLevel ret = null;
+        long gap = event.getEventTime() - lastClickTime;
         lastClickTime = event.getEventTime();
-        // if marker is moving choosing are not allowed
-		if(!chooseReady) return 0;
-		// switch to moving state
-		chooseReady = false;
-		// Click on markered cell means level choise
-		if(markerX - GRID_STEP / 2 < event.getX() &&
-				event.getX() < markerX + GRID_STEP / 2 &&
-				markerY - GRID_STEP / 2 < event.getY() && 
-				event.getY() < markerY + GRID_STEP / 2) {
-			return levels[levelY][levelX][0];
-		}
-		return 0;
-	}
+        if(gap < FAST_CLICK_MILLS) {
+            int y = getGridRow((int) event.getY());
+            int x = getGridCol((int) event.getX());
+            if(inGridBounds(x, y)) {
+                ret = new ChosenLevel(y, x, levels[y][x][0]);
+            }
+        }
+        return ret;
+    }
 
     private boolean inGridBounds(int levelX, int levelY) {
         return levelY >= 0 && levelY < levels.length && levelX >=0 && levelX < levels[levelY].length;
@@ -448,9 +459,9 @@ public class LevelChooseView extends SurfaceView {
     }
 	
 	public int completeCurrentLevel(int score) {
-		int oldScore = finishedLevels[levelY][levelX];
+		int oldScore = finishedLevels[chosenLevel.levelY][chosenLevel.levelX];
         if(Scores.better(score, oldScore)) {
-            finishedLevels[levelY][levelX] = score;
+            finishedLevels[chosenLevel.levelY][chosenLevel.levelX] = score;
         }
 		return oldScore;
 	}
@@ -510,38 +521,46 @@ public class LevelChooseView extends SurfaceView {
     }
 	
 	private class Redrawer extends Thread {
-		boolean running = true;
+        public static final int REDRAW_INTERVAL = 40;
+        boolean running = true;
 		@Override
 		public void run() {
-			while(running) {
-				if(isOnGridCenter(markerX, markerY)) {
-					chooseReady = true;
-					performingAction = chooseAcion;
-					chooseAcion = UserControlType.IDLE;
-				}
-				Canvas c = null;
-				try {
-					c = getHolder().lockCanvas();
-					if(c != null) {
-						synchronized (getHolder()) {
-							draw(c);
-						}
-					}
-				} catch(Exception e) {
-					e.printStackTrace();
-				} finally {
-					if(c != null) {
-						getHolder().unlockCanvasAndPost(c);
-					}
-				}
-				try {
-					sleep(40);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+            try {
+                while (running) {
+                    long startTime = System.currentTimeMillis();
+                    Canvas c = null;
+                    try {
+                        c = getHolder().lockCanvas();
+                        if (c != null) {
+                            draw(c);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        if (c != null) {
+                            getHolder().unlockCanvasAndPost(c);
+                        }
+                    }
+                    tryMoveMarker();
+                    long sleepTime = REDRAW_INTERVAL - (System.currentTimeMillis() - startTime);
+                    if(sleepTime > 0) sleep(REDRAW_INTERVAL);
+                }
+            } catch (InterruptedException e) {
+                System.out.println("Level choose view redrawer thread was interrupted");
+            }
 		}
 	}
+
+    public synchronized void tryMoveMarker() {
+        if(!context.isLoading()) {
+            if (isOnGridCenter(markerX, markerY)) {
+                chooseReady = true;
+                performingAction = checkMoveDirection(
+                        chooseAcion, getGridCol(markerX), getGridRow(markerY));
+                chooseAcion = UserControlType.IDLE;
+            }
+            moveMarker(performingAction);
+        }
+    }
 
 }

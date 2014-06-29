@@ -82,7 +82,7 @@ public class GameManager extends Thread {
                         });
                 }
                 // calculate sleep time to reach needed fps
-                sleepTime = ticksPS-(System.currentTimeMillis() - startTime);
+                sleepTime = ticksPS - (System.currentTimeMillis() - startTime);
                 if (sleepTime > 0) sleep(sleepTime);
             }
         } catch (InterruptedException e) {
@@ -109,9 +109,9 @@ public class GameManager extends Thread {
 		Canvas c = null;
 		try {
 			c = view.getHolder().lockCanvas();
-			synchronized (view.getHolder()) {
-				view.draw(c, update);
-			}
+            if(c != null) {
+                view.draw(c, update);
+            }
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		} finally {
