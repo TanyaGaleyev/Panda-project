@@ -18,6 +18,8 @@ import java.util.Map;
 
 public class ImageProvider {
     public static final int CACHE_SIZE = 2048;
+    public static final int TOTAL_COLS = 10;
+    public static final int TOTAL_ROWS = 5;
     private static String resSet = "large/";
     private static final String base = "sprites/";
 
@@ -51,31 +53,43 @@ public class ImageProvider {
 	public void init(Context context) {
 		assetsMananger = context.getAssets();
 	}
-	
 
     /* now we should use grid step divided by 8 */
     private int setScaleParameters(int width, int height) {
-		if(height < 432) {
+        int calcGridStep = Math.min(width / TOTAL_COLS, height / TOTAL_ROWS);
+        if(calcGridStep < 32) {
+            gridStep = 24;
+            baseStep = 144;
+            resSet = "small/";
+        } else if (calcGridStep < 48) {
+            gridStep = 32;
+            baseStep = 144;
+            resSet = "small/";
+        } else if(calcGridStep < 72) {
 			gridStep = 48;
 			baseStep = 144;
 			resSet = "small/";
-		} else if(height < 528) {
+		} else if(calcGridStep < 88) {
 			gridStep = 72;
 			baseStep = 144;
 			resSet = "small/";
-		} else if(height < 672) {
+		} else if(calcGridStep < 112) {
             gridStep = 88;
             baseStep = 144;
             resSet = "small/";
-        } else if(height < 1080) {
+        } else if(calcGridStep < 144) {
             gridStep = 112;
             baseStep = 230;
             resSet = "large/";
-		} else {
+		} else if(calcGridStep < 230) {
             gridStep = 144;
             baseStep = 144;
             resSet = "small/";
-		}
+		} else {
+            gridStep = 224;
+            baseStep = 230;
+            resSet = "large/";
+        }
 		return gridStep;
 	}
 	
