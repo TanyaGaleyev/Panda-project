@@ -21,7 +21,7 @@ public class ImageProvider {
     private static String resSet = "large/";
     private static final String base = "sprites/";
 
-    private AssetManager asssetsMananger;
+    private AssetManager assetsMananger;
     private Map<String, Bitmap> strictCache = new HashMap<String, Bitmap>();
 	private int gridStep = 128;
 	private double baseStep = 230d;
@@ -49,7 +49,7 @@ public class ImageProvider {
 	}
 	
 	public void init(Context context) {
-		asssetsMananger = context.getAssets();
+		assetsMananger = context.getAssets();
 	}
 	
 
@@ -143,7 +143,7 @@ public class ImageProvider {
     private Bitmap loadBitmap(String path, BitmapFactory.Options opts) {
         InputStream input = null;
         try {
-            input = asssetsMananger.open(base + resSet + path);
+            input = assetsMananger.open(base + resSet + path);
             return hackedBitmapFactory.decodeStream(input, null, opts);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -176,7 +176,7 @@ public class ImageProvider {
 	}
 
     public String[] list(String path) throws IOException {
-        return asssetsMananger.list(base + resSet + path);
+        return assetsMananger.list(base + resSet + path);
     }
 
     public Bitmap getBackground(String path, int width, int height) {
