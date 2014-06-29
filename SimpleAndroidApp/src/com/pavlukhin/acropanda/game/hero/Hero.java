@@ -270,7 +270,9 @@ public class Hero {
 //				activeSprite.changeSet(12);
 				break;
 			default:
-				if(prevCell.getFloor().getType() == PlatformType.THROW_OUT_LEFT) {
+                if(prevMt.isCLOUD()) {
+                    activeSprite = sprites.getSprite("cloud_left_wall");
+                } else if (prevCell.getFloor().getType() == PlatformType.THROW_OUT_LEFT) {
 					activeSprite = sprites.getSprite("jumpleftwall");
 //					activeSprite.changeSet(12);
 				} else if(prevCell.getFloor().getType() == PlatformType.SLICK) {
@@ -293,7 +295,9 @@ public class Hero {
 //				activeSprite.changeSet(11);
 				break;
 			default:
-				if(prevCell.getFloor().getType() == PlatformType.THROW_OUT_RIGHT) {
+                if(prevMt.isCLOUD()) {
+                    activeSprite = sprites.getSprite("cloud_right_wall");
+                } else if (prevCell.getFloor().getType() == PlatformType.THROW_OUT_RIGHT) {
 					activeSprite = sprites.getSprite("jumprightwall");
 //					activeSprite.changeSet(11);
 				} else if(prevCell.getFloor().getType() == PlatformType.SLICK) {
