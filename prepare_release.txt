@@ -1,2 +1,2 @@
-jarsigner -sigalg SHA1withRSA -digestalg SHA1 -keystore panda.jks build/outputs/apk/SimpleAndroidApp-release-unsigned.apk panda
+jarsigner -sigalg SHA1withRSA -digestalg SHA1 -keystore panda.jks build/outputs/apk/SimpleAndroidApp-release-unsigned.apk acropanda
 /c/OtherProgramms/Android/android-studio/sdk/tools/zipalign.exe -v 4 build/outputs/apk/SimpleAndroidApp-release-unsigned.apk build/outputs/apk/AcroPanda.apk
