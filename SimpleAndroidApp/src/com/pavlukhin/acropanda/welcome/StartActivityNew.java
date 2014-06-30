@@ -38,6 +38,11 @@ public class StartActivityNew extends PandaBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (isRepeativeLaunch())   finish();
+        else                        init();
+    }
+
+    private void init() {
         setContentView(R.layout.activity_startnew);
         contentPanel = (RelativeLayout) findViewById(R.id.activity_content);
         contentPanel.setBackgroundDrawable(app().getBackground());
@@ -54,20 +59,31 @@ public class StartActivityNew extends PandaBaseActivity {
         panda = new ImageView(this);
         int width = (int) (app().displayWidth * .3125f);
         int height = (int) (app().displayHeight * .5f);
-        if(width > height)  width = height;
-        else                height = width;
+        if (width > height) width = height;
+        else height = width;
         int left = (int) (app().displayWidth * .65f);
         int top = (int) (app().displayHeight * .20f);
 
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(width, height);
-        layoutParams.setMargins(left, top, 0 , 0);
+        layoutParams.setMargins(left, top, 0, 0);
         panda.setLayoutParams(layoutParams);
         contentPanel.addView(panda);
         initPandaDrawable(true);
-//        initPandaDrawable(false);
+//            initPandaDrawable(false);
 
         initMainTitle();
         initListeners();
+    }
+
+    private boolean isRepeativeLaunch() {
+        if(!isTaskRoot()) {
+            final Intent intent = getIntent();
+            final String intentAction = intent.getAction();
+            if (intent.hasCategory(Intent.CATEGORY_LAUNCHER) && intentAction != null && intentAction.equals(Intent.ACTION_MAIN)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void initMainTitle() {
