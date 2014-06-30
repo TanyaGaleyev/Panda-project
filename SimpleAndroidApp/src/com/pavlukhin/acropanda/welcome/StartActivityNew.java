@@ -79,7 +79,7 @@ public class StartActivityNew extends PandaBaseActivity {
         if(!isTaskRoot()) {
             final Intent intent = getIntent();
             final String intentAction = intent.getAction();
-            if (intent.hasCategory(Intent.CATEGORY_LAUNCHER) && intentAction != null && intentAction.equals(Intent.ACTION_MAIN)) {
+            if (intentAction != null && intentAction.equals(Intent.ACTION_MAIN)) {
                 return true;
             }
         }
