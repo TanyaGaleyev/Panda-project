@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.pavlukhin.acropanda.PandaBaseActivity;
 import com.pavlukhin.acropanda.R;
 import com.pavlukhin.acropanda.achievements.AchievementsActivity;
+import com.pavlukhin.acropanda.utils.AppRater;
 import com.pavlukhin.acropanda.utils.PandaButtonsPanel;
 
 /**
@@ -74,6 +75,7 @@ public class StartActivityNew extends PandaBaseActivity {
 
         initMainTitle();
         initListeners();
+        AppRater.onAppLaunched(this);
     }
 
     private boolean isRepeativeLaunch() {
