@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 
 import com.pavlukhin.acropanda.game.hero.Sprite;
 
-public class Prize {
+public class Prize implements LevelDrawable {
 	private Sprite sprite;
 
     private int kind;
@@ -25,7 +25,8 @@ public class Prize {
         return kind;
     }
 
-	public void onDraw(Canvas canvas, int x, int y, boolean update) {
+	@Override
+    public void draw(Canvas canvas, int x, int y, boolean update) {
 		sprite.onDraw(canvas, x, y, update);
 	}
 }

@@ -100,6 +100,8 @@ public class SpriteSet {
         set.putSprite("cloud_down", "panda/ufo_down.png", 1, 8);
         set.putSprite("cloud_left_wall", "panda/from_ufo_in_wall_left.png", 1, 16);
         set.putSprite("cloud_right_wall", "panda/from_ufo_in_wall_right.png", 1, 16);
+        set.putSprite("cloud_beginflyleft", "panda/from_ufo_begin_fly_right.png", 1, 16);
+        set.putSprite("cloud_beginflyright", "panda/from_ufo_begin_fly_left.png", 1, 16);
 
 		set.putTPSprite("flyleft_tp", "panda/panda_sprite8_flyleft.png", 1, 8, true);
 		set.putTPSprite("flyright_tp", "panda/panda_sprite8_flyright.png", 1, 8, false);

@@ -11,20 +11,21 @@ public class Hero {
 	/**
 	 * Save prev motion after set changed. Prev motion used to get proper animation.
 	 * For example, if prev motion was STEP_LEFT and next motion will be STAY,
-	 * Panda schould turn 90 degrees right in air while jumping on place.
+	 * Panda should turn 90 degrees right in air while jumping on place.
 	 */
 	private boolean finishingState = false;
-	private LevelCell prevCell;
-	private Sprite activeSprite;
-	private TPSprite tpSprite;
-	private SpriteSet sprites;
-	public int x;
-	public int y;
-	private int prevX;
-	private int prevY;
-	public final HeroModel model;
-	
-	public Hero(HeroModel model) {
+    private LevelCell prevCell;
+    private LevelCell currCell;
+    private Sprite activeSprite;
+    private TPSprite tpSprite;
+    private SpriteSet sprites;
+    public int x;
+    public int y;
+    private int prevX;
+    private int prevY;
+    public final HeroModel model;
+
+    public Hero(HeroModel model) {
 		this.model = model;
 		sprites = SpriteSet.getPandaSprites();
 		activeSprite = sprites.getSprite("stay");
@@ -70,10 +71,10 @@ public class Hero {
 	 * Change hero behavior (animation) depending on motion type.
 	 * Used after new motion type is obtained. 
 	 * Goal is to play start/end animations of motions.
-	 * @param prevCell
 	 */
-	public void finishPrevMotion(LevelCell prevCell) {
+	public void finishPrevMotion(LevelCell prevCell, LevelCell currCell) {
 		this.prevCell = prevCell;
+        this.currCell = currCell;
 		prevX = x;
 		prevY = y;
 //		model.finishingMotion = prevMotion;
@@ -183,47 +184,35 @@ public class Hero {
 		case JUMP_LEFT:
 			if(prevMt == MotionType.JUMP || prevMt == MotionType.TP) {
 				activeSprite = sprites.getSprite("jumpleft");
-//				activeSprite.changeSet(8);
 			} else if(prevCell.getFloor().getType() == PlatformType.SLICK) {
 				if(prevMt != mt && prevMt != MotionType.JUMP_RIGHT_WALL) {
 					activeSprite = sprites.getSprite("startslickleft");
 				} else {
 					activeSprite = sprites.getSprite("slickleft");
 				}
-			} else if(prevMt == mt || 
-					prevMt == MotionType.THROW_LEFT ||
-					prevMt == MotionType.TP_LEFT ||
-                    prevMt == MotionType.TP_RL) {
-				activeSprite = sprites.getSprite("stepleft");
-//				activeSprite.changeSet(2);
-            } else if(prevMt.isCLOUD()) {
+            } else if(prevCell.getFloor().getType() == PlatformType.CLOUD || prevMt.isCLOUD()) {
                 activeSprite = sprites.getSprite("cloud_out_left");
+            } else if(currCell.getFloor().getType() == PlatformType.CLOUD) {
+                activeSprite = sprites.getSprite("cloud_in_left");
 			} else {
 				activeSprite = sprites.getSprite("stepleft");
-//				activeSprite.changeSet(3);
 			}
 			break;
 		case JUMP_RIGHT:
 			if(prevMt == MotionType.JUMP || prevMt == MotionType.TP) {
 				activeSprite = sprites.getSprite("jumpright");
-//				activeSprite.changeSet(7);
 			} else if(prevCell.getFloor().getType() == PlatformType.SLICK) {
 				if(prevMt != mt && prevMt != MotionType.JUMP_LEFT_WALL) {
 					activeSprite = sprites.getSprite("startslickright");
 				} else {
 					activeSprite = sprites.getSprite("slickright");
 				}
-			} else if(prevMt == mt || 
-					prevMt == MotionType.THROW_RIGHT ||
-					prevMt == MotionType.TP_RIGHT ||
-                    prevMt == MotionType.TP_LR) {
-				activeSprite = sprites.getSprite("stepright");
-//				activeSprite.changeSet(0);
-            } else if(prevMt.isCLOUD()) {
+            } else if(prevCell.getFloor().getType() == PlatformType.CLOUD || prevMt.isCLOUD()) {
                 activeSprite = sprites.getSprite("cloud_out_right");
+            } else if(currCell.getFloor().getType() == PlatformType.CLOUD) {
+                activeSprite = sprites.getSprite("cloud_in_right");
 			} else {
 				activeSprite = sprites.getSprite("stepright");
-//				activeSprite.changeSet(1);
 			}
 			break;
 		case JUMP:
@@ -270,7 +259,7 @@ public class Hero {
 //				activeSprite.changeSet(12);
 				break;
 			default:
-                if(prevMt.isCLOUD()) {
+                if(prevCell.getFloor().getType() == PlatformType.CLOUD || prevMt.isCLOUD()) {
                     activeSprite = sprites.getSprite("cloud_left_wall");
                 } else if (prevCell.getFloor().getType() == PlatformType.THROW_OUT_LEFT) {
 					activeSprite = sprites.getSprite("jumpleftwall");
@@ -295,7 +284,7 @@ public class Hero {
 //				activeSprite.changeSet(11);
 				break;
 			default:
-                if(prevMt.isCLOUD()) {
+                if(prevCell.getFloor().getType() == PlatformType.CLOUD || prevMt.isCLOUD()) {
                     activeSprite = sprites.getSprite("cloud_right_wall");
                 } else if (prevCell.getFloor().getType() == PlatformType.THROW_OUT_RIGHT) {
 					activeSprite = sprites.getSprite("jumprightwall");
@@ -333,7 +322,9 @@ public class Hero {
 					prevCell.getFloor().getType() == PlatformType.THROW_OUT_RIGHT) {
 				activeSprite = sprites.getSprite("beginflyleft8");
 //				activeSprite.changeSet(11);
-			} else {
+            } else if(prevCell.getFloor().getType() == PlatformType.CLOUD || prevMt.isCLOUD()) {
+                activeSprite = sprites.getSprite("cloud_beginflyleft");
+            } else {
 				activeSprite = sprites.getSprite("beginflyleft");
 //				activeSprite.changeSet(7);
 			}
@@ -349,6 +340,8 @@ public class Hero {
 					prevCell.getFloor().getType() == PlatformType.THROW_OUT_LEFT) {
 				activeSprite = sprites.getSprite("beginflyright8");
 //				activeSprite.changeSet(12);
+            } else if(prevCell.getFloor().getType() == PlatformType.CLOUD || prevMt.isCLOUD()) {
+                activeSprite = sprites.getSprite("cloud_beginflyright");
 			} else {
 				activeSprite = sprites.getSprite("beginflyright");
 //				activeSprite.changeSet(6);
@@ -406,11 +399,7 @@ public class Hero {
 			}
 			break;
 		case CLOUD_IDLE:
-            if(prevMt.isCLOUD()) {
-			    activeSprite = sprites.getSprite("cloud");
-            } else {
-                activeSprite = sprites.getSprite("cloud_prepare");
-            }
+            activeSprite = sprites.getSprite("cloud");
 			break;
 		case CLOUD_LEFT:
             activeSprite = sprites.getSprite("cloud_left");

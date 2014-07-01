@@ -160,8 +160,10 @@ public class GameView extends SurfaceView {
 		canvas.drawColor(0xFFB6D76E);
 //        bgr.draw(canvas);
         canvas.drawBitmap(background, 0, 0, backgroundPaint);
-		level.onDraw(canvas, update);
+//		level.onDraw(canvas, update);
+        level.getBackLayer().draw(canvas, update);
 		hero.onDraw(canvas, update);
+        level.getFrontLayer().draw(canvas, update);
 		monster.onDraw(canvas, update);
         guideAnimation.onDraw(canvas, update);
 //		level.drawGrid(canvas);
@@ -314,7 +316,7 @@ public class GameView extends SurfaceView {
 		// calculate new motion depending on current motion, hero cell and user control
 		level.model.updateGame(controlType);
 		// switch hero animation
-		hero.finishPrevMotion(prevCell);
+		hero.finishPrevMotion(prevCell, level.model.getHeroCell());
 		// play cell reaction to new motion
 		if(!hero.isFinishing()) {
 			hero.switchToCurrentMotion();

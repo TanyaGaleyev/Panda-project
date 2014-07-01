@@ -6,7 +6,7 @@ import com.pavlukhin.acropanda.game.hero.Sprite;
 
 import android.graphics.Canvas;
 
-public class Platform {
+public class Platform implements LevelDrawable {
 	private PlatformType type = PlatformType.NONE;
 	private Sprite sprite = null;
 	private int currentStatus = 0;
@@ -454,7 +454,8 @@ public class Platform {
         sprite.changeSet(currentStatus);
     }
 
-    public void onDraw(Canvas canvas, int x, int y, boolean update) {
+    @Override
+    public void draw(Canvas canvas, int x, int y, boolean update) {
 		if(sprite != null) {
 			if(type == PlatformType.NONE && !sprite.isAnimatingOrDelayed()) {
 				sprite = null;

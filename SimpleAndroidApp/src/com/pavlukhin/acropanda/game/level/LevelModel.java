@@ -366,7 +366,11 @@ public class LevelModel {
 			}
 			break;
 		case CLOUD:
-			motion = new Motion(MotionType.CLOUD_IDLE);
+            if(controlType != UserControlType.LEFT && controlType != UserControlType.RIGHT) {
+                motion = new Motion(MotionType.CLOUD_IDLE);
+            } else {
+                motion = stayCheck(controlType);
+            }
 			break;
         case SPIKE_UP:
             lose = true;
