@@ -68,8 +68,9 @@ public class StartActivityNew extends PandaBaseActivity {
         layoutParams.setMargins(left, top, 0, 0);
         panda.setLayoutParams(layoutParams);
         contentPanel.addView(panda);
-        initPandaDrawable(true);
-//            initPandaDrawable(false);
+        initOneTimePandaAnimation();
+//        initPandaDrawable(true);
+//        initPandaDrawable(false);
 
         initMainTitle();
         initListeners();
@@ -134,27 +135,34 @@ public class StartActivityNew extends PandaBaseActivity {
         } else {
             panda.setBackgroundResource(R.drawable.panda_icon);
         }
-//        panda.setBackgroundResource(R.drawable.panda_icon);
-//        asyncLoadAnimation();
+    }
+
+    private void initOneTimePandaAnimation() {
+        panda.setBackgroundResource(R.drawable.panda_icon);
+        loadAnimation();
     }
 
     private void asyncLoadAnimation() {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                if(pandaAnimation != null) return null;
-                pandaAnimation = app().loadAnimationFromFolder(ANIMATIONS_DIR);
-                pandaAnimation.setOneShot(false);
-                panda.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        panda.setBackgroundDrawable(pandaAnimation);
-                        pandaAnimation.start();
-                    }
-                });
+                loadAnimation();
                 return null;
             }
         }.execute();
+    }
+
+    private void loadAnimation() {
+        if(pandaAnimation != null) return;
+        pandaAnimation = app().loadAnimationFromFolder(ANIMATIONS_DIR);
+        pandaAnimation.setOneShot(false);
+        panda.post(new Runnable() {
+            @Override
+            public void run() {
+                panda.setBackgroundDrawable(pandaAnimation);
+                pandaAnimation.start();
+            }
+        });
     }
 
     private void initListeners() {
@@ -184,12 +192,13 @@ public class StartActivityNew extends PandaBaseActivity {
     }
 
     private void gotoPacksScreen() {
-//        disposePandaAnimation();
+        disposePandaAnimation();
         Intent intent = new Intent(this, StartActivity.class);
         startActivityForResult(intent, 0);
     }
 
     private void disposePandaAnimation() {
+        if(pandaAnimation == null) return;
         panda.setBackgroundResource(R.drawable.panda_icon);
         pandaAnimation.stop();
         for (int i = 0; i < pandaAnimation.getNumberOfFrames(); ++i){
