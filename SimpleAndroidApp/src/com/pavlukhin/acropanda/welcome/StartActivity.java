@@ -41,7 +41,6 @@ public class StartActivity extends PandaBaseActivity {
         TextView caption = (TextView) findViewById(R.id.text_view);
         caption.setTypeface(app().getFontProvider().bold());
         caption.setTextSize(TypedValue.COMPLEX_UNIT_PX, app().displayHeight / 10);
-//        caption.setText(String.format("max memory: %d KiB", Runtime.getRuntime().maxMemory() / 1024));
 
         initPacksButtons();
 
@@ -79,7 +78,7 @@ public class StartActivity extends PandaBaseActivity {
         TableLayout.LayoutParams rowParams = new TableLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
-        TableRow.LayoutParams packButtonParam = createPackLayoutParams();
+        TableRow.LayoutParams packLp = createPackLayoutParams();
         for(int i = 0; i < levCount; i++) {
             if(i % PACKS_IN_ROW == 0) {
                 row = new TableRow(this);
@@ -100,7 +99,7 @@ public class StartActivity extends PandaBaseActivity {
                     startPack(id);
                 }
             });
-            row.addView(levbtn, packButtonParam);
+            row.addView(levbtn, packLp);
             levButtons.put(id, levbtn);
 //        	levbtn.getLayoutParams().width = (int) (displayWidth * 0.85);
 //        	levbtn.getLayoutParams().height = (int) (displayHeight * 0.20);
@@ -118,7 +117,8 @@ public class StartActivity extends PandaBaseActivity {
             chestWidth = (int) (chestHeight / chestRatio);
         }
         TableRow.LayoutParams packButtonParam = new TableRow.LayoutParams(chestWidth, chestHeight);
-        packButtonParam.setMargins(10, 10, 10, 10);
+        int m = (int) (app().displayHeight * 0.02f);
+        packButtonParam.setMargins(m, m, m, m);
         return packButtonParam;
     }
 

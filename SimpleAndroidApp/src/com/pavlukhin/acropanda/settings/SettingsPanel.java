@@ -22,7 +22,8 @@ public class SettingsPanel extends LinearLayout {
         addView(components.getMusic());
         TextView chooseControlCaption = new TextView(context);
         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        lp.setMargins(10, 10, 10, 10);
+        int m = (int) (context.app().displayHeight * 0.02f);
+        lp.setMargins(m, m, m, m);
         chooseControlCaption.setLayoutParams(lp);
         components.setTextDefault(chooseControlCaption, CONTROLS_CAPTION);
         addView(chooseControlCaption);

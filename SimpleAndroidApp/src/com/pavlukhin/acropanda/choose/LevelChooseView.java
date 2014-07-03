@@ -107,7 +107,7 @@ public class LevelChooseView extends SurfaceView {
         this.context = (LevelChooseActivity) context;
 		textPaint = new Paint();
 		textPaint.setColor(Color.DKGRAY);
-		textPaint.setTextSize(36);
+		textPaint.setTextSize(levelNumberSize());
 		textPaint.setTypeface(PandaApplication.getPandaApplication().getFontProvider().regular());
         textPaint.setAntiAlias(true);
         backgroundPaint = new Paint();
@@ -115,8 +115,8 @@ public class LevelChooseView extends SurfaceView {
         gridPaint = new Paint();
         gridPaint.setColor(Color.WHITE);
         gridPaint.setStyle(Paint.Style.STROKE);
-        gridPaint.setStrokeWidth(2);
-        gridPaint.setPathEffect(new DashPathEffect(new float[]{5, 2}, 0));
+        gridPaint.setStrokeWidth(gridLineWidth());
+        gridPaint.setPathEffect(gridLineDashPathEffect());
 		getHolder().addCallback(new SurfaceHolder.Callback() {
 
 			public void surfaceDestroyed(SurfaceHolder holder) {
@@ -145,6 +145,22 @@ public class LevelChooseView extends SurfaceView {
 		});
 
 	}
+
+    private DashPathEffect gridLineDashPathEffect() {
+        float[] intervals = {
+                context.app().displayHeight * 0.01f,
+                context.app().displayHeight * 0.004f
+        };
+        return new DashPathEffect(intervals, 0);
+    }
+
+    private float gridLineWidth() {
+        return context.app().displayHeight * 0.004f;
+    }
+
+    private float levelNumberSize() {
+        return context.app().displayHeight * 0.075f;
+    }
 
     private void initGrid(int width, int height) {
         int xStep = width / LEVELS_COLS;
