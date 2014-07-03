@@ -167,8 +167,8 @@ public class GameView extends SurfaceView {
 		monster.onDraw(canvas, update);
         guideAnimation.onDraw(canvas, update);
 //		level.drawGrid(canvas);
-		drawFPS(canvas);
-		drawScore(canvas);
+//		drawFPS(canvas);
+//		drawScore(canvas);
 //        drawMemoryUsage(canvas);
         if(isReadyToPlayLoseAnimation()) {
 //            drawLose(canvas);
