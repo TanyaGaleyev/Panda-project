@@ -105,11 +105,6 @@ public class LevelChooseView extends SurfaceView {
 	private boolean initialized = false;
     private void init(Context context) {
         this.context = (LevelChooseActivity) context;
-		textPaint = new Paint();
-		textPaint.setColor(Color.DKGRAY);
-		textPaint.setTextSize(levelNumberSize());
-		textPaint.setTypeface(PandaApplication.getPandaApplication().getFontProvider().regular());
-        textPaint.setAntiAlias(true);
         backgroundPaint = new Paint();
         backgroundPaint.setAntiAlias(true);
         gridPaint = new Paint();
@@ -158,8 +153,8 @@ public class LevelChooseView extends SurfaceView {
         return context.app().displayHeight * 0.004f;
     }
 
-    private float levelNumberSize() {
-        return context.app().displayHeight * 0.075f;
+    private float levelNumberSize(int borderHeight) {
+        return borderHeight * 0.48f;
     }
 
     private void initGrid(int width, int height) {
@@ -197,6 +192,11 @@ public class LevelChooseView extends SurfaceView {
         highscore = imageProvider().getBitmapAutoResizeStrictCache("menu/high_score.png");
         mediumscore = imageProvider().getBitmapAutoResizeStrictCache("menu/medium_score.png");
         lowscore = imageProvider().getBitmapAutoResizeStrictCache("menu/low_score.png");
+        textPaint = new Paint();
+        textPaint.setColor(Color.DKGRAY);
+        textPaint.setTextSize(levelNumberSize(border.getHeight()));
+        textPaint.setTypeface(PandaApplication.getPandaApplication().getFontProvider().regular());
+        textPaint.setAntiAlias(true);
     }
 
     private ImageProvider imageProvider() {
