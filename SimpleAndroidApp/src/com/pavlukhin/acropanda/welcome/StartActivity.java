@@ -3,6 +3,7 @@ package com.pavlukhin.acropanda.welcome;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.View;
@@ -17,9 +18,6 @@ import com.pavlukhin.acropanda.PandaBaseActivity;
 import com.pavlukhin.acropanda.R;
 import com.pavlukhin.acropanda.choose.LevelChooseActivity;
 import com.pavlukhin.acropanda.utils.PandaButtonsPanel;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class StartActivity extends PandaBaseActivity {
 	
@@ -142,8 +140,7 @@ public class StartActivity extends PandaBaseActivity {
                     @Override
                     public void run() {
                         chestOpening.start();
-                        new Timer().schedule(new TimerTask() {
-                            @Override
+                        new Handler().postDelayed(new Runnable() {
                             public void run() {
                                 chestOpening.stop();
                                 packToOpen.post(new Runnable() {

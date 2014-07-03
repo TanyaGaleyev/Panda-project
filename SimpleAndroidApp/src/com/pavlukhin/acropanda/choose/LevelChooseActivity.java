@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -17,9 +18,6 @@ import com.pavlukhin.acropanda.achievements.AchievementsDirectories;
 import com.pavlukhin.acropanda.game.scores.Scores;
 import com.pavlukhin.acropanda.utils.PandaButtonsPanel;
 import com.pavlukhin.acropanda.welcome.StartActivity;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class LevelChooseActivity extends PandaBaseActivity {
 	public static final String LEVEL_ID = "levId";
@@ -75,7 +73,7 @@ public class LevelChooseActivity extends PandaBaseActivity {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                finishComplete();
             }
         });
         settingsBtn.setOnClickListener(new View.OnClickListener() {
@@ -112,14 +110,15 @@ public class LevelChooseActivity extends PandaBaseActivity {
                 });
                 achivDialog.setContentView(winAchivView);
                 achivDialog.show();
-                new Timer().schedule(
-                        new TimerTask() {
+                new Handler().postDelayed(
+                        new Runnable() {
                             @Override
                             public void run() {
                                 achivDialog.cancel();
                                 tryCompletePack();
                             }
-                        }, 2500);
+                        }, 2500
+                );
             } else {
                 tryCompletePack();
             }
