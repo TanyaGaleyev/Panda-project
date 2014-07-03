@@ -73,7 +73,7 @@ public class LevelChooseActivity extends PandaBaseActivity {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finishComplete();
+                finish();
             }
         });
         settingsBtn.setOnClickListener(new View.OnClickListener() {
