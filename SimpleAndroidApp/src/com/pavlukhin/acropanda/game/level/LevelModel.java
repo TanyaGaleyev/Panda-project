@@ -366,11 +366,7 @@ public class LevelModel {
 			}
 			break;
 		case CLOUD:
-            if(controlType != UserControlType.LEFT && controlType != UserControlType.RIGHT) {
-                motion = new Motion(MotionType.CLOUD_IDLE);
-            } else {
-                motion = stayCheck(controlType);
-            }
+            motion = moveCloud(controlType);
 			break;
         case SPIKE_UP:
             lose = true;
@@ -598,39 +594,7 @@ public class LevelModel {
         case CLOUD_RIGHT:
         case CLOUD_UP:
         case CLOUD_DOWN:
-            switch(controlType) {
-            case LEFT:
-                if(motionAvaible(MotionType.CLOUD_LEFT)) {
-                    motion = new Motion(MotionType.CLOUD_LEFT);
-                } else {
-                    motion = moveLeft();
-                }
-                break;
-            case RIGHT:
-                if(motionAvaible(MotionType.CLOUD_RIGHT)) {
-                    motion = new Motion(MotionType.CLOUD_RIGHT);
-                } else {
-                    motion = moveRight();
-                }
-                break;
-            case UP:
-                if(motionAvaible(MotionType.CLOUD_UP)) {
-                    motion = new Motion(MotionType.CLOUD_UP);
-                } else {
-                    motion = new Motion(MotionType.CLOUD_IDLE);
-                }
-                break;
-            case DOWN:
-                if(motionAvaible(MotionType.CLOUD_DOWN)) {
-                    motion = new Motion(MotionType.CLOUD_DOWN);
-                } else {
-                    motion = new Motion(MotionType.CLOUD_IDLE);
-                }
-                break;
-            default:
-                motion = new Motion(MotionType.CLOUD_IDLE);
-                break;
-            }
+            motion = moveCloud(controlType);
             break;
         default:
             motion = platformsCheck(controlType, finishingMt);
@@ -638,6 +602,44 @@ public class LevelModel {
         }
         if(motion.getType() == finishingMt)
             motion.copyStage(prevMotion);
+        return motion;
+    }
+
+    private Motion moveCloud(UserControlType controlType) {
+        Motion motion;
+        switch(controlType) {
+        case LEFT:
+            if(motionAvaible(MotionType.CLOUD_LEFT)) {
+                motion = new Motion(MotionType.CLOUD_LEFT);
+            } else {
+                motion = moveLeft();
+            }
+            break;
+        case RIGHT:
+            if(motionAvaible(MotionType.CLOUD_RIGHT)) {
+                motion = new Motion(MotionType.CLOUD_RIGHT);
+            } else {
+                motion = moveRight();
+            }
+            break;
+        case UP:
+            if(motionAvaible(MotionType.CLOUD_UP)) {
+                motion = new Motion(MotionType.CLOUD_UP);
+            } else {
+                motion = new Motion(MotionType.CLOUD_IDLE);
+            }
+            break;
+        case DOWN:
+            if(motionAvaible(MotionType.CLOUD_DOWN)) {
+                motion = new Motion(MotionType.CLOUD_DOWN);
+            } else {
+                motion = new Motion(MotionType.CLOUD_IDLE);
+            }
+            break;
+        default:
+            motion = new Motion(MotionType.CLOUD_IDLE);
+            break;
+        }
         return motion;
     }
 
