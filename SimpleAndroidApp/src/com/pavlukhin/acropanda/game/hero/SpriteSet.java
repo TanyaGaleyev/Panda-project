@@ -87,21 +87,11 @@ public class SpriteSet {
 		set.putSprite("startslickright", "panda/panda_sprite8_startslickright.png", 1, 8);
 		set.putSprite("startslickright", "panda/panda_sprite8_startslickright.png", 1, 8);
 		set.putSprite("slickright", "panda/panda_sprite8_slickright.png", 1, 8);
-//		set.putSprite("cloud", "panda/panda_sprite8_cloud.png", 1, 8);
 		set.putSprite("cloud", "panda/panda_sprite16_ufo_stay.png", 1, 16);
         set.putSprite("cloud_left", "panda/panda_sprite8_ufo_left.png", 1, 8);
         set.putSprite("cloud_right", "panda/panda_sprite8_ufo_right.png", 1, 8);
-        set.putSprite("cloud_in_left", "panda/panda_sprite8_jump_in_ufo_left.png", 1, 8);
-        set.putSprite("cloud_in_right", "panda/panda_sprite8_jump_in_ufo_right.png", 1, 8);
-        set.putSprite("cloud_out_left", "panda/panda_sprite8_jump_out_ufo_left.png", 1, 8);
-        set.putSprite("cloud_out_right", "panda/panda_sprite8_jump_out_ufo_right.png", 1, 8);
-        set.putSprite("cloud_prepare", "panda/panda_sprite16_create_helmet.png", 1, 16);
         set.putSprite("cloud_up", "panda/ufo_up.png", 1, 8);
         set.putSprite("cloud_down", "panda/ufo_down.png", 1, 8);
-        set.putSprite("cloud_left_wall", "panda/from_ufo_in_wall_left.png", 1, 16);
-        set.putSprite("cloud_right_wall", "panda/from_ufo_in_wall_right.png", 1, 16);
-        set.putSprite("cloud_beginflyleft", "panda/from_ufo_begin_fly_right.png", 1, 16);
-        set.putSprite("cloud_beginflyright", "panda/from_ufo_begin_fly_left.png", 1, 16);
 
 		set.putTPSprite("flyleft_tp", "panda/panda_sprite8_flyleft.png", 1, 8, true);
 		set.putTPSprite("flyright_tp", "panda/panda_sprite8_flyright.png", 1, 8, false);
