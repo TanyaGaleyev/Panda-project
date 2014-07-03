@@ -135,7 +135,6 @@ public class StartActivity extends PandaBaseActivity {
                         app().loadAnimationFromFolder("animations/menu/pack_opening");
                 chestOpening.setOneShot(true);
                 packToOpen.setBackgroundDrawable(chestOpening);
-                // TODO rake here, get rid of alpha channel manipulation, calculate chests sizes instead
                 packToOpen.post(new Runnable() {
                     @Override
                     public void run() {
