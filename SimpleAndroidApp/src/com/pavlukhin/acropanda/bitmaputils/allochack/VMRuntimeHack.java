@@ -14,11 +14,11 @@ public class VMRuntimeHack {
 
     public VMRuntimeHack() {
         try {
-            Class cl = Class.forName("dalvik.system.VMRuntime");
-            Method getRt = cl.getMethod("getRuntime", new Class[0]);
-            runtime = getRt.invoke(null, new Object[0]);
-            trackAllocation = cl.getMethod("trackExternalAllocation", new Class[] {long.class});
-            trackFree = cl.getMethod("trackExternalFree", new Class[] {long.class});
+            Class<?> cl = Class.forName("dalvik.system.VMRuntime");
+            Method getRt = cl.getMethod("getRuntime");
+            runtime = getRt.invoke(null);
+            trackAllocation = cl.getMethod("trackExternalAllocation", long.class);
+            trackFree = cl.getMethod("trackExternalFree", long.class);
             System.out.println("Hacked runtime load successfully");
         } catch (Exception e) {
             System.out.println("Exception hacking runtime");
