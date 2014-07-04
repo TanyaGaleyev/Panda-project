@@ -5,6 +5,7 @@ import com.pavlukhin.acropanda.UserControlType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 import static com.pavlukhin.acropanda.UserControlType.*;
 import static com.pavlukhin.acropanda.game.tutorial.GuideAction.*;
@@ -89,6 +90,29 @@ public class Solutions {
                 _(LEFT),_(IDLE), _(IDLE),
                 _(HOME)
         );
+    }
+
+    public static Iterator<SolutionStep> hardTpsLevel() {
+        UserControlType[] solutionControls = {
+                DOWN, IDLE, IDLE, DOWN, IDLE, IDLE, DOWN, IDLE, IDLE, DOWN, IDLE, IDLE, DOWN, IDLE, IDLE, DOWN, IDLE, IDLE, DOWN,
+                IDLE, LEFT, UP, UP, RIGHT, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE,
+                DOWN, IDLE, IDLE, DOWN, IDLE, IDLE, DOWN, IDLE, IDLE, DOWN, IDLE, IDLE, DOWN, IDLE, RIGHT, RIGHT, RIGHT,
+                DOWN, IDLE, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE,
+                DOWN, IDLE, IDLE, DOWN, IDLE, IDLE,
+                DOWN, IDLE, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE, RIGHT, LEFT,
+                DOWN, IDLE, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE,
+                DOWN, IDLE, IDLE, DOWN, IDLE, IDLE, DOWN, IDLE, LEFT, LEFT, LEFT,
+                DOWN, IDLE, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE,
+                RIGHT, RIGHT, RIGHT, DOWN, IDLE, DOWN, IDLE, DOWN, IDLE,
+                DOWN, IDLE, RIGHT, UP, UP, LEFT, LEFT, DOWN, IDLE,
+                UP, UP, LEFT, DOWN, IDLE, DOWN, IDLE, UP, LEFT, DOWN, IDLE, LEFT, DOWN, IDLE, UP, LEFT,
+                DOWN, IDLE, DOWN, IDLE, UP, DOWN, DOWN, IDLE, LEFT, IDLE, DOWN, LEFT, LEFT
+        };
+        List<SolutionStep> solution = new ArrayList<SolutionStep>(solutionControls.length);
+        for (UserControlType control : solutionControls) {
+            solution.add(_(control));
+        }
+        return solution.iterator();
     }
 
     private static GuideAction[] SL_UP = {RELEASED, TAP, SLIDE_UP, RELEASE, RELEASED};

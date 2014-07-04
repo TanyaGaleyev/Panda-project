@@ -24,7 +24,7 @@ public class GameControl implements ControlChangeObserver {
     private ControlsFactory controlsFactory;
     private UserControlProvider controlProvider;
 
-    private boolean robotMode = false;
+     boolean robotMode = false;
     private Iterator<SolutionStep> autoControls = new ArrayList<SolutionStep>().iterator();
 	
 	private GameManager gameLoopThread;
@@ -161,7 +161,7 @@ public class GameControl implements ControlChangeObserver {
             toastMessage(step.getMessage());
         } else {
             control = new ObtainedControl(UserControlType.IDLE);
-            view.getGameContext().stopTutorial();
+//            view.getGameContext().stopTutorial();
         }
         return control;
     }

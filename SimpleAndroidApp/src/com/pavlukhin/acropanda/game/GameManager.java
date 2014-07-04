@@ -94,6 +94,12 @@ public class GameManager extends Thread {
 //        if(System.currentTimeMillis() - rememberTime > ticksPS * 8) {
 //            rememberedControl = UserControlType.IDLE;
 //        }
+        if(view.getControl().robotMode)
+            if(view.readyForUpdate(null))
+                return view.getControl().getUserControl().getControlType();
+            else
+                return UserControlType.IDLE;
+
         UserControl userControl = view.getControl().getUserControl();
         UserControlType controlType = userControl.getControlType();
         if(controlType == UserControlType.IDLE) {

@@ -57,6 +57,7 @@ public class GameActivity extends PandaBaseActivity {
         contentPanel.addView(gView);
         gControl = gView.getControl();
         gControl.setLevId(levid);
+        if(levid == 777) gControl.setAutoControls(Solutions.hardTpsLevel());
         settingsBtn.bringToFront();
         helpBtn.bringToFront();
         app().getSettingsModel().registerControlChangeObserver(gControl);
