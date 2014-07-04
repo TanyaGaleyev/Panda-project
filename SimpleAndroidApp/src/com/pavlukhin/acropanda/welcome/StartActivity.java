@@ -3,7 +3,6 @@ package com.pavlukhin.acropanda.welcome;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.View;
@@ -140,15 +139,10 @@ public class StartActivity extends PandaBaseActivity {
                     @Override
                     public void run() {
                         chestOpening.start();
-                        new Handler().postDelayed(new Runnable() {
+                        packToOpen.postDelayed(new Runnable() {
                             public void run() {
                                 chestOpening.stop();
-                                packToOpen.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        packToOpen.setBackgroundDrawable(getResources().getDrawable(R.drawable.chest_open));
-                                    }
-                                });
+                                packToOpen.setBackgroundDrawable(getResources().getDrawable(R.drawable.chest_open));
                             }
                         }, chestOpening.getNumberOfFrames() * PandaApplication.ONE_FRAME_DURATION);
                     }
@@ -158,7 +152,6 @@ public class StartActivity extends PandaBaseActivity {
 		}
 	}
 
-	
 	private void startPack(int setId) {
 		Intent intent = new Intent(this, LevelChooseActivity.class);
 		intent.putExtra(SET_ID, setId);

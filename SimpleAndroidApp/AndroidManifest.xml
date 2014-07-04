@@ -27,7 +27,8 @@
         <activity
             android:name=".welcome.StartActivityNew"
             android:label="@string/activity_title"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,7 +39,8 @@
         <activity
             android:name=".welcome.StartActivity"
             android:label="@string/activity_title"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.ivan.simple.StartActivityNew" />
