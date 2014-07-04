@@ -52,7 +52,6 @@ public class GameActivity extends PandaBaseActivity {
                 startTutorial(0);
             }
         });
-//        GameView gView = (GameView) findViewById(R.id.game);
         RelativeLayout contentPanel = (RelativeLayout) findViewById(R.id.game_content_panel);
         GameView gView = levid == 1 ? new MessageTutorialGame(this) : new GameView(this);
         contentPanel.addView(gView);
@@ -73,7 +72,7 @@ public class GameActivity extends PandaBaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-    	// TODO Auto-generated method stub
+    	// FIXME we need get rid of this code in the release version
     	switch (item.getItemId()) {
     	case R.id.increaseFPS:
     		GameManager.changeFPS(5);
@@ -82,14 +81,11 @@ public class GameActivity extends PandaBaseActivity {
     		GameManager.changeFPS(-5);
     		return true;
     	case R.id.restart:
-//    		restart();
+            gControl.restartGame();
     	default:
     		return super.onOptionsItemSelected(item);
     	}
     }
-
-
-//    public void restart() {
 
     public void switchBackToChooseActivity(boolean complete, int score) {
 		Intent resultIntent = new Intent();

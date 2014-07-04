@@ -90,6 +90,7 @@ public class StartActivity extends PandaBaseActivity {
                 levbtn.setEnabled(true);
             } else {
                 levbtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.chest_close));
+                // FIXME closed chest buttons should be disabled in the release version
 //                levbtn.setEnabled(false);
             }
             levbtn.setOnClickListener(new View.OnClickListener() {
