@@ -49,7 +49,12 @@ public class GameActivity extends PandaBaseActivity {
         helpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startTutorial(0);
+                try {
+                    gControl.restartGame();
+                    gControl.setAutoControls(Solutions.getSolution(levid));
+                } catch (Exception e) {
+                    System.err.println("solution not found for level " + levid);
+                }
             }
         });
         RelativeLayout contentPanel = (RelativeLayout) findViewById(R.id.game_content_panel);
@@ -58,6 +63,11 @@ public class GameActivity extends PandaBaseActivity {
         gControl = gView.getControl();
         gControl.setLevId(levid);
         if(levid == 777) gControl.setAutoControls(Solutions.hardTpsLevel());
+//        try {
+//            gControl.setAutoControls(Solutions.getSolution(levid));
+//        } catch (Exception e) {
+//            System.err.println("solution not found for level " + levid);
+//        }
         settingsBtn.bringToFront();
         helpBtn.bringToFront();
         app().getSettingsModel().registerControlChangeObserver(gControl);

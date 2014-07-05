@@ -31,8 +31,7 @@
         android:layout_below="@+id/game_settings"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
-        android:background="@drawable/help"
-        android:visibility="invisible"/>
+        android:background="@drawable/help" />
 
     <!--     <org.ivan.simple.game.GameView -->
 <!--         android:id="@+id/game" -->

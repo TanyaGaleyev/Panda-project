@@ -1,6 +1,7 @@
 package com.pavlukhin.acropanda.game.tutorial;
 
 import com.pavlukhin.acropanda.UserControlType;
+import com.pavlukhin.acropanda.game.tutorial.solutionsio.SolutionReader;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -108,11 +109,20 @@ public class Solutions {
                 UP, UP, LEFT, DOWN, IDLE, DOWN, IDLE, UP, LEFT, DOWN, IDLE, LEFT, DOWN, IDLE, UP, LEFT,
                 DOWN, IDLE, DOWN, IDLE, UP, DOWN, DOWN, IDLE, LEFT, IDLE, DOWN, LEFT, LEFT
         };
+        return map(solutionControls).iterator();
+    }
+
+    private static List<SolutionStep> map(UserControlType[] solutionControls) {
         List<SolutionStep> solution = new ArrayList<SolutionStep>(solutionControls.length);
         for (UserControlType control : solutionControls) {
             solution.add(_(control));
         }
-        return solution.iterator();
+        return solution;
+    }
+
+    public static Iterator<SolutionStep> getSolution(int levid) throws Exception {
+        SolutionReader reader = new SolutionReader();
+        return map(reader.readSolution(levid)).iterator();
     }
 
     private static GuideAction[] SL_UP = {RELEASED, TAP, SLIDE_UP, RELEASE, RELEASED};

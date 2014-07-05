@@ -5,6 +5,11 @@ import android.graphics.Canvas;
 
 import com.pavlukhin.acropanda.UserControlType;
 import com.pavlukhin.acropanda.game.controls.UserControl;
+import com.pavlukhin.acropanda.game.tutorial.solutionsio.SolutionWriter;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameManager extends Thread {
 	private GameView view;
@@ -59,6 +64,7 @@ public class GameManager extends Thread {
 	public void run() {
         long startTime;
         long sleepTime;
+        List<UserControlType> solution = new ArrayList<UserControlType>();
         try {
             Thread.sleep(100);
             while(running) {
@@ -66,20 +72,23 @@ public class GameManager extends Thread {
                 UserControlType controlType = receiveUserControlType();
                 if(view.readyForUpdate(controlType)) {
                     view.updateGame(controlType);
+                    solution.add(controlType);
                     rememberedControl = UserControlType.IDLE;
                 }
                 view.updatePositions();
                 doDraw(true);
                 if(view.getControl().finished) {
-                    if(view.isComplete())
+                    if(view.isComplete()) {
+                        saveSolution(solution);
                         view.getGameContext().switchBackToChooseActivity(true, view.getScore());
-                    else
+                    } else {
                         view.post(new Runnable() {
                             @Override
                             public void run() {
                                 view.getGameContext().showLoseDialog();
                             }
                         });
+                    }
                 }
                 // calculate sleep time to reach needed fps
                 sleepTime = ticksPS - (System.currentTimeMillis() - startTime);
@@ -88,7 +97,16 @@ public class GameManager extends Thread {
         } catch (InterruptedException e) {
             System.out.println("Game loop thread interrupted");
         }
-	}
+    }
+
+    private void saveSolution(List<UserControlType> solution) {
+        SolutionWriter writer = new SolutionWriter();
+        try {
+            writer.writeSolution(solution.toArray(new UserControlType[0]), view.getControl().levId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private UserControlType receiveUserControlType() {
 //        if(System.currentTimeMillis() - rememberTime > ticksPS * 8) {
