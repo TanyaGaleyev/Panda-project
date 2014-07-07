@@ -95,6 +95,10 @@ public class Platform implements LevelDrawable {
 			sprite = Sprite.createLru("platform_v/unlock_platform.png", 2, 8);
             sprite.setAnimating(true);
 			break;
+		case UNLOCK_H:
+			sprite = Sprite.createLru("platform_v/unlock_horizontal_platform.png", 2, 8);
+            sprite.setAnimating(true);
+			break;
 		case STRING:
 			sprite = Sprite.createLru("platform_h/string_platform.png", 2, 16);
 			break;

@@ -115,15 +115,20 @@ public class LevelModel {
     private void initStatePlatforms(Map<Platform, int[]> platformMetaMap) {
         for (LevelGrid.VerticalPlatformCoords vp : levelGrid.verticalPlatforms()) {
             initStatus(vp.getPlatform(), platformMetaMap);
-            if (vp.getPlatform().getType() == PlatformType.SWITCH) {
-                switchList.add(vp.getPlatform());
-            }
-            if (vp.getPlatform().getType() == PlatformType.UNLOCK) {
-                unlockList.add(vp.getPlatform());
-            }
+            addToSpecialLists(vp.getPlatform());
         }
         for (LevelGrid.HorizontalPlatformCoords hp : levelGrid.horizontalPlatforms()) {
             initStatus(hp.getPlatform(), platformMetaMap);
+            addToSpecialLists(hp.getPlatform());
+        }
+    }
+
+    private void addToSpecialLists(Platform p) {
+        if (p.getType() == PlatformType.SWITCH) {
+            switchList.add(p);
+        }
+        if (p.getType() == PlatformType.UNLOCK || p.getType() == PlatformType.UNLOCK_H) {
+            unlockList.add(p);
         }
     }
 
