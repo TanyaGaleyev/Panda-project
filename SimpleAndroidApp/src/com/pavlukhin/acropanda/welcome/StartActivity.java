@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.pavlukhin.acropanda.PandaApplication;
 import com.pavlukhin.acropanda.PandaBaseActivity;
 import com.pavlukhin.acropanda.R;
+import com.pavlukhin.acropanda.billing.BuyPremiumDialog;
 import com.pavlukhin.acropanda.choose.LevelChooseActivity;
 import com.pavlukhin.acropanda.utils.PandaButtonsPanel;
 
@@ -23,7 +24,8 @@ public class StartActivity extends PandaBaseActivity {
 	public static final String SET_ID = "Id of levels set";
 	public static final String LAST_FINISHED_SET = "Last finished set of levels";
     public static final int PACKS_IN_ROW = 3;
-//    private final String[] levelsCaptions = {"ACCESS", "BUTTON", "ZOMBIE", "SYSTEM"};
+    public static final int FREE_PACKS_COUNT = 4;
+    //    private final String[] levelsCaptions = {"ACCESS", "BUTTON", "ZOMBIE", "SYSTEM"};
 	public final int levCount = 6;
 	private SparseArray<ImageView> levButtons = new SparseArray<ImageView>();
 
@@ -31,16 +33,20 @@ public class StartActivity extends PandaBaseActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // hide screen title
         setContentView(R.layout.activity_start);
         findViewById(R.id.activity_content).setBackgroundDrawable(app().getBackground());
+        initTitle();
+        initPacksButtons();
+        initServiceButtons();
+    }
+
+    private void initTitle() {
         TextView caption = (TextView) findViewById(R.id.text_view);
         caption.setTypeface(app().getFontProvider().bold());
         caption.setTextSize(TypedValue.COMPLEX_UNIT_PX, app().displayHeight / 10);
+    }
 
-        initPacksButtons();
-
+    private void initServiceButtons() {
         View backBtn = prepare(R.drawable.back);
         View settingsBtn = prepare(R.drawable.settings);
 
@@ -84,7 +90,7 @@ public class StartActivity extends PandaBaseActivity {
             ImageView levbtn = new ImageView(this);
 //            levbtn.setText(levelsCaptions[i]);
             final int id = i + 1;
-            if(id <= lastFinishedSet() + 1) {
+            if(id <= lastFinishedSet() + 1 && canUnlockPack(id)) {
                 levbtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.chest_open));
                 levbtn.setEnabled(true);
             } else {
@@ -129,8 +135,8 @@ public class StartActivity extends PandaBaseActivity {
 			boolean setComplete = data.getBooleanExtra(LevelChooseActivity.SET_COMPLETE, false);
             int startedSet = data.getIntExtra(SET_ID, 0);
             int packToOpenId = startedSet + 1;
-            final ImageView packToOpen;
-            if(setComplete && (packToOpen = levButtons.get(packToOpenId)) != null) {
+            final ImageView packToOpen = levButtons.get(packToOpenId);
+            if(setComplete && canUnlockPack(packToOpenId) && packToOpen != null) {
                 final AnimationDrawable chestOpening =
                         app().loadAnimationFromFolder("animations/menu/pack_opening");
                 chestOpening.setOneShot(true);
@@ -152,10 +158,18 @@ public class StartActivity extends PandaBaseActivity {
 		}
 	}
 
-	private void startPack(int setId) {
-		Intent intent = new Intent(this, LevelChooseActivity.class);
-		intent.putExtra(SET_ID, setId);
-		startActivityForResult(intent, 0);
-	}
+    private boolean canUnlockPack(int packId) {
+        return packId <= FREE_PACKS_COUNT || app().getBillingManager().checkPremium();
+    }
+
+    private void startPack(int packId) {
+        if(canUnlockPack(packId)) {
+            Intent intent = new Intent(this, LevelChooseActivity.class);
+            intent.putExtra(SET_ID, packId);
+            startActivityForResult(intent, 0);
+        } else {
+            new BuyPremiumDialog(this, app().getBillingManager()).show();
+        }
+    }
 
 }

@@ -7,6 +7,7 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="15" />
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
         android:largeHeap="true"
