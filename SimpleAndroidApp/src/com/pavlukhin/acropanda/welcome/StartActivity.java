@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.pavlukhin.acropanda.PandaApplication;
 import com.pavlukhin.acropanda.PandaBaseActivity;
 import com.pavlukhin.acropanda.R;
+import com.pavlukhin.acropanda.billing.BillingManager;
 import com.pavlukhin.acropanda.billing.BuyPremiumDialog;
 import com.pavlukhin.acropanda.choose.LevelChooseActivity;
 import com.pavlukhin.acropanda.utils.PandaButtonsPanel;
@@ -25,6 +26,7 @@ public class StartActivity extends PandaBaseActivity {
 	public static final String LAST_FINISHED_SET = "Last finished set of levels";
     public static final int PACKS_IN_ROW = 3;
     public static final int FREE_PACKS_COUNT = 4;
+    public static final int ENTER_PACK = 0;
     //    private final String[] levelsCaptions = {"ACCESS", "BUTTON", "ZOMBIE", "SYSTEM"};
 	public final int levCount = 6;
 	private SparseArray<ImageView> levButtons = new SparseArray<ImageView>();
@@ -130,31 +132,35 @@ public class StartActivity extends PandaBaseActivity {
     @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if(resultCode == RESULT_OK && requestCode == 0) {
-			System.out.println("Choose activity results!");
-			boolean setComplete = data.getBooleanExtra(LevelChooseActivity.SET_COMPLETE, false);
-            int startedSet = data.getIntExtra(SET_ID, 0);
-            int packToOpenId = startedSet + 1;
-            final ImageView packToOpen = levButtons.get(packToOpenId);
-            if(setComplete && canUnlockPack(packToOpenId) && packToOpen != null) {
-                final AnimationDrawable chestOpening =
-                        app().loadAnimationFromFolder("animations/menu/pack_opening");
-                chestOpening.setOneShot(true);
-                packToOpen.setBackgroundDrawable(chestOpening);
-                packToOpen.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        chestOpening.start();
-                        packToOpen.postDelayed(new Runnable() {
-                            public void run() {
-                                chestOpening.stop();
-                                packToOpen.setBackgroundDrawable(getResources().getDrawable(R.drawable.chest_open));
-                            }
-                        }, chestOpening.getNumberOfFrames() * PandaApplication.ONE_FRAME_DURATION);
-                    }
-                });
-                packToOpen.setEnabled(true);
-			}
+		if(resultCode == RESULT_OK) {
+            if(requestCode == ENTER_PACK) {
+                System.out.println("Choose activity results!");
+                boolean setComplete = data.getBooleanExtra(LevelChooseActivity.SET_COMPLETE, false);
+                int startedSet = data.getIntExtra(SET_ID, 0);
+                int packToOpenId = startedSet + 1;
+                final ImageView packToOpen = levButtons.get(packToOpenId);
+                if (setComplete && canUnlockPack(packToOpenId) && packToOpen != null) {
+                    final AnimationDrawable chestOpening =
+                            app().loadAnimationFromFolder("animations/menu/pack_opening");
+                    chestOpening.setOneShot(true);
+                    packToOpen.setBackgroundDrawable(chestOpening);
+                    packToOpen.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            chestOpening.start();
+                            packToOpen.postDelayed(new Runnable() {
+                                public void run() {
+                                    chestOpening.stop();
+                                    packToOpen.setBackgroundDrawable(getResources().getDrawable(R.drawable.chest_open));
+                                }
+                            }, chestOpening.getNumberOfFrames() * PandaApplication.ONE_FRAME_DURATION);
+                        }
+                    });
+                    packToOpen.setEnabled(true);
+                }
+            } else if(requestCode == BillingManager.BUY_PREMIUM) {
+                app().getBillingManager().handleActivityResult(requestCode, resultCode, data);
+            }
 		}
 	}
 
@@ -166,7 +172,7 @@ public class StartActivity extends PandaBaseActivity {
         if(canUnlockPack(packId)) {
             Intent intent = new Intent(this, LevelChooseActivity.class);
             intent.putExtra(SET_ID, packId);
-            startActivityForResult(intent, 0);
+            startActivityForResult(intent, ENTER_PACK);
         } else {
             new BuyPremiumDialog(this, app().getBillingManager()).show();
         }

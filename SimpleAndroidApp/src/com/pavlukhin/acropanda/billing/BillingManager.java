@@ -1,11 +1,14 @@
 package com.pavlukhin.acropanda.billing;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import com.pavlukhin.acropanda.billing.util.IabException;
 import com.pavlukhin.acropanda.billing.util.IabHelper;
 import com.pavlukhin.acropanda.billing.util.IabResult;
 import com.pavlukhin.acropanda.billing.util.Inventory;
+import com.pavlukhin.acropanda.billing.util.Purchase;
 
 /**
  * Created by ivan on 08.07.2014.
@@ -13,6 +16,7 @@ import com.pavlukhin.acropanda.billing.util.Inventory;
 public class BillingManager {
 
     public static final String PREMIUM_SKU = "premium_upgrade";
+    public static final int BUY_PREMIUM = PREMIUM_SKU.hashCode();
     private IabHelper billingHelper;
 
     private String publicKey() {
@@ -49,7 +53,20 @@ public class BillingManager {
         return ret;
     }
 
-    public void buyPremium() {
+    public void buyPremium(Activity caller) {
+        billingHelper.launchPurchaseFlow(caller, PREMIUM_SKU, BUY_PREMIUM, new IabHelper.OnIabPurchaseFinishedListener() {
+            @Override
+            public void onIabPurchaseFinished(IabResult result, Purchase info) {
+                if(result.isSuccess()) {
+                    System.err.println("premium ok");
+                } else {
+                    System.err.println("premium failed");
+                }
+            }
+        });
+    }
 
+    public boolean handleActivityResult(int requestCode, int resultCode, Intent data) {
+        return billingHelper.handleActivityResult(requestCode, resultCode, data);
     }
 }

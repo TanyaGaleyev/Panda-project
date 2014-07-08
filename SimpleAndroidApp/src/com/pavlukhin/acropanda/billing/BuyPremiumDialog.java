@@ -54,6 +54,7 @@ public class BuyPremiumDialog extends Dialog {
     }
 
     private void buyPremium() {
-        billing.buyPremium();
+         cancel();
+        billing.buyPremium(context);
     }
 }
