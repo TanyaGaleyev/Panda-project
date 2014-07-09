@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.pavlukhin.acropanda"
-    android:versionCode="5"
-    android:versionName="0.1.4"
+    android:versionCode="6"
+    android:versionName="0.1.5"
     android:installLocation="preferExternal" >
 
     <uses-sdk
