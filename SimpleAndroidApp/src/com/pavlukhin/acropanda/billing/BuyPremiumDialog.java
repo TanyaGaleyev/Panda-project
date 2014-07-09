@@ -16,11 +16,13 @@ public class BuyPremiumDialog extends Dialog {
     private View cancel;
     private BillingManager billing;
     private PandaBaseActivity context;
+    private int requestCode;
 
-    public BuyPremiumDialog(PandaBaseActivity context, BillingManager billing) {
+    public BuyPremiumDialog(PandaBaseActivity context, BillingManager billing, int requestCode) {
         super(context);
         this.billing = billing;
         this.context = context;
+        this.requestCode = requestCode;
         setContentView(R.layout.buy_premium);
         findViews();
         initLayout();
@@ -54,7 +56,7 @@ public class BuyPremiumDialog extends Dialog {
     }
 
     private void buyPremium() {
-         cancel();
-        billing.buyPremium(context);
+        cancel();
+        billing.buyPremium(context, requestCode);
     }
 }
