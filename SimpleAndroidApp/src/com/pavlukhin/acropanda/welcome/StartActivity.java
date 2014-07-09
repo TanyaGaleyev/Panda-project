@@ -1,5 +1,6 @@
 package com.pavlukhin.acropanda.welcome;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -15,7 +16,6 @@ import android.widget.TextView;
 import com.pavlukhin.acropanda.PandaApplication;
 import com.pavlukhin.acropanda.PandaBaseActivity;
 import com.pavlukhin.acropanda.R;
-import com.pavlukhin.acropanda.billing.BillingManager;
 import com.pavlukhin.acropanda.billing.BuyPremiumDialog;
 import com.pavlukhin.acropanda.choose.LevelChooseActivity;
 import com.pavlukhin.acropanda.utils.PandaButtonsPanel;
@@ -103,7 +103,7 @@ public class StartActivity extends PandaBaseActivity {
             }
             levbtn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    startPack(id);
+                    onPackClicked(id);
                 }
             });
             row.addView(levbtn, packLp);
@@ -170,14 +170,27 @@ public class StartActivity extends PandaBaseActivity {
         return packId <= FREE_PACKS_COUNT || app().getBillingManager().checkPremium();
     }
 
-    private void startPack(int packId) {
+    private void onPackClicked(int packId) {
         if(canUnlockPack(packId)) {
-            Intent intent = new Intent(this, LevelChooseActivity.class);
-            intent.putExtra(SET_ID, packId);
-            startActivityForResult(intent, ENTER_PACK);
+            startPack(packId);
         } else {
-            new BuyPremiumDialog(this, app().getBillingManager(), BUY_PREMIUM).show();
+            BuyPremiumDialog buyPremiumDialog = new BuyPremiumDialog(this, app().getBillingManager(), BUY_PREMIUM);
+            // FIXME this is for testing purposes, should be removed in release version
+            final int packId2 = packId;
+            buyPremiumDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    startPack(packId2);
+                }
+            });
+            buyPremiumDialog.show();
         }
+    }
+
+    private void startPack(int packId) {
+        Intent intent = new Intent(this, LevelChooseActivity.class);
+        intent.putExtra(SET_ID, packId);
+        startActivityForResult(intent, ENTER_PACK);
     }
 
 }
