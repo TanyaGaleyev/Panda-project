@@ -1,8 +1,11 @@
 package com.pavlukhin.acropanda.utils;
 
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import com.pavlukhin.acropanda.PandaApplication;
 
 /**
  * Created by ivan on 29.09.13.
@@ -28,7 +31,7 @@ public class DrawManager implements Runnable {
                     }
                 }
             } catch(Exception e) {
-                // TODO process exception
+                Log.e(PandaApplication.LOG_TAG, e.getMessage(), e);
             } finally {
                 if(c != null) {
                     holder.unlockCanvasAndPost(c);
@@ -37,8 +40,7 @@ public class DrawManager implements Runnable {
             try {
                 Thread.sleep(40);
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                Log.d(PandaApplication.LOG_TAG, "Draw manager interrupted");
             }
         }
     }

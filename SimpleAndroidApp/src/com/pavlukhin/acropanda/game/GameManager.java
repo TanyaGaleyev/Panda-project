@@ -2,7 +2,9 @@ package com.pavlukhin.acropanda.game;
 
 
 import android.graphics.Canvas;
+import android.util.Log;
 
+import com.pavlukhin.acropanda.PandaApplication;
 import com.pavlukhin.acropanda.UserControlType;
 import com.pavlukhin.acropanda.game.controls.UserControl;
 
@@ -86,7 +88,7 @@ public class GameManager extends Thread {
                 if (sleepTime > 0) sleep(sleepTime);
             }
         } catch (InterruptedException e) {
-            System.out.println("Game loop thread interrupted");
+            Log.d(PandaApplication.LOG_TAG, "Game loop thread interrupted");
         }
 	}
 
@@ -113,7 +115,7 @@ public class GameManager extends Thread {
                 view.draw(c, update);
             }
 		} catch(Exception ex) {
-			ex.printStackTrace();
+			Log.e(PandaApplication.LOG_TAG, ex.getMessage(), ex);
 		} finally {
 			if(c != null) {
 				view.getHolder().unlockCanvasAndPost(c);

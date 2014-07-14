@@ -3,7 +3,9 @@ package com.pavlukhin.acropanda.billing;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
+import com.pavlukhin.acropanda.PandaApplication;
 import com.pavlukhin.acropanda.billing.util.IabException;
 import com.pavlukhin.acropanda.billing.util.IabHelper;
 import com.pavlukhin.acropanda.billing.util.IabResult;
@@ -29,11 +31,11 @@ public class BillingManager {
         billingHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             public void onIabSetupFinished(IabResult result) {
                 if (!result.isSuccess()) {
-                    System.err.println("bill error");
+                    Log.i(PandaApplication.LOG_TAG, "bill error");
                     // Oh noes, there was a problem.
                 } else {
                     setupOk = true;
-                    System.out.println("bill ok");
+                    Log.i(PandaApplication.LOG_TAG, "bill ok");
                     // Hooray, IAB is fully set up!
                 }
             }
@@ -50,7 +52,7 @@ public class BillingManager {
             Inventory inventory = billingHelper.queryInventory(false, null);
             ret = inventory.hasPurchase(PREMIUM_SKU);
         } catch (IabException e) {
-            e.printStackTrace();
+            Log.w(PandaApplication.LOG_TAG, e.getMessage(), e);
         }
         return ret;
     }
@@ -62,9 +64,9 @@ public class BillingManager {
                 public void onIabPurchaseFinished(IabResult result, Purchase info) {
                     if (result.isSuccess()) {
                         // TODO here we should redraw UI
-                        System.err.println("premium ok");
+                        Log.i(PandaApplication.LOG_TAG, "premium ok");
                     } else {
-                        System.err.println("premium failed");
+                        Log.i(PandaApplication.LOG_TAG, "premium failed");
                     }
                 }
             });

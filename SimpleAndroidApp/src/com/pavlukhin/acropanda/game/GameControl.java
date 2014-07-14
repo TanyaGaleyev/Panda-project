@@ -1,5 +1,6 @@
 package com.pavlukhin.acropanda.game;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.widget.Toast;
@@ -66,7 +67,7 @@ public class GameControl implements ControlChangeObserver {
 	public void startManager() {
         if(gameLoopThread != null && gameLoopThread.isRunning()) return;
         if(gameLoopThread != null) postStopManager();
-		System.out.println("Start game loop");
+        Log.d(PandaApplication.LOG_TAG, "Start game loop");
 		gameLoopThread = new GameManager(view);
 		gameLoopThread.setRunning(true);
 		gameLoopThread.start();
@@ -82,14 +83,14 @@ public class GameControl implements ControlChangeObserver {
                gameLoopThread.join();
                retry = false;
            } catch (InterruptedException e) {
-               System.out.println("Interrupted exception: " + e);
+               Log.d(PandaApplication.LOG_TAG, "Interrupted exception: " + e);
            }
         }
 	}
 
     public void postStopManager() {
         if(gameLoopThread == null) return;
-        System.out.println("Stop game loop");
+        Log.d(PandaApplication.LOG_TAG, "Stop game loop");
         paused = true;
         gameLoopThread.setRunning(false);
     }
@@ -111,7 +112,7 @@ public class GameControl implements ControlChangeObserver {
                 initControlProvider();
             } catch (OutOfMemoryError oom) {
                 recycler.recycle();
-                System.err.println("Retry GameControl.initGame()");
+                Log.w(PandaApplication.LOG_TAG, "Retry GameControl.initGame()");
             }
         }
     }

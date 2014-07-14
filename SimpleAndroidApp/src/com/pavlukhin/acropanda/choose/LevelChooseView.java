@@ -19,6 +19,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -551,7 +552,7 @@ public class LevelChooseView extends SurfaceView {
                             draw(c);
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Log.e(PandaApplication.LOG_TAG, e.getMessage(), e);
                     } finally {
                         if (c != null) {
                             getHolder().unlockCanvasAndPost(c);
@@ -562,7 +563,7 @@ public class LevelChooseView extends SurfaceView {
                     if(sleepTime > 0) sleep(REDRAW_INTERVAL);
                 }
             } catch (InterruptedException e) {
-                System.out.println("Level choose view redrawer thread was interrupted");
+                Log.d(PandaApplication.LOG_TAG, "Level choose view redrawer thread was interrupted");
             }
 		}
 	}

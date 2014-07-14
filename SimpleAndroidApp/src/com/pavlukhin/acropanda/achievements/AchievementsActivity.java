@@ -1,6 +1,7 @@
 package com.pavlukhin.acropanda.achievements;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.pavlukhin.acropanda.PandaApplication;
 import com.pavlukhin.acropanda.PandaBaseActivity;
 import com.pavlukhin.acropanda.R;
 import com.pavlukhin.acropanda.utils.PandaButtonsPanel;
@@ -63,7 +65,7 @@ public class AchievementsActivity extends PandaBaseActivity {
             icon.setLayoutParams(new ViewGroup.LayoutParams(app().displayHeight / 5, app().displayHeight / 5));
             hp.addView(icon);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(PandaApplication.LOG_TAG, e.getMessage(), e);
         }
 
         LinearLayout textPanel = new LinearLayout(this);

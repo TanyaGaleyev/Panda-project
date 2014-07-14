@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.WindowManager;
 
@@ -28,6 +29,7 @@ import java.io.InputStream;
 
 public class PandaApplication extends Application {
     public static final int ONE_FRAME_DURATION = 40;
+    public static final String LOG_TAG = "ACRO_PANDA";
     public int displayWidth;
     public int displayHeight;
 
@@ -145,7 +147,7 @@ public class PandaApplication extends Application {
                         ONE_FRAME_DURATION);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(LOG_TAG, e.getMessage(), e);
         }
         return animation;
     }

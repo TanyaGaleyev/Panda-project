@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.pavlukhin.acropanda.bitmaputils.allochack.HackedBitmapFactory;
 import com.pavlukhin.acropanda.bitmaputils.cache.BitmapCache;
@@ -108,12 +109,12 @@ public class ImageProvider {
     }
 
     private void reportOutOfMemory(String path) {
-        System.err.println("Error loading path " + path);
-        System.err.println("Max heap: " + Runtime.getRuntime().maxMemory());
-        System.err.println("Total heap: " + Runtime.getRuntime().totalMemory());
-        System.err.println("Free heap: " + Runtime.getRuntime().freeMemory());
-        System.err.println("Strict cache: " + cacheSize);
-        System.err.println("Lru cache: " + myLru.kbSize());
+        Log.w(PandaApplication.LOG_TAG, "Error loading path " + path);
+        Log.w(PandaApplication.LOG_TAG, "Max heap: " + Runtime.getRuntime().maxMemory());
+        Log.w(PandaApplication.LOG_TAG, "Total heap: " + Runtime.getRuntime().totalMemory());
+        Log.w(PandaApplication.LOG_TAG, "Free heap: " + Runtime.getRuntime().freeMemory());
+        Log.w(PandaApplication.LOG_TAG, "Strict cache: " + cacheSize);
+        Log.w(PandaApplication.LOG_TAG, "Lru cache: " + myLru.kbSize());
     }
 
 //    public Bitmap getBitmapLruCache(String path, int rows, int cols) {
@@ -143,7 +144,7 @@ public class ImageProvider {
             cacheSize += bmp.getWidth() * bmp.getHeight() / 256;// * 4 / 1024
             strictCache.put(path, bmp);
         }
-        System.out.println("[get] cache size: " + cacheSize);
+        Log.d(PandaApplication.LOG_TAG, "[get] cache size: " + cacheSize);
         return bmp;
 	}
 	
@@ -166,7 +167,7 @@ public class ImageProvider {
                 try {
                     input.close();
                 } catch (IOException e) {
-                    System.out.println("error closing stream, this should not happen");
+                    Log.e(PandaApplication.LOG_TAG, "error closing stream, this should not happen");
                 }
             }
         }
@@ -178,7 +179,7 @@ public class ImageProvider {
 		cacheSize -= bmp.getWidth() * bmp.getHeight() / 256;// * 4 / 1024
         strictCache.remove(path);
         free(bmp);
-		System.out.println("[rm] cache size: " + cacheSize);
+		Log.d(PandaApplication.LOG_TAG, "[rm] cache size: " + cacheSize);
 	}
 
     public void free(Bitmap bmp) {
@@ -221,7 +222,7 @@ public class ImageProvider {
             cacheSize += bmp.getWidth() * bmp.getHeight() / 256;// * 4 / 1024
             strictCache.put(path, bmp);
         }
-        System.out.println("[get] cache size: " + cacheSize);
+        Log.d(PandaApplication.LOG_TAG, "[get] cache size: " + cacheSize);
         return bmp;
     }
 

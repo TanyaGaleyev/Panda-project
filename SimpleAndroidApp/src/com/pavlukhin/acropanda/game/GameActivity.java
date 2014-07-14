@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
+import com.pavlukhin.acropanda.PandaApplication;
 import com.pavlukhin.acropanda.PandaBaseActivity;
 import com.pavlukhin.acropanda.R;
 import com.pavlukhin.acropanda.choose.LevelChooseActivity;
@@ -99,7 +100,7 @@ public class GameActivity extends PandaBaseActivity {
     protected void onPause() {
     	super.onPause();
     	gControl.stopManager();
-    	System.out.println("onPause!");
+        Log.d(PandaApplication.LOG_TAG, "onPause!");
     }
 
     private boolean firstRun = true;
