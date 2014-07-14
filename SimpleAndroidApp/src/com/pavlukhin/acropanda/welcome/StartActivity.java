@@ -3,12 +3,15 @@ package com.pavlukhin.acropanda.welcome;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -28,7 +31,7 @@ public class StartActivity extends PandaBaseActivity {
     public static final int FREE_PACKS_COUNT = 4;
     public static final int ENTER_PACK = 0;
     public static final int BUY_PREMIUM = 1;
-    //    private final String[] levelsCaptions = {"ACCESS", "BUTTON", "ZOMBIE", "SYSTEM"};
+//    private final String[] levelsCaptions = {"ACCESS", "BUTTON", "ZOMBIE", "SYSTEM"};
 	public final int levCount = 6;
 	private SparseArray<ImageView> levButtons = new SparseArray<ImageView>();
 
@@ -76,7 +79,8 @@ public class StartActivity extends PandaBaseActivity {
                 .getInt(LAST_FINISHED_SET, 0);
     }
 
-    private float chestRatio = 173f / 225f;
+    private int baseChestHeight = 182;
+    private int baseChestWidth = 247;
 
     private void initPacksButtons() {
         TableLayout buttonsPane = (TableLayout) findViewById(R.id.packs_panel);
@@ -84,7 +88,7 @@ public class StartActivity extends PandaBaseActivity {
         TableLayout.LayoutParams rowParams = new TableLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
-        TableRow.LayoutParams packLp = createPackLayoutParams();
+        float scale = getChestScale();
         for(int i = 0; i < levCount; i++) {
             if(i % PACKS_IN_ROW == 0) {
                 row = new TableRow(this);
@@ -93,39 +97,58 @@ public class StartActivity extends PandaBaseActivity {
             ImageView levbtn = new ImageView(this);
 //            levbtn.setText(levelsCaptions[i]);
             final int id = i + 1;
+            Drawable packDrawable;
             if(id <= lastFinishedSet() + 1 && canUnlockPack(id)) {
-                levbtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.chest_open));
+                packDrawable = getResources().getDrawable(R.drawable.chest_open);
+                levbtn.setBackgroundDrawable(packDrawable);
                 levbtn.setEnabled(true);
-            } else {
-                levbtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.chest_close));
+            } else if(id <= FREE_PACKS_COUNT) {
+                packDrawable = getResources().getDrawable(R.drawable.chest_close);
+                levbtn.setBackgroundDrawable(packDrawable);
                 // FIXME closed chest buttons should be disabled in the release version
 //                levbtn.setEnabled(false);
+            } else {
+                packDrawable = getResources().getDrawable(R.drawable.chest_paid);
+                levbtn.setBackgroundDrawable(packDrawable);
             }
             levbtn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     onPackClicked(id);
                 }
             });
-            row.addView(levbtn, packLp);
+            LinearLayout ll = new LinearLayout(this);
+            int m = (int) (app().displayHeight * 0.01f);
+            TableRow.LayoutParams lp = new TableRow.LayoutParams(
+                    (int) (baseChestWidth * scale) + 2 * m, (int) (baseChestHeight * scale) + 2 * m);
+            lp.gravity = Gravity.CENTER;
+            ll.addView(levbtn, createPackLayoutParams(
+                    packDrawable.getIntrinsicWidth(),
+                    packDrawable.getIntrinsicHeight(),
+                    scale));
+            row.addView(ll, lp);
             levButtons.put(id, levbtn);
-//        	levbtn.getLayoutParams().width = (int) (displayWidth * 0.85);
-//        	levbtn.getLayoutParams().height = (int) (displayHeight * 0.20);
         }
     }
 
-    private TableRow.LayoutParams createPackLayoutParams() {
+    private float getChestScale() {
         float availableWidth = app().displayWidth * 0.8f;
-        float availableHeight = app().displayHeight * 0.55f;
-        int chestWidth = (int) (availableWidth / PACKS_IN_ROW);
-        int chestHeight = (int) (availableHeight / Math.ceil((float) levCount / PACKS_IN_ROW));
+        float availableHeight = app().displayHeight * 0.6f;
+        float chestWidth = (availableWidth / PACKS_IN_ROW);
+        float chestHeight = (availableHeight / (float) Math.ceil((float) levCount / PACKS_IN_ROW));
+        float chestRatio = (float) baseChestHeight / baseChestWidth;
         if(chestWidth * chestRatio < chestHeight) {
-            chestHeight = (int) (chestWidth * chestRatio);
+            return chestWidth / baseChestWidth;
         } else {
-            chestWidth = (int) (chestHeight / chestRatio);
+            return chestHeight / baseChestHeight;
         }
-        TableRow.LayoutParams packButtonParam = new TableRow.LayoutParams(chestWidth, chestHeight);
-        int m = (int) (app().displayHeight * 0.02f);
-        packButtonParam.setMargins(m, m, m, m);
+    }
+
+    private TableRow.LayoutParams createPackLayoutParams(int width, int height, float scale) {
+        TableRow.LayoutParams packButtonParam =
+                new TableRow.LayoutParams((int) (width * scale), (int) (height * scale));
+//        int m = (int) (app().displayHeight * 0.015f);
+//        packButtonParam.setMargins(m, m, m, m);
+        packButtonParam.gravity = Gravity.CENTER;
         return packButtonParam;
     }
 
