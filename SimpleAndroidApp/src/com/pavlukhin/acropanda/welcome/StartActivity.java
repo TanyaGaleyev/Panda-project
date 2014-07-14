@@ -102,7 +102,7 @@ public class StartActivity extends PandaBaseActivity {
                 packDrawable = getResources().getDrawable(R.drawable.chest_open);
                 levbtn.setBackgroundDrawable(packDrawable);
                 levbtn.setEnabled(true);
-            } else if(id <= FREE_PACKS_COUNT) {
+            } else if(canUnlockPack(id)) {
                 packDrawable = getResources().getDrawable(R.drawable.chest_close);
                 levbtn.setBackgroundDrawable(packDrawable);
                 // FIXME closed chest buttons should be disabled in the release version
