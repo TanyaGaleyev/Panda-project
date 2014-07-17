@@ -3,7 +3,7 @@ package com.pavlukhin.acropanda.game.tutorial;
 /**
  * Created by Ivan on 06.06.2014.
  */
-public class TutorialMessages {
+public class TutorialMessages1 {
     public static final String SLIDE_LEFT = "Slide left";
     public static final String SLIDE_RIGHT = "Slide right";
     public static final String SLIDE_UP = "Slide up";

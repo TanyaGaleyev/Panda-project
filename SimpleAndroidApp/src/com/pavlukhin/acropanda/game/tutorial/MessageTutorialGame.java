@@ -9,7 +9,7 @@ import com.pavlukhin.acropanda.game.level.Prize;
  * Created by Ivan on 06.06.2014.
  */
 public class MessageTutorialGame extends GameView {
-    private TutorialMessages messages = new TutorialMessages();
+    private TutorialMessages1 messages = new TutorialMessages1();
     public MessageTutorialGame(GameActivity context) {
         super(context);
     }
