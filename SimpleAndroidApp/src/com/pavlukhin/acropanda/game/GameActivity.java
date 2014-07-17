@@ -16,12 +16,15 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
+import com.pavlukhin.acropanda.PandaApplication;
 import com.pavlukhin.acropanda.PandaBaseActivity;
 import com.pavlukhin.acropanda.R;
 import com.pavlukhin.acropanda.choose.LevelChooseActivity;
 import com.pavlukhin.acropanda.game.dialogs.LoseDialog;
 import com.pavlukhin.acropanda.game.tutorial.MessageTutorialGame;
 import com.pavlukhin.acropanda.game.tutorial.Solutions;
+import com.pavlukhin.acropanda.game.tutorial.TutorialMessages1;
+import com.pavlukhin.acropanda.game.tutorial.TutorialMessages12;
 import com.pavlukhin.acropanda.settings.SettingsInGamePanel;
 
 public class GameActivity extends PandaBaseActivity {
@@ -53,7 +56,8 @@ public class GameActivity extends PandaBaseActivity {
             }
         });
         RelativeLayout contentPanel = (RelativeLayout) findViewById(R.id.game_content_panel);
-        GameView gView = levid == 1 ? new MessageTutorialGame(this) : new GameView(this);
+        GameView gView = levid == 1 ? new MessageTutorialGame(this, new TutorialMessages1())
+                : levid == 12 ? new MessageTutorialGame(this, new TutorialMessages12()) : new GameView(this);
         contentPanel.addView(gView);
         gControl = gView.getControl();
         gControl.setLevId(levid);
@@ -99,7 +103,7 @@ public class GameActivity extends PandaBaseActivity {
     protected void onPause() {
     	super.onPause();
     	gControl.stopManager();
-    	System.out.println("onPause!");
+        Log.d(PandaApplication.LOG_TAG, "onPause!");
     }
 
     private boolean firstRun = true;

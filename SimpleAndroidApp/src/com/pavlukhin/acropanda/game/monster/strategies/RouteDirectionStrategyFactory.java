@@ -1,8 +1,11 @@
 package com.pavlukhin.acropanda.game.monster.strategies;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.pavlukhin.acropanda.PandaApplication;
 import com.pavlukhin.acropanda.game.monster.MonsterDirection;
 
 public class RouteDirectionStrategyFactory {
@@ -44,7 +47,7 @@ public class RouteDirectionStrategyFactory {
 				}
 			}
 		} else {
-			System.out.println("Wrong route, carefull " + src + dst);
+            Log.w(PandaApplication.LOG_TAG, "Wrong route, carefull " + src + dst);
 		}
 	}
 }

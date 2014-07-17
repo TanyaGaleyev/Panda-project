@@ -4,4 +4,12 @@
     <string name="menu_settings">Settings</string>
     <string name="activity_title">Acro Panda</string>
     <string name="choose_pack">Select levels pack</string>
+    <string name="buy_premium_button">Buy premium</string>
+    <string name="buy_premium_title">Upgrade to premium</string>
+    <string name="cancel_buy_premium_button">Cancel</string>
+    <string name="buy_premium_message">If you want to play more levels upgrade your Acro Panda to premium version</string>
+    <string name="rate_message">If you enjoy using Acro Panda, please take a moment to rate it. Thanks for your support!</string>
+    <string name="rate_later">Remind me later</string>
+    <string name="rate_cancel">No, thanks</string>
+    <string name="rate">Rate Acro Panda</string>
 </resources>

@@ -1,5 +1,9 @@
 package com.pavlukhin.acropanda.bitmaputils.allochack;
 
+import android.util.Log;
+
+import com.pavlukhin.acropanda.PandaApplication;
+
 import java.lang.reflect.Method;
 
 /**
@@ -19,10 +23,9 @@ public class VMRuntimeHack {
             runtime = getRt.invoke(null);
             trackAllocation = cl.getMethod("trackExternalAllocation", long.class);
             trackFree = cl.getMethod("trackExternalFree", long.class);
-            System.out.println("Hacked runtime load successfully");
+            Log.d(PandaApplication.LOG_TAG, "Hacked runtime load successfully");
         } catch (Exception e) {
-            System.out.println("Exception hacking runtime");
-            e.printStackTrace();
+            Log.d(PandaApplication.LOG_TAG, "Exception hacking runtime", e);
             runtime = null;
             trackAllocation = null;
             trackFree = null;

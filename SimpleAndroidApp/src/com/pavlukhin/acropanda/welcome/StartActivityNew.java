@@ -76,6 +76,13 @@ public class StartActivityNew extends PandaBaseActivity {
         initMainTitle();
         initListeners();
         AppRater.onAppLaunched(this);
+        app().getBillingManager().init(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        app().getBillingManager().dispose();
     }
 
     private boolean isRepeativeLaunch() {

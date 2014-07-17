@@ -8,9 +8,15 @@ import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.WindowManager;
 
+import com.pavlukhin.acropanda.billing.BillingManager;
+import com.pavlukhin.acropanda.billing.util.IabException;
+import com.pavlukhin.acropanda.billing.util.IabHelper;
+import com.pavlukhin.acropanda.billing.util.IabResult;
+import com.pavlukhin.acropanda.billing.util.Inventory;
 import com.pavlukhin.acropanda.game.hero.Sprite;
 import com.pavlukhin.acropanda.game.level.LevelParser;
 import com.pavlukhin.acropanda.game.sound.MusicManager;
@@ -23,6 +29,7 @@ import java.io.InputStream;
 
 public class PandaApplication extends Application {
     public static final int ONE_FRAME_DURATION = 40;
+    public static final String LOG_TAG = "ACRO_PANDA";
     public int displayWidth;
     public int displayHeight;
 
@@ -34,6 +41,7 @@ public class PandaApplication extends Application {
     private Drawable background;
 
     private LevelParser levelParser;
+    private BillingManager billingManager;
 
 	private boolean sound = true;
 
@@ -62,9 +70,14 @@ public class PandaApplication extends Application {
         settingsModel = new SettingsModel(this);
         loading = Sprite.createStrict("menu/loader.png", 1, 12);
         loading.setAnimating(true);
+        billingManager = new BillingManager();
 
         initBackground();
 	}
+
+    public BillingManager getBillingManager() {
+        return billingManager;
+    }
 
     private void initBackground() {
         BitmapFactory.Options opts = new BitmapFactory.Options();
@@ -134,7 +147,7 @@ public class PandaApplication extends Application {
                         ONE_FRAME_DURATION);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(LOG_TAG, e.getMessage(), e);
         }
         return animation;
     }

@@ -7,6 +7,7 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -70,12 +71,12 @@ public class GameView extends SurfaceView {
         getHolder().addCallback(new SurfaceHolder.Callback() {
 			
 			public void surfaceDestroyed(SurfaceHolder holder) {
-				System.out.println("surfaceDestroyed");
+                Log.d(PandaApplication.LOG_TAG, "surfaceDestroyed");
                 control.stopManager();
 			}
 			
 			public void surfaceCreated(SurfaceHolder holder) {
-				System.out.println("surfaceCreated");
+                Log.d(PandaApplication.LOG_TAG, "surfaceCreated");
                 if(!initialized) {
                     initialized = true;
                     initBackground();
@@ -85,7 +86,7 @@ public class GameView extends SurfaceView {
 			}
 			
 			public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-				System.out.println("surfaceChanged");
+                Log.d(PandaApplication.LOG_TAG, "surfaceChanged");
 				control.getGameLoopThread().doDraw(false);
 			}
 		});
@@ -109,7 +110,7 @@ public class GameView extends SurfaceView {
                 retry = false;
             } catch (OutOfMemoryError oom) {
                 recycler.recycle();
-                System.err.println("Retry GameView.initBackground()");
+                Log.w(PandaApplication.LOG_TAG, "Retry GameView.initBackground()");
             }
         }
     }
