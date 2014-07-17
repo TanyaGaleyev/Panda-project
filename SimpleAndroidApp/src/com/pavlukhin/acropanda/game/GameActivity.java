@@ -24,6 +24,7 @@ import com.pavlukhin.acropanda.game.dialogs.LoseDialog;
 import com.pavlukhin.acropanda.game.tutorial.MessageTutorialGame;
 import com.pavlukhin.acropanda.game.tutorial.Solutions;
 import com.pavlukhin.acropanda.game.tutorial.TutorialMessages1;
+import com.pavlukhin.acropanda.game.tutorial.TutorialMessages12;
 import com.pavlukhin.acropanda.settings.SettingsInGamePanel;
 
 public class GameActivity extends PandaBaseActivity {
@@ -56,7 +57,7 @@ public class GameActivity extends PandaBaseActivity {
         });
         RelativeLayout contentPanel = (RelativeLayout) findViewById(R.id.game_content_panel);
         GameView gView = levid == 1 ? new MessageTutorialGame(this, new TutorialMessages1())
-                : levid == 12 ? new MessageTutorialGame(this, new TutorialMessages1()) : new GameView(this);
+                : levid == 12 ? new MessageTutorialGame(this, new TutorialMessages12()) : new GameView(this);
         contentPanel.addView(gView);
         gControl = gView.getControl();
         gControl.setLevId(levid);
