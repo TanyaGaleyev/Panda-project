@@ -172,6 +172,12 @@ public class StartActivity extends PandaBaseActivity {
 		super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == BUY_PREMIUM) {
             app().getBillingManager().handleActivityResult(requestCode, resultCode, data);
+            if(app().getBillingManager().checkPremium()) {
+                for (int id = 1; id <= levCount; id++) {
+                    if(isPremium(id))
+                        levButtons.get(id).setImageDrawable(getResources().getDrawable(R.drawable.chest_open));
+                }
+            }
         } else if(requestCode == ENTER_PACK && resultCode == RESULT_OK) {
             boolean setComplete = data.getBooleanExtra(LevelChooseActivity.SET_COMPLETE, false);
             int startedSet = data.getIntExtra(SET_ID, 0);
