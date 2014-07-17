@@ -3,7 +3,7 @@ package com.pavlukhin.acropanda.game.tutorial;
 /**
  * Created by Ivan on 06.06.2014.
  */
-public class TutorialMessages1 {
+public class TutorialMessages1 implements TutorialMessages {
     public static final String SLIDE_LEFT = "Slide left";
     public static final String SLIDE_RIGHT = "Slide right";
     public static final String SLIDE_UP = "Slide up";
@@ -18,6 +18,7 @@ public class TutorialMessages1 {
     public static final String FALL_FLY = "Slide up and than slide down to stop jumping";
 
 
+    @Override
     public String get(int i) {
         switch (i) {
             case 2: return SLIDE_LEFT;
