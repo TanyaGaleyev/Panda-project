@@ -89,45 +89,47 @@ public class StartActivity extends PandaBaseActivity {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
         float scale = getChestScale();
+        int lastFinishedSet = lastFinishedSet();
         for(int i = 0; i < levCount; i++) {
             if(i % PACKS_IN_ROW == 0) {
                 row = new TableRow(this);
                 buttonsPane.addView(row, rowParams);
             }
             ImageView levbtn = new ImageView(this);
-//            levbtn.setText(levelsCaptions[i]);
             final int id = i + 1;
-            Drawable packDrawable;
-            if(id <= lastFinishedSet() + 1 && canUnlockPack(id)) {
-                packDrawable = getResources().getDrawable(R.drawable.chest_open);
-                levbtn.setBackgroundDrawable(packDrawable);
-                levbtn.setEnabled(true);
-            } else if(canUnlockPack(id)) {
-                packDrawable = getResources().getDrawable(R.drawable.chest_close);
-                levbtn.setBackgroundDrawable(packDrawable);
-                // FIXME closed chest buttons should be disabled in the release version
-//                levbtn.setEnabled(false);
-            } else {
-                packDrawable = getResources().getDrawable(R.drawable.chest_paid);
-                levbtn.setBackgroundDrawable(packDrawable);
-            }
+            Drawable packDrawable = getPackIcon(lastFinishedSet, id);
+            levbtn.setBackgroundDrawable(packDrawable);
             levbtn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     onPackClicked(id);
                 }
             });
             LinearLayout ll = new LinearLayout(this);
-            int m = (int) (app().displayHeight * 0.01f);
-            TableRow.LayoutParams lp = new TableRow.LayoutParams(
-                    (int) (baseChestWidth * scale) + 2 * m, (int) (baseChestHeight * scale) + 2 * m);
-            lp.gravity = Gravity.CENTER;
-            ll.addView(levbtn, createPackLayoutParams(
+            ll.addView(levbtn, createPackLP(
                     packDrawable.getIntrinsicWidth(),
                     packDrawable.getIntrinsicHeight(),
                     scale));
-            row.addView(ll, lp);
+            row.addView(ll, createPackCellLP(scale));
             levButtons.put(id, levbtn);
         }
+    }
+
+    private Drawable getPackIcon(int lastFinishedSet, int id) {
+        Drawable packDrawable;
+        if(isPremium(id))  {
+           packDrawable = app().getBillingManager().checkPremium()
+                   ? getResources().getDrawable(R.drawable.chest_open)
+                   : getResources().getDrawable(R.drawable.chest_paid);
+        } else {
+          packDrawable = id <= lastFinishedSet + 1
+                  ? getResources().getDrawable(R.drawable.chest_open)
+                  : getResources().getDrawable(R.drawable.chest_close);
+        }
+        return packDrawable;
+    }
+
+    private boolean isPremium(int id) {
+        return id > FREE_PACKS_COUNT;
     }
 
     private float getChestScale() {
@@ -143,7 +145,15 @@ public class StartActivity extends PandaBaseActivity {
         }
     }
 
-    private TableRow.LayoutParams createPackLayoutParams(int width, int height, float scale) {
+    private TableRow.LayoutParams createPackCellLP(float scale) {
+        int m = (int) (app().displayHeight * 0.01f);
+        TableRow.LayoutParams lp = new TableRow.LayoutParams(
+                (int) (baseChestWidth * scale) + 2 * m, (int) (baseChestHeight * scale) + 2 * m);
+        lp.gravity = Gravity.CENTER;
+        return lp;
+    }
+
+    private TableRow.LayoutParams createPackLP(int width, int height, float scale) {
         TableRow.LayoutParams packButtonParam =
                 new TableRow.LayoutParams((int) (width * scale), (int) (height * scale));
 //        int m = (int) (app().displayHeight * 0.015f);
@@ -167,7 +177,7 @@ public class StartActivity extends PandaBaseActivity {
             int startedSet = data.getIntExtra(SET_ID, 0);
             int packToOpenId = startedSet + 1;
             final ImageView packToOpen = levButtons.get(packToOpenId);
-            if (setComplete && canUnlockPack(packToOpenId) && packToOpen != null) {
+            if (setComplete && packToOpen != null && !isPremium(packToOpenId)) {
                 final AnimationDrawable chestOpening =
                         app().loadAnimationFromFolder("animations/menu/pack_opening");
                 chestOpening.setOneShot(true);
@@ -189,14 +199,18 @@ public class StartActivity extends PandaBaseActivity {
 		}
 	}
 
-    private boolean canUnlockPack(int packId) {
-        return packId <= FREE_PACKS_COUNT || app().getBillingManager().checkPremium();
+    private void onPackClicked(int packId) {
+        if(isPremium(packId)) {
+            onPremiumPackClicked(packId);
+        } else {
+            onFreePackClicked(packId);
+        }
     }
 
-    private void onPackClicked(int packId) {
-        if(canUnlockPack(packId)) {
+    private void onPremiumPackClicked(int packId) {
+        if(app().getBillingManager().checkPremium())
             startPack(packId);
-        } else {
+        else {
             BuyPremiumDialog buyPremiumDialog = new BuyPremiumDialog(this, app().getBillingManager(), BUY_PREMIUM);
             // FIXME this is for testing purposes, should be removed in release version
             final int packId2 = packId;
@@ -208,6 +222,12 @@ public class StartActivity extends PandaBaseActivity {
             });
             buyPremiumDialog.show();
         }
+    }
+
+    private void onFreePackClicked(int packId) {
+        // FIXME in release version should be uncommented
+//        if(packId <= lastFinishedSet() + 1)
+            startPack(packId);
     }
 
     private void startPack(int packId) {
