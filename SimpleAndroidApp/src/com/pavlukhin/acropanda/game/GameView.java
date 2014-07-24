@@ -156,8 +156,14 @@ public class GameView extends SurfaceView {
 	public void draw(Canvas canvas) {
 		draw(canvas, false);
 	}
-	
+
+//    private float scale = 1f;
+//    private float dScale = 0.02f;
 	public void draw(Canvas canvas, boolean update) {
+//        if(dScale > 0 && scale >= 2f) dScale = -dScale;
+//        if(dScale < 0 && scale <= 1f) dScale = -dScale;
+//        scale += dScale;
+//        canvas.scale(scale, scale, hero.x, hero.y);
 		canvas.drawColor(0xFFB6D76E);
 //        bgr.draw(canvas);
         canvas.drawBitmap(background, 0, 0, backgroundPaint);
