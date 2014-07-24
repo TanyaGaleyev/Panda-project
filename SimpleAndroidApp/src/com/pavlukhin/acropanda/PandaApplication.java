@@ -13,10 +13,8 @@ import android.util.TypedValue;
 import android.view.WindowManager;
 
 import com.pavlukhin.acropanda.billing.BillingManager;
-import com.pavlukhin.acropanda.billing.util.IabException;
-import com.pavlukhin.acropanda.billing.util.IabHelper;
-import com.pavlukhin.acropanda.billing.util.IabResult;
-import com.pavlukhin.acropanda.billing.util.Inventory;
+import com.pavlukhin.acropanda.billing.EmptyBillingManager;
+import com.pavlukhin.acropanda.billing.IBillingManager;
 import com.pavlukhin.acropanda.game.hero.Sprite;
 import com.pavlukhin.acropanda.game.level.LevelParser;
 import com.pavlukhin.acropanda.game.sound.MusicManager;
@@ -41,7 +39,7 @@ public class PandaApplication extends Application {
     private Drawable background;
 
     private LevelParser levelParser;
-    private BillingManager billingManager;
+    private IBillingManager billingManager;
 
 	private boolean sound = true;
 
@@ -70,12 +68,13 @@ public class PandaApplication extends Application {
         settingsModel = new SettingsModel(this);
         loading = Sprite.createStrict("menu/loader.png", 1, 12);
         loading.setAnimating(true);
-        billingManager = new BillingManager();
+//        billingManager = new BillingManager();
+        billingManager = new EmptyBillingManager();
 
         initBackground();
 	}
 
-    public BillingManager getBillingManager() {
+    public IBillingManager getBillingManager() {
         return billingManager;
     }
 

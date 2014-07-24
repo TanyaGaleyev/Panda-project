@@ -1,7 +1,6 @@
 package com.pavlukhin.acropanda.billing;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.view.View;
 
 import com.pavlukhin.acropanda.PandaBaseActivity;
@@ -14,11 +13,11 @@ import com.pavlukhin.acropanda.utils.UIUtils;
 public class BuyPremiumDialog extends Dialog {
     private View buy;
     private View cancel;
-    private BillingManager billing;
+    private IBillingManager billing;
     private PandaBaseActivity context;
     private int requestCode;
 
-    public BuyPremiumDialog(PandaBaseActivity context, BillingManager billing, int requestCode) {
+    public BuyPremiumDialog(PandaBaseActivity context, IBillingManager billing, int requestCode) {
         super(context);
         this.billing = billing;
         this.context = context;

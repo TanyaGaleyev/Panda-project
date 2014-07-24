@@ -15,7 +15,7 @@ import com.pavlukhin.acropanda.billing.util.Purchase;
 /**
  * Created by ivan on 08.07.2014.
  */
-public class BillingManager {
+public class BillingManager implements IBillingManager {
 
     public static final String PREMIUM_SKU = "premium_upgrade";
     private IabHelper billingHelper;
@@ -25,6 +25,7 @@ public class BillingManager {
         return "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAr4l/hhOJeiJcLQtVSd/a+jjHs/z0hN1cEbiG3byjJMxSpnlcUxv6P5Pm54W8zemqsTdsX0e4g3/x0V/wiENHkosQLgBGLtLQBHzLYbLxfGgkGDmaq3C68IyzQuV8zGr+vPD/GR4Rk6HCyK1k5EDWznm4AeJia55BNSA+iQc0tVrSSXWJ2AD+FgvEPnRZKGdH94uMyKRNGKIMRX83eFw8T2r8vCqEp5t03i9ecVJxP3AKtAGjMU4y3VLA/yjCV3x0RtVelO9TIsARe601/sIlQQrrQoVGnS6BKRgovyr4T4AH5Sro5n2yw7DcWbXyByNjnj7U8bq/wIrxPeXZUlvjNwIDAQAB";
     }
 
+    @Override
     public void init(Context context) {
         billingHelper = new IabHelper(context, publicKey());
         billingHelper.enableDebugLogging(true);
@@ -42,10 +43,12 @@ public class BillingManager {
         });
     }
 
+    @Override
     public void dispose() {
         if(billingHelper != null) billingHelper.dispose();
     }
 
+    @Override
     public boolean checkPremium() {
         boolean ret = false;
         try {
@@ -57,6 +60,7 @@ public class BillingManager {
         return ret;
     }
 
+    @Override
     public void buyPremium(Activity caller, int requestCode) {
         if(setupOk) {
             billingHelper.launchPurchaseFlow(caller, PREMIUM_SKU, requestCode, new IabHelper.OnIabPurchaseFinishedListener() {
@@ -75,6 +79,7 @@ public class BillingManager {
         }
     }
 
+    @Override
     public boolean handleActivityResult(int requestCode, int resultCode, Intent data) {
         return billingHelper.handleActivityResult(requestCode, resultCode, data);
     }
