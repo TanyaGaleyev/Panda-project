@@ -2,30 +2,43 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/rate_message"
-        android:id="@+id/textView" />
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/rate_message"-->
+        <!--android:id="@+id/textView"/>-->
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/rate"
-        android:id="@+id/rate_btn" />
+        android:id="@+id/rate_btn"
+        android:background="@drawable/settings_border"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/rate_later"
-        android:id="@+id/rate_later_btn" />
+        android:id="@+id/rate_later_btn"
+        android:background="@drawable/settings_border"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/rate_cancel"
-        android:id="@+id/rate_cancel_btn" />
+        android:id="@+id/rate_cancel_btn"
+        android:background="@drawable/settings_border"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"/>
 </LinearLayout>

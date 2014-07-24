@@ -1,15 +1,12 @@
-package com.pavlukhin.acropanda.utils;
+package com.pavlukhin.acropanda.rate;
 
-import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.view.View;
 
-import com.pavlukhin.acropanda.PandaApplication;
-import com.pavlukhin.acropanda.R;
+import com.pavlukhin.acropanda.PandaBaseActivity;
 
 /**
  * Created by ivan on 01.07.2014.
@@ -22,8 +19,9 @@ import com.pavlukhin.acropanda.R;
 public class AppRater {
     public static final String MARKER_HEADER = "market://details?id=";
     public static final String GOOGLE_PLAY_HEADER = "http://play.google.com/store/apps/details?id=";
+    // FIXME in release version we need put right tuning to this constants
     public static final int DAYS_UNTIL_PROMPT = 0;
-    public static final int LAUNCHES_UNTIL_PROMPT = 3;
+    public static final int LAUNCHES_UNTIL_PROMPT = 1;
 
     private static interface PrefsConsts {
         String PREFS_KEY = "apprater";
@@ -32,18 +30,19 @@ public class AppRater {
         String LAUNCH_COUNT = "launch_count";
     }
 
-    public static void onAppLaunched(Context context) {
+    public static void onAppLaunched(PandaBaseActivity context) {
         SharedPreferences prefs = raterPrefs(context);
         if (!prefs.getBoolean(PrefsConsts.PREFS_KEY, false)) {
             updateLaunchesInfo(prefs);
             if (isTimeToRate(prefs)) {
-                showRateDialog(context, prefs);
+                showRateDialog(context);
             }
         }
     }
 
     public static boolean isTimeToRate(SharedPreferences prefs) {
-        return prefs.getLong(PrefsConsts.LAUNCH_COUNT, 0) % LAUNCHES_UNTIL_PROMPT == 0 &&
+        return !prefs.getBoolean(PrefsConsts.DONT_SHOW_AGAIN, false) &&
+                prefs.getLong(PrefsConsts.LAUNCH_COUNT, 0) % LAUNCHES_UNTIL_PROMPT == 0 &&
                 System.currentTimeMillis() >= prefs.getLong(PrefsConsts.FIRST_LAUNCH, 0) + (DAYS_UNTIL_PROMPT * 24 * 60 * 60 * 1000);
     }
 
@@ -65,38 +64,12 @@ public class AppRater {
         return context.getSharedPreferences(PrefsConsts.PREFS_KEY, Context.MODE_PRIVATE);
     }
 
-    public static void showRateDialog(final Context context, final SharedPreferences prefs) {
-        final Dialog dialog = new Dialog(context);
-        dialog.setTitle(context.getResources().getString(R.string.rate));
-        dialog.setContentView(R.layout.rate_this_app);
-        dialog.findViewById(R.id.rate_btn).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                rate(context);
-                dontShowAgain(prefs);
-                dialog.dismiss();
-            }
-        });
-        dialog.findViewById(R.id.rate_later_btn).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.findViewById(R.id.rate_cancel_btn).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                dontShowAgain(prefs);
-                dialog.dismiss();
-            }
-        });
-        UIUtils.setDefaultFont(
-                PandaApplication.getPandaApplication().getFontProvider().regular(),
-                dialog.findViewById(android.R.id.content));
-        UIUtils.setDefaultFont(
-                PandaApplication.getPandaApplication().getFontProvider().regular(),
-                dialog.findViewById(android.R.id.title));
-        dialog.show();
+    public static void showRateDialog(final PandaBaseActivity context) {
+        new RateDialog(context).show();
     }
 
-    public static void dontShowAgain(SharedPreferences prefs) {
+    public static void dontShowAgain(Context context) {
+        SharedPreferences prefs = raterPrefs(context);
         SharedPreferences.Editor editor = prefs.edit();
         if (editor != null) {
             editor.putBoolean(PrefsConsts.DONT_SHOW_AGAIN, true);
