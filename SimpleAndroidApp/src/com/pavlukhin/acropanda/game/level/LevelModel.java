@@ -1,6 +1,7 @@
 package com.pavlukhin.acropanda.game.level;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,10 +33,25 @@ public class LevelModel {
 	private Map<Platform, PlatformCellPair> leftRightTpDestMap;
 	private Map<Platform, PlatformCellPair> floorTpDestMap;
 	private List<Platform> switchList = new ArrayList<Platform>();
-	private List<Platform> unlockList = new ArrayList<Platform>();
+	private List<OrderPlatform> unlockList = new ArrayList<OrderPlatform>();
 	private int steps = 0;
 
-    private class PlatformCellPair {
+    private static class OrderPlatform implements Comparable<OrderPlatform> {
+        int order;
+        Platform p;
+
+        private OrderPlatform(Platform p, int order) {
+            this.p = p;
+            this.order = order;
+        }
+
+        @Override
+        public int compareTo(OrderPlatform another) {
+            return this.order > another.order ? 1 : this.order == another.order ? 0 : -1;
+        }
+    }
+
+    private static class PlatformCellPair {
         Platform p;
         CellCoords c;
 
@@ -114,32 +130,33 @@ public class LevelModel {
 
     private void initStatePlatforms(Map<Platform, int[]> platformMetaMap) {
         for (LevelGrid.VerticalPlatformCoords vp : levelGrid.verticalPlatforms()) {
-            initStatus(vp.getPlatform(), platformMetaMap);
-            addToSpecialLists(vp.getPlatform());
+            initStatus(vp.getPlatform(), platformMetaMap.get(vp.getPlatform()));
+            addToSpecialLists(vp.getPlatform(), platformMetaMap.get(vp.getPlatform()));
         }
         for (LevelGrid.HorizontalPlatformCoords hp : levelGrid.horizontalPlatforms()) {
-            initStatus(hp.getPlatform(), platformMetaMap);
-            addToSpecialLists(hp.getPlatform());
+            initStatus(hp.getPlatform(), platformMetaMap.get(hp.getPlatform()));
+            addToSpecialLists(hp.getPlatform(), platformMetaMap.get(hp.getPlatform()));
         }
+        Collections.sort(unlockList);
     }
 
-    private void addToSpecialLists(Platform p) {
+    private void addToSpecialLists(Platform p, int[] platformMeta) {
         if (p.getType() == PlatformType.SWITCH) {
             switchList.add(p);
         }
         if (p.getType() == PlatformType.UNLOCK || p.getType() == PlatformType.UNLOCK_H) {
-            unlockList.add(p);
+            int order = platformMeta.length > 1 ? platformMeta[1] : 0;
+            unlockList.add(new OrderPlatform(p, order));
         }
     }
 
-    private void initStatus(Platform wall, Map<Platform, int[]> platformMetaMap) {
+    private void initStatus(Platform wall, int[] platformMeta) {
         PlatformType type = wall.getType();
-        int[] meta = platformMetaMap.get(wall);
-        if(meta.length > 1 &&
+        if(platformMeta.length > 1 &&
                 (type == PlatformType.LIMIT || type == PlatformType.REDUCE ||
                 type == PlatformType.BRICK || type == PlatformType.BRICK_V ||
                 type == PlatformType.SWITCH)) {
-            wall.setStatus(meta[1]);
+            wall.setStatus(platformMeta[1]);
         }
     }
 
@@ -821,7 +838,7 @@ public class LevelModel {
 		for(Platform wall : switchList) {
 			if(wall.getStatus() != status) return false;
 		}
-		unlockList.get(0).unlock();
+		unlockList.get(0).p.unlock();
 		unlockList.remove(0);
 		return true;
 	}
