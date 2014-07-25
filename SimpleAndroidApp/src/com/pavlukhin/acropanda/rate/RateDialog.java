@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.pavlukhin.acropanda.PandaBaseActivity;
 import com.pavlukhin.acropanda.R;
+import com.pavlukhin.acropanda.utils.DialogsCalculator;
 import com.pavlukhin.acropanda.utils.UIUtils;
 
 /**
@@ -20,19 +21,17 @@ import com.pavlukhin.acropanda.utils.UIUtils;
  */
 public class RateDialog extends Dialog {
     public static final float ICON_PERCENT = 1.00f;
-    public static final float TEXT_SIZE_PERCENT = 0.5f;
-    public static final float BTN_HEIGHT_PERCENT = 0.13f;
-    public static final float BTN_WIDTH_TO_HEIGHT_RATIO = 7f;
-    public static final int TITLE_COLOR = 0xFF34B5E5;
     private Button rate;
     private Button later;
     private Button cancel;
     private TextView title;
     private final PandaBaseActivity pContext;
+    private DialogsCalculator dc;
 
     public RateDialog(PandaBaseActivity context) {
         super(context);
         pContext = context;
+        dc = new DialogsCalculator(pContext);
         findViews();
         initLayout();
         initListeners();
@@ -49,11 +48,11 @@ public class RateDialog extends Dialog {
     private void initLayout() {
         setTitle(getContext().getResources().getString(R.string.rate));
         title.setGravity(Gravity.CENTER);
-        title.setTextColor(TITLE_COLOR);
-        title.setTextSize(TypedValue.COMPLEX_UNIT_PX, btnHeight() * TEXT_SIZE_PERCENT);
+        title.setTextColor(DialogsCalculator.TITLE_COLOR);
+        title.setTextSize(TypedValue.COMPLEX_UNIT_PX, dc.titleTextSize());
         getWindow().setBackgroundDrawableResource(R.drawable.settings_border);
         getWindow().setLayout(
-                (int) (pContext.app().displayHeight * BTN_HEIGHT_PERCENT * BTN_WIDTH_TO_HEIGHT_RATIO),
+                (int) (dc.btnWidth()),
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         setOnShowListener(new OnShowListener() {
             @Override
@@ -71,10 +70,6 @@ public class RateDialog extends Dialog {
                 findViewById(android.R.id.title));
     }
 
-    private float btnHeight() {
-        return pContext.app().displayHeight * BTN_HEIGHT_PERCENT;
-    }
-
     private void prepareButton(Button btn, int resId) {
         prepareButton(btn, getContext().getResources().getDrawable(resId));
     }
@@ -86,14 +81,13 @@ public class RateDialog extends Dialog {
     }
 
     private void prepareButton(Button btn, Drawable icon) {
-        float btnHeight = btnHeight();
-        btn.setHeight((int) btnHeight);
-        btn.setTextSize(TypedValue.COMPLEX_UNIT_PX, btnHeight * TEXT_SIZE_PERCENT);
+        btn.setHeight((int) dc.btnHeight());
+        btn.setTextSize(TypedValue.COMPLEX_UNIT_PX, dc.btnTextSize());
         setLeftIcon(btn, icon);
     }
 
     private void setLeftIcon(Button btn, Drawable icon) {
-        int h =  (int) (pContext.app().displayHeight * BTN_HEIGHT_PERCENT);
+        int h =  (int) dc.btnHeight();
         float iconHeight = h * ICON_PERCENT;
         int margin = (int) ((h - iconHeight) / 2);
         float scale = iconHeight / icon.getIntrinsicHeight();

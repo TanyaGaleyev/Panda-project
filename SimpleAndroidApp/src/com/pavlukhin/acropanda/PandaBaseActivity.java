@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pavlukhin.acropanda.settings.SettingsPanel;
+import com.pavlukhin.acropanda.utils.DialogsCalculator;
 
 public abstract class PandaBaseActivity extends Activity {
 
@@ -67,7 +68,7 @@ public abstract class PandaBaseActivity extends Activity {
         settingsDialog.getWindow().setBackgroundDrawableResource(R.drawable.settings_border);
         TextView titleView = (TextView) settingsDialog.findViewById(android.R.id.title);
         titleView.setTypeface(app().getFontProvider().bold());
-        titleView.setTextColor(Color.DKGRAY);
+        titleView.setTextColor(DialogsCalculator.TITLE_COLOR);
 //        titleView.setBackgroundResource(R.drawable.settings_border);
         settingsDialog.setCanceledOnTouchOutside(true);
         settingsDialog.getWindow().setLayout(
