@@ -29,6 +29,13 @@ android {
 
         instrumentTest.setRoot('tests')
     }
+
+    buildTypes {
+        release {
+//            runProguard true
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
 }
 
 def runScript(String path) {
