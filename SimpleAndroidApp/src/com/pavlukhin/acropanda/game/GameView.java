@@ -105,8 +105,9 @@ public class GameView extends SurfaceView {
         boolean retry = true;
         while (retry) {
             try {
-                background = imageProvider().getBackground(
-                        BackgroundFactory.getGameBackgroundPath(control.levId), getWidth(), getHeight());
+                String backgroundPath = BackgroundFactory.getGameBackgroundPath(
+                        control.packId, control.inPackPos, control.levId);
+                background = imageProvider().getBackground(backgroundPath, getWidth(), getHeight());
                 retry = false;
             } catch (OutOfMemoryError oom) {
                 recycler.recycle();

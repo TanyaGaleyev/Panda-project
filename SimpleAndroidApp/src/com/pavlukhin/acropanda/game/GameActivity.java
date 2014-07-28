@@ -31,7 +31,6 @@ public class GameActivity extends PandaBaseActivity {
 
     public static final String PAUSE_TITLE = "Pause";
     private GameControl gControl;
-	private int levid;
     private Dialog tutorialDialog;
     private LoseDialog loseDialog;
 
@@ -39,7 +38,9 @@ public class GameActivity extends PandaBaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        levid = intent.getIntExtra(LevelChooseActivity.LEVEL_ID, 0);
+        int levid = intent.getIntExtra(LevelChooseActivity.LEVEL_ID, 0);
+        int packId = intent.getIntExtra(LevelChooseActivity.PACK_ID, 0);
+        int inPackPos = intent.getIntExtra(LevelChooseActivity.IN_PACK_POS, 0);
         setContentView(R.layout.activity_main);
         View settingsBtn = prepare(findViewById(R.id.game_settings));
         settingsBtn.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +61,7 @@ public class GameActivity extends PandaBaseActivity {
                 : levid == 12 ? new MessageTutorialGame(this, new TutorialMessages12()) : new GameView(this);
         contentPanel.addView(gView);
         gControl = gView.getControl();
-        gControl.setLevId(levid);
+        gControl.setLevId(levid, packId, inPackPos);
         settingsBtn.bringToFront();
         helpBtn.bringToFront();
         app().getSettingsModel().registerControlChangeObserver(gControl);
@@ -135,7 +136,7 @@ public class GameActivity extends PandaBaseActivity {
         tutorialDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         tutorialDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         GameView nestedGame = new GameView(this);
-        nestedGame.getControl().setLevId(-1);
+        nestedGame.getControl().setLevId(-1, -1, -1);
         nestedGame.getControl().setAutoControls(Solutions.getDemo(type));
         tutorialDialog.setContentView(R.layout.tutorial_dialog);
         ((RelativeLayout) tutorialDialog.findViewById(R.id.tutorial_content_panel)).addView(nestedGame);

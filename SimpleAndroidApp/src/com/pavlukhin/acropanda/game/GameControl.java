@@ -33,12 +33,16 @@ public class GameControl implements ControlChangeObserver {
 
 	private SoundControl soundControl;
     protected int levId = 0;
+    protected int packId = 0;
+    protected int inPackPos = 0;
     protected boolean finished = false;
     protected boolean monsterLose = false;
     protected int loseDelay = 3;
 
-    protected void setLevId(int levId) {
+    protected void setLevId(int levId, int packId, int inPackPos) {
         this.levId = levId;
+        this.packId = packId;
+        this.inPackPos = inPackPos;
     }
 
     public GameControl(final GameView view) {

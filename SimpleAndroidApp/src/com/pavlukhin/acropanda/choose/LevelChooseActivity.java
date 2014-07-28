@@ -14,12 +14,15 @@ import com.pavlukhin.acropanda.PandaBaseActivity;
 import com.pavlukhin.acropanda.R;
 import com.pavlukhin.acropanda.achievements.Achievement;
 import com.pavlukhin.acropanda.achievements.AchievementsDirectories;
+import com.pavlukhin.acropanda.game.GameActivity;
 import com.pavlukhin.acropanda.game.scores.Scores;
 import com.pavlukhin.acropanda.utils.PandaButtonsPanel;
 import com.pavlukhin.acropanda.welcome.StartActivity;
 
 public class LevelChooseActivity extends PandaBaseActivity {
 	public static final String LEVEL_ID = "levId";
+	public static final String PACK_ID = "packId";
+	public static final String IN_PACK_POS = "inPackPos";
 	public static final String LEVEL_COMPLETE = "complete";
 	public static final String COMPLETE_SCORE = "score";
 	public static final String SET_COMPLETE = "set complete";
@@ -65,7 +68,7 @@ public class LevelChooseActivity extends PandaBaseActivity {
         spec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                view.startLevel(777);
+                startLevel(777, 777);
             }
         });
         backBtn.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +84,14 @@ public class LevelChooseActivity extends PandaBaseActivity {
             }
         });
 	}
+
+    protected void startLevel(int levId, int pos) {
+        Intent intent = new Intent(this, GameActivity.class);
+        intent.putExtra(LEVEL_ID, levId);
+        intent.putExtra(PACK_ID, levelsSetId);
+        intent.putExtra(IN_PACK_POS, pos);
+        startActivityForResult(intent, FINISHED_LEVEL_ID);
+    }
 
     @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

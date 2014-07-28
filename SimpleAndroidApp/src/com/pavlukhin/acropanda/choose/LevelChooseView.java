@@ -354,7 +354,7 @@ public class LevelChooseView extends SurfaceView {
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... voids) {
-                    startLevel(chosenLevel.levelId);
+                    context.startLevel(chosenLevel.levelId, levelPos(chosenLevel));
                     return null;
                 }
             }.execute();
@@ -363,6 +363,10 @@ public class LevelChooseView extends SurfaceView {
         }
 		return true;
 	}
+
+    private int levelPos(ChosenLevel cl) {
+        return cl.levelY * levels[cl.levelY].length + cl.levelX + 1;
+    }
 
     private UserControlType checkMoveDirection(UserControlType tempAction, int levelX, int levelY) {
         switch(tempAction) {
@@ -382,12 +386,6 @@ public class LevelChooseView extends SurfaceView {
                 break;
         }
         return tempAction;
-    }
-
-    void startLevel(int levId) {
-        Intent intent = new Intent(context, GameActivity.class);
-        intent.putExtra(LevelChooseActivity.LEVEL_ID, levId);
-        context.startActivityForResult(intent, LevelChooseActivity.FINISHED_LEVEL_ID);
     }
 
     private static class ChosenLevel {
@@ -510,6 +508,10 @@ public class LevelChooseView extends SurfaceView {
 	}
 	
 	private void setFinishedLevels(String finishedArray) {
+        finishedLevels = new int[levels.length][];
+        for(int i = 0; i < levels.length; i++) {
+            finishedLevels[i] = new int[levels[i].length];
+        }
 		StringTokenizer st = new StringTokenizer(finishedArray, ",");
 		for(int i = 0; i < levels.length; i++) {
 			for(int j = 0; j < levels[i].length; j++) {
@@ -527,10 +529,6 @@ public class LevelChooseView extends SurfaceView {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-        finishedLevels = new int[levels.length][];
-		for(int i = 0; i < levels.length; i++) {
-			finishedLevels[i] = new int[levels[i].length];
-		}
 	}
 
     public void releaseResources() {
