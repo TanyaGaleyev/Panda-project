@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/buy_premium_message"
+        android:textColor="#000"
         android:id="@+id/message" />
 
     <LinearLayout
@@ -33,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="5"
             android:text="@string/cancel_buy_premium_button"
+            android:textColor="#000"
             android:id="@+id/cancel"
             android:background="@drawable/button_border"
             android:layout_marginLeft="5dp"
