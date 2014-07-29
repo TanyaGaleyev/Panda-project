@@ -18,7 +18,7 @@
         <activity
             android:name=".game.GameActivity"
             android:label="@string/activity_title"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -28,7 +28,7 @@
         <activity
             android:name=".welcome.StartActivityNew"
             android:label="@string/activity_title"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,7 +40,7 @@
         <activity
             android:name=".welcome.StartActivity"
             android:label="@string/activity_title"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -50,7 +50,7 @@
         <activity
             android:name=".choose.LevelChooseActivity"
             android:label="@string/activity_title"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -60,7 +60,7 @@
         <activity
             android:name=".game.pause.PauseActivity"
             android:label="@string/activity_title"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="sensorLandscape" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.ivan.simple.game.GameActivity" />
@@ -69,7 +69,7 @@
         <activity
             android:name=".achievements.AchievementsActivity"
             android:label="@string/activity_title"
-            android:screenOrientation="landscape">
+            android:screenOrientation="sensorLandscape">
         </activity>
     </application>
     
