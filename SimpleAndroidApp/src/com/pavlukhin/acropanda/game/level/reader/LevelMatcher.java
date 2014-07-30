@@ -1,4 +1,4 @@
-package com.pavlukhin.acropanda.game.level;
+package com.pavlukhin.acropanda.game.level.reader;
 
 /**
  * Created by ivan on 13.05.2014.

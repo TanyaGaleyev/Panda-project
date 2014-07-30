@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.pavlukhin.acropanda.UserControlType;
+import com.pavlukhin.acropanda.game.level.reader.LevelInfo;
+import com.pavlukhin.acropanda.game.level.reader.LevelParser;
 import com.pavlukhin.acropanda.game.motion.ContainerMotion;
 import com.pavlukhin.acropanda.game.motion.Motion;
 import com.pavlukhin.acropanda.game.motion.MotionType;

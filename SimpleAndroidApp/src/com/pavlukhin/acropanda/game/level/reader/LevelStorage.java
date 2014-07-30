@@ -1,4 +1,4 @@
-package com.pavlukhin.acropanda.game.level;
+package com.pavlukhin.acropanda.game.level.reader;
 public class LevelStorage {
     private LevelStorage() {}
 	public int[][][] getLevels(int setid) {

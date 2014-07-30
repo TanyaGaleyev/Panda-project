@@ -1,5 +1,6 @@
-package com.pavlukhin.acropanda.game.level;
+package com.pavlukhin.acropanda.game.level.reader;
 
+import com.pavlukhin.acropanda.game.level.CellCoords;
 import com.pavlukhin.acropanda.game.scores.ScoreStruct;
 
 /**

@@ -1,16 +1,17 @@
-package com.pavlukhin.acropanda.game.level;
+package com.pavlukhin.acropanda.game.level.reader;
 
 import android.content.Context;
 import android.content.res.AssetManager;
 
+import com.pavlukhin.acropanda.game.level.CellCoords;
 import com.pavlukhin.acropanda.game.scores.ScoreStruct;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class LevelParser {
     public static final String LEVELS_BASEDIR = "levels/";
     public static final String MONSTER_TYPE_KEY = "monsterType";
     private final AssetManager assets;
+    private final Decrypter decrypter = new StubDecrypter();
 
     public LevelParser(Context context) {
         this.assets = context.getAssets();
@@ -54,18 +56,18 @@ public class LevelParser {
     }
 
     private String readAsset(String path) throws IOException {
-        BufferedReader br = null;
+        BufferedInputStream bis = null;
         try {
-            br = new BufferedReader(new InputStreamReader(assets.open(path)));
-            char[] buf = new char[1024];
+            bis = new BufferedInputStream(assets.open(path));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] buf = new byte[1024];
             int nread;
-            StringBuilder sb = new StringBuilder();
-            while ((nread = br.read(buf)) != -1) {
-                sb.append(buf, 0, nread);
+            while ((nread = bis.read(buf)) != -1) {
+                baos.write(buf, 0, nread);
             }
-            return sb.toString();
+            return new String(decrypter.decrypt(baos.toByteArray()));
         } finally {
-            if(br != null) br.close();
+            if(bis != null) bis.close();
         }
     }
 

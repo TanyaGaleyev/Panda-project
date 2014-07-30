@@ -12,11 +12,10 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.WindowManager;
 
-import com.pavlukhin.acropanda.billing.BillingManager;
 import com.pavlukhin.acropanda.billing.EmptyBillingManager;
 import com.pavlukhin.acropanda.billing.IBillingManager;
 import com.pavlukhin.acropanda.game.hero.Sprite;
-import com.pavlukhin.acropanda.game.level.LevelParser;
+import com.pavlukhin.acropanda.game.level.reader.LevelParser;
 import com.pavlukhin.acropanda.game.sound.MusicManager;
 import com.pavlukhin.acropanda.game.sound.SoundManager;
 import com.pavlukhin.acropanda.settings.SettingsModel;

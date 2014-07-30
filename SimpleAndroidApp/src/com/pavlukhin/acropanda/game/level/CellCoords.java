@@ -7,7 +7,7 @@ public class CellCoords {
     public int i;
     public int j;
 
-    CellCoords(int i, int j) {
+    public CellCoords(int i, int j) {
         this.i = i;
         this.j = j;
     }
