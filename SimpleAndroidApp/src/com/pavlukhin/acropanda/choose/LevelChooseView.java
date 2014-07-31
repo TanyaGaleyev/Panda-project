@@ -17,6 +17,7 @@ import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -187,7 +188,8 @@ public class LevelChooseView extends SurfaceView {
 //        } catch (XmlPullParserException e) {
 //            bgr = new ColorBackground();
 //        }
-        background = imageProvider().getBackground(backgroundId, getWidth(), getHeight());
+//        background = imageProvider().getBackground(backgroundId, getWidth(), getHeight());
+        background = ((BitmapDrawable) context.app().getBackground()).getBitmap();
         border = imageProvider().getBitmapAutoResizeStrictCache("menu/border.png");
         marker = imageProvider().getBitmapAutoResizeStrictCache("menu/single_panda.png");
         highscore = imageProvider().getBitmapAutoResizeStrictCache("menu/high_score.png");
@@ -532,7 +534,7 @@ public class LevelChooseView extends SurfaceView {
 	}
 
     public void releaseResources() {
-        if(background != null) imageProvider().free(background);
+//        if(background != null) imageProvider().free(background);
     }
 	
 	private class Redrawer extends Thread {

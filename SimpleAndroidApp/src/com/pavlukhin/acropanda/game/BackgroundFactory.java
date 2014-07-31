@@ -4,7 +4,7 @@ package com.pavlukhin.acropanda.game;
  * Created by Ivan on 20.06.2014.
  */
 public class BackgroundFactory {
-    private static final int BACKGROUNDS_IN_PACK = 3;
+    private static final int BACKGROUNDS_IN_PACK = 2;
     /**
      *
      * @param packId levels pack identifier
@@ -19,9 +19,7 @@ public class BackgroundFactory {
 
     public static String getChooseBackgroundPath(int packId) {
         switch(packId) {
-            case 1: return "background/background_c_1.jpg";
-            case 2: return "background/background_c_2.jpg";
-            default:return "background/background_c_1.jpg";
+            default:return "background/background_l_1.jpg";
         }
     }
 
@@ -36,6 +34,9 @@ public class BackgroundFactory {
             case 7: return "background/background_l_7.jpg";
             case 8: return "background/background_l_8.jpg";
             case 9: return "background/background_l_9.jpg";
+            case 10: return "background/background_l_10.jpg";
+            case 11: return "background/background_l_11.jpg";
+            case 12: return "background/background_l_12.jpg";
             default:return "background/background_l_4.jpg";
         }
     }

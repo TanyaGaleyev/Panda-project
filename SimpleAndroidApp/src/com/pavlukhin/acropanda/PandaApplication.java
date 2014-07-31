@@ -83,7 +83,7 @@ public class PandaApplication extends Application {
         Bitmap bmp = BitmapFactory.decodeResource(
                 getResources(), R.drawable.background_menu, opts);
         Bitmap bmpResize = Bitmap.createScaledBitmap(bmp, displayWidth, displayHeight, true);
-        bmp.recycle();
+        if(bmpResize != bmp) bmp.recycle();
         background = new BitmapDrawable(bmpResize);
     }
 
