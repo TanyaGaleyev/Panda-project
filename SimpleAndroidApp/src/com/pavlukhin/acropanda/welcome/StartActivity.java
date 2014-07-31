@@ -40,7 +40,7 @@ public class StartActivity extends PandaBaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        findViewById(R.id.activity_content).setBackgroundDrawable(app().getBackground());
+        initDefaultBackground(findViewById(R.id.activity_content));
         initTitle();
         initPacksButtons();
         initServiceButtons();

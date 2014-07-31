@@ -5,6 +5,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,7 +23,7 @@ public class AchievementsActivity extends PandaBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_achievements);
-        findViewById(R.id.activity_content).setBackgroundDrawable(app().getBackground());
+        initDefaultBackground(findViewById(R.id.activity_content));
         View backBtn = prepare(R.drawable.back);
         PandaButtonsPanel bp = (PandaButtonsPanel) findViewById(R.id.achiv_bp);
         bp.customAddView(backBtn);

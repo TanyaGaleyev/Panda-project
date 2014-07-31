@@ -2,11 +2,14 @@ package com.pavlukhin.acropanda;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.graphics.Color;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +20,7 @@ import com.pavlukhin.acropanda.utils.DialogsCalculator;
 public abstract class PandaBaseActivity extends Activity {
 
     public static final String SETTINGS = "Settings";
+    public static final String BACKGROUND_PATH = "background/menu.jpg";
     protected Dialog settingsDialog;
 
     @Override
@@ -75,5 +79,23 @@ public abstract class PandaBaseActivity extends Activity {
                 (int) (app().displayWidth * 0.6),
                 ViewGroup.LayoutParams.WRAP_CONTENT);
 //        settingsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
+
+    public Bitmap getMenuBackground(int width, int height) {
+        return app().getImageProvider().getBackgroundStrictCache(BACKGROUND_PATH, width, height);
+    }
+
+    public Drawable getMenuDrawable(int width, int height) {
+        return new BitmapDrawable(getMenuBackground(width, height));
+    }
+
+    protected void initDefaultBackground(final View contentView) {
+        contentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                contentView.setBackgroundDrawable(
+                        getMenuDrawable(contentView.getWidth(), contentView.getHeight()));
+            }
+        });
     }
 }

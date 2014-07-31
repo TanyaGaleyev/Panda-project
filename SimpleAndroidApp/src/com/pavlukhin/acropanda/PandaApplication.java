@@ -35,7 +35,7 @@ public class PandaApplication extends Application {
     private FontProvider fontProvider;
     private ImageProvider imageProvider;
     private Sprite loading;
-    private Drawable background;
+//    private Drawable background;
 
     private LevelParser levelParser;
     private IBillingManager billingManager;
@@ -70,22 +70,22 @@ public class PandaApplication extends Application {
 //        billingManager = new BillingManager();
         billingManager = new EmptyBillingManager();
 
-        initBackground();
+//        initBackground();
 	}
 
     public IBillingManager getBillingManager() {
         return billingManager;
     }
 
-    private void initBackground() {
-        BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inPreferredConfig = Bitmap.Config.RGB_565;
-        Bitmap bmp = BitmapFactory.decodeResource(
-                getResources(), R.drawable.background_menu, opts);
-        Bitmap bmpResize = Bitmap.createScaledBitmap(bmp, displayWidth, displayHeight, true);
-        if(bmpResize != bmp) bmp.recycle();
-        background = new BitmapDrawable(bmpResize);
-    }
+//    private void initBackground() {
+//        BitmapFactory.Options opts = new BitmapFactory.Options();
+//        opts.inPreferredConfig = Bitmap.Config.RGB_565;
+//        Bitmap bmp = BitmapFactory.decodeResource(
+//                getResources(), R.drawable.background_menu, opts);
+//        Bitmap bmpResize = Bitmap.createScaledBitmap(bmp, displayWidth, displayHeight, true);
+//        if(bmpResize != bmp) bmp.recycle();
+//        background = new BitmapDrawable(bmpResize);
+//    }
 
     public MusicManager getMusicManger() {
 		return musicManager;
@@ -111,9 +111,9 @@ public class PandaApplication extends Application {
         return levelParser;
     }
 
-    public Drawable getBackground() {
-        return background;
-    }
+//    public Drawable getBackground() {
+//        return background;
+//    }
 
     public boolean getSound() {
 		return sound;

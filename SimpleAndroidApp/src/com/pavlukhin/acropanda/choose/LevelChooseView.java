@@ -189,7 +189,7 @@ public class LevelChooseView extends SurfaceView {
 //            bgr = new ColorBackground();
 //        }
 //        background = imageProvider().getBackground(backgroundId, getWidth(), getHeight());
-        background = ((BitmapDrawable) context.app().getBackground()).getBitmap();
+        background = context.getMenuBackground(getWidth(), getHeight());
         border = imageProvider().getBitmapAutoResizeStrictCache("menu/border.png");
         marker = imageProvider().getBitmapAutoResizeStrictCache("menu/single_panda.png");
         highscore = imageProvider().getBitmapAutoResizeStrictCache("menu/high_score.png");

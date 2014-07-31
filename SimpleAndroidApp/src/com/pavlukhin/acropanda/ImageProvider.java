@@ -137,15 +137,13 @@ public class ImageProvider {
         return bmp;
     }
 
-    public Bitmap getBitmapStrictCache(String path, int rows, int cols) {
-		Bitmap  bmp = strictCache.get(path);
-		if(bmp == null) {
-            bmp = getBitmapNoCache(path, rows, cols);
-            cacheSize += bmp.getWidth() * bmp.getHeight() / 256;// * 4 / 1024
-            strictCache.put(path, bmp);
-        }
-        Log.d(PandaApplication.LOG_TAG, "[get] cache size: " + cacheSize);
-        return bmp;
+    public Bitmap getBitmapStrictCache(final String path, final int rows, final int cols) {
+        return getBitmapStrictCache(path, new BitmapLoader() {
+            @Override
+            public Bitmap loadBitmap() {
+                return getBitmapNoCache(path, rows, cols);
+            }
+        });
 	}
 	
 	public BitmapFactory.Options loadBitmapSize(String path) {
@@ -194,7 +192,16 @@ public class ImageProvider {
         return assetsMananger.list(base + resSet + path);
     }
 
-    public Bitmap getBackground(String path, int width, int height) {
+    public Bitmap getBackgroundStrictCache(final String path, final int width, final int height) {
+        return getBitmapStrictCache(path, new BitmapLoader() {
+            @Override
+            public Bitmap loadBitmap() {
+                return getBackgroundNoCache(path, width, height);
+            }
+        });
+    }
+
+    public Bitmap getBackgroundNoCache(String path, int width, int height) {
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inPreferredConfig = Bitmap.Config.RGB_565;
         return getScaledBitmapNoCache(path, width, height, opts);
@@ -215,15 +222,28 @@ public class ImageProvider {
                 path, (int) (bounds.outWidth * scale), (int) (bounds.outHeight * scale));
     }
 
-    public Bitmap getBitmapAutoResizeStrictCache(String path) {
+    public Bitmap getBitmapAutoResizeStrictCache(final String path) {
+        return getBitmapStrictCache(path, new BitmapLoader() {
+            @Override
+            public Bitmap loadBitmap() {
+                return getBitmapAutoResizeNoCache(path);
+            }
+        });
+    }
+
+    public Bitmap getBitmapStrictCache(String path, BitmapLoader loader) {
         Bitmap  bmp = strictCache.get(path);
         if(bmp == null) {
-            bmp = getBitmapAutoResizeNoCache(path);
+            bmp = loader.loadBitmap();
             cacheSize += bmp.getWidth() * bmp.getHeight() / 256;// * 4 / 1024
             strictCache.put(path, bmp);
         }
         Log.d(PandaApplication.LOG_TAG, "[get] cache size: " + cacheSize);
         return bmp;
+    }
+
+    public interface BitmapLoader {
+        Bitmap loadBitmap();
     }
 
     private Bitmap getScaledBitmapNoCache(String path, int width, int height, BitmapFactory.Options opts) {

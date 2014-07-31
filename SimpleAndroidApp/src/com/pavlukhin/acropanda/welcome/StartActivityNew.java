@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -46,7 +47,7 @@ public class StartActivityNew extends PandaBaseActivity {
     private void init() {
         setContentView(R.layout.activity_startnew);
         contentPanel = (RelativeLayout) findViewById(R.id.activity_content);
-        contentPanel.setBackgroundDrawable(app().getBackground());
+        initDefaultBackground(contentPanel);
         Typeface bold = app().getFontProvider().bold();
 //        ((TextView) findViewById(R.id.acro_caption)).setTypeface(bold);
 //        ((TextView) findViewById(R.id.start_caption)).setTypeface(bold);
