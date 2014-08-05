@@ -174,7 +174,7 @@ public class ImageProvider {
     public void removeFromCatch(String path) {
 		Bitmap bmp = strictCache.get(path);
 		if(bmp == null) return;
-		cacheSize -= bmp.getWidth() * bmp.getHeight() / 256;// * 4 / 1024
+		cacheSize -= bmp.getRowBytes() * bmp.getHeight();
         strictCache.remove(path);
         free(bmp);
 		Log.d(PandaApplication.LOG_TAG, "[rm] cache size: " + cacheSize);
@@ -235,7 +235,7 @@ public class ImageProvider {
         Bitmap  bmp = strictCache.get(path);
         if(bmp == null) {
             bmp = loader.loadBitmap();
-            cacheSize += bmp.getWidth() * bmp.getHeight() / 256;// * 4 / 1024
+            cacheSize += bmp.getRowBytes() * bmp.getHeight();
             strictCache.put(path, bmp);
         }
         Log.d(PandaApplication.LOG_TAG, "[get] cache size: " + cacheSize);
