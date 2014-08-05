@@ -3,6 +3,7 @@ package com.pavlukhin.acropanda.game;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +22,8 @@ import com.pavlukhin.acropanda.PandaBaseActivity;
 import com.pavlukhin.acropanda.R;
 import com.pavlukhin.acropanda.choose.LevelChooseActivity;
 import com.pavlukhin.acropanda.game.dialogs.LoseDialog;
+import com.pavlukhin.acropanda.game.scores.LevelMetrics;
+import com.pavlukhin.acropanda.game.scores.Scores;
 import com.pavlukhin.acropanda.game.tutorial.MessageTutorialGame;
 import com.pavlukhin.acropanda.game.tutorial.Solutions;
 import com.pavlukhin.acropanda.game.tutorial.TutorialMessages1;
@@ -33,6 +36,7 @@ public class GameActivity extends PandaBaseActivity {
     private GameControl gControl;
     private Dialog tutorialDialog;
     private LoseDialog loseDialog;
+    public static final String LEVELS_META = "com.pavlukhin.acropanda.level_meta";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +71,8 @@ public class GameActivity extends PandaBaseActivity {
         app().getSettingsModel().registerControlChangeObserver(gControl);
         settingsDialog.setTitle(PAUSE_TITLE);
         initLoseDialog();
+        // FIXME this log info should be covered
+        Log.w(PandaApplication.LOG_TAG, levelMeta(levid).getAll().toString());
     }
 
     @Override
@@ -92,13 +98,44 @@ public class GameActivity extends PandaBaseActivity {
     	}
     }
 
-    public void switchBackToChooseActivity(boolean complete, int score) {
+    public void switchBackToChooseActivity(boolean complete, LevelMetrics metrics) {
+        updateMetrics(complete, metrics);
 		Intent resultIntent = new Intent();
 		resultIntent.putExtra(LevelChooseActivity.LEVEL_COMPLETE, complete);
-		resultIntent.putExtra(LevelChooseActivity.COMPLETE_SCORE, score);
+		resultIntent.putExtra(LevelChooseActivity.COMPLETE_SCORE, metrics.getScore());
 		setResult(RESULT_OK, resultIntent);
 		finish();
 	}
+
+    private void updateMetrics(boolean complete, LevelMetrics metrics) {
+        if(complete)
+            submitNewScore(metrics);
+    }
+
+    public void updateAttempts() {
+        SharedPreferences levelMeta = levelMeta(gControl.levId);
+        if(levelMeta.getInt("ice_creams", Scores.NO_SCORE) == Scores.NO_SCORE) {
+            int attempts = levelMeta.getInt("attempts", 0);
+            levelMeta.edit().putInt("attempts", attempts + 1).commit();
+        }
+    }
+
+    private void submitNewScore(LevelMetrics metrics) {
+        SharedPreferences levelMeta = levelMeta(gControl.levId);
+        int oldScore = levelMeta.getInt("ice_creams", Scores.NO_SCORE);
+        if(Scores.better(metrics.getScore(), oldScore)) {
+            levelMeta.edit()
+                    .putInt("ice_creams", metrics.getScore())
+                    .putInt("prizes", metrics.getPrizes())
+                    .putLong("time", metrics.getTime())
+                    .putInt("steps", metrics.getSteps())
+                    .commit();
+        }
+    }
+
+    public SharedPreferences levelMeta(int levid) {
+        return getSharedPreferences(LEVELS_META + levid, MODE_PRIVATE);
+    }
 
     @Override
     protected void onPause() {
@@ -171,14 +208,15 @@ public class GameActivity extends PandaBaseActivity {
         settingsDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                gControl.startManager();
+                if(!isFinishing())
+                    gControl.startManager();
             }
         });
         settings.setExitOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                settingsDialog.cancel();
                 finish();
+                settingsDialog.cancel();
             }
         });
         settings.setReplayOnClickListener(new View.OnClickListener() {

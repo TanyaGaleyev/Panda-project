@@ -75,7 +75,7 @@ public class StartActivity extends PandaBaseActivity {
     }
 
     private int lastFinishedSet() {
-        return getSharedPreferences(LevelChooseActivity.CONFIG, MODE_PRIVATE)
+        return getSharedPreferences(LevelChooseActivity.PACK_PREFS, MODE_PRIVATE)
                 .getInt(LAST_FINISHED_SET, 0);
     }
 

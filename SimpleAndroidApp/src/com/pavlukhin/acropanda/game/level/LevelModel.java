@@ -17,6 +17,8 @@ import com.pavlukhin.acropanda.game.monster.MonsterDirection;
 import com.pavlukhin.acropanda.game.monster.MonsterModel;
 import com.pavlukhin.acropanda.game.monster.strategies.MonsterStrategy;
 import com.pavlukhin.acropanda.game.monster.strategies.RouteDirectionStrategyFactory;
+import com.pavlukhin.acropanda.game.scores.LevelMetrics;
+import com.pavlukhin.acropanda.game.scores.MetricsCollector;
 import com.pavlukhin.acropanda.game.scores.ScoreProvider;
 import com.pavlukhin.acropanda.utils.Multimap;
 
@@ -27,8 +29,6 @@ public class LevelModel {
 	public final MonsterModel monster;
 	public final HeroModel hero;
 	private int totalPrizes;
-    private int prizesCollected = 0;
-    private ScoreProvider scoreProvider;
 	private boolean lose = false;
 	private boolean complete = false;
 	private CellCoords winCellCoords;
@@ -36,7 +36,7 @@ public class LevelModel {
 	private Map<Platform, PlatformCellPair> floorTpDestMap;
 	private List<Platform> switchList = new ArrayList<Platform>();
 	private List<OrderPlatform> unlockList = new ArrayList<OrderPlatform>();
-	private int steps = 0;
+    private final MetricsCollector metricsCollector;
 
     private static class OrderPlatform implements Comparable<OrderPlatform> {
         int order;
@@ -84,7 +84,7 @@ public class LevelModel {
         cols=mylevel[0].length;
         int[][] prizes = levelInfo.prizesMap;
         totalPrizes = 0;
-        scoreProvider = new ScoreProvider(levelInfo.scoreStruct);
+        metricsCollector = new MetricsCollector(new ScoreProvider(levelInfo.scoreStruct));
         CellCoords startCellCoord = levelInfo.startCell;
         winCellCoords = levelInfo.winCell;
         hero = new HeroModel(startCellCoord.i, startCellCoord.j);
@@ -440,6 +440,7 @@ public class LevelModel {
     }
 
 	public void updateGame(UserControlType controlType) {
+        metricsCollector.measureTime();
 		tryToUnlock();
 		if(hero.currentMotion.isUncontrolable()) {
 			controlType = UserControlType.IDLE;
@@ -456,7 +457,7 @@ public class LevelModel {
 		// check if we gonna teleport
 		checkTeleport(hero.currentMotion.getType(), tpAwareFinishingMt);
 		// collect prize 
-		prizesCollected += getHeroCell().removePrize();
+		metricsCollector.incrementPrizes(getHeroCell().removePrize());
         checkWin();
         updatePosition(hero.currentMotion);
 	}
@@ -672,7 +673,7 @@ public class LevelModel {
 		 * if all prizes are collected show win platform
 		 * level will be complete after hero reaches win cell (with win floor platform now)
 		 */
-        if(scoreProvider.hasScore(prizesCollected)/* || prizesCollected >= totalPrizes*/) {
+        if(metricsCollector.hasScore()/* || prizesCollected >= totalPrizes*/) {
             LevelCell winCell = levelGrid.get(winCellCoords);
             if(winCell.getFloor().getType() != PlatformType.WIN) {
                 winCell.createFloor(PlatformType.WIN);
@@ -704,7 +705,8 @@ public class LevelModel {
 			hero.setX(hero.getX() + motion.getXSpeed());
 			hero.setY(hero.getY() + motion.getYSpeed());
 		}
-		if(hero.hasMoved()) steps++;
+//		if(hero.hasMoved())
+            metricsCollector.incrementSteps(1);
 	}
 
     public boolean outOfBounds() {
@@ -821,8 +823,8 @@ public class LevelModel {
 		return complete;
 	}
 	
-	public int getScore() {
-		return scoreProvider.getScoreConst(prizesCollected);
+	public LevelMetrics getMetrics() {
+        return metricsCollector.buildMetrics();
 	}
 	
 	public boolean isLost() {

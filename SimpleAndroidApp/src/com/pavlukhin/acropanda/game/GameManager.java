@@ -63,6 +63,7 @@ public class GameManager extends Thread {
         long sleepTime;
         try {
             Thread.sleep(100);
+            view.getControl().updateAttempts();
             while(running) {
                 startTime = System.currentTimeMillis();
                 UserControlType controlType = receiveUserControlType();
@@ -72,17 +73,8 @@ public class GameManager extends Thread {
                 }
                 view.updatePositions();
                 doDraw(true);
-                if(view.getControl().finished) {
-                    if(view.isComplete())
-                        view.getGameContext().switchBackToChooseActivity(true, view.getScore());
-                    else
-                        view.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                view.getGameContext().showLoseDialog();
-                            }
-                        });
-                }
+                if(view.getControl().finished)
+                    doFinishActions();
                 // calculate sleep time to reach needed fps
                 sleepTime = ticksPS - (System.currentTimeMillis() - startTime);
                 if (sleepTime > 0) sleep(sleepTime);
@@ -105,6 +97,18 @@ public class GameManager extends Thread {
             rememberedControl = userControl.getRememberControlType();
         }
         return controlType;
+    }
+
+    private void doFinishActions() {
+        if(view.isComplete())
+            view.getGameContext().switchBackToChooseActivity(true, view.getMetrics());
+        else
+            view.post(new Runnable() {
+                @Override
+                public void run() {
+                    view.getGameContext().showLoseDialog();
+                }
+            });
     }
 
     protected void doDraw(boolean update) {

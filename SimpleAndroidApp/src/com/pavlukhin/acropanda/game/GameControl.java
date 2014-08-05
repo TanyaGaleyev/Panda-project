@@ -99,6 +99,19 @@ public class GameControl implements ControlChangeObserver {
         gameLoopThread.setRunning(false);
     }
 
+    private OneShotAction updateAttempts = new UpdateAttempts();
+
+    private class UpdateAttempts extends OneShotAction {
+        @Override
+        protected void doAction() {
+            view.getGameContext().updateAttempts();
+        }
+    }
+
+    public void updateAttempts() {
+        updateAttempts.act();
+    }
+
     protected void initGame() {
         Recycler recycler = view.getGameContext().app().getImageProvider().getCacheRecycler();
         boolean retry = true;
@@ -109,6 +122,7 @@ public class GameControl implements ControlChangeObserver {
                 loseDelay = 3;
                 firstStartGame = new FirstStartGame();
                 soundControl.init();
+                updateAttempts = new UpdateAttempts();
                 LevelModel levelModel =
                         new LevelModel(levId, PandaApplication.getPandaApplication().getLevelParser());
                 view.initView(levelModel);

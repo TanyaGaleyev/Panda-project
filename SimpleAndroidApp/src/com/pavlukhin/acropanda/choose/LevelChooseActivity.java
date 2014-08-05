@@ -29,9 +29,9 @@ public class LevelChooseActivity extends PandaBaseActivity {
 	public static final int FINISHED_LEVEL_ID = 1;
 	public static final String FINISHED_LEVELS = "finished";
 	public static final String HIGH_SCORES = "high scores";
-	public static final String CONFIG = "panda_config";
+	public static final String PACK_PREFS = "com.pavlukhin.acropanda.pack_prefs";
 
-    private SharedPreferences preferences;
+    private SharedPreferences packPreferences;
 	
 	private LevelChooseView view;
 	private int levelsSetId;
@@ -54,9 +54,9 @@ public class LevelChooseActivity extends PandaBaseActivity {
         setContentView(R.layout.activity_choose);
         view = (LevelChooseView) findViewById(R.id.choose);
         
-        preferences = getSharedPreferences(CONFIG, MODE_PRIVATE);
+        packPreferences = getSharedPreferences(PACK_PREFS, MODE_PRIVATE);
         levelsSetId = getIntent().getIntExtra(StartActivity.SET_ID, 0);
-        String finishedArray = preferences.getString(FINISHED_LEVELS + levelsSetId, "");
+        String finishedArray = packPreferences.getString(FINISHED_LEVELS + levelsSetId, "");
         view.setChooseScreenProperties(levelsSetId, finishedArray);
         View backBtn = prepare(R.drawable.back);
         View settingsBtn = prepare(R.drawable.settings);
@@ -137,9 +137,9 @@ public class LevelChooseActivity extends PandaBaseActivity {
     private void tryCompletePack() {
         if(view.allLevelsFinished()) {
             boolean setWasNotCompleteBefore =
-                    levelsSetId > preferences.getInt(StartActivity.LAST_FINISHED_SET, 0);
+                    levelsSetId > packPreferences.getInt(StartActivity.LAST_FINISHED_SET, 0);
             if(setWasNotCompleteBefore) {
-                preferences.edit().putInt(StartActivity.LAST_FINISHED_SET, levelsSetId).commit();
+                packPreferences.edit().putInt(StartActivity.LAST_FINISHED_SET, levelsSetId).commit();
                 finishComplete();
             }
         }
@@ -148,7 +148,7 @@ public class LevelChooseActivity extends PandaBaseActivity {
     private void submitNewScore(int score) {
         int oldScore = view.completeCurrentLevel(score);
         if(Scores.better(score, oldScore)) {
-            preferences.edit()
+            packPreferences.edit()
                     .putString(FINISHED_LEVELS + levelsSetId, view.getFinishedLevels()).commit();
         }
     }

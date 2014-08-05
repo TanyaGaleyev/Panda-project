@@ -24,6 +24,7 @@ import com.pavlukhin.acropanda.game.level.PlatformType;
 import com.pavlukhin.acropanda.game.monster.Monster;
 import com.pavlukhin.acropanda.game.monster.MonsterFactory;
 import com.pavlukhin.acropanda.game.motion.MotionType;
+import com.pavlukhin.acropanda.game.scores.LevelMetrics;
 import com.pavlukhin.acropanda.game.tutorial.GuideAnimation;
 
 public class GameView extends SurfaceView {
@@ -203,7 +204,7 @@ public class GameView extends SurfaceView {
 		paint.setStyle(Paint.Style.FILL); 
 		paint.setTextSize(25);
 		paint.setColor(Color.MAGENTA);
-		canvas.drawText("Score: " + getScore(), 100, 25, paint);
+		canvas.drawText("Score: " + getMetrics().getPrizes(), 100, 25, paint);
 	}
 
     private void drawMemoryUsage(Canvas canvas) {
@@ -432,8 +433,8 @@ public class GameView extends SurfaceView {
         return level.model.isLost() && !hero.isFinishing();
     }
 	
-	public int getScore() {
-		return level.model.getScore();
+	public LevelMetrics getMetrics() {
+		return level.model.getMetrics();
 	}
 
 	@Override
