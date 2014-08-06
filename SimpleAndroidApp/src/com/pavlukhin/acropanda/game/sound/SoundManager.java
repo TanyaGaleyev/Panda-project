@@ -40,7 +40,10 @@ public class SoundManager {
                 return;
             }
             if (prevFloor == PlatformType.STRING && (mt != MotionType.JUMP || motion.getStage() == 0)) {
-                playSound(R.raw.string);
+                if (mt == MotionType.FALL || mt == MotionType.FALL_BLANSH)
+                    playSound(R.raw.string_break);
+                else
+                    playSound(R.raw.string);
                 return;
             }
         }
@@ -79,6 +82,10 @@ public class SoundManager {
                     playSound(R.raw.switch0);
                 } else if(prevLeft == PlatformType.BRICK_V) {
                     playSound(R.raw.brick);
+                } else if(prevLeft == PlatformType.LIMIT) {
+                    playSound(R.raw.open);
+                } else if(prevLeft == PlatformType.UNLOCK) {
+                    playSound(R.raw.lock_platform);
                 } else if(prevFloor != PlatformType.SPIKE_UP && prevLeft != PlatformType.SPIKE_V) {
                     playSound(R.raw.coin);
                 }
@@ -90,6 +97,8 @@ public class SoundManager {
                     playSound(R.raw.brick);
                 } else if(prevRight == PlatformType.LIMIT) {
                     playSound(R.raw.open);
+                } else if(prevRight == PlatformType.UNLOCK) {
+                    playSound(R.raw.lock_platform);
                 } else if(prevFloor != PlatformType.SPIKE_UP && prevRight != PlatformType.SPIKE_V) {
                     playSound(R.raw.coin);
                 }
@@ -163,6 +172,9 @@ public class SoundManager {
                 } else if(prevFloor != PlatformType.SPIKE_UP) {
                     playSound(R.raw.jump);
                 }
+                break;
+            case TRY_JUMP_GLUE:
+                playSound(R.raw.try_jump_from_glue);
                 break;
             case CLOUD_IDLE:
             case CLOUD_LEFT:
