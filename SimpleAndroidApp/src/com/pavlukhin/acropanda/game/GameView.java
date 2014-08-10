@@ -21,11 +21,14 @@ import com.pavlukhin.acropanda.game.level.LevelCell;
 import com.pavlukhin.acropanda.game.level.LevelModel;
 import com.pavlukhin.acropanda.game.level.LevelView;
 import com.pavlukhin.acropanda.game.level.PlatformType;
+import com.pavlukhin.acropanda.game.level.actions.Action;
 import com.pavlukhin.acropanda.game.monster.Monster;
 import com.pavlukhin.acropanda.game.monster.MonsterFactory;
 import com.pavlukhin.acropanda.game.motion.MotionType;
 import com.pavlukhin.acropanda.game.scores.LevelMetrics;
 import com.pavlukhin.acropanda.game.tutorial.GuideAnimation;
+
+import java.util.Collection;
 
 public class GameView extends SurfaceView {
 	
@@ -306,8 +309,8 @@ public class GameView extends SurfaceView {
         } else {
             // get new motion type only if it was not obtained yet
             // (obtained yet means that pre- or post- motion was just ended)
-			updateModel(controlType);
-            control.playSound();
+            Collection<Action> actions = updateModel(controlType);
+            control.playSound(actions);
 		}
         if(!hero.isFinishing())
             prevCell.updateCell(hero.model.currentMotion, hero.model.finishingMotion);
@@ -317,19 +320,21 @@ public class GameView extends SurfaceView {
 	 * Use user control to obtain next motion type, move hero in model (to next level cell),
 	 * switch hero motion animation and cell platforms reaction to this animation  
 	 */
-	private void updateModel(UserControlType controlType) {
+	private Collection<Action> updateModel(UserControlType controlType) {
+        Collection<Action> ret;
 		// Used to remember pressed control (action down performed and no other actions after)
 //		UserControlType controlType = control.getUserControl();
         // Store cell before update in purpose to play cell animation (like floor movement while jump)
 		prevCell = level.model.getHeroCell();
 		// calculate new motion depending on current motion, hero cell and user control
-		level.model.updateGame(controlType);
+		ret = level.model.updateGame(controlType);
 		// switch hero animation
 		hero.finishPrevMotion(prevCell, level.model.getHeroCell());
 		// play cell reaction to new motion
 		if(!hero.isFinishing()) {
 			hero.switchToCurrentMotion();
 		}
+        return ret;
 	}
 
     /**

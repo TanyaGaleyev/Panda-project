@@ -35,11 +35,15 @@ public class SoundManager {
         PlatformType prevRight = prevCell.getRight().getType();
         PlatformType prevRoof = prevCell.getRoof().getType();
         if(mt != MotionType.FLY_LEFT && mt != MotionType.FLY_RIGHT) {
-            if (prevFloor == PlatformType.REDUCE && (mt != MotionType.JUMP || motion.getStage() == 0)) {
+            if (prevFloor == PlatformType.REDUCE
+                    && (mt != MotionType.JUMP || motion.getStage() == 0)
+                    && mt != MotionType.BEAT_ROOF && mt != MotionType.MAGNET) {
                 playSound(R.raw.reduce);
                 return;
             }
-            if (prevFloor == PlatformType.STRING && (mt != MotionType.JUMP || motion.getStage() == 0)) {
+            if (prevFloor == PlatformType.STRING
+                    && (mt != MotionType.JUMP || motion.getStage() == 0)
+                    && mt != MotionType.BEAT_ROOF && mt != MotionType.MAGNET) {
                 if (mt == MotionType.FALL || mt == MotionType.FALL_BLANSH)
                     playSound(R.raw.string_break);
                 else
@@ -82,8 +86,6 @@ public class SoundManager {
                     playSound(R.raw.switch0);
                 } else if(prevLeft == PlatformType.BRICK_V) {
                     playSound(R.raw.brick);
-                } else if(prevLeft == PlatformType.LIMIT) {
-                    playSound(R.raw.open);
                 } else if(prevLeft == PlatformType.UNLOCK) {
                     playSound(R.raw.lock_platform);
                 } else if(prevFloor != PlatformType.SPIKE_UP && prevLeft != PlatformType.SPIKE_V) {
@@ -95,8 +97,6 @@ public class SoundManager {
                     playSound(R.raw.switch0);
                 } else if(prevRight == PlatformType.BRICK_V) {
                     playSound(R.raw.brick);
-                } else if(prevRight == PlatformType.LIMIT) {
-                    playSound(R.raw.open);
                 } else if(prevRight == PlatformType.UNLOCK) {
                     playSound(R.raw.lock_platform);
                 } else if(prevFloor != PlatformType.SPIKE_UP && prevRight != PlatformType.SPIKE_V) {
@@ -208,7 +208,7 @@ public class SoundManager {
         playSound(R.raw.win);
     }
 
-    private void playSound(int resId) {
+    public void playSound(int resId) {
         float volume = getVolume();
         soundPool.play(soundMap.get(resId), volume, volume, 1, 0, 1f);
     }

@@ -1,12 +1,16 @@
 package com.pavlukhin.acropanda.game.level;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.pavlukhin.acropanda.UserControlType;
+import com.pavlukhin.acropanda.game.level.actions.Action;
+import com.pavlukhin.acropanda.game.level.actions.SoundActions;
 import com.pavlukhin.acropanda.game.level.reader.LevelInfo;
 import com.pavlukhin.acropanda.game.level.reader.LevelParser;
 import com.pavlukhin.acropanda.game.motion.ContainerMotion;
@@ -439,9 +443,10 @@ public class LevelModel {
         }
     }
 
-	public void updateGame(UserControlType controlType) {
+	public Collection<Action> updateGame(UserControlType controlType) {
         metricsCollector.measureTime();
-		tryToUnlock();
+        Collection<Action> actions = new ArrayList<Action>();
+		actions.addAll(tryToUnlock());
 		if(hero.currentMotion.isUncontrolable()) {
 			controlType = UserControlType.IDLE;
 		}
@@ -457,10 +462,20 @@ public class LevelModel {
 		// check if we gonna teleport
 		checkTeleport(hero.currentMotion.getType(), tpAwareFinishingMt);
 		// collect prize 
-		metricsCollector.incrementPrizes(getHeroCell().removePrize());
+        actions.addAll(processPrizes());
         checkWin();
         updatePosition(hero.currentMotion);
+        return actions;
 	}
+
+    private Collection<Action> processPrizes() {
+        Collection<Action> ret;
+        int prizeCost = getHeroCell().removePrize();
+        metricsCollector.incrementPrizes(prizeCost);
+        if(prizeCost > 0)   ret = Arrays.<Action>asList(SoundActions.PRIZE);
+        else                ret = Collections.emptyList();
+        return ret;
+    }
 
     private Motion obtainNextMotion(UserControlType controlType, Motion prevMotion) {
         Motion motion;
@@ -835,16 +850,16 @@ public class LevelModel {
         this.lose = lost;
     }
 	
-	public boolean tryToUnlock() {
-		if(unlockList.isEmpty()) return true;
-		if(switchList.isEmpty()) return false;
+	public Collection<Action> tryToUnlock() {
+        Collection<Action> ret = Collections.emptyList();
+		if(unlockList.isEmpty() || switchList.isEmpty()) return ret;
 		int status = switchList.get(0).getStatus();
 		for(Platform wall : switchList) {
-			if(wall.getStatus() != status) return false;
+			if(wall.getStatus() != status) return ret;
 		}
-		unlockList.get(0).p.unlock();
-		unlockList.remove(0);
-		return true;
+		unlockList.remove(0).p.unlock();
+        ret = Arrays.<Action>asList(SoundActions.UNLOCK);
+		return ret;
 	}
 
 	
