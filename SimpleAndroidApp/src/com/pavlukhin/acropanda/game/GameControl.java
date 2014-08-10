@@ -13,11 +13,14 @@ import com.pavlukhin.acropanda.game.controls.ObtainedControl;
 import com.pavlukhin.acropanda.game.controls.UserControl;
 import com.pavlukhin.acropanda.game.controls.UserControlProvider;
 import com.pavlukhin.acropanda.game.level.LevelModel;
+import com.pavlukhin.acropanda.game.level.actions.Action;
+import com.pavlukhin.acropanda.game.level.actions.SoundAction;
 import com.pavlukhin.acropanda.game.sound.SoundControl;
 import com.pavlukhin.acropanda.game.tutorial.SolutionStep;
 import com.pavlukhin.acropanda.utils.OneShotAction;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 
 public class GameControl implements ControlChangeObserver {
@@ -139,13 +142,16 @@ public class GameControl implements ControlChangeObserver {
 		return gameLoopThread;
 	}
 	
-	protected void playSound() {
+	protected void playSound(Collection<Action> actions) {
         soundControl.playSound(
                 view.level.model.hero.currentMotion,
                 view.level.model.hero.finishingMotion,
                 view.level.model.getHeroCell(),
                 view.prevCell
         );
+        for(Action action : actions)
+            if (action instanceof SoundAction)
+                soundControl.playSound((SoundAction) action);
 	}
 
     protected void playDetonateSound() {

@@ -2,6 +2,7 @@ package com.pavlukhin.acropanda.game.sound;
 
 import com.pavlukhin.acropanda.PandaBaseActivity;
 import com.pavlukhin.acropanda.game.level.LevelCell;
+import com.pavlukhin.acropanda.game.level.actions.SoundAction;
 import com.pavlukhin.acropanda.game.motion.Motion;
 import com.pavlukhin.acropanda.utils.OneShotAction;
 
@@ -51,5 +52,10 @@ public class SoundControl {
         if(context.app().getSound()) {
             sounds.playSound(motion, prevMotion, nextCell, prevCell);
         }
+    }
+
+    public void playSound(SoundAction action) {
+        if(context.app().getSound())
+            sounds.playSound(action.getSoundId());
     }
 }
