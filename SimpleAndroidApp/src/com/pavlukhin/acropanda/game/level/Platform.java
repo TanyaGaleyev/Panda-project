@@ -176,14 +176,22 @@ public class Platform implements LevelDrawable {
 			return;
 		}
 		if(type == PlatformType.REDUCE) {
-			if(currentStatus <= 3) {
-                sprite.changeSet(currentStatus);
-                sprite.playOnce(true);
+            if(!sprite.isAnimatingOrDelayed()) {
+                if (currentStatus < 3) {
+                    sprite.changeSet(currentStatus);
+                    sprite.playOnce(true);
+                }
+                if (currentStatus == 3) {
+                    sprite.changeSet(currentStatus);
+                    sprite.playOnce(false, new Runnable() {
+                        @Override
+                        public void run() {
+                            type = PlatformType.NONE;
+                        }
+                    });
+                }
+                currentStatus++;
             }
-            if(currentStatus == 3) {
-				type = PlatformType.NONE;
-			}
-            currentStatus++;
 			return;
 		}
 		if(type == PlatformType.ANGLE_LEFT) {
@@ -456,6 +464,10 @@ public class Platform implements LevelDrawable {
     public void setStatus(int currentStatus) {
         this.currentStatus = currentStatus;
         sprite.changeSet(currentStatus);
+    }
+
+    public boolean isAnimatingOrDelayed() {
+        return sprite.isAnimatingOrDelayed();
     }
 
     @Override

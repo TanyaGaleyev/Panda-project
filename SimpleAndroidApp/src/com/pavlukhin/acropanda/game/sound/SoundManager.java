@@ -38,7 +38,8 @@ public class SoundManager {
             if (prevFloor == PlatformType.REDUCE
                     && (mt != MotionType.JUMP || motion.getStage() == 0)
                     && mt != MotionType.BEAT_ROOF && mt != MotionType.MAGNET) {
-                playSound(R.raw.reduce);
+                if(!prevCell.getFloor().isAnimatingOrDelayed())
+                    playSound(R.raw.reduce);
                 return;
             }
             if (prevFloor == PlatformType.STRING
@@ -214,6 +215,7 @@ public class SoundManager {
     }
 
     private void playDelayed(final int resId, int framesDelay) {
+        // TODO timer here is bad one
         TimerTask delayedPlayback = new TimerTask() {
             @Override
             public void run() {

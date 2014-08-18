@@ -405,6 +405,12 @@ public class LevelModel {
             if(motion.getType() == MotionType.STAY && prevMt == MotionType.STAY)
                 motion = new Motion(MotionType.FALL);
             break;
+//        case REDUCE:
+//            motion = stayCheck(controlType);
+//            if(getHeroCell().getFloor().getStatus() == 3 &&
+//                    motion.getType() == MotionType.STAY)
+//                motion = new Motion(MotionType.FALL);
+//            break;
 		default:
 			motion = stayCheck(controlType);
 			break;	

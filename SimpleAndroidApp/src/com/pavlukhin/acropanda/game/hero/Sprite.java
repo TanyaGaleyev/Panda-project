@@ -29,7 +29,13 @@ public class Sprite {
 	private boolean switchSet = false;
 	
 	private int delay = 0;
-	
+
+    private Runnable callback = NOP;
+    private static final Runnable NOP = new Runnable() {
+        @Override
+        public void run() { }
+    };
+
 	protected Sprite() {
         bmp = null;
         bmpRows = 0;
@@ -96,6 +102,8 @@ public class Sprite {
             	}
             	if(playOnce) {
             		animating = false;
+                    callback.run();
+                    callback = NOP;
             	}
             }
         }
@@ -144,6 +152,11 @@ public class Sprite {
 		playOnce(0, switchSet);
 	}
 	
+	public void playOnce(boolean switchSet, Runnable callback) {
+		playOnce(0, switchSet);
+        this.callback = callback;
+	}
+
 	public void playOnce(int delay) {
 		playOnce(delay, false);
 	}
