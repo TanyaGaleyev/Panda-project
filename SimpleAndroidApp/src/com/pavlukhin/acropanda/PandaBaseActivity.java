@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -95,6 +96,9 @@ public abstract class PandaBaseActivity extends Activity {
             public void onGlobalLayout() {
                 contentView.setBackgroundDrawable(
                         getMenuDrawable(contentView.getWidth(), contentView.getHeight()));
+//                contentView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                Log.e(PandaApplication.LOG_TAG,
+                        "content view size: " + contentView.getWidth() + " x " + contentView.getHeight());
             }
         });
     }
