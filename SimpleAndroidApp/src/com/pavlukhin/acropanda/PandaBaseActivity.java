@@ -92,17 +92,17 @@ public abstract class PandaBaseActivity extends Activity {
     }
 
     protected void initDefaultBackground(final View contentView) {
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             contentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
-                    contentView.setBackgroundDrawable(
-                            getMenuDrawable(contentView.getWidth(), contentView.getHeight()));
-                    contentView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                    Log.e(PandaApplication.LOG_TAG,
-                            "content view size: " + contentView.getWidth() + " x " + contentView.getHeight());
+                    if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                        contentView.setBackgroundDrawable(
+                                getMenuDrawable(contentView.getWidth(), contentView.getHeight()));
+                        contentView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                        Log.e(PandaApplication.LOG_TAG,
+                                "content view size: " + contentView.getWidth() + " x " + contentView.getHeight());
+                    }
                 }
             });
-        }
     }
 }
