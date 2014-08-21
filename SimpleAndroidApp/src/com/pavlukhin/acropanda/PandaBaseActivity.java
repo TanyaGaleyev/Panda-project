@@ -2,6 +2,7 @@ package com.pavlukhin.acropanda;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -91,15 +92,17 @@ public abstract class PandaBaseActivity extends Activity {
     }
 
     protected void initDefaultBackground(final View contentView) {
-        contentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                contentView.setBackgroundDrawable(
-                        getMenuDrawable(contentView.getWidth(), contentView.getHeight()));
-//                contentView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                Log.e(PandaApplication.LOG_TAG,
-                        "content view size: " + contentView.getWidth() + " x " + contentView.getHeight());
-            }
-        });
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            contentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    contentView.setBackgroundDrawable(
+                            getMenuDrawable(contentView.getWidth(), contentView.getHeight()));
+                    contentView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    Log.e(PandaApplication.LOG_TAG,
+                            "content view size: " + contentView.getWidth() + " x " + contentView.getHeight());
+                }
+            });
+        }
     }
 }
