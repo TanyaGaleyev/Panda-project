@@ -15,10 +15,14 @@ import com.pavlukhin.acropanda.game.controls.UserControlProvider;
 import com.pavlukhin.acropanda.game.level.LevelModel;
 import com.pavlukhin.acropanda.game.level.actions.Action;
 import com.pavlukhin.acropanda.game.level.actions.SoundAction;
+import com.pavlukhin.acropanda.game.level.reader.LevelInfo;
 import com.pavlukhin.acropanda.game.sound.SoundControl;
 import com.pavlukhin.acropanda.game.tutorial.SolutionStep;
 import com.pavlukhin.acropanda.utils.OneShotAction;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -126,8 +130,7 @@ public class GameControl implements ControlChangeObserver {
                 firstStartGame = new FirstStartGame();
                 soundControl.init();
                 updateAttempts = new UpdateAttempts();
-                LevelModel levelModel =
-                        new LevelModel(levId, PandaApplication.getPandaApplication().getLevelParser());
+                LevelModel levelModel = readModel();
                 view.initView(levelModel);
                 retry = false;
                 initControlProvider();
@@ -137,8 +140,19 @@ public class GameControl implements ControlChangeObserver {
             }
         }
     }
-	
-	protected GameManager getGameLoopThread() {
+
+    private LevelModel readModel() {
+        try {
+            return new LevelModel(
+                    PandaApplication.getPandaApplication().getLevelParser().readLevelInfo(levId));
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected GameManager getGameLoopThread() {
 		return gameLoopThread;
 	}
 	

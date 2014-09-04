@@ -67,14 +67,8 @@ public class LevelModel {
         }
     }
 
-	public LevelModel(int lev, LevelParser parser) {
+	public LevelModel(LevelInfo levelInfo) {
         // MonsterStrategy dangerousKillerMonsterStrategy = new RandomContiniousDirection(MonsterDirection.getAllDirections());
-        LevelInfo levelInfo;
-        try {
-            levelInfo = parser.readLevelInfo(lev);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
         int[][] routeArray = levelInfo.monsterRoute;
 
         if(routeArray != null && routeArray.length != 0)  {
