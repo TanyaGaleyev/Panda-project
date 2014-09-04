@@ -218,11 +218,13 @@ public class Platform implements LevelDrawable {
 			switch(mt) {
 			case JUMP_LEFT:
 			case JUMP_LEFT_WALL:
+            case TP_LEFT:
 				currentStatus = 1;
 				sprite.changeSet(1);
 				break;
 			case JUMP_RIGHT:
 			case JUMP_RIGHT_WALL:
+            case TP_RIGHT:
 				currentStatus = 2;
 				sprite.changeSet(2);
 				break;
