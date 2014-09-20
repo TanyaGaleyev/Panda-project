@@ -65,14 +65,14 @@ public class LevelChooseActivity extends PandaBaseActivity {
         PandaButtonsPanel bp = (PandaButtonsPanel) findViewById(R.id.choose_bp);
         bp.customAddView(backBtn);
         bp.customAddView(settingsBtn);
-        View spec = prepare(R.drawable.help);
-        bp.customAddView(spec);
-        spec.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startLevel(777, 777);
-            }
-        });
+//        View spec = prepare(R.drawable.help);
+//        bp.customAddView(spec);
+//        spec.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startLevel(777, 777);
+//            }
+//        });
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
