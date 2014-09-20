@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.pavlukhin.acropanda.PandaBaseActivity;
 import com.pavlukhin.acropanda.R;
 import com.pavlukhin.acropanda.achievements.AchievementsActivity;
@@ -78,6 +80,8 @@ public class StartActivityNew extends PandaBaseActivity {
         initListeners();
         AppRater.onAppLaunched(this);
         app().getBillingManager().init(this);
+        AdView adView = (AdView) findViewById(R.id.adView);
+        adView.loadAd(new AdRequest.Builder().build());
     }
 
     @Override

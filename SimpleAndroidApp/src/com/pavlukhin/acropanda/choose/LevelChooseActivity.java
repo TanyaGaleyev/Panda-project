@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.pavlukhin.acropanda.PandaBaseActivity;
 import com.pavlukhin.acropanda.R;
 import com.pavlukhin.acropanda.achievements.Achievement;
@@ -83,6 +85,8 @@ public class LevelChooseActivity extends PandaBaseActivity {
                 gotoSettingsScreen();
             }
         });
+        AdView adView = (AdView) findViewById(R.id.adView);
+        adView.loadAd(new AdRequest.Builder().build());
 	}
 
     protected void startLevel(int levId, int pos) {

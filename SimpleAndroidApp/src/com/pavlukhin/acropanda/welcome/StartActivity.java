@@ -16,6 +16,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.pavlukhin.acropanda.PandaApplication;
 import com.pavlukhin.acropanda.PandaBaseActivity;
 import com.pavlukhin.acropanda.R;
@@ -44,6 +46,8 @@ public class StartActivity extends PandaBaseActivity {
         initTitle();
         initPacksButtons();
         initServiceButtons();
+        AdView adView = (AdView) findViewById(R.id.adView);
+        adView.loadAd(new AdRequest.Builder().build());
     }
 
     private void initTitle() {
