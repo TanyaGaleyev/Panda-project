@@ -57,7 +57,7 @@ public class StartActivityNew extends PandaBaseActivity {
         achivBtn = prepare(R.drawable.achievement);
         startSettings = prepare(R.drawable.settings);
         PandaButtonsPanel bp = (PandaButtonsPanel) findViewById(R.id.welcome_bp);
-        bp.customAddView(achivBtn);
+//        bp.customAddView(achivBtn);
         bp.customAddView(startSettings);
 
         panda = new ImageView(this);
@@ -180,19 +180,30 @@ public class StartActivityNew extends PandaBaseActivity {
     }
 
     private void initListeners() {
-        panda.setOnClickListener(new View.OnClickListener() {
+        contentPanel.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                gotoPacksScreen();
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    gotoPacksScreen();
+                    return true;
+                } else {
+                    return false;
+                }
             }
         });
-        prepare(startSettings).setOnClickListener(new View.OnClickListener() {
+//        panda.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                gotoPacksScreen();
+//            }
+//        });
+        startSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 gotoSettingsScreen();
             }
         });
-        prepare(achivBtn).setOnClickListener(new View.OnClickListener() {
+        achivBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 gotoAchievementsScreen();
