@@ -353,13 +353,18 @@ public class LevelChooseView extends SurfaceView {
             // ensure that marker is on right position
             moveMarker(chosenLevel.levelY, chosenLevel.levelX);
             context.setLoading(true);
-            new AsyncTask<Void, Void, Void>() {
+            context.displayInterstitial(new Runnable() {
                 @Override
-                protected Void doInBackground(Void... voids) {
-                    context.startLevel(chosenLevel.levelId, levelPos(chosenLevel));
-                    return null;
+                public void run() {
+                    new AsyncTask<Void, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(Void... voids) {
+                            context.startLevel(chosenLevel.levelId, levelPos(chosenLevel));
+                            return null;
+                        }
+                    }.execute();
                 }
-            }.execute();
+            });
 		} else {
             chooseAcion = getMoveType(event);
         }

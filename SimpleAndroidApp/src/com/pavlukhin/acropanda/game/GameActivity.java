@@ -247,6 +247,14 @@ public class GameActivity extends PandaBaseActivity {
 
     public void showLoseDialog() {
         if(settingsDialog.isShowing()) return;
+        if(!loseDialog.isShowing()) {
+            displayInterstitial(new Runnable() {
+                @Override
+                public void run() {
+                    loadAd();
+                }
+            });
+        }
         loseDialog.show();
     }
 

@@ -2,6 +2,7 @@ package com.pavlukhin.acropanda;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -16,6 +17,9 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.pavlukhin.acropanda.settings.SettingsPanel;
 import com.pavlukhin.acropanda.utils.DialogsCalculator;
 
@@ -25,12 +29,58 @@ public abstract class PandaBaseActivity extends Activity {
     public static final String BACKGROUND_PATH = "background/menu.jpg";
     protected Dialog settingsDialog;
 
+    protected InterstitialAd interstitial;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         initSettingsDialog();
+        interstitial = new InterstitialAd(this);
+        interstitial.setAdUnitId(getResources().getString(R.string.interstitial_ad_unit_id));
+        loadAd();
+//        interstitial.setAdListener(new AdListener() {
+//            @Override
+//            public void onAdLoaded() {
+//                super.onAdLoaded();
+//                interstitial.show();
+//            }
+//        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        loadAd();
+    }
+
+    public void loadAd() {
+        interstitial.loadAd(new AdRequest.Builder().build());
+    }
+
+    public void displayInterstitial(final Runnable runnable) {
+        if (interstitial.isLoaded()) {
+            interstitial.show();
+            interstitial.setAdListener(new AdListener() {
+                @Override
+                public void onAdClosed() {
+                    super.onAdClosed();
+                    //todo remove adlistener
+                    runnable.run();
+                }
+            });
+        } else {
+            Log.e(PandaApplication.LOG_TAG, "interstitial not loaded yet");
+            runnable.run();
+        }
+    }
+
+    public void displayInterstitial() {
+        displayInterstitial(new Runnable() {
+            @Override
+            public void run() {}
+        });
     }
 
     @Override
@@ -99,7 +149,7 @@ public abstract class PandaBaseActivity extends Activity {
                         contentView.setBackgroundDrawable(
                                 getMenuDrawable(contentView.getWidth(), contentView.getHeight()));
                         contentView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                        Log.e(PandaApplication.LOG_TAG,
+                        Log.d(PandaApplication.LOG_TAG,
                                 "content view size: " + contentView.getWidth() + " x " + contentView.getHeight());
                     }
                 }
