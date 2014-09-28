@@ -29,6 +29,7 @@ public abstract class PandaBaseActivity extends Activity implements BuyPremiumCa
 
     public static final String SETTINGS = "Settings";
     public static final String BACKGROUND_PATH = "background/menu.jpg";
+    public static final int INTERSTITIAL_RATE = 20;
     protected Dialog settingsDialog;
 
     protected InterstitialAd interstitial;
@@ -63,19 +64,28 @@ public abstract class PandaBaseActivity extends Activity implements BuyPremiumCa
 
     public void displayInterstitial(final Runnable runnable) {
         if (interstitial.isLoaded()) {
-            interstitial.show();
-            interstitial.setAdListener(new AdListener() {
-                @Override
-                public void onAdClosed() {
-                    super.onAdClosed();
-                    //todo remove adlistener
-                    runnable.run();
-                }
-            });
+            if(timeToInterstitial()) {
+                interstitial.show();
+                interstitial.setAdListener(new AdListener() {
+                    @Override
+                    public void onAdClosed() {
+                        super.onAdClosed();
+                        //todo remove adlistener
+                        runnable.run();
+                    }
+                });
+            } else {
+                runnable.run();
+            }
         } else {
             Log.e(PandaApplication.LOG_TAG, "interstitial not loaded yet");
             runnable.run();
         }
+    }
+
+    private static int interstitialCount = 1;
+    private boolean timeToInterstitial() {
+        return interstitialCount++ % INTERSTITIAL_RATE == 0;
     }
 
     public void displayInterstitial() {
