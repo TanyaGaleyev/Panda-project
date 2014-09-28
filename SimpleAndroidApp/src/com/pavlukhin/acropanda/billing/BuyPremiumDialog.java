@@ -85,6 +85,6 @@ public class BuyPremiumDialog extends Dialog {
 
     private void buyPremium() {
         dismiss();
-        billing.buyPremium(pContext, requestCode);
+        billing.buyPremium(pContext, requestCode, pContext);
     }
 }

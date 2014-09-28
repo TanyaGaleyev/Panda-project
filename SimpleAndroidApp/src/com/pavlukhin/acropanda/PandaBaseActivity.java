@@ -20,10 +20,12 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.pavlukhin.acropanda.billing.BuyPremiumCaller;
+import com.pavlukhin.acropanda.billing.util.Purchase;
 import com.pavlukhin.acropanda.settings.SettingsPanel;
 import com.pavlukhin.acropanda.utils.DialogsCalculator;
 
-public abstract class PandaBaseActivity extends Activity {
+public abstract class PandaBaseActivity extends Activity implements BuyPremiumCaller {
 
     public static final String SETTINGS = "Settings";
     public static final String BACKGROUND_PATH = "background/menu.jpg";
@@ -155,4 +157,7 @@ public abstract class PandaBaseActivity extends Activity {
                 }
             });
     }
+
+    @Override
+    public void onPremiumBought(Purchase p) {}
 }

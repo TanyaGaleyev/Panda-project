@@ -21,7 +21,7 @@ public class AppRater {
     public static final String GOOGLE_PLAY_HEADER = "http://play.google.com/store/apps/details?id=";
     // FIXME in release version we need put right tuning to this constants
     public static final int DAYS_UNTIL_PROMPT = 0;
-    public static final int LAUNCHES_UNTIL_PROMPT = 1;
+    public static final int LAUNCHES_UNTIL_PROMPT = 5;
 
     private static interface PrefsConsts {
         String PREFS_KEY = "apprater";
@@ -42,7 +42,7 @@ public class AppRater {
 
     public static boolean isTimeToRate(SharedPreferences prefs) {
         return !prefs.getBoolean(PrefsConsts.DONT_SHOW_AGAIN, false) &&
-                prefs.getLong(PrefsConsts.LAUNCH_COUNT, 0) % LAUNCHES_UNTIL_PROMPT == 0 &&
+                prefs.getLong(PrefsConsts.LAUNCH_COUNT, 1) % LAUNCHES_UNTIL_PROMPT == 0 &&
                 System.currentTimeMillis() >= prefs.getLong(PrefsConsts.FIRST_LAUNCH, 0) + (DAYS_UNTIL_PROMPT * 24 * 60 * 60 * 1000);
     }
 

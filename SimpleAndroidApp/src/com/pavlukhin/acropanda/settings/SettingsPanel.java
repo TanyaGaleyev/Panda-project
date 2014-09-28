@@ -26,7 +26,7 @@ public class SettingsPanel extends LinearLayout {
         lp.setMargins(m, m, m, m);
         chooseControlCaption.setLayoutParams(lp);
         components.setTextDefault(chooseControlCaption, CONTROLS_CAPTION);
-        addView(chooseControlCaption);
-        addView(components.getSelectControl());
+//        addView(chooseControlCaption);
+//        addView(components.getSelectControl());
     }
 }

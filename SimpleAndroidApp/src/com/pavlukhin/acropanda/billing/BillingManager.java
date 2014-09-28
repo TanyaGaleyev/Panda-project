@@ -28,7 +28,7 @@ public class BillingManager implements IBillingManager {
     @Override
     public void init(Context context) {
         billingHelper = new IabHelper(context, publicKey());
-        billingHelper.enableDebugLogging(true);
+        billingHelper.enableDebugLogging(false);
         billingHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             public void onIabSetupFinished(IabResult result) {
                 if (!result.isSuccess()) {
@@ -61,7 +61,7 @@ public class BillingManager implements IBillingManager {
     }
 
     @Override
-    public void buyPremium(Activity caller, int requestCode) {
+    public void buyPremium(Activity caller, int requestCode, final BuyPremiumCaller listener) {
         if(setupOk) {
             billingHelper.launchPurchaseFlow(caller, PREMIUM_SKU, requestCode, new IabHelper.OnIabPurchaseFinishedListener() {
                 @Override
@@ -69,6 +69,7 @@ public class BillingManager implements IBillingManager {
                     if (result.isSuccess()) {
                         // TODO here we should redraw UI
                         Log.i(PandaApplication.LOG_TAG, "premium ok");
+                        listener.onPremiumBought(info);
                     } else {
                         Log.i(PandaApplication.LOG_TAG, "premium failed");
                     }

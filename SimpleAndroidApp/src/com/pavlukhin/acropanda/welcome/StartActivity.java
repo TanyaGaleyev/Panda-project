@@ -22,6 +22,7 @@ import com.pavlukhin.acropanda.PandaApplication;
 import com.pavlukhin.acropanda.PandaBaseActivity;
 import com.pavlukhin.acropanda.R;
 import com.pavlukhin.acropanda.billing.BuyPremiumDialog;
+import com.pavlukhin.acropanda.billing.util.Purchase;
 import com.pavlukhin.acropanda.choose.LevelChooseActivity;
 import com.pavlukhin.acropanda.utils.PandaButtonsPanel;
 
@@ -30,7 +31,7 @@ public class StartActivity extends PandaBaseActivity {
 	public static final String SET_ID = "Id of levels set";
 	public static final String LAST_FINISHED_SET = "Last finished set of levels";
     public static final int PACKS_IN_ROW = 3;
-    public static final int FREE_PACKS_COUNT = 4;
+    public static final int FREE_PACKS_COUNT = 3;
     public static final int ENTER_PACK = 0;
     public static final int BUY_PREMIUM = 1;
 //    private final String[] levelsCaptions = {"ACCESS", "BUTTON", "ZOMBIE", "SYSTEM"};
@@ -222,21 +223,20 @@ public class StartActivity extends PandaBaseActivity {
             startPack(packId);
         else {
             BuyPremiumDialog buyPremiumDialog = new BuyPremiumDialog(this, app().getBillingManager(), BUY_PREMIUM);
-            // FIXME this is for testing purposes, should be removed in release version
-            final int packId2 = packId;
-            buyPremiumDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    startPack(packId2);
-                }
-            });
+            // this is for testing purposes, should be removed in release version
+//            final int packId2 = packId;
+//            buyPremiumDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//                @Override
+//                public void onCancel(DialogInterface dialog) {
+//                    startPack(packId2);
+//                }
+//            });
             buyPremiumDialog.show();
         }
     }
 
     private void onFreePackClicked(int packId) {
-        // FIXME in release version should be uncommented
-//        if(packId <= lastFinishedSet() + 1)
+        if(packId <= lastFinishedSet() + 1)
             startPack(packId);
     }
 
@@ -246,4 +246,13 @@ public class StartActivity extends PandaBaseActivity {
         startActivityForResult(intent, ENTER_PACK);
     }
 
+    @Override
+    public void onPremiumBought(Purchase p) {
+        int lastFinishedSet = lastFinishedSet();
+        for (int i = 0; i < levButtons.size(); i++) {
+            ImageView btn = levButtons.get(i);
+            int id = i + 1;
+            btn.setImageDrawable(getPackIcon(lastFinishedSet, id));
+        }
+    }
 }

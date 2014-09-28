@@ -21,7 +21,7 @@ public class EmptyBillingManager implements IBillingManager {
     }
 
     @Override
-    public void buyPremium(Activity caller, int requestCode) {}
+    public void buyPremium(Activity caller, int requestCode, BuyPremiumCaller listener) {}
 
     @Override
     public boolean handleActivityResult(int requestCode, int resultCode, Intent data) {

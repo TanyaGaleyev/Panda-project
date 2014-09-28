@@ -12,6 +12,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.WindowManager;
 
+import com.pavlukhin.acropanda.billing.BillingManager;
 import com.pavlukhin.acropanda.billing.EmptyBillingManager;
 import com.pavlukhin.acropanda.billing.IBillingManager;
 import com.pavlukhin.acropanda.game.hero.Sprite;
@@ -67,8 +68,8 @@ public class PandaApplication extends Application {
         settingsModel = new SettingsModel(this);
         loading = Sprite.createStrict("menu/loader.png", 1, 12);
         loading.setAnimating(true);
-//        billingManager = new BillingManager();
-        billingManager = new EmptyBillingManager();
+        billingManager = new BillingManager();
+//        billingManager = new EmptyBillingManager();
 
 //        initBackground();
 	}
