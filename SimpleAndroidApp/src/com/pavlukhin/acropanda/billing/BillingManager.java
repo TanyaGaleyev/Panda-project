@@ -67,7 +67,6 @@ public class BillingManager implements IBillingManager {
                 @Override
                 public void onIabPurchaseFinished(IabResult result, Purchase info) {
                     if (result.isSuccess()) {
-                        // TODO here we should redraw UI
                         Log.i(PandaApplication.LOG_TAG, "premium ok");
                         listener.onPremiumBought(info);
                     } else {

@@ -312,7 +312,6 @@ public class LevelChooseView extends SurfaceView {
 	
 	private Bitmap getScoreAward(int i, int j) {
 		int score = finishedLevels[i][j];
-		// TODO add uniq score gradations for each level
         if(score == Scores.LOW_SCORE) {
 			return lowscore;
 		} else if (score == Scores.MEDIUM_SCORE) {

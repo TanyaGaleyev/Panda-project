@@ -124,7 +124,6 @@ public class GameView extends SurfaceView {
         GRID_STEP = imageProvider().getGridStep();
 //		System.out.println("GRID_STEP = " + GRID_STEP);;
 		TOP_BOUND = (getHeight() - GRID_STEP * model.getRows()) / 2 + GRID_STEP / 2;
-		// TODO check this bound carefully!
 		LEFT_BOUND = (getWidth() - GRID_STEP * model.getCols()) / 2 + GRID_STEP / 2;
 		JUMP_SPEED = GRID_STEP;
 		ANIMATION_JUMP_SPEED = JUMP_SPEED / 8;

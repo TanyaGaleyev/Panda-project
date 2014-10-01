@@ -70,7 +70,6 @@ public abstract class PandaBaseActivity extends Activity implements BuyPremiumCa
                     @Override
                     public void onAdClosed() {
                         super.onAdClosed();
-                        //todo remove adlistener
                         runnable.run();
                     }
                 });

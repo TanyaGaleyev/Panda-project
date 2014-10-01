@@ -23,7 +23,6 @@ public class Monster {
 		this.model = model;
 		this.sprite = sprite;
         this.gridStep = gridStep;
-        // TODO this speed needs to be more generic should be dividable to gridStep without remainder
         this.speed = gridStep / MONSTER_SPEED_SCALE;
 	}
 	

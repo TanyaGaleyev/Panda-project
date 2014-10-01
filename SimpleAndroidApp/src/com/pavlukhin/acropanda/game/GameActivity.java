@@ -75,31 +75,32 @@ public class GameActivity extends PandaBaseActivity {
         app().getSettingsModel().registerControlChangeObserver(gControl);
         settingsDialog.setTitle(PAUSE_TITLE);
         initLoseDialog();
-        // FIXME this log info should be covered
-        Log.w(PandaApplication.LOG_TAG, levelMeta(levid).getAll().toString());
+        // WARNING: this log info should be covered
+//        Log.w(PandaApplication.LOG_TAG, levelMeta(levid).getAll().toString());
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.activity_main, menu);
+//        return true;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-    	// FIXME we need get rid of this code in the release version
-    	switch (item.getItemId()) {
-    	case R.id.increaseFPS:
-    		GameManager.changeFPS(5);
-    		return true;
-    	case R.id.decreaseFPS:
-    		GameManager.changeFPS(-5);
-    		return true;
-    	case R.id.restart:
-            gControl.restartGame();
-    	default:
-    		return super.onOptionsItemSelected(item);
-    	}
+    	// we need get rid of this code in the release version
+//    	switch (item.getItemId()) {
+//    	case R.id.increaseFPS:
+//    		GameManager.changeFPS(5);
+//    		return true;
+//    	case R.id.decreaseFPS:
+//    		GameManager.changeFPS(-5);
+//    		return true;
+//    	case R.id.restart:
+//            gControl.restartGame();
+//    	default:
+//    		return super.onOptionsItemSelected(item);
+//    	}
+        return super.onOptionsItemSelected(item);
     }
 
     public void switchBackToChooseActivity(boolean complete, LevelMetrics metrics) {

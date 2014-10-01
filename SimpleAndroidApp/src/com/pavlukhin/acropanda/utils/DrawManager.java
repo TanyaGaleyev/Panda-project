@@ -10,7 +10,7 @@ import com.pavlukhin.acropanda.PandaApplication;
 /**
  * Created by ivan on 29.09.13.
  */
-public class DrawManager implements Runnable {
+public abstract class DrawManager implements Runnable {
     private SurfaceView surfaceView;
 
     public DrawManager(SurfaceView surfaceView) {
@@ -27,7 +27,7 @@ public class DrawManager implements Runnable {
                 c = holder.lockCanvas();
                 if(c != null) {
                     synchronized (holder) {
-                        // TODO draw should ve here
+                        draw(c);
                     }
                 }
             } catch(Exception e) {
@@ -44,4 +44,6 @@ public class DrawManager implements Runnable {
             }
         }
     }
+
+    protected abstract void draw(Canvas c);
 }

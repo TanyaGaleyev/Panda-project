@@ -19,7 +19,7 @@ import com.pavlukhin.acropanda.PandaBaseActivity;
 public class AppRater {
     public static final String MARKER_HEADER = "market://details?id=";
     public static final String GOOGLE_PLAY_HEADER = "http://play.google.com/store/apps/details?id=";
-    // FIXME in release version we need put right tuning to this constants
+    // in release version we need put right tuning to this constants
     public static final int DAYS_UNTIL_PROMPT = 0;
     public static final int LAUNCHES_UNTIL_PROMPT = 5;
 
