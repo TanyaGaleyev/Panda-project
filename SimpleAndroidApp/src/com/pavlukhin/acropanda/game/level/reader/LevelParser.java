@@ -28,7 +28,7 @@ public class LevelParser {
     public static final String LEVELS_BASEDIR = "levels/";
     public static final String MONSTER_TYPE_KEY = "monsterType";
     private final AssetManager assets;
-    private final Decrypter decrypter = new StubDecrypter();
+    private final Decrypter decrypter = new AesDecrypter();
 
     public LevelParser(Context context) {
         this.assets = context.getAssets();
