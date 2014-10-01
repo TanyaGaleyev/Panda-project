@@ -68,8 +68,8 @@ public class PandaApplication extends Application {
         settingsModel = new SettingsModel(this);
         loading = Sprite.createStrict("menu/loader.png", 1, 12);
         loading.setAnimating(true);
-//        billingManager = new BillingManager();
-        billingManager = new EmptyBillingManager();
+        billingManager = new BillingManager();
+//        billingManager = new EmptyBillingManager();
 
 //        initBackground();
 	}
