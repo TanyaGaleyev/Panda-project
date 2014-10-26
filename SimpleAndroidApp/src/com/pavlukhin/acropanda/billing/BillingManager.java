@@ -18,8 +18,10 @@ import com.pavlukhin.acropanda.billing.util.Purchase;
 public class BillingManager implements IBillingManager {
 
     public static final String PREMIUM_SKU = "premium_upgrade";
-    private IabHelper billingHelper;
+    private volatile IabHelper billingHelper;
     private volatile boolean setupOk = false;
+
+    public BillingManager() {}
 
     private String publicKey() {
         return "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAr4l/hhOJeiJcLQtVSd/a+jjHs/z0hN1cEbiG3byjJMxSpnlcUxv6P5Pm54W8zemqsTdsX0e4g3/x0V/wiENHkosQLgBGLtLQBHzLYbLxfGgkGDmaq3C68IyzQuV8zGr+vPD/GR4Rk6HCyK1k5EDWznm4AeJia55BNSA+iQc0tVrSSXWJ2AD+FgvEPnRZKGdH94uMyKRNGKIMRX83eFw8T2r8vCqEp5t03i9ecVJxP3AKtAGjMU4y3VLA/yjCV3x0RtVelO9TIsARe601/sIlQQrrQoVGnS6BKRgovyr4T4AH5Sro5n2yw7DcWbXyByNjnj7U8bq/wIrxPeXZUlvjNwIDAQAB";
@@ -27,12 +29,13 @@ public class BillingManager implements IBillingManager {
 
     @Override
     public void init(Context context) {
+        if(billingHelper != null) return;
         billingHelper = new IabHelper(context, publicKey());
         billingHelper.enableDebugLogging(false);
         billingHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             public void onIabSetupFinished(IabResult result) {
                 if (!result.isSuccess()) {
-                    Log.i(PandaApplication.LOG_TAG, "bill error");
+                    Log.e(PandaApplication.LOG_TAG, "bill error");
                     // Oh noes, there was a problem.
                 } else {
                     setupOk = true;

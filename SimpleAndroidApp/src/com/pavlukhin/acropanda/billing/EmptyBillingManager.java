@@ -9,6 +9,8 @@ import android.content.Intent;
  */
 public class EmptyBillingManager implements IBillingManager {
 
+    public EmptyBillingManager() {}
+
     @Override
     public void init(Context context) {}
 

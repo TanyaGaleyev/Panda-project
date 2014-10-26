@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.pavlukhin.acropanda.billing.BuyPremiumCaller;
 import com.pavlukhin.acropanda.billing.util.Purchase;
@@ -39,10 +40,11 @@ public abstract class PandaBaseActivity extends Activity implements BuyPremiumCa
         super.onCreate(savedInstanceState);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        app().getBillingManager().init(this);
         initSettingsDialog();
         interstitial = new InterstitialAd(this);
         interstitial.setAdUnitId(getResources().getString(R.string.interstitial_ad_unit_id));
-        loadAd();
+        loadAd(interstitial);
 //        interstitial.setAdListener(new AdListener() {
 //            @Override
 //            public void onAdLoaded() {
@@ -55,11 +57,17 @@ public abstract class PandaBaseActivity extends Activity implements BuyPremiumCa
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        loadAd();
+        loadAd(interstitial);
     }
 
-    public void loadAd() {
-        interstitial.loadAd(new AdRequest.Builder().build());
+    public void loadAd(AdView ad) {
+        if(!app().getBillingManager().checkPremium())
+            ad.loadAd(new AdRequest.Builder().build());
+    }
+
+    public void loadAd(InterstitialAd ad) {
+        if(!app().getBillingManager().checkPremium())
+            ad.loadAd(new AdRequest.Builder().build());
     }
 
     public void displayInterstitial(final Runnable runnable) {

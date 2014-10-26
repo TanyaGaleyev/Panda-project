@@ -252,7 +252,7 @@ public class GameActivity extends PandaBaseActivity {
             displayInterstitial(new Runnable() {
                 @Override
                 public void run() {
-                    loadAd();
+                    loadAd(interstitial);
                 }
             });
         }
@@ -269,7 +269,7 @@ public class GameActivity extends PandaBaseActivity {
 //        ViewGroup dContent = (ViewGroup) loseDialog.findViewById(android.R.id.content);
 //        dContent.addView(adView);
         AdView adView = (AdView) loseDialog.findViewById(R.id.adView);
-        adView.loadAd(new AdRequest.Builder().build());
+        loadAd(adView);
         loseDialog.setReplayOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -48,7 +48,7 @@ public class StartActivity extends PandaBaseActivity {
         initPacksButtons();
         initServiceButtons();
         AdView adView = (AdView) findViewById(R.id.adView);
-        adView.loadAd(new AdRequest.Builder().build());
+        loadAd(adView);
     }
 
     private void initTitle() {

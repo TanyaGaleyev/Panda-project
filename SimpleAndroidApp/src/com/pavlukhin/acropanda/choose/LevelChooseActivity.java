@@ -86,7 +86,7 @@ public class LevelChooseActivity extends PandaBaseActivity {
             }
         });
         AdView adView = (AdView) findViewById(R.id.adView);
-        adView.loadAd(new AdRequest.Builder().build());
+        loadAd(adView);
 	}
 
     protected void startLevel(int levId, int pos) {

@@ -79,9 +79,8 @@ public class StartActivityNew extends PandaBaseActivity {
         initMainTitle();
         initListeners();
         AppRater.onAppLaunched(this);
-        app().getBillingManager().init(this);
         AdView adView = (AdView) findViewById(R.id.adView);
-        adView.loadAd(new AdRequest.Builder().build());
+        loadAd(adView);
     }
 
     @Override
