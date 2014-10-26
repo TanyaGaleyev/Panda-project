@@ -54,11 +54,15 @@ public class BillingManager implements IBillingManager {
     @Override
     public boolean checkPremium() {
         boolean ret = false;
-        try {
-            Inventory inventory = billingHelper.queryInventory(false, null);
-            ret = inventory.hasPurchase(PREMIUM_SKU);
-        } catch (IabException e) {
-            Log.w(PandaApplication.LOG_TAG, e.getMessage(), e);
+        if(setupOk) {
+            try {
+                Inventory inventory = billingHelper.queryInventory(false, null);
+                ret = inventory.hasPurchase(PREMIUM_SKU);
+            } catch (IabException e) {
+                Log.w(PandaApplication.LOG_TAG, e.getMessage(), e);
+            }
+        } else {
+            // TODO billing service not connected
         }
         return ret;
     }

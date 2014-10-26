@@ -371,7 +371,15 @@ public class LevelChooseView extends SurfaceView {
 	}
 
     private int levelPos(ChosenLevel cl) {
-        return cl.levelY * levels[cl.levelY].length + cl.levelX + 1;
+        return cl.levelY * levels[0].length + cl.levelX + 1;
+    }
+
+    private int xByPos(int pos) {
+        return (pos - 1) % levels[0].length;
+    }
+
+    private int yByPos(int pos) {
+        return (pos - 1) / levels[0].length;
     }
 
     private UserControlType checkMoveDirection(UserControlType tempAction, int levelX, int levelY) {
@@ -479,10 +487,12 @@ public class LevelChooseView extends SurfaceView {
                 (y - GRID_STEP / 2 - TOP_BOUND) % GRID_STEP == 0;
     }
 	
-	public int completeCurrentLevel(int score) {
-		int oldScore = finishedLevels[chosenLevel.levelY][chosenLevel.levelX];
+	public int completeLevel(int inPackPos, int score) {
+        int x = xByPos(inPackPos);
+        int y = yByPos(inPackPos);
+		int oldScore = finishedLevels[y][x];
         if(Scores.better(score, oldScore)) {
-            finishedLevels[chosenLevel.levelY][chosenLevel.levelX] = score;
+            finishedLevels[y][x] = score;
         }
 		return oldScore;
 	}

@@ -172,6 +172,7 @@ public class StartActivityNew extends PandaBaseActivity {
         panda.post(new Runnable() {
             @Override
             public void run() {
+                if(pandaAnimation == null) return;
                 panda.setBackgroundDrawable(pandaAnimation);
                 pandaAnimation.start();
             }

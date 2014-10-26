@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.pavlukhin.acropanda.PandaBaseActivity;
 import com.pavlukhin.acropanda.R;
@@ -104,7 +103,9 @@ public class LevelChooseActivity extends PandaBaseActivity {
 		if(requestCode == FINISHED_LEVEL_ID && resultCode == RESULT_OK) {
 			boolean complete = data.getBooleanExtra(LEVEL_COMPLETE, false);
             if(complete) {
-                submitNewScore(data.getIntExtra(COMPLETE_SCORE, 0));
+                submitNewScore(
+                        data.getIntExtra(IN_PACK_POS, 1),
+                        data.getIntExtra(COMPLETE_SCORE, 0));
             }
 //            Achievement achievement = Achievement.NEAT;//data.getBooleanExtra(ACHIV, false);
             Achievement achievement = null;
@@ -149,8 +150,8 @@ public class LevelChooseActivity extends PandaBaseActivity {
         }
     }
 
-    private void submitNewScore(int score) {
-        int oldScore = view.completeCurrentLevel(score);
+    private void submitNewScore(int inPackPos, int score) {
+        int oldScore = view.completeLevel(inPackPos, score);
         if(Scores.better(score, oldScore)) {
             packPreferences.edit()
                     .putString(FINISHED_LEVELS + levelsSetId, view.getFinishedLevels()).commit();

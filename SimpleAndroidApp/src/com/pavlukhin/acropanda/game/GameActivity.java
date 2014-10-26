@@ -41,6 +41,7 @@ public class GameActivity extends PandaBaseActivity {
     private Dialog tutorialDialog;
     private LoseDialog loseDialog;
     public static final String LEVELS_META = "com.pavlukhin.acropanda.level_meta";
+    private int inPackPos;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,7 @@ public class GameActivity extends PandaBaseActivity {
         Intent intent = getIntent();
         int levid = intent.getIntExtra(LevelChooseActivity.LEVEL_ID, 0);
         int packId = intent.getIntExtra(LevelChooseActivity.PACK_ID, 0);
-        int inPackPos = intent.getIntExtra(LevelChooseActivity.IN_PACK_POS, 0);
+        inPackPos = intent.getIntExtra(LevelChooseActivity.IN_PACK_POS, 0);
         setContentView(R.layout.activity_main);
         View settingsBtn = prepare(findViewById(R.id.game_settings));
         settingsBtn.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +109,7 @@ public class GameActivity extends PandaBaseActivity {
 		Intent resultIntent = new Intent();
 		resultIntent.putExtra(LevelChooseActivity.LEVEL_COMPLETE, complete);
 		resultIntent.putExtra(LevelChooseActivity.COMPLETE_SCORE, metrics.getScore());
+        resultIntent.putExtra(LevelChooseActivity.IN_PACK_POS, inPackPos);
 		setResult(RESULT_OK, resultIntent);
 		finish();
 	}
