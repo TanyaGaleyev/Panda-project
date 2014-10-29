@@ -1,6 +1,5 @@
 package com.pavlukhin.acropanda.welcome;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
@@ -16,7 +15,6 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.pavlukhin.acropanda.PandaApplication;
 import com.pavlukhin.acropanda.PandaBaseActivity;
@@ -33,7 +31,6 @@ public class StartActivity extends PandaBaseActivity {
     public static final int PACKS_IN_ROW = 3;
     public static final int FREE_PACKS_COUNT = 3;
     public static final int ENTER_PACK = 0;
-    public static final int BUY_PREMIUM = 1;
 //    private final String[] levelsCaptions = {"ACCESS", "BUTTON", "ZOMBIE", "SYSTEM"};
 	public final int levCount = 6;
 	private SparseArray<ImageView> levButtons = new SparseArray<ImageView>();
@@ -175,7 +172,7 @@ public class StartActivity extends PandaBaseActivity {
     @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == BUY_PREMIUM) {
+        if(requestCode == BUY_PREMIUM_CODE) {
             app().getBillingManager().handleActivityResult(requestCode, resultCode, data);
             if(app().getBillingManager().checkPremium()) {
                 for (int id = 1; id <= levCount; id++) {
@@ -221,18 +218,8 @@ public class StartActivity extends PandaBaseActivity {
     private void onPremiumPackClicked(int packId) {
         if(app().getBillingManager().checkPremium())
             startPack(packId);
-        else {
-            BuyPremiumDialog buyPremiumDialog = new BuyPremiumDialog(this, app().getBillingManager(), BUY_PREMIUM);
-            // this is for testing purposes, should be removed in release version
-//            final int packId2 = packId;
-//            buyPremiumDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-//                @Override
-//                public void onCancel(DialogInterface dialog) {
-//                    startPack(packId2);
-//                }
-//            });
-            buyPremiumDialog.show();
-        }
+        else
+            showBuyPremiumDialog();
     }
 
     private void onFreePackClicked(int packId) {

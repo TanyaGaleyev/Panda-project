@@ -22,6 +22,7 @@ import com.google.android.gms.ads.AdView;
 import com.pavlukhin.acropanda.PandaBaseActivity;
 import com.pavlukhin.acropanda.R;
 import com.pavlukhin.acropanda.achievements.AchievementsActivity;
+import com.pavlukhin.acropanda.billing.BuyPremiumDialog;
 import com.pavlukhin.acropanda.rate.AppRater;
 import com.pavlukhin.acropanda.utils.PandaButtonsPanel;
 
@@ -34,6 +35,7 @@ public class StartActivityNew extends PandaBaseActivity {
 
     private View achivBtn;
     private View startSettings;
+    private View turnOffAdBtn;
     private ImageView panda;
     private RelativeLayout contentPanel;
     private AnimationDrawable pandaAnimation;
@@ -56,9 +58,11 @@ public class StartActivityNew extends PandaBaseActivity {
 
         achivBtn = prepare(R.drawable.achievement);
         startSettings = prepare(R.drawable.settings);
+        turnOffAdBtn = prepare(R.drawable.noad);
         PandaButtonsPanel bp = (PandaButtonsPanel) findViewById(R.id.welcome_bp);
 //        bp.customAddView(achivBtn);
         bp.customAddView(startSettings);
+        bp.customAddView(turnOffAdBtn);
 
         panda = new ImageView(this);
         int width = (int) (app().displayWidth * .3125f);
@@ -209,6 +213,12 @@ public class StartActivityNew extends PandaBaseActivity {
                 gotoAchievementsScreen();
             }
         });
+        turnOffAdBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showBuyPremiumDialog();
+            }
+        });
     }
 
     private void gotoAchievementsScreen() {
@@ -239,6 +249,8 @@ public class StartActivityNew extends PandaBaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == BUY_PREMIUM_CODE)
+            app().getBillingManager().handleActivityResult(requestCode, resultCode, data);
 //        asyncLoadAnimation();
     }
 

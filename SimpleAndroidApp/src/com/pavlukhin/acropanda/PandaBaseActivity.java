@@ -22,6 +22,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.pavlukhin.acropanda.billing.BuyPremiumCaller;
+import com.pavlukhin.acropanda.billing.BuyPremiumDialog;
 import com.pavlukhin.acropanda.billing.util.Purchase;
 import com.pavlukhin.acropanda.settings.SettingsPanel;
 import com.pavlukhin.acropanda.utils.DialogsCalculator;
@@ -31,6 +32,7 @@ public abstract class PandaBaseActivity extends Activity implements BuyPremiumCa
     public static final String SETTINGS = "Settings";
     public static final String BACKGROUND_PATH = "background/menu.jpg";
     public static final int INTERSTITIAL_RATE = 20;
+    public static final int BUY_PREMIUM_CODE = 1;
     protected Dialog settingsDialog;
 
     protected InterstitialAd interstitial;
@@ -173,6 +175,20 @@ public abstract class PandaBaseActivity extends Activity implements BuyPremiumCa
                     }
                 }
             });
+    }
+
+    protected void showBuyPremiumDialog() {
+        BuyPremiumDialog buyPremiumDialog =
+                new BuyPremiumDialog(this, app().getBillingManager(), BUY_PREMIUM_CODE);
+        // this is for testing purposes, should be removed in release version
+//            final int packId2 = packId;
+//            buyPremiumDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//                @Override
+//                public void onCancel(DialogInterface dialog) {
+//                    startPack(packId2);
+//                }
+//            });
+        buyPremiumDialog.show();
     }
 
     @Override

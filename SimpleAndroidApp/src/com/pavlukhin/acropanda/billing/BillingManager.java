@@ -49,6 +49,8 @@ public class BillingManager implements IBillingManager {
     @Override
     public void dispose() {
         if(billingHelper != null) billingHelper.dispose();
+        billingHelper = null;
+        setupOk = false;
     }
 
     @Override
