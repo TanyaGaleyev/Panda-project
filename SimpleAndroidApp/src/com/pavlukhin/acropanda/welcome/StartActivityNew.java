@@ -12,17 +12,14 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.pavlukhin.acropanda.PandaBaseActivity;
 import com.pavlukhin.acropanda.R;
 import com.pavlukhin.acropanda.achievements.AchievementsActivity;
-import com.pavlukhin.acropanda.billing.BuyPremiumDialog;
 import com.pavlukhin.acropanda.rate.AppRater;
 import com.pavlukhin.acropanda.utils.PandaButtonsPanel;
 
@@ -216,9 +213,14 @@ public class StartActivityNew extends PandaBaseActivity {
         turnOffAdBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showBuyPremiumDialog();
+                turnOffAd();
             }
         });
+    }
+
+    private void turnOffAd() {
+        if(!app().getBillingManager().checkPremium())
+            showBuyPremiumDialog();
     }
 
     private void gotoAchievementsScreen() {
