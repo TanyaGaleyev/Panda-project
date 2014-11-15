@@ -17,4 +17,6 @@ public interface IBillingManager {
     void buyPremium(Activity caller, int requestCode, BuyPremiumCaller listener);
 
     boolean handleActivityResult(int requestCode, int resultCode, Intent data);
+
+    boolean isInitialized();
 }

@@ -60,16 +60,21 @@ public abstract class PandaBaseActivity extends Activity implements BuyPremiumCa
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         loadAd(interstitial);
+        loadAd((AdView) findViewById(R.id.adView));
     }
 
     public void loadAd(AdView ad) {
-        if(!app().getBillingManager().checkPremium())
+        if(ad != null && shouldShowAd())
             ad.loadAd(new AdRequest.Builder().build());
     }
 
     public void loadAd(InterstitialAd ad) {
-        if(!app().getBillingManager().checkPremium())
+        if(ad != null && shouldShowAd())
             ad.loadAd(new AdRequest.Builder().build());
+    }
+
+    private boolean shouldShowAd() {
+        return app().getBillingManager().isInitialized() && !app().getBillingManager().checkPremium();
     }
 
     public void displayInterstitial(final Runnable runnable) {

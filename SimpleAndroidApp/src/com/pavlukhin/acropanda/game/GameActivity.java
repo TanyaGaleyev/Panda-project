@@ -8,18 +8,14 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.pavlukhin.acropanda.PandaApplication;
 import com.pavlukhin.acropanda.PandaBaseActivity;
@@ -270,8 +266,7 @@ public class GameActivity extends PandaBaseActivity {
 //        adView.setLayoutParams(lp);
 //        ViewGroup dContent = (ViewGroup) loseDialog.findViewById(android.R.id.content);
 //        dContent.addView(adView);
-        AdView adView = (AdView) loseDialog.findViewById(R.id.adView);
-        loadAd(adView);
+        loadAd((AdView) loseDialog.findViewById(R.id.adView));
         loseDialog.setReplayOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -29,4 +29,9 @@ public class EmptyBillingManager implements IBillingManager {
     public boolean handleActivityResult(int requestCode, int resultCode, Intent data) {
         return false;
     }
+
+    @Override
+    public boolean isInitialized() {
+        return true;
+    }
 }

@@ -19,7 +19,6 @@ import com.google.android.gms.ads.AdView;
 import com.pavlukhin.acropanda.PandaApplication;
 import com.pavlukhin.acropanda.PandaBaseActivity;
 import com.pavlukhin.acropanda.R;
-import com.pavlukhin.acropanda.billing.BuyPremiumDialog;
 import com.pavlukhin.acropanda.billing.util.Purchase;
 import com.pavlukhin.acropanda.choose.LevelChooseActivity;
 import com.pavlukhin.acropanda.utils.PandaButtonsPanel;
@@ -44,8 +43,7 @@ public class StartActivity extends PandaBaseActivity {
         initTitle();
         initPacksButtons();
         initServiceButtons();
-        AdView adView = (AdView) findViewById(R.id.adView);
-        loadAd(adView);
+        loadAd((AdView) findViewById(R.id.adView));
     }
 
     private void initTitle() {

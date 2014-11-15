@@ -20,6 +20,7 @@ public class BillingManager implements IBillingManager {
     public static final String PREMIUM_SKU = "premium_upgrade";
     private volatile IabHelper billingHelper;
     private volatile boolean setupOk = false;
+    private volatile boolean initialized = false;
 
     public BillingManager() {}
 
@@ -34,6 +35,7 @@ public class BillingManager implements IBillingManager {
         billingHelper.enableDebugLogging(false);
         billingHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             public void onIabSetupFinished(IabResult result) {
+                initialized = true;
                 if (!result.isSuccess()) {
                     Log.e(PandaApplication.LOG_TAG, "bill error");
                     // Oh noes, there was a problem.
@@ -51,6 +53,7 @@ public class BillingManager implements IBillingManager {
         if(billingHelper != null) billingHelper.dispose();
         billingHelper = null;
         setupOk = false;
+        initialized = false;
     }
 
     @Override
@@ -91,5 +94,10 @@ public class BillingManager implements IBillingManager {
     @Override
     public boolean handleActivityResult(int requestCode, int resultCode, Intent data) {
         return billingHelper.handleActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return initialized;
     }
 }
